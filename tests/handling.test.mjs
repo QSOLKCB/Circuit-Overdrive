@@ -25,6 +25,44 @@ function clearGrid(course) {
   return race;
 }
 
+test('lifting and tapping right at 126 km/h leaves room to accelerate out of the Speedway bank', () => {
+  const race = clearGrid(track);
+  const player = race.player;
+  for (let tick = 0; tick < 600 && player.distance < 132; tick++) {
+    stepRace(race, {throttle: Number(player.current.speed < 35)});
+  }
+  assert.ok(player.distance >= 132 && Math.abs(player.current.speed - 35) < 1);
+
+  // Two coasting taps, then apply power and steer through the rest of the bank.
+  for (const [ticks, command] of [
+    [24, {steer: 1}], [60, {}], [54, {steer: 1}],
+    [36, {throttle: 1}], [72, {throttle: 1, steer: 1}], [70, {throttle: 1}],
+  ]) {
+    for (let tick = 0; tick < ticks; tick++) {
+      stepRace(race, command);
+      assert.ok(!player.vehicle.contacts.includes('guardrail'), 'hit the rail during the coasting entry or exit');
+    }
+  }
+  assert.equal(player.recoveries, 0);
+  assert.ok(player.distance > 310 && player.current.speed > 40, 'accelerate clear of the bank');
+});
+
+test('lifting at high speed with right steering held clears the Ridge opening sweep', () => {
+  const race = clearGrid(ridge);
+  const player = race.player;
+  let liftSpeed;
+  for (let tick = 0; tick < 1500 && player.distance < 415; tick++) {
+    const s = player.distance;
+    const coasting = s >= 265 && s < 360;
+    if (coasting) liftSpeed ??= player.current.speed;
+    stepRace(race, {throttle: Number(!coasting), steer: Number(s >= 231 && s < 390)});
+    assert.ok(!player.vehicle.contacts.includes('guardrail'), 'hit the rail while easing off or reapplying power');
+  }
+  assert.ok(liftSpeed > 47, 'lift above 169 km/h');
+  assert.ok(player.distance >= 415 && player.current.speed > 43);
+  assert.equal(player.recoveries, 0);
+});
+
 for (const { course, approach, turnIn, exit } of firstBends) {
   test(`${course.name} stays on its wheels through the first bend with held digital corrections`, () => {
     const race = clearGrid(course);
@@ -74,5 +112,35 @@ for (const { course, approach, turnIn, exit } of firstBends) {
     const half = steerAndRelease(0.5);
     const full = steerAndRelease(1);
     assert.ok(half > 2 * radians && full > half + radians, 'stronger steering must turn the car further');
+  });
+}
+
+for (const {course, entry, exit, steer} of [
+  {course:track, entry:146, exit:298, steer:1},
+  {course:ridge, entry:565, exit:805, steer:-1},
+]) {
+  test(`${course.name} can hold the accelerator and turn through a fast ${steer > 0 ? 'right' : 'left'} bend`, () => {
+    const race = clearGrid(course);
+    const player = race.player;
+    // On Ridge, drive the preceding bend before accelerating onto the approach straight.
+    for (let tick = 0; tick < 3600 && player.distance < entry; tick += 6) {
+      const command = driverIntent(player.current, 35, 0, course);
+      if (course === track || player.distance >= entry - 115) {
+        command.throttle = 1;
+        command.brake = 0;
+      }
+      if (course === track || player.distance >= entry - 30) command.steer = 0;
+      for (let i = 0; i < 6; i++) stepRace(race, command);
+    }
+    assert.ok(player.distance >= entry && player.current.speed > 42, 'enter above 151 km/h');
+    const entryYaw = player.current.yaw;
+    for (let tick = 0; tick < 450 && player.distance < exit; tick++) {
+      stepRace(race, {throttle:1, steer}); // Hold W+D or W+A from turn-in to exit.
+      assert.equal(player.contact, false, 'ran wide or cut across the inside rail');
+      assert.equal(player.recoveries, 0);
+      assert.ok(player.current.speed > 40, 'lost racing speed in a held-key turn');
+    }
+    assert.ok(player.distance >= exit);
+    assert.ok(steer * angleDelta(entryYaw, player.current.yaw) > 55 * radians, 'follow the bend');
   });
 }

@@ -37,6 +37,29 @@ function place(entrant, s, along, lateral = 0, drift = 0, altitude = 0) {
   entrant.safeLateral = lateral;
 }
 
+test('the car stays upright after a guardrail strike on the left bend before the Ridge tunnel', () => {
+  const race = green(), player = race.player;
+  place(player, 2820, 50, 2);
+  player.nextGate = 6;
+  player.vehicle.gear = 4;
+  player.vehicle.rpm = 5000;
+  let hitRail = false;
+  for (const [ticks, command] of [
+    [30, {throttle: 1}], [40, {throttle: 1, steer: -1}], [30, {steer: -1}],
+    [90, {brake: 1, steer: -1}], [170, {throttle: 1}],
+  ]) {
+    for (let tick = 0; tick < ticks; tick++) {
+      stepRace(race, command);
+      hitRail ||= player.vehicle.contacts.includes('guardrail');
+      const pose = player.current;
+      const bank = ridge.sample(pose.s, pose.lateral).bank;
+      assert.ok(Math.abs(pose.roll - bank) < Math.PI / 9, 'rolled over 20° relative to the road');
+    }
+  }
+  assert.ok(hitRail && player.distance > 2990);
+  assert.equal(player.recoveries, 0);
+});
+
 test('course selection isolates six grid cars, countdown, pause and restart', () => {
   const circuit = green(track), sprint = createRace(27, ridge);
   assert.equal(circuit.player.nextGate, 1);
