@@ -72,7 +72,7 @@ function sourceRevision(root, files) {
   const git = args => execFileSync('git', ['-C', root, ...args], {encoding:'utf8', stdio:['ignore','pipe','pipe']});
   let top;
   try { top = git(['rev-parse','--show-toplevel']).trim(); } catch { return null; }
-  if (top !== root) return null;
+  if (resolve(top) !== root) return null;
   const revision = git(['rev-parse','HEAD']).trim();
   assert.match(revision, /^[0-9a-f]{40}$/);
   const tree = git(['ls-tree','-rz',revision,'--',...siteFiles]);
