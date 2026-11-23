@@ -36,6 +36,8 @@ For a gamepad or wheel, open **Controller**, select the exposed slot, and set it
 
 At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Recordings from Pages and the offline ZIP also carry the exact source revision. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
 
+**NEW — [Replay Theatre](replay-theatre.html):** Import a locally saved JSON replay and watch all six cars in WebGL, switch the follow camera, adjust playback speed, and seek along an authoritative tick timeline. Shared files never leave the browser. Source-stamped replays from v0.6.0 and v0.6.1 are admitted only because their physics-source fingerprints match the tested Theatre build. Unstamped v1 recordings and other incompatible revisions are rejected with an explanation. See [Replay Theatre guide](docs/replay-theatre.md).
+
 ## Cockpit and sound
 
 The position display updates on every accepted race tick. A brief position-change notice waits for a place to hold for 0.2 seconds, so a door-to-door fight keeps a readable HUD. The map retains your latest completed lap or sprint split. The results highlight your fastest Speedway lap.
