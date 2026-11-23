@@ -65,7 +65,7 @@ function drive(entrant,input,requestRecovery,active,course,world) {
   resolveRail(entrant,course,road);
 }
 
-function accept(entrant,input,active,course) {
+function accept(entrant,input,active,course,supportedAtStart) {
   const state=entrant.vehicle, road=course.project(state.position[0],state.position[2]);
   if (!state.tick) {
     entrant.previous=entrant.current=snapshot(state,road);
@@ -80,7 +80,9 @@ function accept(entrant,input,active,course) {
   entrant.distance=road.s;
   entrant.wrongWay=ds<-.035;
   const supported=asphaltSupport(state)>=2;
-  if (supported && Math.abs(road.lateral)<=course.halfWidth) score(entrant,ds,course);
+  // A landing just beyond the plane cannot retroactively validate an airborne
+  // crossing. Require solved wheel support on both sides of this swept tick.
+  if (supportedAtStart && supported && Math.abs(road.lateral)<=course.halfWidth) score(entrant,ds,course);
   if (entrant.finishTicks===null && road.s>course.gates[entrant.nextGate].s+.001) entrant.missedGate=true;
   if (!entrant.missedGate && !entrant.contact && !entrant.wrongWay && Math.abs(road.lateral)<course.halfWidth-1.5 &&
       state.wheels.every(w=>w.grounded && w.surfaceId==='asphalt')) {
@@ -115,9 +117,10 @@ export function stepNitroRace(race,command=NEUTRAL_NITRO) {
   });
   race.elapsedTicks++;
   const world={sampleSurface:course.sampleSurface,barriers:[]};
+  const supportedAtStart=active.map(e=>asphaltSupport(e.vehicle)>=2);
   active.forEach((e,i)=>drive(e,commands[i],recover[i],active,course,world));
   resolveCarContacts(active,carRecipe.chassis,resolveRail,course);
-  active.forEach((e,i)=>accept(e,commands[i],active,course));
+  active.forEach((e,i)=>accept(e,commands[i],active,course,supportedAtStart[i]));
   classify(race);
   if (race.player.finishTicks!==null) race.phase='finished';
 }

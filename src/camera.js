@@ -57,7 +57,8 @@ export function createChaseCamera(course) {
       }
       traffic=follow(traffic,near,4,dt);
       // Lift and open the framing slightly on side-by-side approaches.
-      const range=6.20+high*3.65+speed*.009+traffic*.35;
+      const stunt=course.id==='skyway';
+      const range=6.20+high*3.65+speed*.009+traffic*.35+(stunt ? 1.4 : 0);
       const height=2.31+high*2.74+traffic*.22;
       const fx=-Math.sin(direction),fz=-Math.cos(direction);
       const back=course.project(p.x-range*fx,p.z-range*fz);
@@ -65,7 +66,10 @@ export function createChaseCamera(course) {
       const supported=course.sample(back.s,lane);
       view.eye[0]=supported.x;view.eye[2]=supported.z;
       const heave=clamp(p.y-p.groundY-.5,-.15,.24);
-      view.eye[1]=supported.y+height+heave*.25;
+      // The Skyway launch deck falls away under the chassis. Keep the full
+      // flight and the upcoming catch face in frame while the camera follows.
+      const flight=stunt ? clamp(p.y-p.groundY-.5,0,24) : 0;
+      view.eye[1]=supported.y+height+heave*.25+flight;
       const ahead=course.sample(road.s+6.5+speed*.32,road.lateral);
       const bend=angleDifference(Math.atan2(road.x-ahead.x,road.z-ahead.z),direction);
       // Curve preview is strongest when the chassis faces along the road. A
@@ -73,10 +77,11 @@ export function createChaseCamera(course) {
       const preview=direction+(Math.abs(bend)<1.35?clamp(bend,-.42,.42)*.52:0);
       const look=6.4+speed*.052, x=p.x-look*Math.sin(preview), z=p.z-look*Math.cos(preview);
       view.target[0]=x;view.target[2]=z;
-      view.target[1]=course.project(x,z).y+.98+high*.15+heave*.18;
+      view.target[1]=course.project(x,z).y+.98+high*.15+heave*.18+flight*.92;
       roll=follow(roll,reduced?0:clamp(road.bank*.13,-.044,.044),4,dt);
       view.roll=reduced?0:roll;
       view.fov=.864+(reduced?0:.125*speed/65)+traffic*.023;
+      if(stunt && !reduced) view.fov+=clamp((speed-30)/35,0,1)*.07;
       initialized=true;lastX=p.x;lastZ=p.z;
       return view;
     }
