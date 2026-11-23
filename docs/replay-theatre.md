@@ -6,7 +6,7 @@ Replay Theatre is a **source-bound, offline-first WebGL spectator**. It re-simul
 
 ## How to watch and share
 
-1. Finish a Speedway or Ridge race in the main game. Select **Save replay**; your browser downloads a JSON file.
+1. Finish a Speedway, Ridge or Nitro Skyway race in the main game. Select **Save replay**; your browser downloads a JSON file.
 2. Open **Replay Theatre** from the game header or visit `replay-theatre.html` in a **stamped GitHub Pages or verified offline release**.
 3. Choose the JSON file using **Open local replay JSON**. The recording stays in your browser. No upload, account or server exists.
 4. Use Play/Pause, Restart, ±5 s, Timeline, ½×/1×/2×/4×, Follow car and Chase/High cameras.
@@ -19,7 +19,7 @@ The standalone page supports keyboard, pointer/touch and native button/select co
 
 ## Revision compatibility
 
-A source stamp is mandatory. Playback accepts either the **exact site revision** or the following **explicitly audited same-physics revisions**:
+A source stamp is mandatory. For touring v2, playback accepts either the **exact site revision** or the following **explicitly audited same-physics revisions**:
 
 | Release | Exact accepted revision |
 | --- | --- |
@@ -27,6 +27,7 @@ A source stamp is mandatory. Playback accepts either the **exact site revision**
 | v0.6.1 — SYNTH//OVERDRIVE | `d81a2d4a09286029b87c2ac201edf8ab6448e023` |
 | v0.6.2 — Replay Theatre | `c97ee47e7577337032a55eb2e6ae53b855285573` |
 | v0.7.0 — World Overdrive Championship | `3295b82004b64328072ac5fa64f8ba2b55394416` |
+| v0.8.0 — Nightshift | `8204da56fce6b40ab33cb66c684a2e780f3e3001` |
 
 The v0.7.0 authority audit compared committed trees with `git diff --exit-code v0.6.2 v0.7.0 -- src/ai.js src/contact.js src/field.js src/ridge.js src/speedway.js src/sim.js src/track.js src/replay.js tracks vendor`. Git returned exit code 0. The Node test `tests/replay-theatre.test.mjs` checks the individual blob IDs, including the vehicle, collision and math modules. Provenance tests cover every vendored file.
 
@@ -61,3 +62,11 @@ The complete packaged browser test runs from `tests/browser-theatre.mjs`, integr
 **Remaining limitations:** real hardware input to the Theatre, physical-mobile browser UX, long-seek performance on older devices, and sound-synchronised replays require separate owner testing. Future editions may add trusted-compatible physics manifests or short video export, but no outbound service is needed for the current file-sharing workflow.
 
 CO-007 also exports an ordinary v2 tape for each completed championship round in a stamped build. Its source, course, seed and tick count match that round. Open the downloaded JSON with the same Theatre controls. The championship's other events and points live in its separate local save. Importing a recording can only start spectator playback.
+
+## Nitro Skyway version 3
+
+Skyway recordings require the exact stamped source in both the archive and the viewer. The JSON object has exactly eight fields. `version` is 3, `discipline` is `nitro`, `rules` is 1, and `course` is `skyway`. The other fields are `revision` (40 lowercase hexadecimal digits), `seed` (unsigned 32-bit integer), `ticks` and `runs`.
+
+Each run contains `[length, throttle, brake, steer, drift, boost, recover]`. Length is a positive integer. The two pedals range from zero to one and steering from −1 to +1. The final three entries are booleans. All numbers must be finite. Run lengths must sum exactly to the declared 1–108,000 ticks. The viewer admits files up to 16 MiB, advances at most 240 ticks per seek frame and rejects an early or late flag. A recovery is recorded on the tick the race accepts it. Both new held controls are sampled during each 60 Hz update.
+
+The viewer reconstructs wheel contacts, charge, boost impulses, flight, landings and standings. Follow any car to see its energy and stunt points. Skyway uses its authored daylight environment. For terminal reconstruction run `node scripts/replay-drive.mjs FILE.json` from the matching clean checkout. The touring recorder and command decoder live byte-for-byte in `src/replay-v2.js`. The v0.7.0 to v0.8.0 authority comparison returned an empty diff. The test checks the historical simulator body after removing its one appended export declaration and verifies the other authority blob IDs.

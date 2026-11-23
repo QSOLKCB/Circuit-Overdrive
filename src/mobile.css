@@ -124,3 +124,28 @@ body[data-input=touch] #foot-keys {display: none;}
   .intro {padding-bottom: 4px;}
   .buttons {gap: 5px;}
 }
+
+#touch-controls .touch-nitro { display:none; }
+body[data-course=skyway] #touch-controls .touch-nitro {
+  display:flex; right:var(--safe-right);
+  bottom:calc(var(--safe-bottom) + var(--pad-height) + 6px);
+}
+#touch-controls .touch-nitro button {height:44px; font-size:13px;}
+#touch-controls [data-touch=boost] {background:#3c3523db; border-color:#f3c94b;}
+body[data-course=skyway][data-input=touch] #nitro-hud {
+  bottom:calc(var(--safe-bottom) + var(--pad-height) + 6px);
+  left:50%; transform:translateX(-50%); padding:4px 7px;
+}
+@media (max-width:540px) {
+  body[data-course=skyway][data-input=touch] .dash {
+    bottom:var(--safe-bottom); left:50%; right:auto; transform:translateX(-50%);
+  }
+  body[data-course=skyway][data-input=touch] #nitro-hud {
+    bottom:calc(var(--safe-bottom) + var(--pad-height) + 56px);
+    left:var(--safe-left); transform:none; width:174px;
+  }
+}
+@media (max-width:620px) {
+  .course-picker button { flex:1; min-width:0; padding-inline:5px; }
+  .course-picker button canvas { max-width:36px; }
+}

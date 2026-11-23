@@ -46,3 +46,26 @@ test('sample separates held pedals from single-tick actions and immediate pause/
   key('Escape');
   assert.deepEqual(transitions,['pause','arm']);
 });
+
+test('Space and either Shift belong only to focused Nitro driving and need a fresh press after blur',()=>{
+  const target=new EventTarget();
+  let nitro=false, focused=true;
+  const input=attachRaceInput(target,()=>focused,()=>false,()=>nitro);
+  function key(type, code, repeat=false) {
+    const event=Object.assign(new Event(type,{cancelable:true}),{code,repeat});
+    target.dispatchEvent(event);
+    return event.defaultPrevented;
+  }
+  for(const code of ['Space','ShiftLeft','ShiftRight']) assert.equal(key('keydown',code),false);
+  assert.deepEqual(input.command(),{throttle:0,brake:0,steer:0});
+  nitro=true;
+  for(const code of ['KeyW','Space','ShiftLeft','ShiftRight']) assert(key('keydown',code));
+  key('keyup','ShiftLeft');
+  assert.deepEqual(input.sample().command,{throttle:1,brake:0,steer:0,drift:true,boost:true});
+  target.dispatchEvent(new Event('blur')); focused=false;
+  assert.equal(key('keyup','Space'),false);
+  assert.equal(key('keydown','ShiftRight'),false);
+  focused=true; key('keydown','ShiftRight',true);
+  assert.deepEqual(input.sample().command,{throttle:0,brake:0,steer:0,drift:false,boost:false});
+  input.dispose();
+});

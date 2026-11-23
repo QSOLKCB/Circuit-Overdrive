@@ -103,6 +103,17 @@ try {
   assert.equal((await record()).devices[0].profile.actions.camera,undefined);
   await frame([.08,.1],[]); await click('profile-save');
   assert.equal((await record()).devices[0].profile.actions.camera.index,4);
+  for (const [name,button] of [['drift',10],['boost',11]]) {
+    await id('profile-remap-action').selectOption(name); await click('profile-remap');
+    await capture([.08,.1],[]); await capture([.08,.1],[button]);
+    await frame([.08,.1],[]); await click('profile-save');
+    const saved=await record();
+    assert.equal(saved.version,2);
+    assert.equal(saved.devices[0].profile.actions[name].index,button);
+  }
+  await frame([.08,.1],[10,11]);
+  assert.match(await id('profile-preview').textContent(),/drift, boost/);
+  await frame([.08,.1],[]);
 
   // A different id with identical dimensions cannot inherit an active wheel's
   // ownership, even when the browser has not delivered its disconnect event.

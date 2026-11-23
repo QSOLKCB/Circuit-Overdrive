@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Original QSOL-IMC race scores. Compact data, not sampled music or copyrighted melodies.
 // BPS-001 owns synthesis, timing and PCM. These are authored mathematical arrangements.
-export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER',championship:'DIGITAL DOMINION',night:'MIDNIGHT PROTOCOL'});
+export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER',championship:'DIGITAL DOMINION',night:'MIDNIGHT PROTOCOL',nitro:'NITRO PULSE'});
 
 function phrase(root,melody,variation) {
   if (!Array.isArray(melody) || melody.length!==16) throw RangeError('16 melody steps required');
@@ -17,6 +17,31 @@ function phrase(root,melody,variation) {
   return {bass,lead:melody.slice(),arp,drums};
 }
 const N=null;
+// Pedal-point bass under an off-beat pickup. The second half answers the
+// opening motif a fifth higher, then walks down into the looping first note.
+function nitroPulse() {
+  const roots = [42,42,38,45,42,47,38,37];
+  const leads = [
+    [N,24,27,N,31,N,26,27,N,24,N,19,22,N,N,26],
+    [27,N,26,24,N,19,N,22,24,N,31,N,29,27,N,26],
+    [N,28,N,26,23,26,N,28,31,N,30,N,26,23,N,19],
+    [24,N,28,31,N,26,28,N,23,N,21,19,N,16,N,23],
+    [N,31,34,N,38,N,33,34,N,31,N,26,29,N,33,36],
+    [31,N,28,26,N,23,N,21,19,N,26,N,28,N,31,33],
+    [35,N,33,N,31,30,N,26,28,N,26,N,23,21,N,19],
+    [N,31,N,29,26,N,24,N,22,N,19,17,N,14,17,24]
+  ];
+  return {id:'nitro-pulse',mode:'demoscene',bpm:160,seed:0x9df05a37,
+    phrases:roots.map((root,bar)=>{
+      const upper = [0,1,4,7].includes(bar) ? 3 : 4;
+      const shimmer = [12,19,12+upper,24,19,26,12+upper,19];
+      const bassLine = [0,N,0,12,N,7,N,0,0,N,12,N,7,N,bar%2 ? 10 : 7,N];
+      const beat = bar===7 ? 'K.H.S.HKK.H.SSHS' : bar%2===0 ? 'K.H.SHK.H.K.S.HH' : 'K.HKS.H.KH.HS.HK';
+      return {lead:leads[bar].map(n=>n===N?N:root+n),bass:bassLine.map(n=>n===N?N:root+n),
+        arp:Array.from({length:16},(_,i)=>i%8===7 && bar<4 ? N : root+shimmer[(i+Math.floor(bar/2))%8]),
+        drums:Array.from(beat)};
+    })};
+}
 const NEON=Object.freeze([
   [45,[69,N,72,N,76,N,79,N,76,N,72,N,69,N,67,N]],
   [41,[69,N,72,N,76,N,72,N,69,N,67,N,64,N,67,N]],
@@ -142,6 +167,7 @@ export function scoreForFutureMode(mode) {
 }
 
 export function scoreForCourse(course) {
+  if (course==='nitro') return nitroPulse();
   if (course==='championship' || course==='night') return catalogueScore(course);
   if(!Object.hasOwn(MUSIC_TITLES,course))throw RangeError('Unknown music course');
   const ridge=course==='ridge',form=ridge?IRON:NEON;

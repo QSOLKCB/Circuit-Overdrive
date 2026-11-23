@@ -10,7 +10,7 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'profile-editor', 'profiles', 'replay', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
+const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
   'scene', 'sim', 'skyway', 'skyway-scene', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
@@ -139,5 +139,5 @@ export async function packageSite(source, destination) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   assert.equal(process.argv.length, 3, 'Usage: node --experimental-vm-modules scripts/package-site.mjs NEW_DIRECTORY');
   const count = await packageSite('.', resolve(process.argv[2]));
-  console.log('Packaged ' + count + ' files, including both courses and verified VANILLAJS sources and notices.');
+  console.log('Packaged ' + count + ' files, with verified VANILLAJS sources and notices.');
 }

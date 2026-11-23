@@ -9,6 +9,11 @@ const TAU = 2 * Math.PI;
 const unit = value => Math.max(0, Math.min(1,value));
 const profile = {...defaultVehicleSound(), cylinders:8, exhaustTone:.5, smoothingMs:24,
   seed:27, engineGain:.33, exhaustGain:.29, shiftGain:.075, tyreGain:0};
+// Start/end pitch (Hz), seconds and gain for the single retriggerable effects voice.
+const nitroCues = {
+  ignite:[160,665,.16,.18], empty:[380,92,.20,.12],
+  launch:[205,940,.18,.12], landing:[132,46,.21,.20]
+};
 
 // The upstream voice supplies firing order harmonics, exhaust pulses and the
 // gear transient. Everything below reads accepted telemetry without mutating it.
@@ -30,6 +35,10 @@ export class TouringVoice {
     this.engineLevel = this.effectsLevel = this.railTone = 0;
     this.previousTick = -1;
     this.contact = false;
+    this.nitroCue = null;
+    this.cueAge = this.cuePhase = this.chargePhase = this.chargeLevel = this.airLevel = 0;
+    this.wasBoosting = false;
+    this.lastEnergy = this.lastStunts = 0;
   }
 
   accept(player, command, course) {
@@ -55,6 +64,29 @@ export class TouringVoice {
     const span = course.features?.tunnel, s = player.current.s;
     target.tunnel = span ? unit(Math.min(s-span[0],span[1]-s)/9) : 0;
     target.wind = unit((target.speed-8)/48)**1.5 * (1-.65*target.tunnel);
+    const n = player.nitro;
+    if (n) {
+      target.nitro = true;
+      target.charge = n.charging ? 1 : 0;
+      target.chargeHz = 390 + 410 * unit(n.energy/100000);
+      target.air = n.airborne ? 1 : 0;
+      if (car.tick > this.previousTick) {
+        let cue;
+        if (n.boosting && !this.wasBoosting) cue = nitroCues.ignite;
+        if (this.lastEnergy>0 && n.energy===0 && (n.boosting || this.wasBoosting)) cue = nitroCues.empty;
+        if (n.launch) cue = nitroCues.launch;
+        if (n.rewarded && n.stunts>this.lastStunts) cue = nitroCues.landing;
+        if (cue) { this.nitroCue = cue; this.cueAge = this.cuePhase = 0; }
+      }
+      this.wasBoosting = n.boosting;
+      this.lastEnergy = n.energy;
+      this.lastStunts = n.stunts;
+    } else if (this.target?.nitro) {
+      this.nitroCue = null;
+      this.chargeLevel = this.airLevel = this.chargePhase = 0;
+      this.wasBoosting = false;
+      this.lastEnergy = this.lastStunts = 0;
+    }
 
     // Resolve short contacts at the physics tick, even if this audio block is
     // already queued. A sustained scrape generates one attack on initial impact.
@@ -111,7 +143,22 @@ export class TouringVoice {
         + .21*this.midAir + .18*this.railTone*Math.sin(9*TAU*this.hitPhase));
       this.engineLevel += (volumes.engine-this.engineLevel)*.002;
       this.effectsLevel += (volumes.effects-this.effectsLevel)*.002;
-      const mix = engine*this.engineLevel + (road+strike)*this.effectsLevel;
+      let stunt = 0;
+      if (t.nitro) {
+        this.chargeLevel += (t.charge-this.chargeLevel)*.0007;
+        this.airLevel += (t.air-this.airLevel)*.0008;
+        this.chargePhase = (this.chargePhase + t.chargeHz/RATE) % 1;
+        stunt = this.chargeLevel*.043*(1-4*Math.abs(this.chargePhase-.5))
+          + this.airLevel*.21*(this.midAir-this.lowAir);
+        if (this.nitroCue) {
+          const [start,end,duration,level] = this.nitroCue;
+          const u = this.cueAge/(RATE*duration);
+          this.cuePhase = (this.cuePhase + (start+(end-start)*u)/RATE) % 1;
+          stunt += Math.sin(TAU*this.cuePhase)*level*Math.min(1,this.cueAge/144)*(1-u)**2;
+          if (++this.cueAge>=RATE*duration) this.nitroCue = null;
+        }
+      }
+      const mix = engine*this.engineLevel + (road+strike+stunt)*this.effectsLevel;
       // Soft saturation leaves headroom at maximum sliders and during impacts.
       out[i] = mix / (1+.72*Math.abs(mix));
     }

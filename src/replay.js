@@ -1,54 +1,43 @@
 // SPDX-License-Identifier: Apache-2.0
-// A replay contains only values delivered to the 60 Hz game, plus recovery
-// requests. Wall time spent paused and camera changes do not affect a replay.
-const LIMIT = 60 * 60 * 30;
-const validCourse = course => course === 'speedway' || course === 'ridge';
-const validSeed = seed => Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
-const inRange = (value, low) => Number.isFinite(value) && value >= low && value <= 1;
+import {createRecording as touringRecording, replayCommands as touringCommands} from './replay-v2.js';
+import {validateNitroCommand} from './nitro-physics.js';
+import {MAX_REPLAY_TICKS, validateTheatreReplay} from './replay-theatre-core.js';
 
-const validRevision = value => typeof value === 'string' && /^[0-9a-f]{40}$/.test(value);
-
-export function createRecording(course, seed, revision = null) {
-  if (!validCourse(course) || !validSeed(seed) || (revision !== null && !validRevision(revision))) throw RangeError('Invalid replay header');
-  const runs = [];
-  let ticks = 0, overflow = false;
+export function createRecording(course,seed,revision=null) {
+  if (course !== 'skyway') return touringRecording(course,seed,revision);
+  if (!Number.isSafeInteger(seed) || seed<0 || seed>0xffffffff ||
+      (revision!==null && (typeof revision!=='string' || !/^[0-9a-f]{40}$/.test(revision)))) {
+    throw RangeError('Invalid Nitro recording header');
+  }
+  let ticks=0, overflow=false;
+  const runs=[];
   return {
-    record({throttle,brake,steer}, recover) {
-      if (ticks === LIMIT) { overflow = true; return; }
+    record(command,recover) {
+      validateNitroCommand(command);
+      if (typeof recover!=='boolean') throw TypeError('Invalid recovery flag');
+      if (ticks===MAX_REPLAY_TICKS) { overflow=true; return; }
+      const {throttle,brake,steer,drift,boost}=command;
+      const last=runs.at(-1);
+      if (last && last[1]===throttle && last[2]===brake && last[3]===steer &&
+          last[4]===drift && last[5]===boost && last[6]===recover) last[0]++;
+      else runs.push([1,throttle,brake,steer,drift,boost,recover]);
       ticks++;
-      const previous = runs.at(-1);
-      if (previous && previous[1] === throttle && previous[2] === brake && previous[3] === steer && previous[4] === recover) previous[0]++;
-      else runs.push([1,throttle,brake,steer,recover]);
     },
-    get complete() { return !overflow; },
+    get complete() { return revision!==null && ticks>0 && !overflow; },
     export() {
-      if (overflow) throw RangeError('This drive exceeds the 30-minute replay limit.');
-      const header = revision === null ? {version:1} : {version:2,revision};
-      return {...header,course,seed,ticks,runs:runs.map(row=>row.slice())};
+      if (!this.complete) throw RangeError('Nitro replay requires a stamped build and at most 30 minutes.');
+      return {version:3,revision,discipline:'nitro',rules:1,course,seed,ticks,runs:runs.map(r=>r.slice())};
     }
   };
 }
 
-export function* replayCommands(data, expectedRevision) {
-  const legacy = data?.version === 1 && !Object.hasOwn(data,'revision');
-  const identified = data?.version === 2 && validRevision(data.revision);
-  if (identified && expectedRevision !== undefined && data.revision !== expectedRevision) {
-    throw RangeError('Replay requires game revision ' + data.revision);
+export function* replayCommands(data,expectedRevision) {
+  if (Object.getOwnPropertyDescriptor(data??{},'version')?.value!==3) {
+    yield* touringCommands(data,expectedRevision);
+    return;
   }
-  if ((!legacy && !identified) || !validCourse(data.course) || !validSeed(data.seed) ||
-      !Number.isInteger(data.ticks) || data.ticks < 0 || data.ticks > LIMIT ||
-      !Array.isArray(data.runs) || data.runs.length > data.ticks) throw RangeError('Invalid replay header');
-  let count = 0;
-  for (const row of data.runs) {
-    if (!Array.isArray(row) || row.length !== 5 || !Number.isInteger(row[0]) || row[0] <= 0 ||
-        !inRange(row[1],0) || !inRange(row[2],0) || !inRange(row[3],-1) || typeof row[4] !== 'boolean') {
-      throw RangeError('Invalid replay run');
-    }
-    count += row[0];
-    if (count > data.ticks) throw RangeError('Invalid replay length');
-  }
-  if (count !== data.ticks) throw RangeError('Incomplete replay');
-  for (const [length,throttle,brake,steer,recover] of data.runs) {
-    for (let i=0; i<length; i++) yield {command:{throttle,brake,steer},recover};
+  const tape=validateTheatreReplay(data,expectedRevision);
+  for (const [length,throttle,brake,steer,drift,boost,recover] of tape.runs) {
+    for (let tick=0;tick<length;tick++) yield {command:{throttle,brake,steer,drift,boost},recover};
   }
 }

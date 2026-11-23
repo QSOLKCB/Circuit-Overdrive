@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Pointer IDs own individual controls. Only sample() publishes a driving command.
-export function attachTouchInput(container, {enabled, onPause}) {
+export function attachTouchInput(container, {enabled, onPause, nitroMode = () => false}) {
   const doc = container.ownerDocument;
   const win = doc.defaultView;
   const held = new Map();
@@ -23,6 +23,7 @@ export function attachTouchInput(container, {enabled, onPause}) {
   }
   group('touch-steering', [['left', '◀', 'Steer left'], ['right', '▶', 'Steer right']]);
   group('touch-pedals', [['brake', 'Brake', 'Brake or reverse'], ['throttle', 'Gas', 'Accelerate']]);
+  group('touch-nitro', [['drift','Drift','Hold drift'], ['boost','Nitro','Hold nitro boost']]);
   group('touch-actions', [['pause','Pause','Pause race'], ['camera','View','Switch chase camera'],
     ['recover','Recover','Recover car with a three-second penalty']]);
 
@@ -52,6 +53,7 @@ export function attachTouchInput(container, {enabled, onPause}) {
     const button = event.target;
     const name = button.dataset?.touch;
     if (!enabled() || !counts.has(name) || event.button !== 0 || held.has(event.pointerId)) return;
+    if ((name === 'drift' || name === 'boost') && !nitroMode()) return;
     event.preventDefault();
     if (name === 'pause' || name === 'camera' || name === 'recover') {
       action(name);
@@ -109,6 +111,10 @@ export function attachTouchInput(container, {enabled, onPause}) {
       const brake = Number(pressed('brake'));
       const command = {throttle:Number(!brake && pressed('throttle')), brake,
         steer:Number(pressed('right'))-Number(pressed('left'))};
+      if (nitroMode()) {
+        command.drift = pressed('drift');
+        command.boost = pressed('boost');
+      }
       const snapshot = {command, camera:pending.has('camera'), recover:pending.has('recover')};
       pending.clear();
       return snapshot;

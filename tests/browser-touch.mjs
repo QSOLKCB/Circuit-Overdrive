@@ -62,7 +62,12 @@ try {
   };
   const safeLayout = limits => page.evaluate(limits=>{
     const instruments=['.timing','.course','.dash'];
-    const controls=Array.from(document.querySelectorAll('[data-touch]'));
+    const nitro=document.body.dataset.course==='skyway';
+    if (nitro) instruments.push('#nitro-hud');
+    const controls=Array.from(document.querySelectorAll('[data-touch]')).filter(el=>el.getClientRects().length);
+    const wanted=['left','right','throttle','brake','camera','recover','pause'];
+    if (nitro) wanted.push('boost','drift');
+    if (controls.map(el=>el.dataset.touch).sort().join()!==wanted.sort().join()) return 'Incorrect visible touch controls';
     const rects=[...instruments.map(s=>document.querySelector(s)),...controls].map(el=>el.getBoundingClientRect());
     const clipped=rects.some(r=>r.width<1 || r.left<limits.left || r.right>innerWidth-limits.right ||
       r.top<limits.top || r.bottom>innerHeight-limits.bottom);
@@ -203,6 +208,19 @@ try {
   report.handoff = ['synthetic standard gamepad','touch'];
   await held();
   assert(report.events.down>=8 && report.events.secondary>=3 && report.events.cancel>=1);
+  await send('touchEnd'); // Release the physical contact held across the navigation probe.
+  await page.goto(url); await phase('menu');
+  await tap('#choose-skyway'); await tap('#start'); await tap('#touch-arm'); await phase('racing');
+  assert.equal(await safeLayout(insets.landscape),'clear','Skyway landscape controls and Nitro HUD');
+  const stuntFingers=await Promise.all(['throttle','left','drift','boost'].map((name,i)=>down(i+1,name)));
+  await send('touchStart',stuntFingers);
+  await held('boost','drift','left','throttle');
+  await send('touchCancel'); await phase('paused'); await held();
+  await page.setViewportSize(portrait);
+  await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:insets.portrait});
+  await tap('#continue'); await phase('racing');
+  assert.equal(await safeLayout(insets.portrait),'clear','Skyway portrait controls and Nitro HUD');
+  await held();
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({url,browser:browser.version(),landscape,portrait,insets,device:'desktop Chromium touch emulation',...report},null,2));
 } finally { await browser.close(); }

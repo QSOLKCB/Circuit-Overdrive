@@ -178,3 +178,46 @@ test('stop revokes pending starts; refused or interrupted devices remain optiona
   assert(retry.update(p,{},track));
   assert(peak(recovered.sources[0].buffer.getChannelData(0))>0);
 });
+
+test('Nitro effects synthesize only accepted transitions and stay on the effects bus',()=>{
+  const base={energy:1000,charging:false,boosting:false,airborne:false,launch:false,landed:false,rewarded:false,stunts:0};
+  function hear(change, levels=effects, sameTick=false) {
+    const p=entrant(),voice=new TouringVoice(), out=new Float32Array(3072);
+    p.nitro={...base};
+    voice.accept(p,{},track); voice.write(out,levels);
+    if (!sameTick) p.vehicle.tick+=2;
+    Object.assign(p.nitro,change);
+    voice.accept(p,{drift:true,boost:true},track); voice.write(out,levels);
+    return out;
+  }
+  const silent=hear({});
+  for(const change of [{charging:true},{boosting:true},{boosting:true,energy:0},{launch:true},
+    {airborne:true},{rewarded:true,stunts:1}]) {
+    const pcm=hear(change);
+    assert(pcm.every(Number.isFinite) && peak(pcm)<.9);
+    assert(difference(pcm,silent)>.001);
+    assert.deepEqual(hear(change,engine),hear({},engine));
+  }
+  assert.deepEqual(hear({landed:true}),silent);
+  assert.deepEqual(hear({launch:true},effects,true),silent);
+  assert(difference(hear({boosting:true}),hear({boosting:true,energy:0}))>.001);
+});
+
+test('the landing thump waits for settled wheels and Nitro tones clear on a course switch',()=>{
+  const p=entrant(), testVoice=new TouringVoice(), reference=new TouringVoice();
+  const a=new Float32Array(3072), b=new Float32Array(3072);
+  function accept(stunt) {
+    p.vehicle.tick+=2;
+    p.nitro=stunt && {energy:5000,stunts:0,...stunt};
+    testVoice.accept(p,{},track);
+    delete p.nitro;
+    reference.accept(p,{},track);
+    testVoice.write(a,effects);reference.write(b,effects);
+  }
+  accept({landed:true}); assert.deepEqual(a,b);
+  for(let i=0;i<4;i++) { accept({}); assert.deepEqual(a,b); }
+  accept({rewarded:true,stunts:1}); assert(difference(a,b)>.01);
+  accept({stunts:1,charging:true,airborne:true}); assert(difference(a,b)>.01);
+  accept(null); assert.deepEqual(a,b);
+  accept({}); assert.deepEqual(a,b);
+});

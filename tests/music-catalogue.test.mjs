@@ -16,7 +16,7 @@ const catalogue=[
   {id:'derby',title:'STEEL RIOT',mode:'industrial',bpm:150,frames:614400}
 ];
 test('two future scores have separate authored material and reproducible PCM, without activating future races',()=>{
-  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge','championship','night']);
+  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge','championship','night','nitro']);
   assert.deepEqual(Object.keys(FUTURE_MUSIC_TITLES),catalogue.map(c=>c.id));
   const hashes=new Set();
   for(const {id,title,mode,bpm,frames} of catalogue){
@@ -47,7 +47,7 @@ test('two future scores have separate authored material and reproducible PCM, wi
   for(const bad of ['unknown','__proto__'])assert.throws(()=>scoreForFutureMode(bad),RangeError);
 });
 
-test('WAV export emits six distinct score/WAV pairs and twelve valid SHA-256 receipts',async t=>{
+test('WAV export emits seven distinct score/WAV pairs and fourteen valid SHA-256 receipts',async t=>{
   const tmp=await mkdtemp(join(tmpdir(),'circuit-music-catalogue-'));
   t.after(()=>rm(tmp,{recursive:true,force:true}));
   const root=fileURLToPath(new URL('../',import.meta.url));
@@ -60,7 +60,7 @@ test('WAV export emits six distinct score/WAV pairs and twelve valid SHA-256 rec
   const files=await readdir(dest);
   assert.deepEqual(files.sort(),[...ids.flatMap(id=>[id+'-score.json',id+'-preview.wav']),'SHA256SUMS'].sort());
   const lines=(await readFile(join(dest,'SHA256SUMS'),'utf8')).trim().split('\n');
-  assert.equal(lines.length,12);
+  assert.equal(lines.length,14);
   for(const line of lines){
     const match=/^([0-9a-f]{64})  ([a-z-]+\.(?:json|wav))$/.exec(line);
     assert(match,'well-formed local receipt');
@@ -80,6 +80,6 @@ test('WAV export emits six distinct score/WAV pairs and twelve valid SHA-256 rec
     assert.equal(meta.status,Object.hasOwn(MUSIC_TITLES,id)?'playable':'future-mode-only');
     assert.equal(meta.score.phrases.length,8);
   }
-  assert.equal(hashes.size,6,'six distinct original scores');
+  assert.equal(hashes.size,7,'seven distinct original scores');
   assert.notEqual(run().status,0,'an existing output folder must not be overwritten');
 });

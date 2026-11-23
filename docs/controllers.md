@@ -10,6 +10,7 @@ For a standard-layout pad, release the stick, pedals and buttons. Choose **Start
 | Confirm, back | A, B | Cross, Circle |
 | Pause/resume | Menu | Options |
 | Camera, recover | Y, X | Triangle, Square |
+| Nitro Skyway drift, boost | LB, RB | L1, R1 |
 
 These defaults require the browser's standard mapping. Device names, USB and Bluetooth transport do not select layouts. Use a loopback server or HTTPS for browser device access. A browser, permissions policy or OS can limit which devices it exposes. [W3C Gamepad API](https://www.w3.org/TR/gamepad/)
 
@@ -23,9 +24,15 @@ A digital pad can use separate directions, two face buttons for pedals and its o
 
 Profiles are versioned and stored on this browser only. Storage failure keeps a profile usable for the session. Unknown or incomplete layouts require calibration. Device names are matching hints for local settings; explicitly select the slot each time. Physically identical units reporting the same ID and layout can share calibration. Active ownership still belongs to the explicitly selected slot. Profiles never leave the browser.
 
+### Nitro bindings
+
+On Nitro Skyway the keyboard uses **Space** for drift and either **Shift** for boost while the racing canvas owns focus. The standard gamepad uses its two shoulder buttons. Hold either control for as many physics ticks as intended. Release every mapped control before arming the grid or resuming a paused gamepad race.
+
+For a custom pad or wheel, open **Mapping and calibration → Button assignments**, choose **Nitro drift** or **Nitro boost**, then capture the neutral and pressed endpoints for that assignment. Save the profile and select the device. Version 2 accepts both assignments. Version 1 profiles retain their existing steering, pedals and buttons, with drift and boost initially unassigned. Loading preserves the stored settings. The next explicit save writes version 2.
+
 ## Touch driving
 
-On a touch-capable screen select either course, tap **Start race**, then **Drive with touch** on the grid. The same source is available in the controller picker. Hold Gas or Brake with one finger and a steering arrow with another. Lift or move a finger off a control to release it. Use View, Recover and Pause beside the steering arrows. A cancelled gesture, lost capture, app switch or orientation change clears the controls and pauses active racing. Tap **Resume race**, then make fresh presses.
+On a touch-capable screen select either course, tap **Start race**, then **Drive with touch** on the grid. The same source is available in the controller picker. Hold Gas or Brake with one finger and a steering arrow with another. Lift or move a finger off a control to release it. On Nitro Skyway, separate Drift and Nitro buttons sit above the pedals. Each finger holds its own control, including when steering and accelerating together. Use View, Recover and Pause beside the steering arrows. A cancelled gesture, lost capture, app switch or orientation change clears the controls and pauses active racing. Tap **Resume race**, then make fresh presses.
 
 Landscape offers the widest road view. Portrait keeps the instrument panel and controls accessible. **Settings → Driving effects → Mobile** limits the drawing buffer to 75% in each dimension and selects reduced effects. Automatic quality selects this mode when the browser reports a coarse primary pointer. Physics and timing always use the same fixed-step update.
 

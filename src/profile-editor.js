@@ -4,7 +4,7 @@ import {ACTION_NAMES,TUNING,captureNeutral,centredSteering,deviceKey,movedContro
 
 const names={left:'Steer left',right:'Steer right',throttle:'Accelerator',brake:'Brake / reverse',
   confirm:'Confirm / grid start',pause:'Pause / resume',back:'Back',camera:'Camera',recover:'Recover',
-  up:'Menu up',down:'Menu down',menuLeft:'Menu left',menuRight:'Menu right'};
+  up:'Menu up',down:'Menu down',menuLeft:'Menu left',menuRight:'Menu right',drift:'Nitro drift',boost:'Nitro boost'};
 const STEPS=['neutral','left','right','centre','throttle','brake','confirm','pause','back','camera','recover','up','down','menuLeft','menuRight'];
 const optional=new Set(['back','camera','recover','up','down','menuLeft','menuRight']);
 const instructions={neutral:'Release all controls and centre the steering. Capture neutral.',
