@@ -46,3 +46,20 @@ test('recording owns its snapshots and rejects corrupt/truncated or unbounded pl
   for(let i=2;i<=108000;i++) r.record(cmd,false);
   assert.equal(r.complete,false); assert.throws(()=>r.export());
 });
+
+test('published recordings identify their revision before playback and keep legacy inputs readable', () => {
+  const revision = 'a1'.repeat(20);
+  const recording = createRecording('speedway', 27, revision);
+  recording.record({throttle:0.4,brake:0,steer:0.15},false);
+  const data = recording.export();
+  assert.equal(data.version,2);
+  assert.equal(data.revision,revision);
+  assert.equal([...replayCommands(data,revision)].length,1);
+  assert.throws(() => [...replayCommands(data,'b2'.repeat(20))],/requires game revision/);
+  for (const invalid of ['', 'main', 27, 'A'.repeat(40), null]) {
+    assert.throws(() => [...replayCommands({...data,revision:invalid})],/Invalid replay header/);
+  }
+  assert.throws(() => [...replayCommands({...data,version:1})],/Invalid replay header/);
+  assert.throws(() => [...replayCommands({...data,version:3})],/Invalid replay header/);
+  assert.throws(() => createRecording('ridge',27,'unreleased'),/Invalid replay header/);
+});

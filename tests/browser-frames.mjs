@@ -45,7 +45,8 @@ try {
       ['bridge',...course.features.bridge],['tunnel',...course.features.tunnel]
     ] : [['speedway six-car grid',-60,0],['six-car close racing',0,72],['speedway banked turn',180,263]];
     const intervals=sections.map(()=>[]);
-    let last, previousSection, held=new Set();
+    const simulationTicks=sections.map(()=>0), maxTicksPerFrame=sections.map(()=>0);
+    let last, lastTick, previousSection, held=new Set();
     function allInView() {
       const {eye,target,fov,roll}=window.frameCamera;
       const dx=target[0]-eye[0],dy=target[1]-eye[1],dz=target[2]-eye[2];
@@ -85,7 +86,13 @@ try {
             .map(e=>Math.hypot(e.current.x-p.x,e.current.z-p.z));
           if(p.speed<16 || Math.max(...distances)>50 || Math.min(...distances)>18) section=-1;
         }
-        if (section>=0 && section===previousSection) intervals[section].push(now-last);
+        if (section>=0 && section===previousSection) {
+          intervals[section].push(now-last);
+          const ticks=race.elapsedTicks-lastTick;
+          simulationTicks[section]+=ticks;
+          maxTicksPerFrame[section]=Math.max(maxTicksPerFrame[section],ticks);
+        }
+        lastTick=race.elapsedTicks;
         last=now; previousSection=section;
         if (station>=sections.at(-1)[2]) resolve();
         else requestAnimationFrame(frame);
@@ -97,7 +104,7 @@ try {
         const sorted=intervals[i].sort((a,b)=>a-b), samples=sorted.length;
         const seconds=sorted.reduce((a,b)=>a+b,0)/1000;
         const percentile=f=>sorted[Math.ceil(samples*f)-1];
-        return {section,samples,seconds,meanFps:samples/seconds,medianMs:percentile(.5),
+        return {section,samples,seconds,simulationTicks:simulationTicks[i],maxTicksPerFrame:maxTicksPerFrame[i],meanFps:samples/seconds,medianMs:percentile(.5),
           p95Ms:percentile(.95),maxMs:sorted.at(-1)};
       })};
   },scenic);

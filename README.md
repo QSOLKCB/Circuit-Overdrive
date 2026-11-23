@@ -7,6 +7,8 @@ Start sixth in the Ignition GT No. 27 and race five rivals on either course. All
 | Overdrive Speedway | Three laps of the 1.58 km circuit | Two long straights, a 17° banked turn and a reverse bend |
 | Redline Ridge | One 4.51 km mountain sprint | Forest switchbacks, a 270 m valley bridge, a 170 m tunnel and a downhill run to the flag |
 
+For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
+
 ## Start the game
 
 From the checkout, run
@@ -32,7 +34,7 @@ Losing focus clears the controls and pauses the countdown or race. Resume explic
 
 For a gamepad or wheel, open **Controller**, select the exposed slot, and set its mapping before the race. On touchscreens, tap **Drive with touch** on the grid. Each device supplies the same three driving values to the six-car simulation. [Controller setup and compatibility matrix](docs/controllers.md)
 
-At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
+At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Recordings from Pages and the offline ZIP also carry the exact source revision. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
 
 ## Cockpit and sound
 

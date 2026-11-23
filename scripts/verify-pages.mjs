@@ -2,8 +2,7 @@
 // Run from the exact checkout being served. Probes the actual HTTP entry and
 // every byte-shipped file, including optional audio and attribution.
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import {siteFiles} from './package-site.mjs';
+import {readSite} from './package-site.mjs';
 
 const base = new URL(process.argv[2]);
 assert(base.pathname === '/Circuit-Overdrive/' && !base.search && !base.hash,
@@ -13,7 +12,8 @@ const types = {
   js: ['text/javascript', 'application/javascript']
 };
 
-for (const name of siteFiles) {
+const {files} = await readSite('.');
+for (const [name, expected] of files) {
   // Fetch the bare directory to verify its default entry point.
   const url = new URL(name === 'index.html' ? '' : name, base);
   const response = await fetch(url, {redirect: 'error', signal: AbortSignal.timeout(20_000)});
@@ -23,7 +23,6 @@ for (const name of siteFiles) {
     const type = response.headers.get('content-type')?.split(';')[0].trim().toLowerCase();
     assert(required.includes(type), url + ' served as ' + type);
   }
-  const expected = await readFile(name);
   assert(expected.equals(Buffer.from(await response.arrayBuffer())), url + ' differs from the checked-out revision');
 }
-console.log('HTTP contents and MIME types verified at ' + base.href + ' (' + siteFiles.length + ' files).');
+console.log('HTTP contents and MIME types verified at ' + base.href + ' (' + files.size + ' files).');

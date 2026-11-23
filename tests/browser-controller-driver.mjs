@@ -111,11 +111,20 @@ export async function verifyReplayDownload(page, result, courseName, required) {
   assert((await stat(path)).size < 12*1024*1024, 'export exceeds the 30-minute command limit');
   const data=JSON.parse(await readFile(path,'utf8'));
   assert.equal(data.course,course.id);
-  assert.deepEqual(Object.keys(data).sort(),['course','runs','seed','ticks','version']);
+  const revision = await page.locator('meta[name=game-revision]').getAttribute('content');
+  if (process.env.REPLAY_REVISION) assert.equal(revision,process.env.REPLAY_REVISION);
+  if (revision) {
+    assert.equal(data.version,2);
+    assert.match(data.revision,/^[0-9a-f]{40}$/);
+    assert.equal(data.revision,revision);
+  } else assert.equal(data.version,1);
+  if (process.env.EVIDENCE_DIR && revision) {
+    await download.saveAs((await import('node:path')).join(process.env.EVIDENCE_DIR, download.suggestedFilename()));
+  }
   const race=createRace(data.seed,course);
   startRace(race);
   let ticks=0, analog=0;
-  for (const {command,recover} of replayCommands(data)) {
+  for (const {command,recover} of replayCommands(data,revision)) {
     assert.notEqual(race.phase,'finished','extra tick after flag');
     if (recover) assert(recoverCar(race));
     if ([command.steer,command.throttle,command.brake].some(v => v!==0 && Math.abs(v)<1)) analog++;
@@ -127,5 +136,5 @@ export async function verifyReplayDownload(page, result, courseName, required) {
   assert.equal(race.player.elapsedTicks,result.expectedTicks);
   assert.deepEqual(course.closed ? race.player.lapTicks : race.player.splitTicks,result.expectedSplits);
   assert.deepEqual(race.order.map(e=>({id:e.id,name:e.name,number:e.number,ticks:e.finishTicks,recoveries:e.recoveries})),result.expected);
-  return {ticks, runs:data.runs.length, analogTicks:analog, finishers:race.order.filter(e=>e.finishTicks!==null).length};
+  return {revision, ticks, runs:data.runs.length, analogTicks:analog, finishers:race.order.filter(e=>e.finishTicks!==null).length};
 }

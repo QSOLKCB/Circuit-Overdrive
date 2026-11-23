@@ -11,7 +11,9 @@ const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/');
 const scenic = process.argv.includes('--ridge');
 const attack = process.argv.includes('--attack');
+const recoverOnce = process.argv.includes('--recover');
 const source = process.argv.find(arg => arg.startsWith('--input='))?.slice(8) ?? 'keyboard';
+assert(!recoverOnce || source === 'keyboard','the recovery acceptance drive uses the R key');
 assert(['keyboard','standard','digital','wheel','touch'].includes(source),'unknown replay input');
 const softwareReplay = process.argv.includes('--software-replay');
 const courseName = scenic ? 'Ridge' : 'Speedway';
@@ -97,8 +99,8 @@ try {
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'grid');
   await armReplayController(page,source);
 
-  const result = await page.evaluate(async ({cruise, scenic, softwareReplay, source}) => {
-    const {createRace, startRace, stepRace} = await import('./src/sim.js');
+  const result = await page.evaluate(async ({cruise, scenic, softwareReplay, source, recoverOnce}) => {
+    const {createRace, startRace, stepRace, recoverCar, PENALTY_TICKS} = await import('./src/sim.js');
     const course = scenic ? (await import('./src/ridge.js')).ridge : (await import('./src/track.js')).track;
     const phase = () => document.body.dataset.phase;
     const text = id => document.getElementById(id).textContent;
@@ -208,6 +210,14 @@ try {
         flush();
         await window.captureSection(captures.shift()[1]);
       }
+      if (recoverOnce && tick === 240) {
+        flush();
+        const {nextGate, distance, elapsedTicks} = shadow.player;
+        if (!recoverCar(shadow) || shadow.player.nextGate !== nextGate || shadow.player.distance > distance ||
+            shadow.player.elapsedTicks !== elapsedTicks + PENALTY_TICKS) throw Error('Invalid reference recovery');
+        key('keydown','KeyR');
+        key('keyup','KeyR');
+      }
       const intent = window.driveKeyboard(shadow.player.current, cruise, 0, course);
       if ((source==='standard' || source==='wheel') && tick<60) intent.throttle=.5;
       if (source==='touch') {
@@ -244,7 +254,7 @@ try {
       remaining:text('remaining'), expectedSplits: scenic ? shadow.player.splitTicks : shadow.player.lapTicks,
       expectedSplitCount:scenic ? course.gates.length-2 : 3, expectedTicks: shadow.player.elapsedTicks, recoveries: shadow.player.recoveries
     };
-  }, {cruise:attack ? (scenic ? 42 : 38) : 30,scenic,softwareReplay,source});
+  }, {cruise:attack ? (scenic ? 42 : 38) : 30,scenic,softwareReplay,source,recoverOnce});
   const time = ticks => {
     const ms = Math.round(ticks * 1000 / 60);
     return Math.floor(ms / 60000) + ':' + String(Math.floor(ms / 1000) % 60).padStart(2, '0')
@@ -261,7 +271,7 @@ try {
   assert.equal(result.splits.length, result.expectedSplitCount);
   assert.deepEqual(result.splits, result.expectedSplits.map(time));
   assert.equal(result.time, time(result.expectedTicks));
-  assert.equal(result.recoveries, 0);
+  assert.equal(result.recoveries, Number(recoverOnce));
   assert.equal(result.classification.length, 6);
   for (const [i, expected] of result.expected.entries()) {
     const official = expected.ticks === null ? 'Racing at flag' : time(expected.ticks);
