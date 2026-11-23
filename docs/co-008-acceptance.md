@@ -101,6 +101,10 @@ NATIVE_GL=1 node tests/browser-endurance.mjs "$BASE"
 NATIVE_GL=1 node tests/browser-endurance.mjs "$URL" --night
 ```
 
+## CI timing baseline
+
+The three-shard PR run on head `fcf3ba2cb53a5cffc1dfcfb3192cba5f6e4b0348` took 15m13s. The Ridge job took 12m58s, including approximately 8m06s for the championship. The seven-shard layout gives the championship a dedicated runner and starts the browser jobs when the archive is ready. To reproduce all 15 browser suites on a current checkout, run `bash scripts/browser-pages.sh "$URL" "$(mktemp -d)"`. The elapsed time for a full merge also includes the subsequent public browser jobs against the deployed SHA. [Three-shard reference run](https://github.com/QSOLKCB/Circuit-Overdrive/actions/runs/45243951365) · [Current worker and replay reuse contracts](pages.md#reproduce-browser-verification)
+
 ## Owner release gate
 
 Review A → B → C → D. After integrating each dependency, retarget its successor to main and verify the cumulative main diff. On the final main SHA, repeat CI, check the deployed project URL through the protected Pages workflow and complete both night races. Check visibility through the bank and portals, brake-lamp contrast, sound on speakers and the intended physical controls. Prepare the release notes, tag and publish only after owner sign-off. [Player instructions](nightshift.md) · [Release procedure](offline-release.md)

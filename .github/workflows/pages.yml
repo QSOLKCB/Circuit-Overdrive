@@ -14,6 +14,25 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Test simulation, course rules and vendored source hashes
+        run: node --test tests/*.test.mjs
+      - name: Verify browser shard coverage
+        run: bash tests/browser-pages-shards.sh
+      - name: Test offline release rules
+        run: python3 tests/test_offline_release.py
+
   package:
     runs-on: ubuntu-latest
     timeout-minutes: 50
@@ -29,15 +48,10 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
-      - name: Test simulation, course rules and vendored source hashes
-        run: node --test tests/*.test.mjs
-      - name: Verify browser shard coverage
-        run: bash tests/browser-pages-shards.sh
       - name: Assemble and validate the allowlisted site
         run: node --experimental-vm-modules scripts/package-site.mjs "$RUNNER_TEMP/public/Circuit-Overdrive"
       - name: Build and independently verify offline release candidate
         run: |
-          python3 tests/test_offline_release.py
           python3 scripts/offline-release.py build "$RUNNER_TEMP/offline"
           python3 scripts/offline-release.py verify "$RUNNER_TEMP/offline"
           name="Circuit-Overdrive-${GITHUB_SHA}.zip"
@@ -70,14 +84,15 @@ jobs:
   # Keep the existing required check. A skipped or failed dependency must fail it.
   verify:
     if: always()
-    needs: [package, local-browser]
+    needs: [tests, package, local-browser]
     runs-on: ubuntu-latest
     steps:
-      - name: Require the package and every browser shard
+      - name: Require tests, the verified package and every browser shard
         env:
+          TESTS: ${{ needs.tests.result }}
           PACKAGE: ${{ needs.package.result }}
           BROWSER: ${{ needs.local-browser.result }}
-        run: '[[ "$PACKAGE" == success && "$BROWSER" == success ]]'
+        run: '[[ "$TESTS" == success && "$PACKAGE" == success && "$BROWSER" == success ]]'
 
   deploy:
     needs: [package, verify]

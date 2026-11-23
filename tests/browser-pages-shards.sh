@@ -18,7 +18,11 @@ if [[ $1 == tests/browser-finish.mjs ]]; then
     if [[ $arg == --ridge ]]; then course=ridge; fi
     if [[ $arg == --night ]]; then suffix=-night; fi
   done
-  touch "$EVIDENCE_DIR/circuit-overdrive-$course$suffix-replay.json"
+  if [[ ${MISSING_TAPE:-} != "$course$suffix" ]]; then
+    ticks=123
+    if [[ ${DIFFERENT_TAPE:-} == "$course$suffix" ]]; then ticks=124; fi
+    printf '{"course":"%s","ticks":%s}\n' "$course" "$ticks" > "$EVIDENCE_DIR/circuit-overdrive-$course$suffix-replay.json"
+  fi
 fi
 if [[ $1 == "${FAIL_SCRIPT:-}" ]]; then exit 73; fi
 NODE
@@ -32,10 +36,19 @@ run() {
   CALLS="$test_dir/$name.calls" bash scripts/browser-pages.sh "$url" "$test_dir/$name" "$@"
 }
 
+shards=(championship speedway ridge controllers theatre lifecycle effects)
+# The required gate trusts the actual matrix. A missing workflow lane must fail
+# even when its shell entry point can still run locally.
+diff -u <(printf '%s\n' "${shards[@]}" | sort) <(
+  awk -F '[][]' '/^[[:space:]]*shard: *\[/ {
+    count = split($2, names, / *, */)
+    for (i = 1; i <= count; i++) print names[i]
+  }' .github/workflows/browser-checks.yml | sort
+)
 run serial
-run speedway --shard=speedway --wait-for-cdn
-run ridge --wait-for-cdn --shard=ridge
-run controllers --shard=controllers
+run explicit --wait-for-cdn --shard=all
+diff -u "$test_dir/serial.calls" "$test_dir/explicit.calls"
+for shard in "${shards[@]}"; do run "$shard" "--shard=$shard" --wait-for-cdn; done
 cat > "$test_dir/expected" <<EOF
 |scripts/verify-pages.mjs $url
 smoke|tests/browser-smoke.mjs $url
@@ -55,16 +68,38 @@ headlights|tests/browser-headlights.mjs $url
 night-contact|tests/browser-effects.mjs $url --night
 EOF
 diff -u "$test_dir/expected" "$test_dir/serial.calls"
-# Each runner checks the HTTP package itself. Every other invocation belongs to exactly one shard.
-diff -u <(sed -n '1p;2p;6p;9p;12p;16p' "$test_dir/expected") "$test_dir/speedway.calls"
-diff -u <(sed -n '1p;3p;10p;11p;13p' "$test_dir/expected") "$test_dir/ridge.calls"
-diff -u <(sed -n '1p;4p;5p;7p;8p;14p;15p' "$test_dir/expected") "$test_dir/controllers.calls"
+# Every shard starts by validating its own HTTP endpoint. Assert suite membership
+# by its evidence log, then compare every invocation and argument with serial.
+check_lane() {
+  local lane=$1 log name
+  shift
+  diff -u <(head -n 1 "$test_dir/expected") <(head -n 1 "$test_dir/$lane.calls")
+  diff -u <(printf '%s\n' http "$@" | sort) <(
+    for log in "$test_dir/$lane"/*.log; do
+      name=${log##*/}
+      echo "${name%.log}"
+    done | sort
+  )
+}
+check_lane championship championship
+check_lane speedway speedway night-speedway
+check_lane ridge ridge night-ridge
+check_lane controllers gamepad profiles lab
+check_lane theatre theatre
+check_lane lifecycle smoke ridge-smoke night-smoke touch
+check_lane effects night-contact headlights
 diff -u <(tail -n +2 "$test_dir/serial.calls" | sort) \
-  <(for shard in speedway ridge controllers; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
+  <(for shard in "${shards[@]}"; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
 inventory() { (cd "$test_dir/$1" && find . -type f | sort); }
-diff -u <(inventory serial) <(for shard in speedway ridge controllers; do inventory "$shard"; done | sort -u)
+diff -u <(inventory serial) <(for shard in "${shards[@]}"; do inventory "$shard"; done | sort -u)
 NATIVE_GL=1 run native-gl --shard=ridge
 diff -u <(sed 's/ --software-replay//' "$test_dir/ridge.calls") "$test_dir/native-gl.calls"
+
+for course in speedway ridge; do
+  if MISSING_TAPE="$course" run "missing-$course" "--shard=$course" >/dev/null 2>&1; then exit 1; else [[ $? == 2 ]]; fi
+  if DIFFERENT_TAPE="$course-night" run "mismatch-$course" "--shard=$course" >/dev/null 2>&1; then exit 1; else [[ $? == 1 ]]; fi
+done
+if DIFFERENT_TAPE=ridge-night run mismatch-serial >/dev/null 2>&1; then exit 1; else [[ $? == 1 ]]; fi
 
 # A failed test must survive tee; the following suite must never run.
 if FAIL_SCRIPT=tests/browser-profiles.mjs run failure --shard=controllers; then exit 1; else [[ $? == 73 ]]; fi
@@ -75,5 +110,6 @@ for option in --shard=typo --shard= --unexpected; do
   if run invalid "$option" 2>/dev/null; then exit 1; else [[ $? == 2 ]]; fi
 done
 if run invalid --shard=ridge --shard=speedway 2>/dev/null; then exit 1; else [[ $? == 2 ]]; fi
+if run invalid --shard=all --shard=ridge 2>/dev/null; then exit 1; else [[ $? == 2 ]]; fi
 [[ ! -e "$test_dir/invalid.calls" ]]
 echo 'Browser suite commands, evidence inventory, CLI and failure propagation passed.'

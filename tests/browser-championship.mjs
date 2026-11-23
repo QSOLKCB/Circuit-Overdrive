@@ -1,12 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
 import {readFile, writeFile} from 'node:fs/promises';
-import {createReplaySession,MAX_SEEK_STEPS} from '../src/replay-theatre-core.js';
+import {createReplaySession} from '../src/replay-theatre-core.js';
+import {encodeReference,readReference,referenceIdentity,replayBatches,verifyRoundReference}
+  from './championship-replay-reference.mjs';
 import {driverIntent} from './driver.mjs';
 import {installReplayController,selectReplayController,armReplayController} from './browser-controller-driver.mjs';
 
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2]);
+const identity = await referenceIdentity();
+const cachedRounds = await readReference(process.env.WOC_REFERENCE_RECEIPT,identity);
+const references = [];
 const browser = await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors = [];
@@ -108,19 +113,24 @@ async function verifyEventReplay(page, result, round, course, seed) {
   const revision = await page.locator('meta[name=game-revision]').getAttribute('content');
   assert.match(revision,/^[a-f0-9]{40}$/,'Serve a source-stamped package');
   const [file] = await Promise.all([page.waitForEvent('download'),click(page,'woc-replay')]);
-  const data = JSON.parse(await readFile(await file.path(),'utf8'));
+  const bytes = await readFile(await file.path());
+  const data = JSON.parse(bytes);
   assert.equal(data.course,course);
   assert.equal(data.seed,seed);
   assert.equal(data.revision,revision);
   assert.equal(data.ticks,result.ticks);
   assert.match(file.suggestedFilename(),new RegExp('^woc-[a-f0-9]{32}-r'+round+'-'+course+'-'+seed+'-replay\\.json$'));
-  const session = createReplaySession(data,revision);
-  for (const batch of [MAX_SEEK_STEPS,63]) {
-    session.reset();
-    while (!session.finished) session.advance(batch);
-    assert.deepEqual(session.race.order.map(({id,finishTicks,recoveries})=>({id,finishTicks,recoveries})),
-      result.classification);
-  }
+  if (identity) assert.equal(revision,identity.revision);
+  const verified = verifyRoundReference(bytes,result.classification,cachedRounds[round-1],() => {
+    const session = createReplaySession(data,revision);
+    return replayBatches.map(batch => {
+      session.reset();
+      while (!session.finished) session.advance(batch);
+      return session.race.order.map(({id,finishTicks,recoveries})=>({id,finishTicks,recoveries}));
+    });
+  });
+  references.push(verified.reference);
+  console.log('Round '+round+' Node replay reference '+(verified.reused?'reused':'reconstructed')+'.');
   if (process.env.EVIDENCE_DIR) await file.saveAs(process.env.EVIDENCE_DIR+'/'+file.suggestedFilename());
   return data;
 }
@@ -438,5 +448,7 @@ try {
   for (const source of ['standard','touch']) await lifecycle(source);
   await storageFaults();
   assert.deepEqual(errors,[]);
+  if (process.env.EVIDENCE_DIR) await writeFile(process.env.EVIDENCE_DIR+'/replay-reference.json',
+    encodeReference(identity,references));
   console.log('Four flags, four replay downloads, standings, storage, menu and controller lifecycle passed.');
 } finally { await browser.close(); }
