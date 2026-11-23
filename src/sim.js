@@ -27,7 +27,8 @@ export const rideHeight = touring.wheel.radius + touring.suspension.restLength
   - touring.mass * 9.81 / (4 * touring.suspension.spring);
 const staticCompression = touring.wheel.radius + touring.suspension.restLength - rideHeight;
 const railClearance = .08;
-const corneringAcceleration = 18; // m/s² at racing speed, with aero load on the tyres.
+const precisionSpeedSquared = 36 ** 2;
+const fullAeroSpeedSquared = 45 ** 2;
 const maxStationStep = 2.5; // 120 m/s × 1/60 s plus the inside-corner projection margin.
 const gridClearance = touring.chassis.length / 2 + railClearance;
 
@@ -185,6 +186,10 @@ function controls(state, intent) {
   // before the tyres saturate, keeping the entire stick or wheel range usable.
   const [vx, vy, vz] = state.velocity;
   const speedSquared = vx * vx + vy * vy + vz * vz;
+  // Keep coasting taps precise at ordinary entry speeds. Blending in v²
+  // keeps the maximum wheel angle decreasing even as the acceleration target rises.
+  const highSpeedBlend = clamp((speedSquared - precisionSpeedSquared) / (fullAeroSpeedSquared - precisionSpeedSquared), 0, 1);
+  const corneringAcceleration = 13.5 + 4.5 * highSpeedBlend;
   const gripAngle = Math.atan2(touring.wheel.wheelbase * corneringAcceleration, speedSquared);
   const engineLock = touring.steering.maxAngle / (1 + Math.abs(speed) * touring.steering.speedReduction);
   const steer = requestedSteer * Math.min(1, gripAngle / engineLock);
@@ -196,7 +201,7 @@ function controls(state, intent) {
 function loadSuspension(state) {
   if (!state.wheels.some(wheel => wheel.grounded && wheel.load > 0)) return state;
   const [vx, vy, vz] = state.velocity;
-  const downforce = 4 * Math.min(1, (vx * vx + vz * vz) / (45 * 45));
+  const downforce = 4 * Math.min(1, (vx * vx + vz * vz) / fullAeroSpeedSquared);
   return {...state, velocity: [vx, vy - downforce * STEP, vz]};
 }
 

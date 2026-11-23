@@ -25,6 +25,28 @@ function clearGrid(course) {
   return race;
 }
 
+test('lifting and tapping right at 126 km/h leaves room to accelerate out of the Speedway bank', () => {
+  const race = clearGrid(track);
+  const player = race.player;
+  for (let tick = 0; tick < 600 && player.distance < 132; tick++) {
+    stepRace(race, {throttle: Number(player.current.speed < 35)});
+  }
+  assert.ok(player.distance >= 132 && Math.abs(player.current.speed - 35) < 1);
+
+  // Two coasting taps, then apply power and steer through the rest of the bank.
+  for (const [ticks, command] of [
+    [24, {steer: 1}], [60, {}], [54, {steer: 1}],
+    [36, {throttle: 1}], [72, {throttle: 1, steer: 1}], [70, {throttle: 1}],
+  ]) {
+    for (let tick = 0; tick < ticks; tick++) {
+      stepRace(race, command);
+      assert.ok(!player.vehicle.contacts.includes('guardrail'), 'hit the rail during the coasting entry or exit');
+    }
+  }
+  assert.equal(player.recoveries, 0);
+  assert.ok(player.distance > 310 && player.current.speed > 40, 'accelerate clear of the bank');
+});
+
 for (const { course, approach, turnIn, exit } of firstBends) {
   test(`${course.name} stays on its wheels through the first bend with held digital corrections`, () => {
     const race = clearGrid(course);
