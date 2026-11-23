@@ -1,0 +1,542 @@
+[
+  {
+    "input": "keyboard",
+    "time": "2:39.800",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9768,
+      "runs": 3529,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:55.383",
+      "0:52.200",
+      "0:52.217"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "2:12.017"
+      },
+      {
+        "id": 3,
+        "driver": "2.  Rory Flint  #59",
+        "time": "2:12.650"
+      },
+      {
+        "id": 0,
+        "driver": "3.  Mara Vale  #14",
+        "time": "2:16.883"
+      },
+      {
+        "id": 2,
+        "driver": "4.  Emi Park  #46",
+        "time": "2:17.200"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:31.150"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:39.800"
+      }
+    ],
+    "course": "speedway",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "keyboard",
+    "time": "2:32.683",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9341,
+      "runs": 2375,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:21.150",
+      "0:41.583",
+      "1:01.167",
+      "1:18.100",
+      "1:36.633",
+      "1:55.550",
+      "2:14.067"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "1:53.083"
+      },
+      {
+        "id": 0,
+        "driver": "2.  Mara Vale  #14",
+        "time": "1:59.400"
+      },
+      {
+        "id": 2,
+        "driver": "3.  Emi Park  #46",
+        "time": "2:00.467"
+      },
+      {
+        "id": 3,
+        "driver": "4.  Rory Flint  #59",
+        "time": "2:00.583"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:18.367"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:32.683"
+      }
+    ],
+    "course": "ridge",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "standard",
+    "time": "2:40.283",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9797,
+      "runs": 3526,
+      "analogTicks": 60,
+      "finishers": 6
+    },
+    "splits": [
+      "0:55.867",
+      "0:52.217",
+      "0:52.200"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "2:12.017"
+      },
+      {
+        "id": 3,
+        "driver": "2.  Rory Flint  #59",
+        "time": "2:12.650"
+      },
+      {
+        "id": 0,
+        "driver": "3.  Mara Vale  #14",
+        "time": "2:16.883"
+      },
+      {
+        "id": 2,
+        "driver": "4.  Emi Park  #46",
+        "time": "2:17.200"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:31.150"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:40.283"
+      }
+    ],
+    "course": "speedway",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "standard",
+    "time": "2:33.167",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9370,
+      "runs": 2391,
+      "analogTicks": 60,
+      "finishers": 6
+    },
+    "splits": [
+      "0:21.633",
+      "0:42.083",
+      "1:01.650",
+      "1:18.600",
+      "1:37.133",
+      "1:56.050",
+      "2:14.567"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "1:53.083"
+      },
+      {
+        "id": 0,
+        "driver": "2.  Mara Vale  #14",
+        "time": "1:59.400"
+      },
+      {
+        "id": 2,
+        "driver": "3.  Emi Park  #46",
+        "time": "2:00.467"
+      },
+      {
+        "id": 3,
+        "driver": "4.  Rory Flint  #59",
+        "time": "2:00.583"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:18.367"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:33.167"
+      }
+    ],
+    "course": "ridge",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "digital",
+    "time": "2:39.800",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9768,
+      "runs": 3529,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:55.383",
+      "0:52.200",
+      "0:52.217"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "2:12.017"
+      },
+      {
+        "id": 3,
+        "driver": "2.  Rory Flint  #59",
+        "time": "2:12.650"
+      },
+      {
+        "id": 0,
+        "driver": "3.  Mara Vale  #14",
+        "time": "2:16.883"
+      },
+      {
+        "id": 2,
+        "driver": "4.  Emi Park  #46",
+        "time": "2:17.200"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:31.150"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:39.800"
+      }
+    ],
+    "course": "speedway",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "digital",
+    "time": "2:32.683",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9341,
+      "runs": 2375,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:21.150",
+      "0:41.583",
+      "1:01.167",
+      "1:18.100",
+      "1:36.633",
+      "1:55.550",
+      "2:14.067"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "1:53.083"
+      },
+      {
+        "id": 0,
+        "driver": "2.  Mara Vale  #14",
+        "time": "1:59.400"
+      },
+      {
+        "id": 2,
+        "driver": "3.  Emi Park  #46",
+        "time": "2:00.467"
+      },
+      {
+        "id": 3,
+        "driver": "4.  Rory Flint  #59",
+        "time": "2:00.583"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:18.367"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:32.683"
+      }
+    ],
+    "course": "ridge",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "wheel",
+    "time": "2:40.283",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9797,
+      "runs": 3526,
+      "analogTicks": 60,
+      "finishers": 6
+    },
+    "splits": [
+      "0:55.867",
+      "0:52.217",
+      "0:52.200"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "2:12.017"
+      },
+      {
+        "id": 3,
+        "driver": "2.  Rory Flint  #59",
+        "time": "2:12.650"
+      },
+      {
+        "id": 0,
+        "driver": "3.  Mara Vale  #14",
+        "time": "2:16.883"
+      },
+      {
+        "id": 2,
+        "driver": "4.  Emi Park  #46",
+        "time": "2:17.200"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:31.150"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:40.283"
+      }
+    ],
+    "course": "speedway",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "wheel",
+    "time": "2:33.167",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9370,
+      "runs": 2391,
+      "analogTicks": 60,
+      "finishers": 6
+    },
+    "splits": [
+      "0:21.633",
+      "0:42.083",
+      "1:01.650",
+      "1:18.600",
+      "1:37.133",
+      "1:56.050",
+      "2:14.567"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "1:53.083"
+      },
+      {
+        "id": 0,
+        "driver": "2.  Mara Vale  #14",
+        "time": "1:59.400"
+      },
+      {
+        "id": 2,
+        "driver": "3.  Emi Park  #46",
+        "time": "2:00.467"
+      },
+      {
+        "id": 3,
+        "driver": "4.  Rory Flint  #59",
+        "time": "2:00.583"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:18.367"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:33.167"
+      }
+    ],
+    "course": "ridge",
+    "fieldRecoveries": 0
+  },
+  {
+    "input": "touch",
+    "time": "2:39.900",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9774,
+      "runs": 812,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:55.417",
+      "0:52.233",
+      "0:52.250"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "2:12.017"
+      },
+      {
+        "id": 3,
+        "driver": "2.  Rory Flint  #59",
+        "time": "2:12.650"
+      },
+      {
+        "id": 0,
+        "driver": "3.  Mara Vale  #14",
+        "time": "2:16.883"
+      },
+      {
+        "id": 2,
+        "driver": "4.  Emi Park  #46",
+        "time": "2:17.200"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:31.150"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:39.900"
+      }
+    ],
+    "course": "speedway",
+    "fieldRecoveries": 0,
+    "touch": {
+      "trustedPresses": 553,
+      "maxFingers": 2,
+      "untrustedPresses": 0
+    }
+  },
+  {
+    "input": "touch",
+    "time": "2:32.783",
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "savedReplay": {
+      "ticks": 9347,
+      "runs": 612,
+      "analogTicks": 0,
+      "finishers": 6
+    },
+    "splits": [
+      "0:21.150",
+      "0:41.617",
+      "1:01.200",
+      "1:18.150",
+      "1:36.700",
+      "1:55.633",
+      "2:14.150"
+    ],
+    "classification": [
+      {
+        "id": 1,
+        "driver": "1.  Kit Vega  #83",
+        "time": "1:53.083"
+      },
+      {
+        "id": 0,
+        "driver": "2.  Mara Vale  #14",
+        "time": "1:59.400"
+      },
+      {
+        "id": 2,
+        "driver": "3.  Emi Park  #46",
+        "time": "2:00.467"
+      },
+      {
+        "id": 3,
+        "driver": "4.  Rory Flint  #59",
+        "time": "2:00.583"
+      },
+      {
+        "id": 4,
+        "driver": "5.  Luca Reed  #32",
+        "time": "2:18.367"
+      },
+      {
+        "id": 5,
+        "driver": "6.  Player  #27",
+        "time": "2:32.783"
+      }
+    ],
+    "course": "ridge",
+    "fieldRecoveries": 0,
+    "touch": {
+      "trustedPresses": 412,
+      "maxFingers": 2,
+      "untrustedPresses": 0
+    }
+  }
+]

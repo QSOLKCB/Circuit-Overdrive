@@ -81,7 +81,11 @@ try {
   assert.equal(await page.locator('#timer').textContent(),frozen);
   await click('controllers'); await page.selectOption('#driver-device','pad-1'); await click('use-device');
   await tick(2); await click('continue'); assert.equal(await phase(),'paused','held pedals and steering must release first');
-  await press(7,0); await page.evaluate(()=>{reports[1].axes[0]=0;window.tick(2);});
+  await press(7,0); await page.evaluate(()=>{
+    reports[1].axes[0]=0; window.tick(2);
+    // A native dialog close notification can arrive after neutral was observed.
+    document.querySelector('#controller-dialog').dispatchEvent(new Event('close'));
+  });
   await press(9,1); await tick(2); assert.equal(await phase(),'racing');
   await press(9,0); await tick(2); await press(9,1); await tick(2);
   assert.equal(await phase(),'paused');
@@ -96,6 +100,23 @@ try {
   await click('controllers'); await page.selectOption('#driver-device','keyboard'); await click('use-device');
   await click('continue'); assert.equal(await phase(),'racing');
   await page.keyboard.press('Escape'); assert.equal(await phase(),'paused');
+  await click('courses'); await click('controllers');
+  await page.selectOption('#driver-device','pad-1'); await click('use-device');
+  await press(9,0); await tick(2);
+  await press(0,1); await tick(2);
+  assert.equal(await phase(),'grid','a confirm/pause-only wheel can launch the selected course');
+  await press(0,0); await tick(2); await press(0,1); await tick(2);
+  assert.equal(await phase(),'countdown');
+  await press(0,0); await tick(2); await press(7,1);
+  await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
+  assert.equal(await phase(),'paused');
+  await tick(2); await click('continue'); assert.equal(await phase(),'paused');
   assert.deepEqual(errors,[]);
+  // Losing a required track module leaves a readable HTML entry point even
+  // on a browser that cannot start the main module graph.
+  await page.route('**/tracks/overdrive-speedway.json', route=>route.abort());
+  await page.reload();
+  assert(await page.locator('#boot-note').isVisible());
+  assert(await page.locator('#start').isDisabled());
   console.log('Chromium '+browser.version()+' · synthetic standard pad · owner-only picker navigation, Back and Cancel, held grid buttons, analog drive, disconnect under load, neutral reacquisition, gamepad pause/resume and keyboard handoff passed.');
 } finally { await browser.close(); }

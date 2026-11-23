@@ -10,10 +10,17 @@ export function controllerMenu(input, onSelect) {
   const dialog = $('controller-dialog'), list = $('driver-device');
   let signature = '', devices = [], message = '';
   let previewKey, mapper;
-  const editor = createProfileEditor($('profile-host'), {onSave:(pad,updated) => {
+  // Capture and Save can happen between frames. Some browsers replace the
+  // Gamepad object on each poll, so always read the current slot for a click.
+  function readDevice(expected) {
+    if (!expected) return null;
+    const key=deviceKey(expected);
+    return input.pads.devices().find(live=>live.index===expected.index && deviceKey(live)===key) || null;
+  }
+  const editor = createProfileEditor($('profile-host'), {readDevice, onSave:(pad,updated) => {
     previewKey = undefined;
     // Saving edits to the owner's device clears every held value before reuse.
-    if (input.source === 'gamepad' && input.pads.index === pad.index) {
+    if (input.source === 'gamepad' && input.pads.owns(pad)) {
       if (updated || pad.mapping === 'standard') input.select('gamepad',pad.index,updated || undefined);
       else input.pads.deselect();
     }
@@ -72,7 +79,7 @@ export function controllerMenu(input, onSelect) {
   list.onchange = () => { message = ''; present(); };
   $('use-device').onclick = () => {
     const pad = currentPad();
-    if (pad && !input.pads.devices().some(p=>p.index===pad.index && p.id===pad.id && p.mapping===pad.mapping)) {
+    if (pad && !readDevice(pad)) {
       message = 'Device changed. Select the connected controller again.'; refresh(); return;
     }
     const kind = pad ? 'gamepad' : list.value === 'touch' ? 'touch' : 'keyboard';
@@ -85,7 +92,7 @@ export function controllerMenu(input, onSelect) {
   };
   $('close-controller').onclick = close;
   function navigate(action) {
-    if (input.pads.index === currentPad()?.index && editor.handlesLearningInput(action)) return true;
+    if (input.pads.owns(currentPad()) && editor.handlesLearningInput(action)) return true;
     return menuAction(action);
   }
   return {open, refresh, navigate};
