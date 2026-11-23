@@ -9,7 +9,7 @@ import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
-import {eventTitle, validateEnvironment} from './environment.js';
+import {courseEnvironment, eventTitle, validateEnvironment} from './environment.js';
 import {createMap, drawCoursePreview} from './map.js';
 import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, progress, STEP} from './sim.js';
 
@@ -229,6 +229,7 @@ function graphicsError(message) {
 }
 function initializeScene() {
   try {
+    environment = courseEnvironment(race.course, environment);
     scene = createScene(canvas, race.course, pixelRatio, environment);
     error = '';
     updatePanel();

@@ -39,12 +39,13 @@ async function inspect(base,variant) {
     const {createRace,startRace,stepRace,recoverCar,rideHeight}=await import('./src/sim.js');
     const canvas=document.querySelector('canvas');
     let scene,course,race;
-    window.openCourse=id=>{
+    window.openGrid=(grid,requested)=>{
       scene?.dispose();
-      course=id==='speedway'?track:ridge;
-      race=createRace(27,course);
-      scene=createScene(canvas,course,1,variant);
+      race=grid;
+      course=grid.course;
+      scene=createScene(canvas,course,1,requested);
     };
+    window.openCourse=id=>window.openGrid(createRace(27,id==='speedway'?track:ridge),variant);
     window.photo=async(station,reverse,recovery)=>{
       if(recovery) {
         startRace(race);
@@ -100,6 +101,21 @@ async function inspect(base,variant) {
       }
       captures.push({file,reverse,recovery,...stats});
     }
+  }
+  if(variant==='night') {
+    const [day,fromNight]=await page.evaluate(async()=>{
+      const {skyway}=await import('./src/skyway.js');
+      const {createRace}=await import('./src/sim.js');
+      const grid=createRace(27,skyway), samples=[];
+      for(const request of ['day','night']) {
+        window.openGrid(grid,request);
+        const {rgba256,bright}=await window.photo(null);
+        samples.push({rgba256,bright});
+      }
+      return samples;
+    });
+    assert(day.bright>650,'Skyway grid must render visibly');
+    assert.equal(fromNight.rgba256,day.rgba256,'Skyway inherits daylight when opened from Nightshift');
   }
   assert.deepEqual(errors,[]);
   await page.close();

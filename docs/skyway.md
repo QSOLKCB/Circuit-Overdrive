@@ -4,6 +4,8 @@ Nitro Skyway is a 1,920 m point-to-point race across a tidal power installation.
 
 ## Course and landings
 
+Skyway runs in daylight, including when the previous course used Nightshift. The NITRO gantry and its chequered stripe mark the start at 0 m. The FINISH gantry and stripe sit at the 1,920 m timing plane.
+
 The route uses connected straight lines and tangent circular arcs. Horizontal station runs from −60 m on the start runoff to 1,992 m on the finish runoff. The suspension, render mesh, collision rails and recovery slots share the same sampler. Rail inner faces stand at lateral ±15 m and rise 0.94 m above their decks. The engine queries the inclined surface under every wheel. The catch face continues back down to the main deck for drivers who take a ramp slowly.
 
 | Deck | Crest station | Horizontal run on each side | Maximum grade |
@@ -20,4 +22,4 @@ Each ramp can pay once in course order. A successful flight earns two points per
 
 ## Verification
 
-`node --test tests/skyway-geometry.test.mjs tests/skyway-race.test.mjs` checks the rendered asphalt against contact heights and drives the full seeded race twice. The digital driver initiates the opening drift with a sustained steering input and then countersteers from measured heading error. All six racers must finish, spend charge and earn a physical landing award. Race state is compared entry by entry. The original circuit, Ridge and championship retain their own handling and courses.
+`node --test tests/skyway-geometry.test.mjs tests/skyway-race.test.mjs` checks every asphalt triangle at its three vertices and its centre, verifies both timing-line markings, and drives the full seeded race twice. The digital driver initiates the opening drift with a sustained steering input and then countersteers from measured heading error. All six racers must finish, spend charge and earn a physical landing award. The landing test repeats a recorded touchdown inside its catch zone and checks that its points can be paid only once.

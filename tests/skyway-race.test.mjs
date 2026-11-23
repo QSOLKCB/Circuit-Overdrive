@@ -13,12 +13,20 @@ function green() {
   return race;
 }
 test('six seeded drivers run the full Skyway with physical slides, paid boosts and validated landings',()=>{
+  let firstLanding,firstAward;
   function run() {
     const race=green(),p=race.player,landings=[],awards=[];
     for(let i=0;i<6000 && race.phase==='racing';i++) {
       stepNitroRace(race,skywayIntent(p,skyway));
-      if(p.nitro.landed) landings.push([p.nitro.takeoffS,p.current.s,p.nitro.lastAirTicks,p.nitro.peakHeight]);
-      if(p.nitro.rewarded) awards.push(p.nitro.lastRewardRamp);
+      if(p.nitro.landed) {
+        landings.push([p.nitro.takeoffS,p.current.s,p.nitro.lastAirTicks,p.nitro.peakHeight]);
+        firstLanding ??= structuredClone(race);
+      }
+      if(p.nitro.rewarded) {
+        awards.push(p.nitro.lastRewardRamp);
+        const {lastRewardRamp,stunts,points}=p.nitro;
+        firstAward ??= {lastRewardRamp,stunts,points};
+      }
     }
     assert.equal(race.phase,'finished');
     assert.deepEqual(awards,[0,1,2]);
@@ -35,11 +43,23 @@ test('six seeded drivers run the full Skyway with physical slides, paid boosts a
   }
   const race=run();
   assert.deepEqual(run().entrants,race.entrants);
-  const n=race.player.nitro;
-  // Even if the last accepted landing is observed twice, the same ramp has
-  // already paid. Recovery preserves this boundary.
-  const points=n.points;
-  n.landed=true;
-  for(let i=0;i<12;i++) skyway.settleStunt(race.player);
-  assert.equal(n.points,points);
+  const landed=firstLanding.player.nitro;
+  assert(landed.landed && landed.pendingStunt);
+  assert.equal(landed.takeoffRamp,firstAward.lastRewardRamp);
+  function replayLanding(lastRewardRamp) {
+    const replay=structuredClone(firstLanding);
+    Object.defineProperty(replay,'course',{value:skyway});
+    const player=replay.player;
+    // The live tick already opened a pending award. Re-submit that physical
+    // landing from its original pose against the ledger from just after payout.
+    Object.assign(player.nitro,firstAward,{lastRewardRamp,pendingStunt:null});
+    skyway.settleStunt(player);
+    for(let i=0;i<45;i++) stepNitroRace(replay,skywayIntent(player,skyway));
+    return [player.nitro.stunts,player.nitro.points];
+  }
+  const value=firstAward.points-landed.points;
+  assert(value>0);
+  // The branches differ only in whether this ramp has already paid.
+  assert.deepEqual(replayLanding(landed.lastRewardRamp),[firstAward.stunts+1,firstAward.points+value]);
+  assert.deepEqual(replayLanding(firstAward.lastRewardRamp),[firstAward.stunts,firstAward.points]);
 });

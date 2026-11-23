@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { createHeadlightPass, selectHeadlights } from './headlights.js';
 import { LitRenderer } from '../vendor/vanillajs/modules/render-lit/index.js';
-import { nightFrame, validateEnvironment } from './environment.js';
+import { nightFrame, courseEnvironment } from './environment.js';
 import { buildNightWorld, nightStars } from './night-fixtures.js';
 import { cross, normalize } from '../vendor/vanillajs/modules/math/index.js';
 import { ridgeBatches } from './ridge-scene.js';
@@ -45,9 +45,8 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
 }
 
 export function createScene(canvas,course=track,pixelRatio=1,environment='day') {
-  const night=validateEnvironment(environment)==='night';
+  const night=courseEnvironment(course,environment)==='night';
   const skyway=course.id==='skyway';
-  if(skyway && night) throw RangeError('Skyway is a daylight stunt discipline');
   const light=skyway ? SKYWAY_LIGHT : night ? nightFrame(course) : course.closed ? LIGHT : RIDGE_LIGHT;
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   let world,car,shadow,effects,headlights,stars;
