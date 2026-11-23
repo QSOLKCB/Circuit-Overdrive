@@ -159,6 +159,23 @@ test('guardrails at both physical road ends retain the car on supported pavement
   }
 });
 
+test('a full rear runway can repair a damaged car in its own footprint', () => {
+  const race = green(), e = race.player;
+  const first = ridge.startS + carRecipe.chassis.length / 2 + .081;
+  for (const rival of race.entrants.slice(0, 5)) place(rival, first, 0, (rival.id - 2) * 4);
+  place(e, first + 4.5, 0);
+  const old = e.current;
+  assert.equal(recoverCar(race), false);
+  e.vehicle.velocity = null;
+  stepRace(race);
+  assert.equal(e.recoveries, 1);
+  assert.equal(e.elapsedTicks, PENALTY_TICKS + 1);
+  assert.equal(e.nextGate, 0);
+  assert.equal(e.current.x, old.x);
+  assert.equal(e.current.z, old.z);
+  assert.ok(e.vehicle.velocity.every(Number.isFinite));
+});
+
 test('sprint recovery and reversing cannot gain a checkpoint, split or classification position', () => {
   const race = green(), e = race.player, rival = race.entrants[0];
   e.nextGate = rival.nextGate = 1;

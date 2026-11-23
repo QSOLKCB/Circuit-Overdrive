@@ -104,13 +104,23 @@ function clearForRecovery(road, entrant, field) {
   return field.every(other => {
     if (other.id === entrant.id || other.finishTicks !== null) return true;
     const p = other.current, dx = road.x - p.x, dz = road.z - p.z;
-    const vx = other.vehicle.velocity?.[0] || 0, vz = other.vehicle.velocity?.[2] || 0;
+    const vx = other.vehicle?.velocity?.[0] || 0, vz = other.vehicle?.velocity?.[2] || 0;
     const t = clamp((dx * vx + dz * vz) / (vx * vx + vz * vz || 1), 0, 0.35);
     return Math.hypot(dx - t * vx, dz - t * vz) > clearance;
   });
 }
 
-function resetCar(entrant, field, course) {
+function finishRecovery(entrant, vehicle, road) {
+  entrant.vehicle = vehicle;
+  entrant.previous = entrant.current = snapshot(vehicle, road);
+  entrant.elapsedTicks += PENALTY_TICKS;
+  entrant.recoveryCooldown = 120;
+  entrant.recoveries++;
+  entrant.wrongWay = entrant.contact = entrant.pairContact = false;
+  if (entrant.ai) entrant.ai = createDriver(entrant.style, entrant.seed, road.lateral);
+}
+
+function resetCar(entrant, field, course, repairInPlace = false) {
   // Search only behind the last safe progress. Never jump ahead to find a gap.
   const lastSafe = Math.min(entrant.distance, entrant.safeDistance, progress(entrant, course) + entrant.extraDistance);
   for (let back = 0; back <= 120; back += 8) {
@@ -119,21 +129,21 @@ function resetCar(entrant, field, course) {
       const distance = course.closed ? lastSafe - back : Math.max(course.startS + gridClearance, lastSafe - back);
       const road = course.sample(distance, lateral);
       if (!clearForRecovery(road, entrant, field)) continue;
-      entrant.vehicle = spawnOnRoad(road);
-      entrant.current = snapshot(entrant.vehicle, road);
-      entrant.previous = entrant.current;
       entrant.distance = entrant.safeDistance = distance;
       entrant.safeLateral = lateral;
-      entrant.elapsedTicks += PENALTY_TICKS;
-      entrant.recoveryCooldown = 120;
-      entrant.recoveries++;
-      entrant.missedGate = entrant.wrongWay = entrant.contact = entrant.pairContact = false;
-      if (entrant.ai) entrant.ai = createDriver(entrant.style, entrant.seed, lateral);
+      entrant.missedGate = false;
+      finishRecovery(entrant, spawnOnRoad(road), road);
       return true;
     }
     if (!course.closed && lastSafe - back <= course.startS + gridClearance) break;
   }
-  return false;
+  if (!repairInPlace) return false;
+  // A pack can occupy every aligned slot at the rear rail. Rebuild a damaged
+  // state at its last accepted pose, which already owned this footprint.
+  const p = entrant.current;
+  const vehicle = car.spawn({ position: [p.x, p.y, p.z], yaw: p.yaw, pitch: p.pitch, roll: p.roll });
+  finishRecovery(entrant, vehicle, course.project(p.x, p.z));
+  return true;
 }
 
 export function recoverCar(race) {
@@ -313,14 +323,14 @@ function drive(entrant, intent, field, course, world) {
     entrant.vehicle = car.step(entrant.vehicle, controls(entrant.vehicle, intent), world, STEP);
   } catch (error) {
     if (!(error instanceof RangeError || error instanceof TypeError)) throw error;
-    resetCar(entrant, field, course);
+    resetCar(entrant, field, course, true);
     return;
   }
   const state = entrant.vehicle;
   const road = course.project(state.position[0], state.position[2]);
   const jumped = !course.closed && Math.abs(road.s - entrant.previous.s) > maxStationStep;
   if (jumped || state.needsRecovery || state.position[1] < road.y - 3 || Math.abs(road.lateral) > course.barrierOffset + 3) {
-    resetCar(entrant, field, course);
+    resetCar(entrant, field, course, true);
     return;
   }
   entrant.contact = contactRail(state, road, course) !== null;
@@ -339,7 +349,7 @@ function accept(entrant, field, course) {
   // Nearby roads can have very different stations. An impossible one-tick
   // jump must not become sector progress, even when both ends project to asphalt.
   if (!course.closed && Math.abs(ds) > maxStationStep) {
-    resetCar(entrant, field, course);
+    resetCar(entrant, field, course, true);
     return;
   }
   entrant.current = snapshot(state, road);

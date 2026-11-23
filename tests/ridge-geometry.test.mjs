@@ -83,7 +83,17 @@ function verticalIntersections(point) {
   }
   return ys;
 }
-test('bridge and tunnel leave the wheel surface and high chase camera corridor clear',()=>{
+test('solid rail geometry matches each physical boundary and structures clear the chase camera',()=>{
+  for(let s=ridge.startS+.11;s<ridge.endS;s+=49.3) for(const side of [-1,1]){
+    const edge=ridge.sample(s,side*(ridge.barrierOffset+.16));
+    const top=verticalIntersections(edge);
+    assert.ok(top.some(y=>Math.abs(y-edge.y-.86)<.025),`missing side rail at ${s} m`);
+  }
+  for(const [s,sign] of [[ridge.startS,-1],[ridge.endS,1]]){
+    const p=ridge.sample(s,.7);
+    const outside={x:p.x+sign*.2*p.tx,z:p.z+sign*.2*p.tz};
+    assert.ok(verticalIntersections(outside).some(y=>Math.abs(y-p.y-.90)<.012),'missing runoff stop');
+  }
   for(const [name,[start,end]] of Object.entries(ridge.features)){
     for(let s=start+.007;s<end;s+=9.91) for(const l of [-10.8,.73,10.8]){
       const p=ridge.sample(s,l), ys=verticalIntersections(p);

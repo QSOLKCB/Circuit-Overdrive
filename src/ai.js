@@ -57,7 +57,7 @@ function nearby(entrant, entrants, course) {
     if (other.id === entrant.id || other.finishTicks != null) continue;
     const gap = stationDelta(course, entrant.current.s, other.current.s);
     if (Math.abs(gap) >= 72) continue;
-    const velocity = other.vehicle.velocity;
+    const velocity = other.vehicle?.velocity;
     // Ignore a damaged drivetrain until the simulation has recovered that entrant.
     if (!Number.isFinite(velocity?.[0]) || !Number.isFinite(velocity[2])) continue;
     const [vx,,vz] = velocity;
