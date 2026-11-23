@@ -41,14 +41,15 @@ try {
   assert.equal(await page.locator('#replay-play').isDisabled(),true);
   const file=page.locator('#replay-file');
   for(const course of [track,ridge]){
-    // Use v0.6.0 for the first race to prove the auditable compatibility path,
+    // Use the released v0.6.2 source for the first race to exercise its compatibility label,
     // and the exact test site revision for the second.
-    const source=course.closed?'020e5dc4c7e2485e01f0f47c698f80ee58fe228b':revision;
+    const source=course.closed?'c97ee47e7577337032a55eb2e6ae53b855285573':revision;
     const {data,race}=recordedRace(course,source);
     await file.setInputFiles({name:'race-'+course.id+'.json',mimeType:'application/json',
       buffer:Buffer.from(JSON.stringify(data))});
     await page.waitForFunction(id=>document.querySelector('#replay-status').textContent.includes('Loaded '+id),
       course.id,{timeout:60000});
+    if (course.closed) assert((await page.locator('#replay-status').textContent()).includes(source));
     assert.equal(await page.locator('#replay-play').isEnabled(),true);
     assert.equal(await page.locator('#replay-title').textContent(),course.name);
     const gl=await page.locator('#replay-world').evaluate(canvas=>!!canvas.getContext('webgl'));

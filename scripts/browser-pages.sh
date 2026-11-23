@@ -18,9 +18,9 @@ for option in "$@"; do
 done
 
 case "$shard" in
-  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge) ;;
+  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge championship) ;;
   speedway) suites=(smoke touch speedway) ;;
-  ridge) suites=(ridge-smoke ridge) ;;
+  ridge) suites=(ridge-smoke ridge championship) ;;
   controllers) suites=(gamepad profiles lab theatre) ;;
 esac
 
@@ -44,9 +44,9 @@ for suite in "${suites[@]}"; do
       if [[ ${NATIVE_GL:-0} != 1 ]]; then args+=(--software-replay); fi
       ;;
     *)
-      if [[ $suite == theatre ]]; then
-        mkdir -p "$evidence/theatre"
-        EVIDENCE_DIR="$evidence/theatre" node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
+      if [[ $suite == theatre || $suite == championship ]]; then
+        mkdir -p "$evidence/$suite"
+        EVIDENCE_DIR="$evidence/$suite" node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
       else
         node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
       fi
