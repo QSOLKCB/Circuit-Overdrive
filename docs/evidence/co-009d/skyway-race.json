@@ -1,0 +1,173 @@
+{
+  "revision": "3d0f8b10512fbdae17b5fbe0bcd9f1d6ee11a320",
+  "browser": "158.0.8127.36",
+  "seed": 27,
+  "ticks": 3925,
+  "frames": 414,
+  "samples": 50,
+  "peakEnergy": 31320,
+  "boostTicks": 73,
+  "airborneTicks": 353,
+  "maxAirTicks": 146,
+  "positiveBoostAcceleration": 73,
+  "chargingTicks": 99,
+  "landings": 3,
+  "positions": [
+    6,
+    5
+  ],
+  "gates": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "stunts": 3,
+  "points": 913,
+  "standings": [
+    {
+      "id": 1,
+      "position": 1,
+      "finishTicks": 3177,
+      "recoveries": 0
+    },
+    {
+      "id": 2,
+      "position": 2,
+      "finishTicks": 3251,
+      "recoveries": 0
+    },
+    {
+      "id": 3,
+      "position": 3,
+      "finishTicks": 3274,
+      "recoveries": 0
+    },
+    {
+      "id": 0,
+      "position": 4,
+      "finishTicks": 3290,
+      "recoveries": 0
+    },
+    {
+      "id": 4,
+      "position": 5,
+      "finishTicks": 3694,
+      "recoveries": 0
+    },
+    {
+      "id": 5,
+      "position": 6,
+      "finishTicks": 3745,
+      "recoveries": 0
+    }
+  ],
+  "splits": [
+    728,
+    1305,
+    1634,
+    2175,
+    2657,
+    3068
+  ],
+  "boostStreaks": {
+    "fullEffects": "visible during accepted boost",
+    "reducedMotion": "suppressed",
+    "referenceRevision": "11d8d4759621b542f4692a2d59447fdc8f273cfb",
+    "referenceBoostPngSha256": "a9b87e2601545e0d9ad200f787249185fab2fe713e598e3bfe2190e8eae90731",
+    "rgbChangedPixelsByColumnRange": {
+      "0-145": 922,
+      "146-813": 0,
+      "814-959": 1075
+    },
+    "unchangedDriftFrame": true
+  },
+  "renderer": "SwiftShader",
+  "playwright": "1.64.0",
+  "sitePath": "/Circuit-Overdrive/",
+  "verifiedHttpFiles": 64,
+  "recording": {
+    "bytes": 26506,
+    "sha256": "f9400d3dfcf6168d34f38fe7b1d3c8346631dc7a2c4e48e40ec595a28c7a1304",
+    "version": 3,
+    "runs": 952,
+    "ticks": 3925
+  },
+  "cli": {
+    "phase": "finished",
+    "raceTicks": 3745,
+    "recordedTicks": 3925,
+    "classificationMatchesBrowser": true,
+    "playerSplitsMatchBrowser": true
+  },
+  "captures": [
+    {
+      "file": "skyway-selection.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "7050296d958582f5cbfd3fe7f69f08f9be2efda80c64865afa83345534d95b34",
+      "webpSha256": "9bb1803c4208383d406a16b606e94d5958bcb30ccee2af3b94f5fe41a7789595"
+    },
+    {
+      "file": "skyway-grid.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "102c0e6e09421902d4b814a068c148c86ca5e9acf5adb2d323f55947fe82c38e",
+      "webpSha256": "1ab247c3d15b7cbf04d717185da062d7464d065a93012be4cb5936841e4e09eb"
+    },
+    {
+      "file": "skyway-drift.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "5cf160a555631579e1c647789020386ba51dddd87e6001915a8b350b6665247c",
+      "webpSha256": "fb5e84ef5826f4444bac3dee58ca34674f8a3087621c065ebba9a48a95d1d452"
+    },
+    {
+      "file": "skyway-boost.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "dabce26f1b41dcc67a66049e526fd8ee4f867e4f0013cc2aa58d25897d1ee316",
+      "webpSha256": "a048cdaec99918d5389ab69fbf9596648b6214107fdb3580e6d478e511d011af"
+    },
+    {
+      "file": "skyway-airborne.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "ed9e9b2a0b72a294c2a6280e2c6a45c9d41cd21d1cdec4596b4a94f7bf1b4c91",
+      "webpSha256": "f36c0c8c2abb63936fe106421f49e54c4cec85c86c9645195c112105ed7c1350"
+    },
+    {
+      "file": "skyway-landing.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "3ccc2f465e2fc7de54ac7142d974655004b15caee358e1ea8f380bcc72f09535",
+      "webpSha256": "34f05958a204480b2c498a5e82bf0af529d6bc3d7050e92c5c92d85da56b4f11"
+    },
+    {
+      "file": "skyway-flag.webp",
+      "size": [
+        960,
+        560
+      ],
+      "pngSha256": "737bf7815078e9607cac281b5455a79689e149f43e255b6859105d222a26da90",
+      "webpSha256": "c3192531d36a65590b11a124e8ce4bbacef3831f0d07280cb1bcc575228fbf11"
+    }
+  ]
+}

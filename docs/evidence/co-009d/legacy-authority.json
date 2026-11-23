@@ -1,0 +1,44 @@
+{
+  "baseline": "8204da56fce6b40ab33cb66c684a2e780f3e3001",
+  "candidate": "11d8d4759621b542f4692a2d59447fdc8f273cfb",
+  "node": "v22.18.0",
+  "platform": "linux",
+  "arch": "x64",
+  "seed": 708,
+  "results": [
+    {
+      "course": "speedway",
+      "ticks": 9847,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "finishTicks": 9847,
+      "order": [
+        1,
+        3,
+        2,
+        0,
+        4,
+        5
+      ],
+      "v2Sha256": "ce958611550ebb72485653401a3ed4e249b0a644802937a018ef34e5a18b8fe4",
+      "fieldCheckpointsSha256": "d63ae0e811356d2a576fcd06e8574598aca00f290032117ffba7cfa714c1454c"
+    },
+    {
+      "course": "ridge",
+      "ticks": 9402,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "finishTicks": 9402,
+      "order": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5
+      ],
+      "v2Sha256": "5e34ed4ddfeca6e4e91035fbb2180329bb077c8cefa30dc8b8c1e0162d7ca713",
+      "fieldCheckpointsSha256": "8027c2bf121440973bed8305b3e3c308faff8df923c4f1a8f0c8d133075fb73c"
+    }
+  ]
+}

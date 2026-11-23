@@ -10,7 +10,7 @@ The original six-score catalogue shipped in v0.6.1. CO-007 activated Digital Dom
 | MIDNIGHT PROTOCOL | CO-008 After Dark — **live** | Sparse minor-key cyberpunk synth | 144 | 13.33 s |
 | DIGITAL DOMINION | CO-007 W.O.C. — **live** | Major-key arcade championship anthem | 120 | 16.00 s |
 | STEEL RIOT | CO-012 Total Destruction — **future** | Industrial power riffs and mechanical percussion | 150 | 12.80 s |
-| NITRO PULSE | CO-009 Nitro Skyway — **candidate** | Syncopated demoscene bass, eighth-note arpeggios, rising lead answer | 160 | 12.00 s |
+| NITRO PULSE | CO-009 Nitro Skyway — **candidate** | Syncopated demoscene bass, sixteenth-note arpeggios, rising lead answer | 160 | 12.00 s |
 
 Nitro Pulse uses eight bars in four-four time. Each sixteenth is exactly 4,500 sample frames at 48 kHz. Seed `0x9df05a37` drives the timbres for the original F♯ pedal-point bass, pitched arpeggio, lead and percussion. The loop contains 576,000 stereo frames. On Node 22.18.0 x86-64, the interleaved little-endian PCM16 SHA-256 is `87d4fba988f5ddfbc309682e99499eb5e45154b6179debd59a1f22cb34104253`. The full WAV SHA-256 is `aca8683f9a00768df1698d5aca0111fd8950deaa2aeafe7affd5d9fc04acb84f`.
 

@@ -8,7 +8,7 @@ Start sixth in the Ignition GT No. 27. Race five rivals in a standalone event or
 | Redline Ridge | One 4.51 km mountain sprint | Forest switchbacks, a 270 m valley bridge, a 170 m tunnel and a downhill run to the flag |
 | Nitro Skyway | One 1.92 km stunt sprint | Six checkpoints, sweeping drift corners and three physical launch decks |
 
-Choose **Nitro Overdrive** for the stunt discipline. Drift under load to earn energy, then spend it on the next acceleration section. Stunt points recognise a clean landing. Finishing order decides the race. [Nitro driving guide](docs/nitro.md)
+Choose **Nitro Overdrive** for the stunt discipline. Drift under load to earn energy, then spend it on the next acceleration section. Stunt points recognise a clean landing. Finishing order decides the race. [Nitro driving guide](docs/nitro.md) · [Recorded race, replay and native timings](docs/co-009-acceptance.md)
 
 Choose **Day** or **Nightshift** on Speedway or Ridge. Nightshift Speedway runs under the pit and grandstand lights. On Redline Ridge — Midnight Descent, follow the reflectors into the valley, across the bridge and through the illuminated tunnel. Both events use car-mounted headlights and the original 144 BPM **Midnight Protocol** score. [Nightshift controls and spectator lighting](docs/nightshift.md) · [Browser captures and native GPU measurements](docs/co-008-acceptance.md)
 
