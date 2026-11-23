@@ -91,12 +91,23 @@ try {
   await page.evaluate(() => {
     pads[0].axes[0]=0; pads[0].buttons[7].value=0; pads[0].buttons[6].value=0; window.advance(2);
   });
-  await click('controllers'); await openLab();
-  assert.equal(await content('owner'),'Gamepad · Slot 1');
-  await page.evaluate(() => {
-    pads[0].buttons[7]={value:1,pressed:true}; pads[0].buttons[0]={value:1,pressed:true};
-    pads[0].buttons[13]={value:1,pressed:true}; window.advance(5);
+  await click('controllers');
+  // The summary opens synchronously. Its native toggle event (and the focus
+  // transfer to the readings) can arrive after the next gamepad samples.
+  const openedFromPad = await page.evaluate(() => {
+    const summary = document.querySelector('#controller-lab summary');
+    const buttons = pads[0].buttons;
+    const press = i => { buttons[i]={value:1,pressed:true}; };
+    const release = i => { buttons[i]={value:0,pressed:false}; };
+    summary.focus(); window.advance();
+    press(0); window.advance();
+    const opened = summary.parentElement.open && document.activeElement === summary;
+    release(0); window.advance();
+    press(7); press(0); press(13); window.advance(5);
+    return opened;
   });
+  assert(openedFromPad,'owner opened the lab while the native toggle event was pending');
+  assert.equal(await content('owner'),'Gamepad · Slot 1');
   assert.equal(await content('neutral'),'No');
   assert(await id('lab-readings').isVisible());
   assert.equal(await id('timer').textContent(),clock);
@@ -107,6 +118,12 @@ try {
   assert(!(await id('lab-readings').isVisible()),'owner can leave the readings with Pause');
   assert(await id('controller-dialog').isVisible());
   assert.equal(await phase(),'paused');
+  await page.evaluate(() => {
+    pads[0].buttons[9]={value:0,pressed:false}; window.advance();
+    pads[0].buttons[13]={value:1,pressed:true}; window.advance();
+    pads[0].buttons[13]={value:0,pressed:false}; window.advance();
+  });
+  assert.equal(await page.evaluate(() => document.activeElement.id),'driver-device','D-pad navigates the picker again');
   await openLab();
   await page.evaluate(() => { pads[0]=null; window.advance(2); });
   assert.match(await content('device'), /Disconnected/);
