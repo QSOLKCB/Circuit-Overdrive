@@ -9,8 +9,8 @@ import {createRace} from '../src/sim.js';
 import {ridge} from '../src/ridge.js';
 import {track} from '../src/track.js';
 
-test('three original score shapes compile to bounded stereo PCM and retain exact sample identity',()=>{
-  const expected=[['speedway',120,768000],['ridge',150,614400],['championship',120,768000]];
+test('four original score shapes compile to bounded stereo PCM and retain exact sample identity',()=>{
+  const expected=[['speedway',120,768000],['ridge',150,614400],['championship',120,768000],['night',144,640000]];
   for(const [course,bpm,samples] of expected){
     const data=scoreForCourse(course);
     assert.equal(data.bpm,bpm);
@@ -125,4 +125,26 @@ test('the live championship uses the complete v0.6.2 anthem and schedules only m
   assert(await audio.start());
   ctx.state='interrupted';
   assert.equal(audio.updateCelebration(),false);
+});
+
+test('Nightshift plays the exact v0.7.0 Midnight Protocol score through the live mixer', async () => {
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  const score = scoreForCourse('night');
+  assert.equal(score.mode,'cyberpunk');
+  assert.equal(new RaceMusic('night').title,'MIDNIGHT PROTOCOL');
+  assert.equal(sha(JSON.stringify(score)),'75afc3be8595a643d426cf3dc02c6e8f6b08fdd6077099e8e882d89d0c9f0a5a');
+  assert.equal(sha(musicForCourse('night').wavLoop()),'79f704e0f1cacc85fd1f03b67356dddd5cf3d6d8625b157ec0ceeb40e3c50da6');
+  const ctx = fakeAudioContext(), audio = new TouringAudio({contextFactory:()=>ctx});
+  const race = createRace(27,ridge);
+  assert(audio.selectMusic('night'));
+  assert.equal(ctx.buffers.length,0);
+  assert(await audio.start());
+  race.phase='countdown';
+  assert(audio.update(race.player,{throttle:0,brake:0,steer:0},ridge,race));
+  const stereo=ctx.sources.find(source=>source.buffer.numberOfChannels===2);
+  const voice=new RaceMusic('night'),left=new Float32Array(3072),right=new Float32Array(3072);
+  voice.accept(race);
+  voice.write(left,right);
+  assert.deepEqual(stereo.buffer.getChannelData(0),left);
+  assert.deepEqual(stereo.buffer.getChannelData(1),right);
 });

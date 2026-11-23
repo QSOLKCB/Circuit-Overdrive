@@ -12,7 +12,8 @@ export const MAX_SEEK_STEPS=240;
 export const REPLAY_COMPATIBLE_RELEASES=Object.freeze([
   '020e5dc4c7e2485e01f0f47c698f80ee58fe228b', // v0.6.0
   'd81a2d4a09286029b87c2ac201edf8ab6448e023', // v0.6.1
-  'c97ee47e7577337032a55eb2e6ae53b855285573'  // v0.6.2
+  'c97ee47e7577337032a55eb2e6ae53b855285573', // v0.6.2
+  '3295b82004b64328072ac5fa64f8ba2b55394416'  // v0.7.0
 ]);
 const SHA=/^[0-9a-f]{40}$/;
 const headerKeys=['version','revision','course','seed','ticks','runs'];

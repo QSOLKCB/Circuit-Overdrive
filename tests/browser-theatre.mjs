@@ -52,6 +52,7 @@ try {
     if (course.closed) assert((await page.locator('#replay-status').textContent()).includes(source));
     assert.equal(await page.locator('#replay-play').isEnabled(),true);
     assert.equal(await page.locator('#replay-title').textContent(),course.name);
+    assert.equal(await page.locator('#replay-environment').inputValue(),'day');
     const gl=await page.locator('#replay-world').evaluate(canvas=>!!canvas.getContext('webgl'));
     assert(gl,'real WebGL spectator canvas');
     // A paused camera switch must immediately change the WebGL view even
@@ -63,6 +64,16 @@ try {
     const highCamera=await page.locator('#replay-world').screenshot();
     assert.notDeepEqual(highCamera,lowCamera,'paused camera preset must update scene without advancing ticks');
     assert.equal(Number(await page.locator('#replay-seek').inputValue()),0);
+    await page.locator('#replay-environment').selectOption('night');
+    await page.waitForFunction(()=>document.body.dataset.environment==='night');
+    assert.match(await page.locator('#replay-title').textContent(),/Nightshift|Midnight Descent/i);
+    const night=await page.locator('#replay-world').screenshot();
+    assert.notDeepEqual(night,highCamera,'spectator lighting changes the scene at a fixed tick');
+    for(const entrant of race.entrants){
+      await page.locator('#replay-follow').selectOption(String(entrant.id));
+      assert.equal(await page.locator('#replay-driver').textContent(),'#'+entrant.number+' '+entrant.name);
+      assert.equal(Number(await page.locator('#replay-seek').inputValue()),0);
+    }
     await page.locator('#replay-follow').selectOption('0');
     assert.match(await page.locator('#replay-driver').textContent(),/Mara Vale/);
     await page.locator('#replay-follow').selectOption('5');

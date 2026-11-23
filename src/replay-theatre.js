@@ -3,6 +3,7 @@
 // Camera, tempo and seek operations only change presentation or re-simulate ticks.
 import {createReplaySession,MAX_REPLAY_BYTES,MAX_SEEK_STEPS} from './replay-theatre-core.js';
 import {createScene} from './scene.js';
+import {validateEnvironment,eventTitle} from './environment.js';
 import {FIELD,PLAYER_ID} from './field.js';
 import {interpolateReplayPoses,createReplayPoses} from './replay-presentation.js';
 
@@ -10,9 +11,10 @@ const $=id=>document.getElementById(id);
 const canvas=$('replay-world');
 const stamp=document.querySelector('meta[name="game-revision"]')?.content||'';
 const controls=['replay-play','replay-restart','replay-back','replay-forward','replay-download',
-  'replay-seek','replay-follow','replay-camera','replay-rate'];
+  'replay-seek','replay-follow','replay-camera','replay-environment','replay-rate'];
 const poses=createReplayPoses();
 let session=null,scene=null,playing=false,seekTarget=null,frameTime=null,playBudget=0;
+let environment='day';
 let imported='',currentFileName='',lastHud=-1;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const coarse=matchMedia('(pointer: coarse)');
@@ -49,7 +51,7 @@ function dashboard(force=false){
   const index=Number($('replay-follow').value);
   const driver=session.race.entrants[index]??session.race.player;
   const p=driver.current;
-  set('replay-title',session.race.course.name);
+  set('replay-title',eventTitle(session.race.course,environment));
   set('replay-driver','#'+driver.number+' '+driver.name);
   set('replay-place','P'+driver.position+' / 6');
   set('replay-speedometer',Math.round(p.speed*3.6)+' km/h');
@@ -136,14 +138,20 @@ function frame(ms){
   }
   requestAnimationFrame(frame);
 }
+function installScene(course,nextEnvironment) {
+  validateEnvironment(nextEnvironment);
+  scene?.dispose();
+  scene=null;
+  scene=createScene(canvas,course,coarse.matches?.75:1,nextEnvironment);
+  environment=nextEnvironment;
+  $('replay-environment').value=environment;
+  document.body.dataset.environment=environment;
+}
 function loadRecordedRace(data,sourceText,fileName){
   const candidate=createReplaySession(data,stamp);
   // Construct the new scene only after source/shape admission has succeeded.
-  const size=coarse.matches?.75:1;
-  scene?.dispose();
-  scene=null;
-  const fresh=createScene(canvas,candidate.race.course,size);
-  session=candidate;scene=fresh;
+  installScene(candidate.race.course,'day');
+  session=candidate;
   imported=sourceText;currentFileName=fileName;
   seekTarget=null;pause();lastHud=-1;
   $('replay-seek').max=String(candidate.totalTicks);
@@ -194,6 +202,14 @@ $('replay-forward').addEventListener('click',()=>targetTick(session.tick+300));
 $('replay-seek').addEventListener('input',()=>targetTick(Number($('replay-seek').value)));
 $('replay-follow').addEventListener('change',()=>dashboard(true));
 $('replay-camera').addEventListener('change',()=>dashboard(true));
+$('replay-environment').addEventListener('change',()=>{
+  if(!session)return;
+  try{
+    installScene(session.race.course,$('replay-environment').value);
+    frameTime=null;
+    dashboard(true);
+  }catch(error){displayErrors(error);}
+});
 $('replay-download').addEventListener('click',()=>{
   if(!session || !imported)return;
   const url=URL.createObjectURL(new Blob([imported],{type:'application/json'}));
@@ -225,7 +241,7 @@ window.addEventListener('pagehide',event=>{
 window.addEventListener('pageshow',event=>{
   frameTime=null;
   if(event.persisted && session && !scene) {
-    try{scene=createScene(canvas,session.race.course,coarse.matches?.75:1);
+    try{installScene(session.race.course,environment);
       notify('Replay graphics restored after navigation. Press Play to resume.');}
     catch(error){displayErrors(error);}
   }
@@ -233,7 +249,7 @@ window.addEventListener('pageshow',event=>{
 canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();pause();notify('WebGL context lost. Playback suspended.');});
 canvas.addEventListener('webglcontextrestored',()=>{
   if(!session)return;
-  try{scene?.dispose();scene=createScene(canvas,session.race.course,coarse.matches?.75:1);
+  try{installScene(session.race.course,environment);
     notify('Graphics restored. Press Play to resume.');}
   catch(error){displayErrors(error);}
 });

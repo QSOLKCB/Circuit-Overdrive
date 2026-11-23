@@ -1,6 +1,6 @@
 # CO-MUSIC-001C — Original Future-Mode Chiptune Collection
 
-CO-007 activates the original Digital Dominion arrangement for the championship. The catalogue below records the v0.6.1 assignments. [Current player guide](championship.md)
+CO-007 activates Digital Dominion for championship rounds. CO-008 activates Midnight Protocol for both standalone night courses. The catalogue below records the original v0.6.1 assignments. [Nightshift player guide](nightshift.md)
 
 **Status:** review candidate for the final v0.6.1 music PR. The future gameplay modes do not yet exist.
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Original QSOL-IMC race scores. Compact data, not sampled music or copyrighted melodies.
 // BPS-001 owns synthesis, timing and PCM. These are authored mathematical arrangements.
-export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER',championship:'DIGITAL DOMINION'});
+export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER',championship:'DIGITAL DOMINION',night:'MIDNIGHT PROTOCOL'});
 
 function phrase(root,melody,variation) {
   if (!Array.isArray(melody) || melody.length!==16) throw RangeError('16 melody steps required');
@@ -39,12 +39,11 @@ const IRON=Object.freeze([
 ]);
 
 
-// Only the championship arrangement from this catalogue is selectable in a live race.
+// The championship and night arrangements are selectable in live racing.
 // Each has authored interval motifs, rhythmic placement and a distinct harmonic
 // progression. They are reference music, not a playable gameplay-mode registry.
 export const FUTURE_MUSIC_TITLES=Object.freeze({
   rocket:'RASTER VELOCITY',
-  night:'MIDNIGHT PROTOCOL',
   derby:'STEEL RIOT'
 });
 const FUTURE_PROFILES=Object.freeze({
@@ -143,7 +142,7 @@ export function scoreForFutureMode(mode) {
 }
 
 export function scoreForCourse(course) {
-  if (course==='championship') return catalogueScore(course);
+  if (course==='championship' || course==='night') return catalogueScore(course);
   if(!Object.hasOwn(MUSIC_TITLES,course))throw RangeError('Unknown music course');
   const ridge=course==='ridge',form=ridge?IRON:NEON;
   return {

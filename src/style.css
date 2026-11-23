@@ -864,3 +864,36 @@ body[data-phase=racing] #world,body[data-phase=countdown] #world {
 #lab-readings dl { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.5rem .8rem; }
 #lab-readings dt { color:var(--muted); }
 #lab-readings dd { margin:0; white-space:pre-line; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+
+.environment-picker {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:4px;
+  margin-bottom:14px;
+}
+.environment-picker button {
+  min-width:64px;
+  min-height:36px;
+  font:700 12px var(--mono);
+}
+.environment-picker button[aria-pressed=true] {
+  border-color:var(--gold);
+  color:var(--gold);
+  box-shadow:inset 0 -2px var(--gold);
+}
+#night-score {margin-left:8px; color:#c0c9ee; letter-spacing:.03em;}
+body[data-environment=night] {
+  --gold:#8ff4f1;
+  --mint:#c7b5ff;
+  --red:#f779bf;
+}
+body[data-environment=night] h1 em {text-shadow:3px 3px 0 #613a80;}
+body[data-environment=night] .primary {border-bottom-color:#408e9d;}
+body[data-environment=night] .primary:hover {background:#bcfffa;}
+body[data-environment=night] .course small {max-width:152px; margin:auto;}
+@media (pointer:coarse),(max-width:680px) {
+  .environment-picker {margin-bottom:6px;}
+  .environment-picker button {min-height:44px;}
+  body[data-environment=night] .course small {max-width:94px;}
+}
