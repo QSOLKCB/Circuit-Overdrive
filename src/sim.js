@@ -192,7 +192,7 @@ function controls(state, intent) {
   const highSpeedBlend = clamp((speedSquared - precisionSpeedSquared) / (fullAeroSpeedSquared - precisionSpeedSquared), 0, 1);
   // At high speed a held pedal gets extra turn-in. Lifting eases the line
   // even if the driver keeps the steering key down through a long sweep.
-  const corneringAcceleration = 13.5 + (1.5 + 3 * requestedThrottle) * highSpeedBlend;
+  const corneringAcceleration = 13.5 + (2 + 2.5 * requestedThrottle) * highSpeedBlend;
   const gripAngle = Math.atan2(touring.wheel.wheelbase * corneringAcceleration, speedSquared);
   const engineLock = touring.steering.maxAngle / (1 + Math.abs(speed) * touring.steering.speedReduction);
   const steer = requestedSteer * Math.min(1, gripAngle / engineLock);
