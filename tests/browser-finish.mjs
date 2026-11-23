@@ -2,9 +2,11 @@
 // Optional development check. Serve the checkout first and point this script at
 // its URL. PLAYWRIGHT_MODULE and CHROME_BIN may identify existing installations.
 import assert from 'node:assert/strict';
+import {driverIntent} from './driver.mjs';
 
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/');
+const scenic = process.argv.includes('--ridge');
 const attack = process.argv.includes('--attack');
 const browser = await chromium.launch({
   executablePath: process.env.CHROME_BIN, args: process.env.NATIVE_GL === '1'
@@ -12,11 +14,14 @@ const browser = await chromium.launch({
 });
 try {
   const page = await browser.newPage({viewport: {width: 1280, height: 720}});
-  const failures = [];
+  const failures = [], loaded = new Set();
+  page.on('console', msg => { if (msg.type() === 'error') failures.push(msg.text()); });
+  page.on('requestfailed', r => failures.push(r.url() + ' ' + r.failure()?.errorText));
+  page.on('response', r => loaded.add(new URL(r.url()).pathname));
   page.on('pageerror', e => failures.push(e.message));
   page.on('response', r => { if (r.status() >= 400) failures.push(r.status() + ' ' + r.url()); });
   await page.route('**/*', route => {
-    if (new URL(route.request().url()).origin === url.origin) return route.continue();
+    if (route.request().url().startsWith(url.href)) return route.continue();
     failures.push('Off-origin request ' + route.request().url());
     return route.abort();
   });
@@ -34,17 +39,26 @@ try {
       callback(now);
     };
   });
-  await page.goto(url.href);
+  // Inject the local test driver from the runner. Published games contain only runtime files.
+  await page.addInitScript({content:'window.driveKeyboard = (' + driverIntent.toString() + ');'});
+  if (process.env.EVIDENCE_DIR && scenic) {
+    await page.exposeFunction('captureSection', name => page.screenshot({path:process.env.EVIDENCE_DIR+'/ridge-'+name+'.png'}).then(() => null));
+  }
+  const entry = await page.goto(url.href);
+  assert.equal(entry.status(),200);
+  assert.match(await entry.headerValue('content-type'),/text\/html/);
   await page.evaluate(() => window.advanceFrame());
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'menu');
+  if (scenic) await page.locator('#choose-ridge').click({force:true});
+  assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'ridge' : 'speedway');
   await page.locator('#sound').click({force: true});
   await page.locator('#start').click({force: true});
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'grid');
   await page.keyboard.press('w');
 
-  const result = await page.evaluate(async cruise => {
+  const result = await page.evaluate(async ({cruise, scenic}) => {
     const {createRace, startRace, stepRace} = await import('./src/sim.js');
-    const {driverIntent} = await import('./tests/driver.mjs');
+    const course = scenic ? (await import('./src/ridge.js')).ridge : (await import('./src/track.js')).track;
     const phase = () => document.body.dataset.phase;
     const text = id => document.getElementById(id).textContent;
     const canvas = document.querySelector('#world');
@@ -62,7 +76,7 @@ try {
 
     // A separate car generates digital commands in the same JS runtime. The
     // playable race receives only DOM key transitions. No live state is accessed.
-    const shadow = createRace();
+    const shadow = createRace(undefined,course);
     startRace(shadow);
     for (let i = 0; i < 180; i++) stepRace(shadow);
     let held = new Set(), frameTicks = 0, frames = 0;
@@ -78,8 +92,21 @@ try {
     function key(type, code) {
       canvas.dispatchEvent(new KeyboardEvent(type, {code, key:code.at(-1).toLowerCase(), bubbles:true, cancelable:true}));
     }
+    // Exercise the high chase through both tunnel portals during the sprint.
+    const cameraChanges = scenic ? [2900,3300] : [];
+    const captures = [[-12,'start'],[460,'open'],[1000,'forest'],[1900,'bridge'],[3140,'tunnel']];
     for (let tick = 0; tick < 32000 && shadow.phase === 'racing'; tick++) {
-      const intent = driverIntent(shadow.player.current, cruise);
+      if (cameraChanges.length && shadow.player.current.s >= cameraChanges[0]) {
+        flush();
+        key('keydown','KeyC');
+        key('keyup','KeyC');
+        cameraChanges.shift();
+      }
+      if (window.captureSection && captures.length && shadow.player.current.s >= captures[0][0]) {
+        flush();
+        await window.captureSection(captures.shift()[1]);
+      }
+      const intent = window.driveKeyboard(shadow.player.current, cruise, 0, course);
       const wanted = new Set();
       if (intent.throttle) wanted.add('KeyW');
       if (intent.brake) wanted.add('KeyS');
@@ -105,9 +132,10 @@ try {
         id:Number(item.dataset.id), driver:item.querySelector('span').textContent, time:item.querySelector('strong').textContent
       })),
       expected: shadow.order.map(e => ({id:e.id,name:e.name,number:e.number,ticks:e.finishTicks,recoveries:e.recoveries})),
-      expectedTicks: shadow.player.elapsedTicks, expectedLapTicks: shadow.player.lapTicks, recoveries: shadow.player.recoveries
+      remaining:text('remaining'), expectedSplits: scenic ? shadow.player.splitTicks : shadow.player.lapTicks,
+      expectedSplitCount:scenic ? course.gates.length-2 : 3, expectedTicks: shadow.player.elapsedTicks, recoveries: shadow.player.recoveries
     };
-  }, attack ? 38 : 30);
+  }, {cruise:attack ? (scenic ? 42 : 38) : 30,scenic});
   const time = ticks => {
     const ms = Math.round(ticks * 1000 / 60);
     return Math.floor(ms / 60000) + ':' + String(Math.floor(ms / 1000) % 60).padStart(2, '0')
@@ -115,9 +143,10 @@ try {
   };
   assert.deepEqual(result.countdown, ['3','2','1']);
   assert.equal(result.phase, 'finished');
-  assert.equal(result.lap, '3');
-  assert.equal(result.splits.length, 3);
-  assert.deepEqual(result.splits, result.expectedLapTicks.map(time));
+  assert.equal(result.lap, String(result.expectedSplitCount));
+  if (scenic) assert.equal(result.remaining,'0 m');
+  assert.equal(result.splits.length, result.expectedSplitCount);
+  assert.deepEqual(result.splits, result.expectedSplits.map(time));
   assert.equal(result.time, time(result.expectedTicks));
   assert.equal(result.recoveries, 0);
   assert.equal(result.classification.length, 6);
@@ -136,10 +165,15 @@ try {
     assert(result.expected.every(e => e.ticks !== null),'all six should finish with this keyboard replay');
   }
   if (process.env.EVIDENCE_DIR) {
-    await page.screenshot({path:process.env.EVIDENCE_DIR + (attack ? '/win.png' : '/finished.png')});
+    await page.screenshot({path:process.env.EVIDENCE_DIR + (scenic ? (attack ? '/ridge-win.png' : '/ridge-finished.png') : attack ? '/win.png' : '/finished.png')});
   }
   await page.locator('#restart').click({force: true});
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'grid');
+  assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'ridge' : 'speedway');
+  await page.keyboard.press('Escape');
+  await page.locator(scenic ? '#choose-speedway' : '#choose-ridge').click({force:true});
+  assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'speedway' : 'ridge');
+  assert(loaded.has(new URL('./tracks/redline-ridge.json',url).pathname));
   assert.deepEqual(failures, []);
   console.log(JSON.stringify({browser:browser.version(), url:url.href, ...result}, null, 2));
 } finally {

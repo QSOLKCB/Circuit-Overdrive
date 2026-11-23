@@ -4,7 +4,7 @@ import { rotate } from '../vendor/vanillajs/modules/math/index.js';
 import { aiCommand, createDriver } from './ai.js';
 import { resolveCarContacts } from './contact.js';
 import { FIELD, PLAYER_ID } from './field.js';
-import { track } from './track.js';
+import { stationDelta, track } from './track.js';
 
 export const STEP = 1 / 60;
 export const TOTAL_LAPS = 3;
@@ -26,7 +26,10 @@ export const carRecipe = car.recipe;
 export const rideHeight = touring.wheel.radius + touring.suspension.restLength
   - touring.mass * 9.81 / (4 * touring.suspension.spring);
 const staticCompression = touring.wheel.radius + touring.suspension.restLength - rideHeight;
-const world = { sampleSurface: track.sampleSurface, barriers: [] };
+const railClearance = .08;
+const maxStationStep = 2.5; // 120 m/s × 1/60 s plus the inside-corner projection margin.
+const gridClearance = touring.chassis.length / 2 + railClearance;
+
 
 function spawnOnRoad(road) {
   const [nx, ny, nz] = road.normal;
@@ -49,34 +52,36 @@ function snapshot(state, road) {
   };
 }
 
-function createEntrant(driver, raceSeed) {
+function createEntrant(driver, raceSeed, course) {
   const id = driver.id;
   const distance = -5 - 9 * Math.floor(id / 2) - 3 * (id % 2);
   const lateral = id % 2 === 0 ? -3.5 : 3.5;
-  const road = track.sample(distance, lateral);
+  const road = course.sample(distance, lateral);
   const vehicle = spawnOnRoad(road);
   const current = snapshot(vehicle, road);
   const seed = (raceSeed + Math.imul(id + 1, 0x9e3779b9)) >>> 0;
   const entrant = {
     ...driver, seed, ai: id === PLAYER_ID ? null : createDriver(driver.style, seed, lateral),
     vehicle, current, previous: current, distance, extraDistance: 0,
-    elapsedTicks: 0, lapStartTick: 0, lap: 1, lapTicks: [], nextGate: 1, finishTicks: null,
-    safeDistance: distance, safeLateral: lateral, recoveryCooldown: 0, recoveries: 0,
+    elapsedTicks: 0, lapStartTick: 0, lap: 1, lapTicks: [], splitTicks: [], nextGate: course.closed ? 1 : 0, finishTicks: null,
+    missedGate: false, safeDistance: distance, safeLateral: lateral, recoveryCooldown: 0, recoveries: 0,
     wrongWay: false, contact: false, pairContact: false, position: id + 1,
   };
   Object.defineProperty(entrant, 'id', { writable: false, configurable: false });
   return entrant;
 }
 
-export function createRace(seed = DEFAULT_SEED) {
+export function createRace(seed = DEFAULT_SEED, course = track) {
   if (!Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) throw RangeError('Invalid race seed');
-  const entrants = FIELD.map(driver => createEntrant(driver, seed));
-  return { phase: 'menu', pausedFrom: null, countdownTicks: 180, elapsedTicks: 0, seed,
+  const entrants = FIELD.map(driver => createEntrant(driver, seed, course));
+  const race = { phase: 'menu', pausedFrom: null, countdownTicks: 180, elapsedTicks: 0, seed,
     entrants, player: entrants[PLAYER_ID], order: entrants.slice() };
+  // Immutable runtime geometry is intentionally outside the serializable race state.
+  return Object.defineProperty(race, 'course', { value: course });
 }
 
 export function startRace(race) {
-  Object.assign(race, createRace(race.seed), { phase: 'countdown' });
+  Object.assign(race, createRace(race.seed, race.course), { phase: 'countdown' });
 }
 
 export function pauseRace(race) {
@@ -105,13 +110,14 @@ function clearForRecovery(road, entrant, field) {
   });
 }
 
-function resetCar(entrant, field) {
+function resetCar(entrant, field, course) {
   // Search only behind the last safe progress. Never jump ahead to find a gap.
-  const lastSafe = Math.min(entrant.distance, entrant.safeDistance, progress(entrant) + entrant.extraDistance);
+  const lastSafe = Math.min(entrant.distance, entrant.safeDistance, progress(entrant, course) + entrant.extraDistance);
   for (let back = 0; back <= 120; back += 8) {
     for (const lateral of [entrant.safeLateral, -7, 7, 0]) {
-      const distance = lastSafe - back;
-      const road = track.sample(distance, lateral);
+      // Leave room for the re-aligned chassis behind the finite starting gate.
+      const distance = course.closed ? lastSafe - back : Math.max(course.startS + gridClearance, lastSafe - back);
+      const road = course.sample(distance, lateral);
       if (!clearForRecovery(road, entrant, field)) continue;
       entrant.vehicle = spawnOnRoad(road);
       entrant.current = snapshot(entrant.vehicle, road);
@@ -121,17 +127,18 @@ function resetCar(entrant, field) {
       entrant.elapsedTicks += PENALTY_TICKS;
       entrant.recoveryCooldown = 120;
       entrant.recoveries++;
-      entrant.wrongWay = entrant.contact = entrant.pairContact = false;
+      entrant.missedGate = entrant.wrongWay = entrant.contact = entrant.pairContact = false;
       if (entrant.ai) entrant.ai = createDriver(entrant.style, entrant.seed, lateral);
       return true;
     }
+    if (!course.closed && lastSafe - back <= course.startS + gridClearance) break;
   }
   return false;
 }
 
 export function recoverCar(race) {
   if (race.phase !== 'racing' || race.player.recoveryCooldown > 0) return false;
-  const recovered = resetCar(race.player, race.entrants);
+  const recovered = resetCar(race.player, race.entrants, race.course);
   classify(race);
   return recovered;
 }
@@ -165,23 +172,12 @@ function controls(state, intent) {
   return { throttle, brake, steer, ...(gear === undefined ? {} : { gear }) };
 }
 
-// The rails are curved strips. The upstream AABB solver cannot represent these
-// boundaries. Project the oriented body's support onto the road normal in XZ,
-// retain tangent motion and remove outward momentum before accepting this tick.
-// A legal vehicle3d step travels <= 2 m, well below the separated rail spacing.
-function contactRail(state, road) {
-  const right = rotate(state.orientation, [1, 0, 0]);
-  const forward = rotate(state.orientation, [0, 0, -1]);
-  const extent = (Math.abs(right[0] * road.rx + right[2] * road.rz) * touring.chassis.width
-    + Math.abs(forward[0] * road.rx + forward[2] * road.rz) * touring.chassis.length) / 2;
-  const penetration = Math.abs(road.lateral) + extent + 0.08 - track.barrierOffset;
-  if (penetration <= 0) return null;
-  const side = Math.sign(road.lateral);
-  const nx = road.rx * side;
-  const nz = road.rz * side;
+// Push out the oriented chassis along a horizontal guardrail normal. Both
+// kinds of rail preserve grounded suspension motion on grades/crossfall.
+function railResponse(state, road, course, nx, nz, penetration) {
   state.position[0] -= penetration * nx;
   state.position[2] -= penetration * nz;
-  const accepted = track.project(state.position[0], state.position[2]);
+  const accepted = course.project(state.position[0], state.position[2]);
   const [vx,,vz] = state.velocity;
   const out = Math.max(0, vx * nx + vz * nz);
   const scrub = 1 - Math.min(0.35, out * 0.018);
@@ -200,28 +196,56 @@ function contactRail(state, road) {
   return accepted;
 }
 
-function signedStep(before, after) {
-  let ds = after - before;
-  if (ds > track.length / 2) ds -= track.length;
-  if (ds < -track.length / 2) ds += track.length;
-  return ds;
-}
-
-function gateDistance(entrant) {
-  const priorLaps = entrant.nextGate === 0 ? entrant.lap : entrant.lap - 1;
-  return priorLaps * track.length + track.gates[entrant.nextGate].s;
-}
-
-// An unfinished car can use only the distance it drove up to its expected gate.
-// Backing up reduces that distance, including when reversing across a lap seam.
-// If it overshot an unvalidated gate, its last validated gate is its authority.
-function progress(entrant) {
-  const next = gateDistance(entrant), travelled = entrant.distance - entrant.extraDistance;
-  if (travelled > next + 2.5) {
-    const previous = (entrant.nextGate + track.gates.length - 1) % track.gates.length;
-    return (entrant.lap - 1) * track.length + track.gates[previous].s;
+function contactRail(state, road, course) {
+  const right = rotate(state.orientation, [1, 0, 0]);
+  const forward = rotate(state.orientation, [0, 0, -1]);
+  const extent = (nx, nz) => (Math.abs(right[0] * nx + right[2] * nz) * touring.chassis.width
+    + Math.abs(forward[0] * nx + forward[2] * nz) * touring.chassis.length) / 2;
+  const side = Math.sign(road.lateral);
+  const penetration = Math.abs(road.lateral) + extent(road.rx, road.rz) + railClearance - course.barrierOffset;
+  let accepted = null;
+  if (penetration > 0) {
+    accepted = railResponse(state, road, course, road.rx * side, road.rz * side, penetration);
+    road = accepted;
   }
-  return Math.min(travelled, next);
+  // The finite course has a transverse rail at each end of its paved runoff.
+  // The start and finish timing gates sit inside those rails and remain open.
+  if (!course.closed && (road.s < course.startS + touring.chassis.length ||
+                         road.s > course.endS - touring.chassis.length)) {
+    const rear = road.s < 0;
+    const edge = course.sample(rear ? course.startS : course.endS);
+    const nx = rear ? -edge.tx : edge.tx, nz = rear ? -edge.tz : edge.tz;
+    const room = (edge.x - state.position[0]) * nx + (edge.z - state.position[2]) * nz;
+    const overlap = extent(nx, nz) + railClearance - room;
+    if (overlap > 0) accepted = railResponse(state, road, course, nx, nz, overlap);
+  }
+  return accepted;
+}
+
+function gateDistance(entrant, course) {
+  const gate = course.gates[entrant.nextGate].s;
+  if (!course.closed) return gate;
+  const priorLaps = entrant.nextGate === 0 ? entrant.lap : entrant.lap - 1;
+  return priorLaps * course.length + gate;
+}
+
+// A missed gate limits classification and recovery to the last validated gate.
+// Reversing reduces progress, even back through the starting grid.
+export function progress(entrant, course) {
+  if (entrant.finishTicks !== null) return course.closed ? TOTAL_LAPS * course.length : course.length;
+  const next = gateDistance(entrant, course), travelled = entrant.distance - entrant.extraDistance;
+  if (!course.closed && (entrant.missedGate || travelled > next + maxStationStep)) {
+    const previous = entrant.nextGate > 0 ? course.gates[entrant.nextGate - 1].s : course.startS + gridClearance;
+    return Math.max(course.startS + gridClearance, Math.min(travelled, previous));
+  }
+  if (course.closed && travelled > next + maxStationStep) {
+    const previous = (entrant.nextGate + course.gates.length - 1) % course.gates.length;
+    return (entrant.lap - 1) * course.length + course.gates[previous].s;
+  }
+  const withinSector = Math.min(travelled, next);
+  // A yawed car can back closer to the dead-end rail than an aligned spawn.
+  // Reserve that footprint outside ranking so realigning never grants credit.
+  return course.closed ? withinSector : Math.max(course.startS + gridClearance, withinSector);
 }
 
 export function classify(race) {
@@ -229,18 +253,18 @@ export function classify(race) {
     if (a.finishTicks !== null && b.finishTicks !== null) return a.finishTicks - b.finishTicks || a.id - b.id;
     if (a.finishTicks !== null) return -1;
     if (b.finishTicks !== null) return 1;
-    return progress(b) - progress(a) || a.id - b.id;
+    return progress(b, race.course) - progress(a, race.course) || a.id - b.id;
   });
   race.order.forEach((entrant, index) => { entrant.position = index + 1; });
 }
-function score(entrant, ds) {
-  if (ds <= 0 || ds > 2.5) return;
-  const gate = track.gates[entrant.nextGate];
-  const target = gateDistance(entrant) + entrant.extraDistance;
+function score(entrant, ds, course) {
+  if (ds <= 0 || ds > maxStationStep) return;
+  const gate = course.gates[entrant.nextGate];
+  const target = gateDistance(entrant, course) + entrant.extraDistance;
   // A missed gate can be taken on a later winding. Still require the entire
   // next sector on that same winding before the next gate becomes eligible.
-  const missedLoops = Math.round((entrant.distance - target) / track.length);
-  if (missedLoops < 0 || Math.abs(entrant.distance - target - missedLoops * track.length) > 2.5) return;
+  const missedLoops = course.closed ? Math.round((entrant.distance - target) / course.length) : 0;
+  if (missedLoops < 0 || Math.abs(entrant.distance - target - missedLoops * course.length) > maxStationStep) return;
   const forward = rotate(entrant.vehicle.orientation, [0, 0, -1]);
   if (forward[0] * gate.tx + forward[2] * gate.tz <= 0) return;
   // The swept center must intersect this particular finite gate in its forward
@@ -252,54 +276,82 @@ function score(entrant, ds) {
   const t = -before / (after - before);
   const offset = (a.x + (b.x - a.x) * t - gate.x) * gate.rx
     + (a.z + (b.z - a.z) * t - gate.z) * gate.rz;
-  if (Math.abs(offset) > track.barrierOffset) return;
-  entrant.extraDistance += missedLoops * track.length;
+  if (Math.abs(offset) > course.barrierOffset) return;
+  if (!course.closed) {
+    // Reject crossings of a horizontally overlapping but vertically distinct road.
+    const height = a.y + (b.y - a.y) * t;
+    if (Math.abs(height - course.sample(gate.s, offset).y - rideHeight) > 2) return;
+    if (entrant.nextGate === course.gates.length - 1) entrant.finishTicks = entrant.elapsedTicks;
+    else if (entrant.nextGate > 0) entrant.splitTicks.push(entrant.elapsedTicks);
+    entrant.nextGate++;
+    entrant.missedGate = false;
+    return;
+  }
+  entrant.extraDistance += missedLoops * course.length;
   if (entrant.nextGate === 0) {
     entrant.lapTicks.push(entrant.elapsedTicks - entrant.lapStartTick);
     entrant.lapStartTick = entrant.elapsedTicks;
     if (entrant.lap === TOTAL_LAPS) entrant.finishTicks = entrant.elapsedTicks;
     else entrant.lap++;
   }
-  entrant.nextGate = (entrant.nextGate + 1) % track.gates.length;
+  entrant.nextGate = (entrant.nextGate + 1) % course.gates.length;
 }
 
-function constrainRail(entrant) {
+function constrainRail(entrant, course) {
   const state = entrant.vehicle;
-  const road = track.project(state.position[0], state.position[2]);
-  if (contactRail(state, road)) entrant.contact = true;
+  const road = course.project(state.position[0], state.position[2]);
+  if (contactRail(state, road, course)) entrant.contact = true;
 }
 
-function drive(entrant, intent, field) {
+function drive(entrant, intent, field, course, world) {
   entrant.previous = entrant.current;
   entrant.contact = entrant.pairContact = false;
   entrant.elapsedTicks++;
   entrant.recoveryCooldown = Math.max(0, entrant.recoveryCooldown - 1);
-  if (entrant.ai && intent.recover && !entrant.recoveryCooldown && resetCar(entrant, field)) return;
+  if (entrant.ai && intent.recover && !entrant.recoveryCooldown && resetCar(entrant, field, course)) return;
   try {
     entrant.vehicle = car.step(entrant.vehicle, controls(entrant.vehicle, intent), world, STEP);
   } catch (error) {
     if (!(error instanceof RangeError || error instanceof TypeError)) throw error;
-    resetCar(entrant, field);
+    resetCar(entrant, field, course);
     return;
   }
   const state = entrant.vehicle;
-  const road = track.project(state.position[0], state.position[2]);
-  if (state.needsRecovery || state.position[1] < road.y - 3 || Math.abs(road.lateral) > track.barrierOffset + 3) {
-    resetCar(entrant, field);
+  const road = course.project(state.position[0], state.position[2]);
+  const jumped = !course.closed && Math.abs(road.s - entrant.previous.s) > maxStationStep;
+  if (jumped || state.needsRecovery || state.position[1] < road.y - 3 || Math.abs(road.lateral) > course.barrierOffset + 3) {
+    resetCar(entrant, field, course);
     return;
   }
-  entrant.contact = contactRail(state, road) !== null;
+  entrant.contact = contactRail(state, road, course) !== null;
 }
 
-function accept(entrant) {
+function accept(entrant, field, course) {
   const state = entrant.vehicle;
-  const road = track.project(state.position[0], state.position[2]);
+  const road = course.project(state.position[0], state.position[2]);
+  if (state.tick === 0) {
+    // A recovery spawned this tick. Show its resolved pose without scoring
+    // any displacement from the reset or a simultaneous pair correction.
+    entrant.previous = entrant.current = snapshot(state, road);
+    return;
+  }
+  const ds = stationDelta(course, entrant.previous.s, road.s);
+  // Nearby roads can have very different stations. An impossible one-tick
+  // jump must not become sector progress, even when both ends project to asphalt.
+  if (!course.closed && Math.abs(ds) > maxStationStep) {
+    resetCar(entrant, field, course);
+    return;
+  }
   entrant.current = snapshot(state, road);
-  const ds = signedStep(entrant.previous.s, road.s);
-  entrant.distance += ds;
-  score(entrant, ds);
+  entrant.distance = course.closed ? entrant.distance + ds : road.s;
+  score(entrant, ds, course);
+  // Reversing back up to a missed sprint gate cannot promote a driver.
+  // Only a valid crossing or a recovery to already credited ground clears it.
+  if (!course.closed && entrant.finishTicks === null && road.s > course.gates[entrant.nextGate].s + .001) {
+    entrant.missedGate = true;
+  }
   entrant.wrongWay = ds < -0.035;
-  if (!entrant.contact && !entrant.wrongWay && Math.abs(road.lateral) < track.halfWidth - 1.5
+  if (!entrant.contact && !entrant.wrongWay && Math.abs(road.lateral) < course.halfWidth - 1.5
       && state.wheels.every(wheel => wheel.grounded)) {
     entrant.safeDistance = entrant.distance;
     entrant.safeLateral = road.lateral;
@@ -314,12 +366,14 @@ export function stepRace(race, intent = {}) {
   if (race.phase !== 'racing') return;
   checkIntent(intent);
   race.elapsedTicks++;
+  const { course } = race;
+  const world = { sampleSurface: course.sampleSurface, barriers: [] };
   const active = race.entrants.filter(entrant => entrant.finishTicks === null);
   // Read one common field before integrating anyone. Never read a rival's future pose.
-  const commands = active.map(entrant => entrant.ai ? aiCommand(entrant, active) : intent);
-  for (let i = 0; i < active.length; i++) drive(active[i], commands[i], active);
-  resolveCarContacts(active, carRecipe.chassis, constrainRail);
-  for (const entrant of active) accept(entrant);
+  const commands = active.map(entrant => entrant.ai ? aiCommand(entrant, active, course) : intent);
+  for (let i = 0; i < active.length; i++) drive(active[i], commands[i], active, course, world);
+  resolveCarContacts(active, carRecipe.chassis, constrainRail, course);
+  for (const entrant of active) accept(entrant, active, course);
   classify(race);
   if (race.player.finishTicks !== null) race.phase = 'finished';
 }

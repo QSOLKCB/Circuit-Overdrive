@@ -4,10 +4,11 @@ import {defaultVehicleSound} from '../vendor/vanillajs/modules/vehicle-audio/ind
 import {RaceAudio} from '../vendor/vanillajs/demos/horizon-lab/race-audio.js';
 import {attachRaceInput} from './input.js';
 import {track} from './track.js';
+import {ridge} from './ridge.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
 import {createMap} from './map.js';
-import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, STEP} from './sim.js';
+import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, progress, STEP} from './sim.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('world');
@@ -15,8 +16,8 @@ const clock = new FixedClock({step:STEP});
 const audio = new RaceAudio({
   ...defaultVehicleSound(), cylinders:8, exhaustTone:.75, engineGain:.16, exhaustGain:.23, seed:27
 });
-const drawMap = createMap($('map'), track);
 let race = createRace();
+let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
 let lastTime = null, lastPanel = '', soundGeneration = 0;
 const phase = () => error ? 'error' : grid ? 'grid' : race.phase;
@@ -57,7 +58,7 @@ function enterGrid() {
   if (error) return;
   stopAudio();
   resetClock();
-  race = createRace();
+  race = createRace(race.seed, race.course);
   grid = true;
   canvas.focus({preventScroll:true});
   updatePanel();
@@ -90,6 +91,7 @@ function updatePanel() {
   $('continue').hidden = mode !== 'paused';
   $('restart').hidden = !['paused','finished'].includes(mode);
   $('restart').className = mode === 'finished' ? 'primary' : '';
+  $('courses').hidden = !['paused','finished'].includes(mode);
   $('results').hidden = mode !== 'finished';
   $('lights').hidden = !driving();
   const titles = {grid:'On the grid', paused:'Race paused', finished:'Race complete', error:'Graphics unavailable'};
@@ -111,9 +113,10 @@ function updatePanel() {
       item.append(name,time);
       return item;
     }));
-    $('splits').replaceChildren(...race.player.lapTicks.map((ticks, i) => {
+    const splitTimes = race.course.closed ? race.player.lapTicks : race.player.splitTicks;
+    $('splits').replaceChildren(...splitTimes.map((ticks, i) => {
       const item = document.createElement('li'), time = document.createElement('strong');
-      item.append('Lap ' + (i+1), time);
+      item.append((race.course.closed ? 'Lap ' : 'CP ') + (i+1), time);
       time.textContent = formatTime(ticks);
       return item;
     }));
@@ -130,7 +133,7 @@ function graphicsError(message) {
 }
 function initializeScene() {
   try {
-    scene = createScene(canvas);
+    scene = createScene(canvas, race.course);
     error = '';
     updatePanel();
   } catch (failure) {
@@ -146,7 +149,43 @@ canvas.addEventListener('webglcontextrestored', () => {
   scene?.dispose();
   initializeScene();
 });
-$('distance').textContent = (track.length / 1000).toFixed(2) + ' km';
+function displayCourse(course) {
+  const circuit = course.closed;
+  document.body.dataset.course = course.id;
+  $('choose-speedway').setAttribute('aria-pressed', String(circuit));
+  $('choose-ridge').setAttribute('aria-pressed', String(!circuit));
+  set('title-first', circuit ? 'Overdrive' : 'Redline');
+  set('title-last', circuit ? 'Speedway' : 'Ridge');
+  set('distance', (course.length/1000).toFixed(2) + ' km');
+  set('format', circuit ? '3 laps' : 'Mountain sprint');
+  set('progress-label', circuit ? 'Lap' : 'Checkpoint');
+  set('progress-total', ' / ' + (circuit ? 3 : course.gates.length-2));
+  set('map-title', course.name);
+  set('panel-course', course.name);
+  set('split-header', circuit ? 'Your laps' : 'Checkpoint splits');
+  $('distance-hud').hidden = circuit;
+}
+function selectCourse(course) {
+  if (phase() !== 'menu' || course === race.course) return;
+  resetClock();
+  race = createRace(race.seed, course);
+  camera = 'chase';
+  drawMap = createMap($('map'),course);
+  displayCourse(course);
+  scene?.dispose();
+  initializeScene();
+}
+$('choose-speedway').onclick = () => selectCourse(track);
+$('choose-ridge').onclick = () => selectCourse(ridge);
+$('courses').onclick = () => {
+  if (!['paused','finished'].includes(phase())) return;
+  resetClock();
+  stopAudio();
+  race=createRace(race.seed,race.course);
+  updatePanel();
+  $(race.course.closed ? 'choose-speedway' : 'choose-ridge').focus();
+};
+displayCourse(race.course);
 $('start').onclick = $('restart').onclick = enterGrid;
 $('continue').onclick = resume;
 $('sound').onclick = () => {
@@ -192,12 +231,20 @@ function drawHud(p) {
   showNearby(player);
   set('speed', Math.round(p.speed * 3.6));
   set('gear', p.gear < 0 ? 'R' : p.gear === 0 ? 'N' : p.gear);
-  set('lap', player.lap);
+  if (race.course.closed) set('lap', player.lap);
+  else {
+    set('lap', player.splitTicks.length);
+    const metres = Math.max(0, race.course.length-Math.max(0,progress(player,race.course)));
+    set('remaining', metres >= 1000 ? (metres/1000).toFixed(2)+' km' : Math.ceil(metres)+' m');
+  }
   set('timer', formatTime(player.elapsedTicks));
   $('revs').style.width = Math.min(100, p.rpm / 75) + '%';
   let message = '';
   if (player.wrongWay) message = 'Wrong way';
   else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
+  else if (!race.course.closed && player.splitTicks.length && player.elapsedTicks-player.splitTicks.at(-1)<180) {
+    message = 'CP ' + player.splitTicks.length + '  ·  ' + formatTime(player.splitTicks.at(-1));
+  }
   else if (race.phase === 'racing' && player.lapTicks.length && player.elapsedTicks - player.lapStartTick < 180) {
     message = 'Lap ' + player.lapTicks.length + '  ·  ' + formatTime(player.lapTicks.at(-1));
   }

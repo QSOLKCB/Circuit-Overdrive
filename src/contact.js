@@ -106,27 +106,27 @@ function findContact(a, b, chassis, radius, sweep) {
   return hit;
 }
 
-function applyResponse(entrant, otherId, dx, dz, dvx, dvz, constrainRail) {
+function applyResponse(entrant, otherId, dx, dz, dvx, dvz, constrainRail, course) {
   const v = entrant.vehicle, p = v.position, speed = v.velocity;
   const grounded = v.wheels.some(w => w.grounded);
-  const before = grounded ? track.project(p[0],p[2]) : null;
+  const before = grounded ? course.project(p[0],p[2]) : null;
   p[0] += dx;
   p[2] += dz;
   speed[0] += dvx;
   speed[2] += dvz;
   if (grounded) {
     // Preserve ride height and vertical motion relative to the road on a bank.
-    p[1] += track.project(p[0],p[2]).y - before.y;
+    p[1] += course.project(p[0],p[2]).y - before.y;
     const [nx,ny,nz] = before.normal;
     speed[1] -= (nx*dvx+nz*dvz)/ny;
   }
   entrant.contact = entrant.pairContact = true;
   const label = 'car:' + otherId;
   if (!v.contacts.includes(label)) v.contacts.push(label);
-  constrainRail(entrant);
+  constrainRail(entrant, course);
 }
 
-function resolvePair(a, b, hit, constrainRail) {
+function resolvePair(a, b, hit, constrainRail, course) {
   const {nx,nz,gap} = hit;
   const va = a.entrant.vehicle.velocity, vb = b.entrant.vehicle.velocity;
   const vx = va[0]-vb[0], vz = va[2]-vb[2];
@@ -137,14 +137,14 @@ function resolvePair(a, b, hit, constrainRail) {
   const dvx = impulse*nx + slide*nz, dvz = impulse*nz - slide*nx;
   if (gap >= 0 && !impulse && !hit.swept) return false;
   const push = Math.max(0,SKIN-gap)*.5;
-  applyResponse(a.entrant,b.entrant.id,-push*nx,-push*nz,-dvx,-dvz,constrainRail);
-  applyResponse(b.entrant,a.entrant.id, push*nx, push*nz, dvx, dvz,constrainRail);
+  applyResponse(a.entrant,b.entrant.id,-push*nx,-push*nz,-dvx,-dvz,constrainRail,course);
+  applyResponse(b.entrant,a.entrant.id, push*nx, push*nz, dvx, dvz,constrainRail,course);
   return true;
 }
 
 // Entrants supply their tick-start pose and newly integrated vehicle3d state.
 // The race captures render and scoring snapshots only after all constraints.
-export function resolveCarContacts(entrants, chassis, constrainRail) {
+export function resolveCarContacts(entrants, chassis, constrainRail, course = track) {
   const bodies = entrants.filter(e => e.finishTicks === null).sort((a,b) => a.id-b.id).map(shape);
   const radius = Math.hypot(chassis.width,chassis.length)/2;
   // Sweep once; then settle endpoint overlaps propagated by other cars/rails.
@@ -155,7 +155,7 @@ export function resolveCarContacts(entrants, chassis, constrainRail) {
       for (let j=i+1; j<bodies.length; j++) {
         const a = bodies[i], b = bodies[j];
         const hit = findContact(a,b,chassis,radius,pass===0);
-        if (hit && resolvePair(a,b,hit,constrainRail)) changed = true;
+        if (hit && resolvePair(a,b,hit,constrainRail,course)) changed = true;
       }
     }
     if (!changed) break;

@@ -3,7 +3,7 @@ import {PLAYER_ID} from './field.js';
 
 export function createMap(canvas, track) {
   const ctx = canvas.getContext('2d');
-  const points = Array.from({length:192}, (_, i) => track.sample(track.length * i / 192));
+  const points = Array.from({length:192}, (_, i) => track.sample(track.length * i / (track.closed ? 192 : 191)));
   const xs = points.map(p => p.x), zs = points.map(p => p.z);
   const minX = Math.min(...xs), minZ = Math.min(...zs);
   const width = Math.max(...xs) - minX, height = Math.max(...zs) - minZ;
@@ -12,7 +12,7 @@ export function createMap(canvas, track) {
   const y = v => (v - minZ - height / 2) * scale + 107;
   const path = new Path2D();
   points.forEach((p, i) => i ? path.lineTo(x(p.x), y(p.z)) : path.moveTo(x(p.x), y(p.z)));
-  path.closePath();
+  if (track.closed) path.closePath();
   return entrants => {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.lineWidth = 4;
@@ -20,6 +20,11 @@ export function createMap(canvas, track) {
     ctx.stroke(path);
     ctx.fillStyle = '#fffbe7';
     ctx.fillRect(x(points[0].x)-5,y(points[0].z)-2,10,4);
+    if (!track.closed) {
+      const finish=points.at(-1);
+      ctx.fillStyle='#ffcb4d';
+      ctx.fillRect(x(finish.x)-4,y(finish.z)-4,8,8);
+    }
     ctx.font = 'bold 15px monospace';
     ctx.textAlign = 'center';
     ctx.fillText('COURSE',84,16);
