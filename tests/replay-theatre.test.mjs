@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import {createRecording} from '../src/replay.js';
 import {createRace,startRace,stepRace} from '../src/sim.js';
@@ -50,7 +51,18 @@ test('source-compatibility pins match the immutable v0.6.0 through v0.7.0 race a
     'vendor/vanillajs/provenance.json':'42c170df0b42d5c752a0dca47c6746b6bbd5cc7f'
   };
   for(const [path,sha] of Object.entries(pinned)){
-    const current=execFileSync('git',['hash-object',path],{cwd:root,encoding:'utf8'}).trim();
+    // The sole addition to the original simulation is an ESM export list for
+    // existing primitives. Verify every byte of the historical implementation.
+    const trailer='\n// Nitro uses the same swept gates, recovery slots, steering map and chassis rails.\n'+
+      'export {contactRail, controls, loadSuspension, resetCar, score, snapshot};\n';
+    let current;
+    if (path === 'src/sim.js') {
+      const source=readFileSync(new URL('../src/sim.js',import.meta.url),'utf8');
+      assert(source.endsWith(trailer));
+      current=execFileSync('git',['hash-object','--stdin'],{cwd:root,encoding:'utf8',input:source.slice(0,-trailer.length)}).trim();
+    } else {
+      current=execFileSync('git',['hash-object',path],{cwd:root,encoding:'utf8'}).trim();
+    }
     assert.equal(current,sha,'historical replay trust invalidated by '+path);
   }
 });

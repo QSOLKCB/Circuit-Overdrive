@@ -414,3 +414,6 @@ export function stepRace(race, intent = {}) {
   classify(race);
   if (race.player.finishTicks !== null) race.phase = 'finished';
 }
+
+// Nitro uses the same swept gates, recovery slots, steering map and chassis rails.
+export {contactRail, controls, loadSuspension, resetCar, score, snapshot};
