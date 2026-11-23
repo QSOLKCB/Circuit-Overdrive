@@ -5,7 +5,11 @@ import { clamp, cross, multiplyMatrices, normalize, quatMultiply, rotate } from 
 import { speedwayBatches } from './speedway.js';
 import { touringMeshes } from './touring-car.js';
 import { track } from './track.js';
-import { rideHeight } from './sim.js';
+import { PLAYER_ID } from './field.js';
+import { carRecipe, rideHeight } from './sim.js';
+
+const bodyHeightScale=.92;
+const staticCompression=carRecipe.wheel.radius+carRecipe.suspension.restLength-rideHeight;
 
 const LIGHT = {
   ambient:.49, sunDirection:[-.62,.84,-.44], sunColor:[1,.93,.82],
@@ -36,7 +40,7 @@ function carMatrix(p) {
   const q=quatMultiply(quatMultiply(qYaw,qPitch),qRoll);
   const down=rotate(q,[0,.012-rideHeight,0]);
   // Fit the touring rig to the authoritative 4.4 x 1.95 m chassis.
-  return columnMatrix(rotate(q,[1.037,0,0]),rotate(q,[0,.92,0]),rotate(q,[0,0,.898]),
+  return columnMatrix(rotate(q,[1.037,0,0]),rotate(q,[0,bodyHeightScale,0]),rotate(q,[0,0,.898]),
     [p.x+down[0],p.y+down[1],p.z+down[2]]);
 }
 
@@ -78,10 +82,46 @@ export function createScene(canvas) {
     renderer.dispose();
     throw error;
   }
+  const wheels = new Array(4);
+  const glass = car.visual.parts.find(part => part.id === 'windows');
+  function drawCar(p,livery) {
+    const road=track.project(p.x,p.z);
+    const shadowRight=normalize(cross(road.normal,[Math.sin(p.yaw),0,Math.cos(p.yaw)]));
+    const shadowMatrix=columnMatrix(shadowRight,road.normal,cross(shadowRight,road.normal),
+      [p.x,road.y+.032,p.z]);
+    renderer.draw(shadow,{matrix:shadowMatrix,material:shadowMaterial});
+
+    const root=carMatrix(p);
+    const parts=vehicleDraws(car.visual,{steer:-p.steering,wheelSpin:p.wheelSpin,brake:p.brake??0});
+    wheels.fill(null);
+    for(const {part,matrix,material} of parts) {
+      if(part.id==='windows')continue;
+      let transform = root;
+      if (part.wheel !== null) {
+        if (!wheels[part.wheel]) {
+          // The rig is authored at resting ride height. Both tyre and alloy
+          // follow their own interpolated suspension travel from that reference.
+          matrix[13] += (p.compression[part.wheel]-staticCompression)/bodyHeightScale;
+          wheels[part.wheel] = multiplyMatrices(root,matrix);
+        }
+        transform = wheels[part.wheel];
+      }
+      renderer.draw(car.mesh.get(part.id),{
+        matrix:transform,
+        material:part.id==='body' ? livery.material : material
+      });
+    }
+    renderer.draw(car.stripes,{matrix:root,material:PAINT});
+    renderer.draw(livery.trim,{matrix:root,material:PAINT});
+    renderer.draw(car.lamps,{matrix:root,material:{roughness:.26,emission:.32+1.3*(p.brake??0)}});
+    return root;
+  }
+  const glassDraws=[];
   let direction, lastMode;
   return {
-    draw(p,{mode='racing',camera='chase',dt=1/60}={}) {
+    draw(poses,{mode='racing',camera='chase',dt=1/60}={}) {
       if(renderer.lost)return;
+      const p = poses[PLAYER_ID];
       if(direction===undefined || lastMode==='menu' || mode==='countdown') direction=p.yaw;
       const delta=Math.atan2(Math.sin(p.yaw-direction),Math.cos(p.yaw-direction));
       direction+=delta*(1-Math.exp(-clamp(dt,0,.1)*12));
@@ -91,25 +131,18 @@ export function createScene(canvas) {
       renderer.begin(view.eye,lookAt(view.eye,view.target),{...LIGHT,fov:view.fov});
       for(const row of world)renderer.draw(row.mesh,{material:row.material});
 
-      const road=track.project(p.x,p.z);
-      const shadowRight=normalize(cross(road.normal,[Math.sin(p.yaw),0,Math.cos(p.yaw)]));
-      const shadowMatrix=columnMatrix(shadowRight,road.normal,cross(shadowRight,road.normal),
-        [p.x,road.y+.032,p.z]);
-      renderer.draw(shadow,{matrix:shadowMatrix,material:shadowMaterial});
-
-      const root=carMatrix(p);
-      const parts=vehicleDraws(car.visual,{steer:-p.steering,wheelSpin:p.wheelSpin,brake:p.brake??0});
-      for(const {part,matrix,material} of parts) {
-        if(part.id==='windows')continue;
-        renderer.draw(car.mesh.get(part.id),{
-          matrix:part.wheel===null ? root : multiplyMatrices(root,matrix),
-          material:part.id==='body' ? PAINT : material
-        });
+      glassDraws.length = 0;
+      for (const pose of poses) {
+        if (pose.id !== PLAYER_ID && (mode === 'menu' || pose.finished)) continue;
+        // Avoid submitting a whole car when its bounding sphere is behind the camera.
+        const dx=pose.x-view.eye[0], dy=pose.y-view.eye[1], dz=pose.z-view.eye[2];
+        const depth=dx*(view.target[0]-view.eye[0])+dy*(view.target[1]-view.eye[1])+dz*(view.target[2]-view.eye[2]);
+        if (depth < -60) continue;
+        const matrix = drawCar(pose, car.liveries[pose.id]);
+        glassDraws.push({matrix,depth});
       }
-      renderer.draw(car.trim,{matrix:root,material:PAINT});
-      renderer.draw(car.lamps,{matrix:root,material:{roughness:.26,emission:.32+1.3*(p.brake??0)}});
-      const glass=parts.find(row=>row.part.id==='windows');
-      renderer.draw(car.mesh.get('windows'),{matrix:root,material:glass.material});
+      glassDraws.sort((a,b) => b.depth-a.depth);
+      for (const {matrix} of glassDraws) renderer.draw(car.mesh.get('windows'),{matrix,material:glass.material});
     },
     dispose(){renderer.dispose();}
   };

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import { buildVehicleVisual } from '../vendor/vanillajs/modules/scenic3d/index.js';
-import { box, quad } from './geometry.js';
+import { box, quad, lettering } from './geometry.js';
+import { FIELD, PLAYER_ID } from './field.js';
 
 const SCARLET = [.92,.075,.027], CREAM = [.97,.85,.57], BLUE = [.026,.16,.34];
 const INK = [.035,.05,.063], at=(x,y,z)=>[x,y,-z];
@@ -22,19 +23,21 @@ function clip(polygon, edge, less) {
   return result;
 }
 function paintBody(vertices) {
-  const out=[], bands=[[-2,-.49,SCARLET],[-.49,-.44,CREAM],[-.44,-.34,BLUE],
+  const coat=[], stripes=[], bands=[[-2,-.49,SCARLET],[-.49,-.44,CREAM],[-.44,-.34,BLUE],
     [-.34,-.05,CREAM],[-.05,2,SCARLET]];
   for(let i=0;i<vertices.length;i+=33) {
     const source=[0,11,22].map(j=>Array.from(vertices.subarray(i+j,i+j+11)));
     for(const [left,right,color] of bands) {
+      const out = color === SCARLET ? coat : stripes;
+      const tint = color === SCARLET ? [1,1,1] : color;
       const polygon=clip(clip(source,left,false),right,true);
       for(let k=1;k<polygon.length-1;k++) {
         for(const p of [polygon[0],polygon[k],polygon[k+1]])
-          out.push(...p.slice(0,6),...color,...p.slice(9));
+          out.push(...p.slice(0,6),...tint,...p.slice(9));
       }
     }
   }
-  return new Float32Array(out);
+  return {coat:new Float32Array(coat), stripes:new Float32Array(stripes)};
 }
 
 // Slanted stencil numerals, shared by the door plates and roof.
@@ -47,16 +50,19 @@ function number27(out, point, color) {
   ];
   for(const strip of strips) quad(out,...strip.map(([u,v])=>point(u+.12*(v-.5),v)),color);
 }
-function raceTrim() {
+function raceTrim(driver, paint) {
+  const decal = driver.id === PLAYER_ID ? number27 : (out, point, color) => {
+    lettering(out, String(driver.number), 1, (x,y) => point(.5+x/7+.08*(y/5-.5),y/5), color);
+  };
   const out=[],lamps=[];
   for(const side of [-1,1]) {
     box(out,at,[side*.59,1.015,-2.0],[.10,.42,.23],INK);
-    box(out,at,[side*.96,1.23,-2.02],[.052,.28,.45],SCARLET);
+    box(out,at,[side*.96,1.23,-2.02],[.052,.28,.45],paint);
     box(out,at,[side*.915,.30,-.035],[.12,.16,2.05],BLUE);
     const position=(u,v,offset)=>[side*(.921+offset),.40+v*.44,-side*(u-.5)*.76];
     const plaque=(u,v)=>position(u,v,.004);
     quad(out,plaque(-.22,-.11),plaque(1.22,-.11),plaque(1.15,1.1),plaque(-.15,1.1),CREAM,[side,0,0]);
-    number27(out,(u,v)=>position(u,v,.008),INK);
+    decal(out,(u,v)=>position(u,v,.008),INK);
     // Quarter panel arrow behind the door number.
     const stripe=(z,y)=>[side*.942,y,z];
     quad(out,stripe(.48,.66),stripe(1.8,.9),stripe(1.85,.81),stripe(.5,.52),CREAM);
@@ -79,7 +85,7 @@ function raceTrim() {
     box(out,at,[side*.73,.415,-2.45],[.19,.047,.064],CREAM);
   }
   quad(out,rear(-.185,.52,2.487),rear(.185,.52,2.487),rear(.185,.67,2.487),rear(-.185,.67,2.487),CREAM,[0,0,1]);
-  number27(out,(u,v)=>rear((u-.5)*.21,.538+.115*v,2.496),INK);
+  decal(out,(u,v)=>rear((u-.5)*.21,.538+.115*v,2.496),INK);
   box(out,at,[0,.313,-2.40],[1.59,.075,.17],INK);
   for(const x of [-.57,-.38,.38,.57]) box(out,at,[x,.278,-2.31],[.035,.12,.34],BLUE);
   const front=(x,y,z=-2.48)=>[x,y,z];
@@ -100,16 +106,24 @@ function raceTrim() {
     const y=1.52-.065*(x/(.94*.64))**2-.025*((z+.45)/1.33*2-1)**2;
     return [x,y+.009,z];
   };
-  number27(out,roof,INK);
+  decal(out,roof,INK);
   return {body:new Float32Array(out),lamps:new Float32Array(lamps)};
 }
 
 export function touringMeshes(renderer) {
   const visual=buildVehicleVisual('touring',{profile:'low',paint:[1,1,1]});
   const mesh=new Map();
-  for(const part of visual.parts) {
-    mesh.set(part.id,renderer.mesh(part.id==='body' ? paintBody(part.vertices) : part.vertices));
+  const body=paintBody(visual.parts.find(part => part.id === 'body').vertices);
+  for (const part of visual.parts) {
+    mesh.set(part.id, renderer.mesh(part.id === 'body' ? body.coat : part.vertices));
   }
-  const trim=raceTrim();
-  return {visual,mesh,trim:renderer.mesh(trim.body),lamps:renderer.mesh(trim.lamps)};
+  let lamps;
+  const liveries = FIELD.map(driver => {
+    const paint = driver.id === PLAYER_ID ? SCARLET :
+      [1,3,5].map(start => parseInt(driver.color.slice(start,start+2),16)/255);
+    const trim = raceTrim(driver, paint);
+    lamps ??= renderer.mesh(trim.lamps);
+    return {material:{color:paint,roughness:.32,metalness:.18}, trim:renderer.mesh(trim.body)};
+  });
+  return {visual,mesh,liveries,stripes:renderer.mesh(body.stripes),lamps};
 }
