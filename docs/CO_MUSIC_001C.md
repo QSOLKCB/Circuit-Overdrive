@@ -21,7 +21,7 @@ From the repository root:
 
 ```sh
 node scripts/music-preview.mjs ../circuit-overdrive-soundtrack
-sha256sum -c ../circuit-overdrive-soundtrack/SHA256SUMS
+(cd ../circuit-overdrive-soundtrack && sha256sum -c SHA256SUMS)
 ```
 
 Use a **new**, nonexistent output directory. The command writes six `<mode>-preview.wav` references, six inspectable `<mode>-score.json` files and one `SHA256SUMS` with twelve entries.
