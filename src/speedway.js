@@ -18,27 +18,46 @@ function ribbon(out, from, to, left, right, lift, color) {
   quad(out,a,b,c,d,color);
 }
 
-function makeCourse(road, field, details) {
+function roadSlice(road, field, details, from, to, columns, section, dashStart, dashEnd) {
   const width = track.halfWidth, wall = track.barrierOffset;
+  for (let j=0; j<columns; j++) {
+    const left = width*(2*j/columns-1), right = width*(2*(j+1)/columns-1);
+    ribbon(road,from,to,left,right,0,[.224,.245,.264]);
+  }
+  for (const side of [-1,1]) {
+    const lo=side*width, outer=side*wall;
+    ribbon(details,from,to,lo-side*.32,lo,.016,CREAM);
+    ribbon(details,from,to,lo,lo+side*.82,.012,section%2 ? CREAM : RED);
+    ribbon(road,from,to,lo+side*.82,outer,.001,[.43,.46,.43]);
+    // Inner barrier face sits exactly at the simulation boundary.
+    const a=roadPoint(from,outer), b=roadPoint(to,outer);
+    const A=roadPoint(from,outer,1), B=roadPoint(to,outer,1);
+    const p=track.sample(from);
+    quad(details,a,b,B,A,section%8 < 2 ? BLUE : [.68,.72,.70],[-side*p.rx,0,-side*p.rz]);
+    ribbon(details,from,to,outer,outer+side*.4,1,[.8,.82,.78]);
+    // Sloping embankment joins the broad flat field even under the banking.
+    const farA=roadPoint(from,outer+side*9), farB=roadPoint(to,outer+side*9);
+    farA[1]=farB[1]=-1.75;
+    quad(field,a,b,farB,farA,section%8<4 ? TURF : [.32,.56,.21],up);
+    const start=Math.max(from,dashStart), end=Math.min(to,dashEnd);
+    if (section%3===0 && end>start) {
+      ribbon(details,start,end,side*width/3-.105,side*width/3+.105,.018,[.69,.71,.69]);
+    }
+  }
+}
+
+function makeCourse(road, field, details) {
+  const width = track.halfWidth;
   const sections = Math.ceil(track.length/5);
   for (let i=0; i<sections; i++) {
     const s = track.length*i/sections, next = track.length*(i+1)/sections;
-    ribbon(road,s,next,-width,width,0,[.224,.245,.264]);
-    for (const side of [-1,1]) {
-      const lo=side*width, outer=side*wall;
-      ribbon(details,s,next,lo-side*.32,lo,.016,CREAM);
-      ribbon(details,s,next,lo,lo+side*.82,.012,i%2 ? CREAM : RED);
-      ribbon(road,s,next,lo+side*.82,outer,.001,[.43,.46,.43]);
-      // Inner barrier face sits exactly at the simulation boundary.
-      const a=roadPoint(s,outer), b=roadPoint(next,outer);
-      const A=roadPoint(s,outer,1), B=roadPoint(next,outer,1);
-      quad(details,a,b,B,A,i%8 < 2 ? BLUE : [.68,.72,.70],[-side*track.sample(s).rx,0,-side*track.sample(s).rz]);
-      ribbon(details,s,next,outer,outer+side*.4,1,[.8,.82,.78]);
-      // Sloping embankment joins the broad flat field even under the banking.
-      const farA=roadPoint(s,outer+side*9), farB=roadPoint(next,outer+side*9);
-      farA[1]=farB[1]=-1.75;
-      quad(field,a,b,farB,farA,i%8<4 ? TURF : [.32,.56,.21],up);
-      if (i%3===0) ribbon(details,s+.4,next-.8,side*width/3-.105,side*width/3+.105,.018,[.69,.71,.69]);
+    // Where the bank changes, the two road edges have different grades.
+    // Sample the twisted surface at tyre-scale intervals across the ribbon.
+    const changingBank = track.sample(s).bank !== track.sample(next).bank;
+    const rows = changingBank ? 3 : 1, columns = changingBank ? 12 : 1;
+    for (let row=0; row<rows; row++) {
+      const from = s+(next-s)*row/rows, to = s+(next-s)*(row+1)/rows;
+      roadSlice(road,field,details,from,to,columns,i,s+.4,next-.8);
     }
   }
   for (let row=0; row<2; row++) {

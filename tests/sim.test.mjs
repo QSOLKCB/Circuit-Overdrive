@@ -6,7 +6,7 @@ import { FixedClock } from '../vendor/vanillajs/modules/time/index.js';
 import { createVehicle } from '../vendor/vanillajs/modules/vehicle3d/index.js';
 import { track } from '../src/track.js';
 import {
-  carRecipe, createRace, pauseRace, recoverCar, resumeRace, startRace, stepRace, STEP,
+  carRecipe, createRace, pauseRace, recoverCar, resumeRace, rideHeight, startRace, stepRace, STEP,
 } from '../src/sim.js';
 
 function begin() {
@@ -76,6 +76,63 @@ test('accelerates, brakes, then reverses with held brake and re-engages first ge
   advance(race, 165, { throttle: 1 });
   assert.ok(race.current.gear >= 1);
   assert.equal(race.recoveries, 0);
+});
+
+test('full throttle runs level from the grid and follows the first right-hand bank', () => {
+  const race = begin();
+  for (let tick = 0; tick < 600; tick++) {
+    stepRace(race, { throttle: 1 });
+    const p = race.current;
+    if (race.distance <= 140) {
+      assert.ok(Math.abs(p.lateral) < 0.01, 'left the centreline on the opening straight');
+      assert.ok(Math.abs(p.roll) < 0.001, 'unexpected roll on the opening straight');
+    }
+    const bank = track.sample(p.s).bank;
+    if (bank < -0.10) {
+      assert.ok(Math.abs(p.roll - bank) < 0.05, 'chassis should lean with the road');
+      assert.equal(race.contact, false);
+      return;
+    }
+  }
+  assert.fail('did not reach the first bank');
+});
+
+test('grounded contact with the first banked outer rail keeps the car on the road', () => {
+  const race = begin();
+  let firstContact = null;
+  for (let tick = 0; tick < 650; tick++) {
+    stepRace(race, { throttle: 1 });
+    if (firstContact === null) {
+      if (!race.contact) continue;
+      firstContact = tick;
+      assert.ok(race.current.lateral < -track.halfWidth);
+    }
+    const lift = race.current.y - race.current.groundY - rideHeight;
+    assert.ok(lift < 0.12, 'banked contact launched the chassis above its suspension');
+    assert.ok(race.vehicle.wheels.some(wheel => wheel.grounded));
+    assert.equal(race.recoveries, 0);
+    if (tick - firstContact === 90) return;
+  }
+  assert.fail('did not observe the banked rail collision');
+});
+
+test('rail response preserves vertical speed for airborne and separating cars', () => {
+  const vehicle = createVehicle(carRecipe);
+  for (const airborne of [false, true]) {
+    const race = begin();
+    const s = 188;
+    const p = track.sample(s, 0.1 - track.barrierOffset);
+    approach(race, s, 20, p.lateral);
+    const lateralSpeed = airborne ? -4 : 4;
+    race.vehicle.velocity[0] += lateralSpeed * p.rx;
+    race.vehicle.velocity[2] += lateralSpeed * p.rz;
+    if (airborne) race.vehicle.position[1] += 2;
+    const free = vehicle.step(race.vehicle, {}, { sampleSurface: track.sampleSurface, barriers: [] }, STEP);
+    stepRace(race);
+    assert.equal(race.contact, true);
+    assert.equal(race.vehicle.velocity[1], free.velocity[1]);
+    if (airborne) assert.equal(race.vehicle.position[1], free.position[1]);
+  }
 });
 
 test('same fixed-tick commands produce identical vehicle and progress at 30/60/144 Hz', () => {
