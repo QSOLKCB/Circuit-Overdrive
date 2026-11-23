@@ -10,7 +10,7 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'camera', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'field', 'gamepad', 'geometry', 'input', 'main', 'map', 'profile-editor', 'profiles', 'replay', 'ridge', 'ridge-scene',
+const code = ['ai', 'audio', 'bps', 'camera', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'field', 'gamepad', 'geometry', 'input', 'main', 'map', 'music', 'music-scores', 'profile-editor', 'profiles', 'replay', 'ridge', 'ridge-scene',
   'scene', 'sim', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
