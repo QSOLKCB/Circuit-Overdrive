@@ -45,7 +45,7 @@ try {
   const id = name => page.locator('#'+name);
   await id('settings').click();
   assert(await id('options').isVisible());
-  for (const name of ['master','engine','effects']) {
+  for (const name of ['master','engine','effects','music']) {
     const slider=id(name+'-volume');
     await slider.focus();
     await page.keyboard.press('Home');
