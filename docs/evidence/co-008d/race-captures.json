@@ -1,0 +1,78 @@
+{
+  "source": "2bc4ee997b9d2363c985d4fad53ad07c64a05de9",
+  "browser": "Chrome 158.0.8127.36, ANGLE SwiftShader",
+  "viewport": [
+    1280,
+    720
+  ],
+  "origin": "Verified offline ZIP served at /Circuit-Overdrive/",
+  "method": "Full-page screenshots during browser-finish keyboard drives. Re-encoded from PNG at original dimensions, WebP quality 90.",
+  "images": [
+    {
+      "course": "speedway",
+      "file": "speedway-starting-grid.webp",
+      "screenshotSha256": "38aa2a84c8c8f1d4aadb67995ece6f5ed04059c7586dd217cd304e599abb5e5d",
+      "webpSha256": "57c836bf4c7baac43f16888193dccc75d78227a08851d0c30be6aae06b105a26"
+    },
+    {
+      "course": "speedway",
+      "file": "speedway-bank.webp",
+      "screenshotSha256": "2fcf3ec417d5f5f7d1cc0fe714008cc88b5b7aea2ba1c27a5ee5954d17f0dc0a",
+      "webpSha256": "b6001080b98af73d44b02bc2072897d44f514eb5b1d463c3f97be3fc3ff6ad54"
+    },
+    {
+      "course": "speedway",
+      "file": "speedway-road-at-speed.webp",
+      "screenshotSha256": "f2bdcf5595affde07f7d5aaf73fc26e351020d742406796aac40ee990edc7a87",
+      "webpSha256": "3654ed274a856308422f90c3a0196bd87038b5d8db37f7b8c5d26fa063634985"
+    },
+    {
+      "course": "speedway",
+      "file": "speedway-finished.webp",
+      "screenshotSha256": "e95c3758312a29a21855024aa99378fa9ac9e8ca8cf7af2cfe8a188cf8615451",
+      "webpSha256": "7b70e1638da431704d28f37f01ef7032b80207c270994458d7036838a40883d6"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-open.webp",
+      "screenshotSha256": "8060f3267df75dfbde085f891c79f8f601e2dabca0add552e1a63c4cbc94e422",
+      "webpSha256": "f071c4a6ea8f5b4d04c2e4e128e360b847cfa7e2fda7e4e7b5729caaf47a8f93"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-forest.webp",
+      "screenshotSha256": "61e845a46379c434701daae44562bc55fb60cd858f16abd0a56002277ace2ff9",
+      "webpSha256": "28de4e8e5f0e3192e582294e77e187c9f6915c087f473a404b9b9d56b2db2860"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-bridge.webp",
+      "screenshotSha256": "84a3040c8f1327ae54e2686e1515fd5d35eccfc95cf47ee93a28d7ec4f86c8e6",
+      "webpSha256": "26bdd7124f1d3510eeade04265adce8df4452fdf64245dd3c5925a40667e7c96"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-tunnel-entrance.webp",
+      "screenshotSha256": "a727b0764b96c771e9a715e7e562af1883f60c754d59ba8ba0ee789c5cc565cb",
+      "webpSha256": "78efecd2e7055ab51b2019704b9d8fe59384158dc86555976dbb7aae0cf1e20d"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-tunnel.webp",
+      "screenshotSha256": "4f88e268973f8cdef5c4828b4bf68820720b4b0a4143803c9b45ef9e8171d8f9",
+      "webpSha256": "d9847f1045b0d4f07b28f3550b99eab3fba096a36cd5d0df296462c3769984f5"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-tunnel-exit.webp",
+      "screenshotSha256": "58fb61e99d6f7848e439d536695b22e2a6d2cdd5c5f0ee8146291c43beaf2bf2",
+      "webpSha256": "8fe9f649dc311221e6641e598d53b6ebf6abc261146fc32092ab1cbe20f8c37a"
+    },
+    {
+      "course": "ridge",
+      "file": "ridge-finished.webp",
+      "screenshotSha256": "27d9ee9a5fe100479d23d673a70874e236a47782a007f47515e1ee147314c7a5",
+      "webpSha256": "a1ca7645584c30884948063fa88d3ff0cccf3b8a57029fddfad013fd12d03002"
+    }
+  ]
+}

@@ -95,6 +95,8 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | **v0.9.0** | **CO-009 — NITRO OVERDRIVE** | Separate arcade stunt/boost discipline: drift charging, bounded nitro, ramps, jumping, air manoeuvres and original stunt track | Physically driven command path, genuine airborne states, no scoring by shortcut, finite energy/cooldowns and replay integrity |
 | **v1.0.0** | **CO-010 — ROCKET OVERDRIVE / DEFY GRAVITY** | Dedicated rocket-racing mode with flight assistance, 3D traversable routes, wall/ceiling adhesion and transitions, air dodges and six-car AI | No car teleportation or fake wall riding; explicit surface-relative collision/gravity, 3D checkpoints, bounded contact and real-browser complete races |
 
+**v0.8.0 review candidate.** Four stacked CO-008 reviews cover car-mounted surface lighting, both night worlds, Midnight Protocol and certification. The inaugural championship retains its four daytime events. The release awaits owner review, a final main build and play-through. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
+
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 
 ## 6. Post-v1.0.0 — destruction, garage and economy
