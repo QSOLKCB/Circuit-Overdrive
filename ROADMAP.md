@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.6.2; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
+This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.7.0; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
 
 ## 1. Non-negotiable project contracts
 
@@ -29,8 +29,9 @@ This is the forward development programme, not a claim that proposed features al
 | **v0.6.0** | CO-006 — Arcade Certification Lab | Device diagnostics, reproducible source-stamped offline ZIP, SHA-256 receipts, endurance evidence, keyboard handling and parallel browser verification |
 | **v0.6.1** | CO-MUSIC-001 — SYNTH//OVERDRIVE | Bounded Phrase Sequencer, two playable original chiptune scores and four dormant future-mode compositions, WAV/score export and checksums |
 | **v0.6.2** | CO-REPLAY-001 — Replay Theatre | Source-stamped offline six-car playback, bounded seek, camera selection and verified revision compatibility |
+| **v0.7.0** | CO-007 — World Overdrive Championship | Four seeded events, persistent standings, exactly-once settlement, trophy and single-event replays |
 
-**Published baseline** [v0.6.2](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.6.2) is at `c97ee47e7577337032a55eb2e6ae53b855285573`.
+**Published baseline** [v0.7.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.7.0) is at `3295b82004b64328072ac5fa64f8ba2b55394416`.
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -50,7 +51,7 @@ This is the forward development programme, not a claim that proposed features al
 | **IRON HORSEPOWER** | Industrial guitar-like chiptune · 150 BPM | Redline Ridge — playable now |
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive (CO-010) — soundtrack catalogue only until mode exists |
 | **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — soundtrack catalogue only until mode exists |
-| **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active in the v0.7.0 candidate |
+| **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
 | **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |
 
 Create distinct original melodies, bass figures, drums, harmonies and timbres. Industrial guitar-like tones may use bounded Karplus–Strong pluck, distortion and filtered power-chord synthesis. No sampled commercial recordings, existing copyrighted songs, music-generation service or runtime downloads.
@@ -85,7 +86,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 ## 5. Road to v1.0.0 — gameplay expansions
 
-**v0.7.0 review candidate.** CO-007 builds a four-event World Overdrive Championship on the two existing courses. Four seeds drive the established six-car simulation. The player flag settles each round, local saves retain its six-car order, and the final standings award the trophy. Digital Dominion and independent single-race Theatre exports accompany the competition. The owner controls acceptance and publication. [Championship guide](docs/championship.md) · [Acceptance record](docs/co-007-acceptance.md)
+**Published in v0.7.0.** CO-007 builds a four-event World Overdrive Championship on the two existing courses. Four seeds drive the established six-car simulation. The player flag settles each round, local saves retain its six-car order, and the final standings award the trophy. Digital Dominion and independent single-race Theatre exports accompany the competition. [Championship guide](docs/championship.md) · [Acceptance record](docs/co-007-acceptance.md)
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |

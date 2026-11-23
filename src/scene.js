@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+import { createHeadlightPass, selectHeadlights } from './headlights.js';
 import { LitRenderer } from '../vendor/vanillajs/modules/render-lit/index.js';
 import { cross, normalize } from '../vendor/vanillajs/modules/math/index.js';
 import { ridgeBatches } from './ridge-scene.js';
@@ -16,6 +17,8 @@ const LIGHT = {
 };
 const RIDGE_LIGHT = {...LIGHT, ambient:.54, skyTop:[.13,.40,.63], skyBottom:[.81,.85,.79],
   sunDirection:[-.55,.83,-.30], fogColor:[.68,.76,.74], fogDensity:.00094};
+const NIGHT_LIGHT = {...LIGHT, ambient:.23, sunDirection:[-.52,.66,-.46], sunColor:[.21,.28,.46],
+  skyTop:[.012,.018,.085],skyBottom:[.14,.12,.24],fogColor:[.087,.10,.17],fogDensity:.0017};
 const PAINT = {roughness:.32,metalness:.18};
 const shadowMaterial={color:[.025,.037,.045],pattern:'shadow',opacity:.75};
 const shadowVertices=new Float32Array([
@@ -38,15 +41,17 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
   return lateral <= depth*horizontalSlope+bounds.r*Math.hypot(1,horizontalSlope);
 }
 
-export function createScene(canvas,course=track,pixelRatio=1) {
+export function createScene(canvas,course=track,pixelRatio=1,environment='day') {
+  if(environment!=='day' && environment!=='night') throw RangeError('Unknown racing environment');
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
-  let world,car,shadow,effects;
+  let world,car,shadow,effects,headlights;
   try {
     const batches=course.closed ? speedwayBatches() : ridgeBatches(course);
     world=batches.map(({vertices,material,bounds})=>({mesh:renderer.mesh(vertices),material,bounds}));
     car=touringMeshes(renderer);
     effects=createDrivingEffects(renderer);
     shadow=renderer.mesh(shadowVertices);
+    if(environment==='night') headlights=createHeadlightPass(renderer.gl,batches);
   } catch (error) {
     renderer.dispose();
     throw error;
@@ -91,13 +96,19 @@ export function createScene(canvas,course=track,pixelRatio=1) {
       const view=mode==='menu' ? showroom(p,aspect,course) :
         cameraRig.update(p,poses,{camera,dt:mode==='paused'?0:dt,reducedMotion});
       lastMode=mode;
-      const light=course.closed ? LIGHT : RIDGE_LIGHT;
-      renderer.begin(view.eye,lookAt(view.eye,view.target,view.roll),{...light,fov:view.fov});
+      const light=headlights ? NIGHT_LIGHT : course.closed ? LIGHT : RIDGE_LIGHT;
+      const orientation=lookAt(view.eye,view.target,view.roll), frame={...light,fov:view.fov};
+      renderer.begin(view.eye,orientation,frame);
       const forward=normalize(view.target.map((v,i)=>v-view.eye[i]));
       const horizontalSlope=aspect*Math.tan(view.fov/2);
       for(const row of world) if(visible(row.bounds,view.eye,forward,horizontalSlope,light.far))
         renderer.draw(row.mesh,{material:row.material});
 
+      if(headlights) {
+        const sources=selectHeadlights(poses,p,reducedEffects,mode==='menu');
+        headlights.draw(sources,view.eye,orientation,frame,
+          cell=>visible(cell,view.eye,forward,horizontalSlope,light.far));
+      }
       glassDraws.length = 0;
       for (const pose of poses) {
         if (pose.id !== PLAYER_ID && (mode === 'menu' || pose.finished)) continue;
@@ -112,6 +123,6 @@ export function createScene(canvas,course=track,pixelRatio=1) {
       for (const {matrix} of glassDraws) renderer.draw(car.glass,{matrix,material:glass});
       if(mode==='racing' || mode==='paused' || mode==='finished') effects.draw(view.eye,forward,reducedEffects);
     },
-    dispose(){renderer.dispose();}
+    dispose(){headlights?.dispose();renderer.dispose();}
   };
 }
