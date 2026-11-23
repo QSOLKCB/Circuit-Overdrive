@@ -33,6 +33,17 @@ const report = {
     webAudio:typeof AudioContext, gamepad:typeof navigator.getGamepads, pointer:typeof PointerEvent
 };
 el('sound').click();
+el('settings').click();
+el('effects-quality').value = 'mobile';
+el('effects-quality').dispatchEvent(new Event('change'));
+el('close-settings').click();
+await until(() => {
+    const box = gl.canvas.getBoundingClientRect();
+    return document.body.dataset.effects === 'reduced' &&
+        gl.drawingBufferWidth === Math.floor(box.width * .75) &&
+        gl.drawingBufferHeight === Math.floor(box.height * .75);
+}, 'Mobile rendering resolution');
+report.mobileBuffer = [gl.drawingBufferWidth,gl.drawingBufferHeight];
 el('controllers').click();
 await until(() => el('driver-device').options.length > 0, 'Device picker');
 el('driver-device').value = 'touch';
@@ -49,6 +60,19 @@ for (const course of ['ridge','speedway']) {
     const button = name => document.querySelector('[data-touch="'+name+'"]');
     report.controls = [...document.querySelectorAll('[data-touch]')].map(b => b.dataset.touch);
     if (getComputedStyle(button('throttle')).touchAction !== 'none') throw Error('Unprotected pedal surface');
+    if (course === 'ridge') {
+        const extension = gl.getExtension('WEBGL_lose_context');
+        report.contextRestored = false;
+        if (extension) {
+            extension.loseContext();
+            await until(() => phase('error'), 'Lost WebGL context');
+            extension.restoreContext();
+            await until(() => phase('paused'), 'Restored WebGL context');
+            el('continue').click();
+            await until(() => phase('racing'), 'Explicit resume after restoration');
+            report.contextRestored = true;
+        }
+    }
     button('recover').click();
     await until(() => el('feedback').textContent.includes('Recovered'), 'Recovery');
     button('pause').click();
@@ -57,6 +81,13 @@ for (const course of ['ridge','speedway']) {
     await until(() => phase('racing'), 'Resume');
     window.dispatchEvent(new Event('pagehide'));
     await until(() => phase('paused'), 'Page interruption');
+    el('restart').click();
+    await until(() => phase('grid'), 'Restart at grid');
+    if (document.body.dataset.course !== course) throw Error('Restart changed the course');
+    el('touch-arm').click();
+    await until(() => phase('racing'), 'Fresh countdown after restart');
+    if (Number(el('speed').textContent) > 2) throw Error('Touch restart retained a pedal');
+    button('pause').click();
     el('courses').click();
     await until(() => phase('menu'), 'Course select');
 }
