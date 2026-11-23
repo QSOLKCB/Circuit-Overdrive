@@ -41,15 +41,19 @@ function displayErrors(error){
   $('replay-play').textContent='Play';
   notify('Cannot play replay: '+String(error?.message||error));
 }
-function fillPoses(race){
+function fillPoses(race,alpha){
   for(const driver of race.entrants){
     const a=driver.previous,b=driver.current,p=poses[driver.id];
     p.vx=driver.vehicle.velocity[0];p.vz=driver.vehicle.velocity[2];
     p.gear=b.gear;p.rpm=b.rpm;p.brake=b.brake;
     p.finished=driver.finishTicks!==null;
-    for(let wheel=0;wheel<4;wheel++)p.compression[wheel]=b.compression[wheel];
-    for(const key of smooth)p[key]=b[key];
-    for(const key of angles)p[key]=b[key];
+    for(let wheel=0;wheel<4;wheel++)
+      p.compression[wheel]=a.compression[wheel]+(b.compression[wheel]-a.compression[wheel])*alpha;
+    for(const key of smooth)p[key]=a[key]+(b[key]-a[key])*alpha;
+    for(const key of angles) {
+      const delta=Math.atan2(Math.sin(b[key]-a[key]),Math.cos(b[key]-a[key]));
+      p[key]=a[key]+delta*alpha;
+    }
   }
 }
 function dashboard(force=false){
@@ -83,7 +87,11 @@ function dashboard(force=false){
 }
 function render(elapsed){
   if(!scene||!session)return;
-  fillPoses(session.race);
+  // A one-tick presentation delay lets ½× and high-refresh playback smoothly
+  // interpolate between accepted simulation snapshots without changing physics.
+  // Pause, seek and finished presentation use exact authoritative current poses.
+  const alpha=playing && !session.finished && seekTarget===null?playBudget:1;
+  fillPoses(session.race,alpha);
   const followId=Number($('replay-follow').value);
   scene.draw(poses,{mode:session.race.phase==='finished'?'finished':'racing',
     camera:$('replay-camera').value,followId,
@@ -96,6 +104,7 @@ function pause(){
 function restart(){
   if(!session)return;
   pause();seekTarget=null;session.reset();
+  $('replay-play').disabled=false; // Restart also cancels any in-flight seek.
   scene?.resetEffects();
   lastHud=-1;dashboard(true);
   notify('Restarted. Press Play to watch.');
@@ -224,7 +233,20 @@ document.addEventListener('keydown',event=>{
 });
 window.addEventListener('blur',pause);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
-window.addEventListener('pagehide',()=>{pause();scene?.dispose();scene=null;});
+window.addEventListener('pagehide',event=>{
+  pause();
+  // A bfcache navigation preserves the live WebGL scene and source-bound
+  // session. A real unload disposes retained GPU resources as before.
+  if(!event.persisted){scene?.dispose();scene=null;}
+});
+window.addEventListener('pageshow',event=>{
+  frameTime=null;
+  if(event.persisted && session && !scene) {
+    try{scene=createScene(canvas,session.race.course,coarse.matches?.75:1);
+      notify('Replay graphics restored after navigation. Press Play to resume.');}
+    catch(error){displayErrors(error);}
+  }
+});
 canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();pause();notify('WebGL context lost. Playback suspended.');});
 canvas.addEventListener('webglcontextrestored',()=>{
   if(!session)return;
