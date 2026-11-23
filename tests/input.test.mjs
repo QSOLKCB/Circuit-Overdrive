@@ -29,3 +29,20 @@ test('alias releases, focus loss and OS repeat preserve a neutral input boundary
   key('keydown', 'KeyW');
   assert.equal(input.command().throttle, 1);
 });
+
+test('sample separates held pedals from single-tick actions and immediate pause/arming', () => {
+  const target = new EventTarget(), transitions = [];
+  const input = attachRaceInput(target, () => true, action => {transitions.push(action);return true;});
+  const key = (code,options={}) => target.dispatchEvent(Object.assign(new Event('keydown',{cancelable:true}),{code,...options}));
+  key('Escape'); key('Escape',{repeat:true}); key('Escape',{ctrlKey:true});
+  key('KeyW'); key('KeyD'); key('KeyR'); key('KeyC');
+  assert.deepEqual(transitions,['pause','arm']);
+  const command={throttle:1,brake:0,steer:1};
+  assert.deepEqual(input.sample(),{command,camera:true,recover:true});
+  assert.deepEqual(input.sample(),{command,camera:false,recover:false});
+  input.clear();
+  assert.equal(input.sample().command.steer,0);
+  input.dispose();
+  key('Escape');
+  assert.deepEqual(transitions,['pause','arm']);
+});

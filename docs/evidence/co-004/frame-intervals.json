@@ -1,0 +1,100 @@
+{
+  "driver": "595.99.02",
+  "unit": "browser requestAnimationFrame intervals, milliseconds",
+  "runs": [
+    {
+      "browser": "158.0.8127.36",
+      "course": "speedway",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "speedway six-car grid",
+          "samples": 133,
+          "seconds": 2.2167,
+          "meanFps": 59.99909775792845,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.799999999999272,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "six-car close racing",
+          "samples": 150,
+          "seconds": 2.4999,
+          "meanFps": 60.002400096003846,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "speedway banked turn",
+          "samples": 162,
+          "seconds": 2.7,
+          "meanFps": 59.99999999999999,
+          "medianMs": 16.69999999999891,
+          "p95Ms": 16.799999999999272,
+          "maxMs": 16.80000000000109
+        }
+      ]
+    },
+    {
+      "browser": "158.0.8127.36",
+      "course": "ridge",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "six-car start",
+          "samples": 168,
+          "seconds": 2.7998999999999996,
+          "meanFps": 60.00214293367621,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.799999999999272,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "open descent",
+          "samples": 329,
+          "seconds": 5.4830999999999985,
+          "meanFps": 60.00255330014045,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "forest",
+          "samples": 633,
+          "seconds": 10.549599999999998,
+          "meanFps": 60.0022749677713,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.700000000004366,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "bridge",
+          "samples": 538,
+          "seconds": 8.966299999999988,
+          "meanFps": 60.00245363193299,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.79999999998836,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "tunnel",
+          "samples": 339,
+          "seconds": 5.649800000000003,
+          "meanFps": 60.00212396899003,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.70000000001164,
+          "maxMs": 16.80000000000291
+        }
+      ]
+    }
+  ]
+}

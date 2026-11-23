@@ -43,11 +43,11 @@ try {
     const sections=scenic ? [
       ['six-car start',-60,5],['open descent',400,565],['forest',860,1180],
       ['bridge',...course.features.bridge],['tunnel',...course.features.tunnel]
-    ] : [['speedway start',-60,Infinity]];
+    ] : [['speedway six-car grid',-60,0],['six-car close racing',0,72],['speedway banked turn',180,263]];
     const intervals=sections.map(()=>[]);
     let last, previousSection, held=new Set();
     function allInView() {
-      const {eye,target,fov}=window.frameCamera;
+      const {eye,target,fov,roll}=window.frameCamera;
       const dx=target[0]-eye[0],dy=target[1]-eye[1],dz=target[2]-eye[2];
       const horizontal=Math.hypot(dx,dz), length=Math.hypot(horizontal,dy);
       const rightX=-dz/horizontal, rightZ=dx/horizontal;
@@ -56,8 +56,9 @@ try {
         const x=p.x-eye[0], y=p.y-eye[1], z=p.z-eye[2];
         const depth=(x*dx+y*dy+z*dz)/length;
         const altitude=(horizontal*y-(x*dx+z*dz)*dy/horizontal)/length;
-        return !p.finished && depth>.13 && Math.abs(x*rightX+z*rightZ)<depth*slope*aspect &&
-          Math.abs(altitude)<depth*slope;
+        const lateral=x*rightX+z*rightZ,c=Math.cos(roll),s=Math.sin(roll);
+        return !p.finished && depth>.13 && Math.abs(lateral*c+altitude*s)<depth*slope*aspect &&
+          Math.abs(altitude*c-lateral*s)<depth*slope;
       });
     }
     const deadline=performance.now()+250000;
@@ -76,16 +77,22 @@ try {
         for(const code of held) if(!wanted.has(code)) key('keyup',code);
         for(const code of wanted) if(!held.has(code)) key('keydown',code);
         held=wanted;
-        let section=sections.findIndex(([,start,end])=>p.s>=start && p.s<end);
-        if(scenic && section===0 && !allInView()) section=-1;
+        const station=race.player.distance;
+        let section=sections.findIndex(([,start,end])=>station>=start && station<end);
+        if(section===0 && !allInView()) section=-1;
+        if(!scenic && section===1){
+          const distances=race.entrants.filter(e=>e!==race.player)
+            .map(e=>Math.hypot(e.current.x-p.x,e.current.z-p.z));
+          if(p.speed<16 || Math.max(...distances)>50 || Math.min(...distances)>18) section=-1;
+        }
         if (section>=0 && section===previousSection) intervals[section].push(now-last);
         last=now; previousSection=section;
-        if (scenic ? p.s>=sections.at(-1)[2] : intervals[0].length>=360) resolve();
+        if (station>=sections.at(-1)[2]) resolve();
         else requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     });
-    return {renderer,width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,
+    return {renderer,profile:'high',effects:document.body.dataset.effects,width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,
       sections:sections.map(([section],i)=>{
         const sorted=intervals[i].sort((a,b)=>a-b), samples=sorted.length;
         const seconds=sorted.reduce((a,b)=>a+b,0)/1000;

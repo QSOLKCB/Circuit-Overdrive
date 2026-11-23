@@ -114,11 +114,16 @@ At the presentation boundary, render interpolated previous/current simulation sn
 - **Exit:** the complete sprint is drivable and finishable; no invisible-roadblock regressions.
 
 **CO-004 — Arcade Polish**
-- Improved original car silhouettes and liveries, better chase camera, sound, menus, opponent tuning, effects and controller support where tested.
+- Improved original car silhouettes and liveries, better chase camera, sound, menus, competition feedback and telemetry-driven effects. Prepare the platform input boundary for controller profiles.
 - Fix handling rough edges before adding more features.
 - **Exit:** manual play-through evidence for both modes, visible UI clarity and no major focus/pause faults.
 
-**CO-005 — Release Engineering**
+**CO-005 — Controller Profiles**
+- Add gamepad, steering-wheel and mobile touch profiles through the shared driving-command interface.
+- Verify calibration, neutral arming, disconnect and touch cancellation alongside the keyboard controls.
+- **Exit:** supported profiles complete races on both courses and preserve focus, pause and recovery safety.
+
+**CO-006 — Release Engineering**
 - Reproducible offline packaging, GitHub Pages workflow (owner-reviewed), immutable engine provenance, licence checks, tests, browser validation and release notes.
 - **Exit:** reviewed/approved release candidate with recorded commit SHAs, evidence and known limitations. Publication remains owner-controlled.
 

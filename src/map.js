@@ -1,18 +1,35 @@
 // SPDX-License-Identifier: Apache-2.0
 import {PLAYER_ID} from './field.js';
 
-export function createMap(canvas, track) {
-  const ctx = canvas.getContext('2d');
+function courseOutline(track, boxWidth, boxHeight, cx, cy) {
   const points = Array.from({length:192}, (_, i) => track.sample(track.length * i / (track.closed ? 192 : 191)));
   const xs = points.map(p => p.x), zs = points.map(p => p.z);
   const minX = Math.min(...xs), minZ = Math.min(...zs);
   const width = Math.max(...xs) - minX, height = Math.max(...zs) - minZ;
-  const scale = Math.min(142 / width, 162 / height);
-  const x = v => (v - minX - width / 2) * scale + 84;
-  const y = v => (v - minZ - height / 2) * scale + 107;
+  const scale = Math.min(boxWidth / width, boxHeight / height);
+  const x = v => (v - minX - width / 2) * scale + cx;
+  const y = v => (v - minZ - height / 2) * scale + cy;
   const path = new Path2D();
   points.forEach((p, i) => i ? path.lineTo(x(p.x), y(p.z)) : path.moveTo(x(p.x), y(p.z)));
   if (track.closed) path.closePath();
+  return {points,x,y,path};
+}
+
+export function drawCoursePreview(canvas, course) {
+  const ctx=canvas.getContext('2d');
+  const {path,points,x,y}=courseOutline(course,canvas.width-14,canvas.height-12,canvas.width/2,canvas.height/2);
+  ctx.strokeStyle='#e7f2ed';
+  ctx.lineWidth=3;
+  ctx.lineCap='round';
+  ctx.stroke(path);
+  const finish=course.closed ? points[0] : points.at(-1);
+  ctx.fillStyle='#ffce4a';
+  ctx.fillRect(x(finish.x)-3,y(finish.z)-3,6,6);
+}
+
+export function createMap(canvas, track) {
+  const ctx=canvas.getContext('2d');
+  const {points,x,y,path}=courseOutline(track,142,162,84,107);
   return entrants => {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.lineWidth = 4;
