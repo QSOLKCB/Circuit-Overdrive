@@ -322,6 +322,7 @@ function handleAction(action) {
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
+    audio.selectMusic(race.course.id); // New race: reset the soundtrack timeline.
     recording = createRecording(race.course.id, race.seed, document.querySelector('meta[name=game-revision]').content || null);
     resetClock();
     playAudio();
@@ -340,7 +341,7 @@ function fixedUpdate() {
   recording.record(command, recovered);
   stepRace(race, command);
   scene.observe(race,reducedEffects);
-  if (driving() && sound && audio.update(race.player,command,race.course) === false) {
+  if (driving() && sound && audio.update(race.player,command,race.course,race) === false) {
     sound = false;
     syncSound();
   }
