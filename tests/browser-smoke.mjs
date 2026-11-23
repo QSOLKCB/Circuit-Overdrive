@@ -30,9 +30,13 @@ try {
   // Count real scheduled PCM buffers while leaving the audio device path intact.
   await page.addInitScript(() => {
     window.engineBuffers = 0;
+    window.musicBuffers = 0;
     const start = AudioBufferSourceNode.prototype.start;
     AudioBufferSourceNode.prototype.start = function(...args) {
-      if (this.buffer?.getChannelData(0).some(sample => sample !== 0)) window.engineBuffers++;
+      if (this.buffer?.getChannelData(0).some(sample => sample !== 0)) {
+        if (this.buffer.numberOfChannels === 2) window.musicBuffers++;
+        else window.engineBuffers++;
+      }
       return start.apply(this, args);
     };
   });
@@ -132,6 +136,7 @@ try {
     return {renderer:ext && gl.getParameter(ext.UNMASKED_RENDERER_WEBGL),browser:navigator.userAgent};
   });
   assert(await page.evaluate(() => window.engineBuffers > 0), 'producer scheduled original non-silent engine PCM');
+  assert(await page.evaluate(() => window.musicBuffers > 0), 'producer scheduled non-silent stereo soundtrack PCM');
   await page.evaluate(() => {
     window.graphicsTest = document.querySelector('#world').getContext('webgl').getExtension('WEBGL_lose_context');
     window.graphicsTest.loseContext();
