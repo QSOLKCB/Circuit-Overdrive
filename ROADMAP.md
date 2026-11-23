@@ -27,10 +27,11 @@ This is the forward development programme, not a claim that proposed features al
 | **v0.4.0** | CO-004 — The Speed Machine | Touring-car polish, skid marks, smoke, sparks, camera tuning, adaptive presentation and expanded procedural engine audio |
 | **v0.5.0** | CO-005 — Controller Profiles | Standard gamepads, generic/digital/steering-wheel profile calibration, touch controls, and input-source-independent deterministic replay |
 | **v0.6.0** | CO-006 — Arcade Certification Lab | Device diagnostics, reproducible source-stamped offline ZIP, SHA-256 receipts, endurance evidence, keyboard handling and parallel browser verification |
+| **v0.6.1** | CO-MUSIC-001 — SYNTH//OVERDRIVE | Bounded Phrase Sequencer, two playable original chiptune scores and four dormant future-mode compositions, WAV/score export and checksums |
 
-**Current published tag:** [v0.6.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.6.0) at `020e5dc4c7e2485e01f0f47c698f80ee58fe228b`. Source content and verification after this tag belong to later reviews, not retroactive v0.6.0 claims.
+**Current published tag:** [v0.6.1](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.6.1) at `d81a2d4a09286029b87c2ac201edf8ab6448e023`. Work after this tag belongs to future releases, not retroactive v0.6.1 claims.
 
-## 3. Immediate soundtrack milestone — v0.6.1
+## 3. Completed soundtrack milestone — v0.6.1
 
 ### CO-MUSIC-001 — SYNTH//OVERDRIVE: Bounded Phrase Sequencer
 
@@ -63,7 +64,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Acceptance gates:** equal bytes for repeated same-runtime exports; chunking/loop consistency; bounded CPU/memory/polyphony; finite unclipped samples; exact track/seed/score revision; no audible gaps at phrase transitions; no AudioContext before permitted user gesture; correct pause/blur/restart/course switching; music-disabled browser races still pass; 60 Hz physics and replay unchanged; offline ZIP and GitHub Pages verification pass; owner listening review records actual hearing rather than claims from pure tests.
 
-**Release:** proposed `v0.6.1`, **only after** the three PRs are reviewed, merged and verified.
+**Release:** published `v0.6.1` after the three music PRs (#17–#19) merged and the final production CI passed.
 
 ## 4. Replay spectator milestone — v0.6.2
 

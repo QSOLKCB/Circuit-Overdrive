@@ -7,6 +7,7 @@
   <title>Circuit Overdrive</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="./src/style.css">
   <link rel="stylesheet" href="./src/mobile.css">
+  <style>.theatre-entry,#watch-replay{display:inline-flex;align-items:center;color:var(--cream);border:1px solid #7a8d91;padding:7px 11px;text-decoration:none;font:700 12px var(--mono);background:#142b36}.theatre-entry:hover,#watch-replay:hover{background:#344a54}#watch-replay{margin-left:5px}body:not([data-phase=finished]) #watch-replay{display:none}</style>
 </head>
 <body data-phase="menu">
 <header>
@@ -16,6 +17,7 @@
     <button id="settings" type="button">Settings</button>
     <button id="controllers" type="button">Controller</button>
     <button id="controls" type="button">Controls</button>
+    <a class="theatre-entry" href="./replay-theatre.html">Replay Theatre</a>
   </nav>
 </header>
 <main>
@@ -52,7 +54,7 @@
       <div class="eyebrow"><i class="checks" aria-hidden="true"></i><span id="panel-course">Overdrive Speedway</span></div>
       <h2 id="panel-title"></h2><p id="panel-copy"></p>
       <div id="results" hidden><section><h3>Classification</h3><ol id="classification"></ol></section><section><h3 id="split-header">Your laps</h3><ol id="splits"></ol></section></div>
-      <div class="buttons"><button class="primary" id="touch-arm" hidden>Drive with touch</button><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button><button id="save-drive" hidden>Save replay</button><button id="courses" hidden>Course select</button></div>
+      <div class="buttons"><button class="primary" id="touch-arm" hidden>Drive with touch</button><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button><button id="save-drive" hidden>Save replay</button><a id="watch-replay" href="./replay-theatre.html">Watch saved replay</a><button id="courses" hidden>Course select</button></div>
     </div>
   </section>
 </main>

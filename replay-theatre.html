@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111a24">
+  <meta name="game-revision" content="">
+  <title>Replay Theatre — Circuit Overdrive</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/replay-theatre.css">
+</head>
+<body class="replay-theatre" data-phase="theatre">
+<header>
+  <div class="brand"><i class="streak" aria-hidden="true"></i>Circuit <b>Overdrive</b> <small>Replay Theatre</small></div>
+  <nav><a href="./index.html" class="theatre-return">Return to racing</a></nav>
+</header>
+<main class="theatre-main">
+  <canvas id="replay-world" tabindex="-1" aria-label="Six-car replay race scene"></canvas>
+  <section id="replay-empty" class="theatre-intro" aria-label="Choose a race replay">
+    <div class="eyebrow"><i class="checks" aria-hidden="true"></i> CO-REPLAY-001</div>
+    <h1>Replay<br><em>Theatre</em></h1>
+    <p>Relive every overtake, corner and finish with all six cars. Import a saved Circuit Overdrive race, then watch it unfold using the original race simulation.</p>
+    <p>Share the <code>.json</code> with a friend. Everything runs locally; no uploads or online accounts.</p>
+  </section>
+  <aside class="theatre-telemetry" id="replay-telemetry" hidden aria-label="Race telemetry">
+    <h2 id="replay-title">Race replay</h2>
+    <dl>
+      <dt>Camera car</dt><dd id="replay-driver">#27 Player</dd>
+      <dt>Position</dt><dd id="replay-place">P6 / 6</dd>
+      <dt>Speed</dt><dd id="replay-speedometer">0 km/h</dd>
+      <dt>Gear</dt><dd id="replay-gear">1</dd>
+      <dt>Race time</dt><dd id="replay-racetime">0:00.000</dd>
+      <dt>Lap / checkpoint</dt><dd id="replay-progress">—</dd>
+    </dl>
+    <ol id="replay-standing" aria-label="Live six-car standings"></ol>
+  </aside>
+</main>
+<section class="theatre-console" aria-label="Replay controls">
+  <div class="theatre-file-row">
+    <label for="replay-file">Open local replay JSON</label>
+    <input type="file" id="replay-file" accept=".json,application/json" aria-describedby="replay-help">
+    <button type="button" id="replay-download" disabled>Download to share</button>
+  </div>
+  <p id="replay-help">Open a source-stamped replay from a compatible Circuit Overdrive release. Private files never leave your device.</p>
+  <p id="replay-status" role="status" aria-live="polite">Choose a recording to begin.</p>
+  <div class="theatre-playback">
+    <button id="replay-play" type="button" disabled>Play</button>
+    <button id="replay-restart" type="button" disabled>Restart</button>
+    <button id="replay-back" type="button" disabled aria-label="Back five seconds">−5 s</button>
+    <button id="replay-forward" type="button" disabled aria-label="Forward five seconds">+5 s</button>
+    <label for="replay-seek">Timeline</label>
+    <input type="range" id="replay-seek" min="0" max="1" step="1" value="0" disabled aria-label="Replay timeline in simulation ticks">
+    <output id="replay-clock" for="replay-seek">0:00 / 0:00</output>
+  </div>
+  <div class="theatre-views">
+    <label for="replay-follow">Follow car</label>
+    <select id="replay-follow" disabled></select>
+    <label for="replay-camera">Camera</label>
+    <select id="replay-camera" disabled>
+      <option value="chase">Low chase</option><option value="high">High chase</option>
+    </select>
+    <label for="replay-rate">Speed</label>
+    <select id="replay-rate" disabled>
+      <option value="0.5">½×</option><option value="1" selected>1×</option>
+      <option value="2">2×</option><option value="4">4×</option>
+    </select>
+  </div>
+</section>
+<footer><div><i class="live-dot" aria-hidden="true"></i>Source-bound offline spectator</div>
+  <div>Space play/pause · ← / → five seconds · V switch view · Home / End seek</div>
+</footer>
+<script type="module" src="./src/replay-theatre.js"></script>
+</body>
+</html>
