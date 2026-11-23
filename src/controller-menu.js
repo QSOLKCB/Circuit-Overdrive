@@ -1,21 +1,41 @@
 // SPDX-License-Identifier: Apache-2.0
 
+import {createProfileEditor} from './profile-editor.js';
+import {deviceKey, savedMapper} from './profiles.js';
+
 // The device picker is independent of the current owner. Previewing a slot
 // cannot switch the driver. Labels are inserted as text and stay in this page.
 export function controllerMenu(input, onSelect) {
   const $ = id => document.getElementById(id);
   const dialog = $('controller-dialog'), list = $('driver-device');
   let signature = '', devices = [], message = '';
+  let previewKey, mapper;
+  const editor = createProfileEditor($('profile-host'), {onSave:(pad,updated) => {
+    previewKey = undefined;
+    // Saving edits to the owner's device clears every held value before reuse.
+    if (input.source === 'gamepad' && input.pads.index === pad.index) {
+      if (updated || pad.mapping === 'standard') input.select('gamepad',pad.index,updated || undefined);
+      else input.pads.deselect();
+    }
+    refresh();
+  }});
+  dialog.addEventListener('close', () => { editor.close(); previewKey = undefined; });
+  window.addEventListener('gamepaddisconnected', e => {
+    if (dialog.open && e.gamepad?.index === currentPad()?.index) { editor.close(); previewKey = undefined; }
+  });
   function currentPad() {
     return devices.find(pad => list.value === 'pad-' + pad.index);
   }
   function present() {
     const pad = currentPad();
+    const key = deviceKey(pad);
+    if (key !== previewKey) { previewKey = key; mapper = pad && savedMapper(pad); }
+    editor.update(pad);
     const standard = pad?.mapping === 'standard';
-    $('driver-layout').textContent = pad ? (standard
+    $('driver-layout').textContent = pad ? (mapper ? 'Saved custom controls. Expand Mapping and calibration to preview or adjust them.' : standard
       ? 'Standard layout · left stick steers, right trigger accelerates and left trigger brakes. Bottom face button confirms, right goes back, top changes camera and left recovers. Menu pauses.'
-      : 'This controller needs a custom mapping.') : 'WASD or arrow keys to drive, Esc to pause, C for camera and R to recover.';
-    $('use-device').disabled = !!pad && !standard;
+      : 'Open Mapping and calibration to set up this device.') : 'WASD or arrow keys to drive, Esc to pause, C for camera and R to recover.';
+    $('use-device').disabled = !!pad && !standard && !mapper;
     $('driver-status').textContent = message || (pad ? 'Release the pedals, steering and buttons before taking control.'
       : input.pads.available ? 'Press a controller button to make it visible to your browser.' : 'Gamepad access is unavailable in this browser or context.');
     $('raw-input').textContent = pad ? 'Axes  ' + Array.from(pad.axes).slice(0,32).map((v,i)=>i+' '+(Number.isFinite(v)?v.toFixed(2):'—')).join('   ')
@@ -47,7 +67,7 @@ export function controllerMenu(input, onSelect) {
       message = 'Device changed. Select the connected controller again.'; refresh(); return;
     }
     const kind = pad ? 'gamepad' : 'keyboard';
-    if (!input.select(kind, pad?.index)) {
+    if (!input.select(kind, pad?.index, mapper || undefined)) {
       message = 'This controller is missing a required control. Choose another layout or device.';
       present(); return;
     }
