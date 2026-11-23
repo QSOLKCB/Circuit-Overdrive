@@ -73,7 +73,7 @@ export function createScene(canvas,course=track,pixelRatio=1) {
     return root;
   }
   const glassDraws=[];
-  let lastMode,lastFollow=PLAYER_ID;
+  let lastMode,lastFollow=PLAYER_ID,lastCamera='chase';
   return {
     observe:effects.observe,
     resetEffects:effects.reset,
@@ -82,9 +82,11 @@ export function createScene(canvas,course=track,pixelRatio=1) {
       const p=poses[followId]??poses[PLAYER_ID];
       if(!p || !Number.isInteger(followId) || followId<0 || followId>=poses.length)
         throw RangeError('Invalid spectator camera target');
-      if(lastFollow!==followId || lastMode==='menu' || (mode==='grid' && lastMode!==mode))
-        cameraRig.reset();
-      lastFollow=followId;
+      // During paused spectator inspection there is no elapsed presentation
+      // time to blend a new preset. Snap the camera without moving the cars.
+      if(lastFollow!==followId || (lastCamera!==camera && dt===0) ||
+         lastMode==='menu' || (mode==='grid' && lastMode!==mode))cameraRig.reset();
+      lastFollow=followId;lastCamera=camera;
       const aspect=canvas.clientWidth/Math.max(1,canvas.clientHeight);
       const view=mode==='menu' ? showroom(p,aspect,course) :
         cameraRig.update(p,poses,{camera,dt:mode==='paused'?0:dt,reducedMotion});
