@@ -27,7 +27,7 @@ export const rideHeight = touring.wheel.radius + touring.suspension.restLength
   - touring.mass * 9.81 / (4 * touring.suspension.spring);
 const staticCompression = touring.wheel.radius + touring.suspension.restLength - rideHeight;
 const railClearance = .08;
-const corneringAcceleration = 13.5; // m/s², below the touring tyres' level-asphalt grip limit.
+const corneringAcceleration = 18; // m/s² at racing speed, with aero load on the tyres.
 const maxStationStep = 2.5; // 120 m/s × 1/60 s plus the inside-corner projection margin.
 const gridClearance = touring.chassis.length / 2 + railClearance;
 
@@ -176,15 +176,28 @@ function controls(state, intent) {
     if (speed > -0.6) gear = 1;
     else { brake = throttle; throttle = 0; }
   }
-  if (gear !== -1) throttle *= clamp((59 - speed) / 3, 0, 1);
+  const requestedSteer = intent.steer ?? 0;
+  // Progressively lift power at high lock so a held accelerator leaves the
+  // tyres room to turn. Small corrections retain almost all straight-line power.
+  const powerCutoff = 59 - 11 * requestedSteer * requestedSteer;
+  if (gear !== -1) throttle *= clamp((powerCutoff - speed) / 3, 0, 1);
   // Bicycle-model radius = wheelbase / tan(lock). Limit the requested lock
   // before the tyres saturate, keeping the entire stick or wheel range usable.
   const [vx, vy, vz] = state.velocity;
   const speedSquared = vx * vx + vy * vy + vz * vz;
   const gripAngle = Math.atan2(touring.wheel.wheelbase * corneringAcceleration, speedSquared);
   const engineLock = touring.steering.maxAngle / (1 + Math.abs(speed) * touring.steering.speedReduction);
-  const steer = (intent.steer ?? 0) * Math.min(1, gripAngle / engineLock);
+  const steer = requestedSteer * Math.min(1, gripAngle / engineLock);
   return { throttle, brake, steer, ...(gear === undefined ? {} : { gear }) };
+}
+
+// Model aero load on grounded tyres. It rises with horizontal speed squared
+// to 4 m/s² at 45 m/s, then the suspension and tyre solver carry that load.
+function loadSuspension(state) {
+  if (!state.wheels.some(wheel => wheel.grounded && wheel.load > 0)) return state;
+  const [vx, vy, vz] = state.velocity;
+  const downforce = 4 * Math.min(1, (vx * vx + vz * vz) / (45 * 45));
+  return {...state, velocity: [vx, vy - downforce * STEP, vz]};
 }
 
 // Push out the oriented chassis along a horizontal guardrail normal. Both
@@ -325,7 +338,8 @@ function drive(entrant, intent, field, course, world) {
   entrant.recoveryCooldown = Math.max(0, entrant.recoveryCooldown - 1);
   if (entrant.ai && intent.recover && !entrant.recoveryCooldown && resetCar(entrant, field, course)) return;
   try {
-    entrant.vehicle = car.step(entrant.vehicle, controls(entrant.vehicle, intent), world, STEP);
+    const state = loadSuspension(entrant.vehicle);
+    entrant.vehicle = car.step(state, controls(state, intent), world, STEP);
   } catch (error) {
     if (!(error instanceof RangeError || error instanceof TypeError)) throw error;
     resetCar(entrant, field, course, true);
