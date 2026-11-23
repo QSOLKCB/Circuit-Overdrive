@@ -53,7 +53,15 @@ try {
     assert.equal(await page.locator('#replay-title').textContent(),course.name);
     const gl=await page.locator('#replay-world').evaluate(canvas=>!!canvas.getContext('webgl'));
     assert(gl,'real WebGL spectator canvas');
+    // A paused camera switch must immediately change the WebGL view even
+    // though accepted race ticks and elapsed physics time remain frozen.
+    await page.waitForTimeout(100);
+    const lowCamera=await page.locator('#replay-world').screenshot();
     await page.locator('#replay-camera').selectOption('high');
+    await page.waitForTimeout(100);
+    const highCamera=await page.locator('#replay-world').screenshot();
+    assert.notDeepEqual(highCamera,lowCamera,'paused camera preset must update scene without advancing ticks');
+    assert.equal(Number(await page.locator('#replay-seek').inputValue()),0);
     await page.locator('#replay-follow').selectOption('0');
     assert.match(await page.locator('#replay-driver').textContent(),/Mara Vale/);
     await page.locator('#replay-follow').selectOption('5');
@@ -73,6 +81,14 @@ try {
     // Seeking backwards reconstructs the grid, does not teleport the cars.
     await page.locator('#replay-restart').click();
     assert.equal(Number(await page.locator('#replay-seek').inputValue()),0);
+    // A Restart while a long seek is pending must return the Play button to
+    // the enabled state even though the seek-completion callback never runs.
+    await page.locator('#replay-seek').evaluate((range,value)=>{
+      range.value=String(value);range.dispatchEvent(new Event('input',{bubbles:true}));
+    },data.ticks);
+    await page.locator('#replay-restart').click();
+    assert.equal(await page.locator('#replay-play').isEnabled(),true);
+    assert.equal(Number(await page.locator('#replay-seek').inputValue()),0);
     // Drive the entire original race asynchronously, bounded in 240-step chunks.
     await page.locator('#replay-seek').evaluate((range,value)=>{
       range.value=String(value);range.dispatchEvent(new Event('input',{bubbles:true}));
@@ -90,6 +106,15 @@ try {
     }
     const spectatorPosition=await page.locator('#replay-place').textContent();
     assert.equal(spectatorPosition,'P'+race.player.position+' / 6');
+    // A persisted pagehide must not dispose the WebGL renderer, or browser
+    // Back/Forward restoration would leave working controls with a blank view.
+    await page.evaluate(()=>{
+      window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));
+      window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+    });
+    await page.waitForTimeout(75);
+    assert(await page.locator('#replay-world').evaluate(canvas=>
+      !!canvas.getContext('webgl')),'WebGL remains available across persisted navigation');
     if(process.env.EVIDENCE_DIR)
       await page.screenshot({path:process.env.EVIDENCE_DIR+'/theatre-'+course.id+'.png'});
     console.log(JSON.stringify({course:course.id,revision:source,ticks:data.ticks,
