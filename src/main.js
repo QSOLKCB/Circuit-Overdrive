@@ -2,6 +2,7 @@
 import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {TouringAudio, DEFAULT_VOLUMES} from './audio.js';
 import {attachDriverInput} from './driver-input.js';
+import {championshipUI} from './championship-ui.js';
 import {createRecording} from './replay.js';
 import {controllerMenu, menuAction} from './controller-menu.js';
 import {track} from './track.js';
@@ -22,16 +23,26 @@ const mixer = Object.keys(DEFAULT_VOLUMES);
 let reducedEffects;
 let quality = 'auto';
 let race = createRace();
+let standaloneCourse = race.course;
 let recording;
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
 let lastTime = null, lastPanel = '', soundGeneration = 0;
-const phase = () => error ? 'error' : grid ? 'grid' : race.phase;
+const phase = () => error ? 'error' : championship.visible ? 'championship' : grid ? 'grid' : race.phase;
 const driving = () => ['countdown','racing'].includes(phase());
 const modalOpen = () => !!document.querySelector('dialog[open]');
 const focused = () => (input.source !== 'keyboard' || document.activeElement === canvas) && document.hasFocus() && !document.hidden && !modalOpen();
 const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController, $('touch-controls'));
 const controller = controllerMenu(input, showSource);
+const revision = document.querySelector('meta[name=game-revision]').content || null;
+const championship = championshipUI({revision, formatTime, grid:() => enterGrid(true),
+  changed() { resetClock(); updatePanel(true); },
+  leave() {
+    installRace(createRace(undefined,standaloneCourse));
+    updatePanel();
+    $('enter-woc').focus();
+  }
+});
 let inputNotice = '';
 function showSource(kind) {
   inputNotice = '';
@@ -40,6 +51,7 @@ function showSource(kind) {
   lastPanel = '';
   updatePanel();
   if (phase() === 'menu') $('start').focus();
+  if (championship.visible) championship.focus();
   if (phase() === 'paused') $('continue').focus();
 }
 function lostController() {
@@ -87,18 +99,38 @@ function resetPresentation() {
   candidateSince = placeUntil = 0;
   placeMessage = '';
 }
-function enterGrid() {
+function installRace(next) {
+  const courseChanged = race.course !== next.course;
+  race = next;
+  recording = null;
+  resetPresentation();
+  if (courseChanged) {
+    camera = 'chase';
+    drawMap = createMap($('map'),race.course);
+    scene?.dispose();
+    initializeScene();
+  }
+  displayCourse(race.course);
+}
+function enterGrid(round = false) {
   if (error || (input.source === 'gamepad' && input.pads.index === null)) { if (!error) controller.open(); return; }
+  if (!round && !['menu','paused','finished'].includes(phase())) return;
   stopAudio();
   resetClock();
-  race = createRace(race.seed, race.course);
-  resetPresentation();
+  if (championship.active) championship.abandon(race);
+  installRace(round ? championship.takeGrid() : createRace(undefined,race.course));
   grid = true;
   canvas.focus({preventScroll:true});
   updatePanel();
 }
 function pause() {
-  if (grid) grid = false;
+  if (grid) {
+    grid = false;
+    if (championship.active) {
+      championship.abandon(race);
+      championship.briefing();
+    }
+  }
   else if (driving()) pauseRace(race);
   else return;
   resetClock();
@@ -114,13 +146,14 @@ function resume() {
   playAudio();
   updatePanel();
 }
-function updatePanel() {
+function updatePanel(screenChanged = false) {
   const mode = phase();
-  if (mode === lastPanel) return;
+  if (mode === lastPanel && !screenChanged) return;
   lastPanel = mode;
   document.body.dataset.phase = mode;
   $('menu').hidden = mode !== 'menu';
-  $('hud').hidden = ['menu','grid','error'].includes(mode);
+  $('hud').hidden = ['menu','championship','grid','error'].includes(mode);
+  $('woc').hidden = mode !== 'championship';
   $('overlay').hidden = !['grid','paused','finished','error'].includes(mode);
   $('touch-arm').hidden = !(mode === 'grid' && input.hasTouch && (navigator.maxTouchPoints > 0 || input.source === 'touch'));
   $('continue').hidden = mode !== 'paused';
@@ -135,6 +168,8 @@ function updatePanel() {
   const copy = {grid:input.source === 'touch' ? 'Tap Drive with touch to start the countdown.' : input.source === 'keyboard' ? 'Press W or ↑ to take the wheel and start the countdown.' : 'Release all controls, then press Confirm to start the countdown.', paused:inputNotice || 'Resume when you’re ready to drive.',
     finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
+  set('panel-course',championship.active ? championship.roundName : race.course.name);
+  set('courses',championship.active ? 'Leave event' : 'Course select');
   set('panel-copy', copy[mode] || '');
   if (mode === 'finished') {
     stopAudio();
@@ -166,9 +201,9 @@ function updatePanel() {
   if (mode === 'paused' && !document.hidden && !modalOpen()) {
     $('continue').focus({preventScroll:true});
   }
-  const statuses = {menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
+  const statuses = {championship:championship.announcement, menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
     racing:'Race live', paused:'Paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Renderer offline'};
-  set('status', statuses[mode]);
+  set('status', championship.active ? championship.roundName+' · '+statuses[mode] : statuses[mode]);
 }
 function graphicsError(message) {
   pause();
@@ -212,13 +247,7 @@ function displayCourse(course) {
 function selectCourse(course) {
   if (phase() !== 'menu' || course === race.course) return;
   resetClock();
-  race = createRace(race.seed, course);
-  camera = 'chase';
-  resetPresentation();
-  drawMap = createMap($('map'),course);
-  displayCourse(course);
-  scene?.dispose();
-  initializeScene();
+  installRace(createRace(undefined,course));
 }
 $('choose-speedway').onclick = () => selectCourse(track);
 $('choose-ridge').onclick = () => selectCourse(ridge);
@@ -235,14 +264,25 @@ $('courses').onclick = () => {
   if (!['paused','finished'].includes(phase())) return;
   resetClock();
   stopAudio();
-  race=createRace(race.seed,race.course);
+  if (championship.active) {
+    championship.abandon(race);
+    championship.briefing();
+    return;
+  }
+  installRace(createRace(undefined,race.course));
   updatePanel();
   $(race.course.closed ? 'choose-speedway' : 'choose-ridge').focus();
 };
 for (const course of [track,ridge]) drawCoursePreview($('preview-'+course.id),course);
 displayCourse(race.course);
 resetPresentation();
-$('start').onclick = $('restart').onclick = enterGrid;
+$('enter-woc').onclick = () => {
+  if (phase() !== 'menu') return;
+  standaloneCourse = race.course;
+  championship.open();
+};
+$('start').onclick = () => enterGrid();
+$('restart').onclick = () => { if (['paused','finished'].includes(phase())) enterGrid(championship.active); };
 $('continue').onclick = resume;
 $('touch-arm').onclick = () => {
   if (!grid || !input.select('touch')) return;
@@ -309,6 +349,10 @@ function handleAction(action) {
   if (document.hidden || !document.hasFocus()) return false;
   if ($('controller-dialog').open) return input.source === 'gamepad' && controller.navigate(action);
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
+  if (championship.visible && (action === 'back' || action === 'pause')) {
+    championship.back();
+    return true;
+  }
   if (input.source === 'gamepad') {
     if (grid && action === 'confirm') action = 'arm';
     else if (grid && action === 'back') action = 'pause';
@@ -323,7 +367,7 @@ function handleAction(action) {
     grid = false;
     startRace(race);
     audio.selectMusic(race.course.id); // New race: reset the soundtrack timeline.
-    recording = createRecording(race.course.id, race.seed, document.querySelector('meta[name=game-revision]').content || null);
+    recording = createRecording(race.course.id, race.seed, revision);
     resetClock();
     playAudio();
     updatePanel();
@@ -339,11 +383,17 @@ function fixedUpdate() {
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
   const recovered = recover && race.phase === 'racing' && recoverCar(race);
   recording.record(command, recovered);
-  stepRace(race, command);
+  if (championship.active) championship.step(race,command);
+  else stepRace(race,command);
   scene.observe(race,reducedEffects);
   if (driving() && sound && audio.update(race.player,command,race.course,race) === false) {
     sound = false;
     syncSound();
+  }
+  if (championship.active && race.phase === 'finished') {
+    stopAudio();
+    championship.finish(race);
+    return;
   }
   const place=race.player.position;
   if (candidatePlace !== place) {
@@ -420,7 +470,7 @@ function render(alpha, elapsed) {
     for (const key of smoothFields) p[key] = a[key] + (b[key]-a[key])*alpha;
     for (const key of angles) p[key] = a[key] + Math.atan2(Math.sin(b[key]-a[key]), Math.cos(b[key]-a[key]))*alpha;
   }
-  scene.draw(poses,{mode:phase(),camera,dt:elapsed,reducedEffects,reducedMotion:motion.matches || reducedEffects});
+  scene.draw(poses,{mode:championship.visible ? 'menu' : phase(),camera,dt:elapsed,reducedEffects,reducedMotion:motion.matches || reducedEffects});
   if (!$('hud').hidden) drawHud(poses[PLAYER_ID]);
 }
 function frame(time) {
@@ -444,5 +494,5 @@ function frame(time) {
 }
 initializeScene();
 $('boot-note').hidden = true;
-$('start').disabled = false;
+$('start').disabled = $('enter-woc').disabled = false;
 requestAnimationFrame(frame);
