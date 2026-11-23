@@ -8,6 +8,7 @@ import {createRace,startRace,stepRace} from '../src/sim.js';
 import {track} from '../src/track.js';
 import {ridge} from '../src/ridge.js';
 import {driverIntent} from './driver.mjs';
+import {createReplayPoses,interpolateReplayPoses} from '../src/replay-presentation.js';
 import {createReplaySession,validateTheatreReplay,REPLAY_COMPATIBLE_RELEASES,
   MAX_SEEK_STEPS} from '../src/replay-theatre-core.js';
 
@@ -98,4 +99,28 @@ test('forward/rewind/seek batches preserve authoritative six-car state on both c
     assert.throws(()=>spectator.step(),/ended before/,'partial tape must not claim a finish');
     assert.equal(reference.phase,'racing');
   }
+});
+
+test('spectator interpolates accepted snapshots at fractional speed without modifying race authority',()=>{
+  const race=createRace(27,track);
+  startRace(race);
+  for(let tick=0;tick<180;tick++)stepRace(race);
+  for(let tick=0;tick<80;tick++)stepRace(race,{throttle:1,brake:0,steer:0});
+  const before=structuredClone(race);
+  const poses=createReplayPoses();
+  const atStart=interpolateReplayPoses(race,poses,0).map(p=>({...p,compression:p.compression.slice()}));
+  const mid=interpolateReplayPoses(race,poses,.5).map(p=>({...p,compression:p.compression.slice()}));
+  const atEnd=interpolateReplayPoses(race,poses,1).map(p=>({...p,compression:p.compression.slice()}));
+  for(let i=0;i<poses.length;i++){
+    assert.equal(mid[i].x,(atStart[i].x+atEnd[i].x)/2);
+    assert.equal(mid[i].speed,(atStart[i].speed+atEnd[i].speed)/2);
+    assert.equal(mid[i].compression[0],(atStart[i].compression[0]+atEnd[i].compression[0])/2);
+  }
+  assert.deepEqual(race,before,'presentation interpolation is read-only to simulation');
+  assert.throws(()=>interpolateReplayPoses(race,poses,NaN),RangeError);
+  assert.throws(()=>interpolateReplayPoses(race,poses,1.1),RangeError);
+  const driver=race.player;
+  const previous=driver.previous.yaw,current=driver.current.yaw;
+  const delta=Math.atan2(Math.sin(current-previous),Math.cos(current-previous));
+  assert(Math.abs(mid[driver.id].yaw-(previous+delta*.5))<1e-12);
 });
