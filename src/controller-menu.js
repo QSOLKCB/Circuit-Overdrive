@@ -26,15 +26,6 @@ export function controllerMenu(input, onSelect) {
     }
     refresh();
   }});
-  function close() {
-    // Native close events can arrive after fresh input on the next animation
-    // frame. Reset ownership synchronously while leaving the editor.
-    input.clear();
-    editor.close();
-    previewKey = undefined;
-    dialog.close();
-  }
-  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
   window.addEventListener('gamepaddisconnected', e => {
     if (dialog.open && e.gamepad?.index === currentPad()?.index) { editor.close(); previewKey = undefined; }
   });
@@ -58,9 +49,6 @@ export function controllerMenu(input, onSelect) {
   }
   function refresh() {
     if (!dialog.open) return;
-    // Mapping consumes only preview inputs. Poll the owner for loss here because
-    // the normal menu intentionally suppresses action edges while editing.
-    if ($('profile-settings').open && input.pads.index!==null) input.pads.poll();
     devices = input.pads.devices();
     const next = JSON.stringify(devices.map(p => [p.index,p.id,p.mapping,p.axes.length,p.buttons.length]));
     if (next !== signature) {
@@ -79,6 +67,15 @@ export function controllerMenu(input, onSelect) {
     list.value = input.source === 'gamepad' && input.pads.index !== null ? 'pad-'+input.pads.index : input.source === 'touch' ? 'touch' : 'keyboard';
     present(); list.focus();
   }
+  function close() {
+    // Clear held input before returning to the menu. A queued native close
+    // event can otherwise erase fresh input from the following frame.
+    input.clear();
+    editor.close();
+    previewKey = undefined;
+    dialog.close();
+  }
+  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
   list.onchange = () => { message = ''; present(); };
   $('use-device').onclick = () => {
     const pad = currentPad();
@@ -94,7 +91,11 @@ export function controllerMenu(input, onSelect) {
     onSelect(kind);
   };
   $('close-controller').onclick = close;
-  return {open, refresh};
+  function navigate(action) {
+    if (input.pads.owns(currentPad()) && editor.handlesLearningInput(action)) return true;
+    return menuAction(action);
+  }
+  return {open, refresh, navigate};
 }
 
 // Move real DOM focus so the same course buttons and dialogs serve every source.
@@ -120,7 +121,8 @@ export function menuAction(action) {
     active.dispatchEvent(new Event('change',{bubbles:true}));
     return true;
   }
-  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled,summary')].filter(el => el.getClientRects().length);
+  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled,summary')]
+    .filter(el => el.getClientRects().length && !el.closest('details:not([open]) > :not(summary)'));
   const index = available.indexOf(active);
   available[(index < 0 ? 0 : (index+(forward?1:-1)+available.length)%available.length)]?.focus();
   return true;

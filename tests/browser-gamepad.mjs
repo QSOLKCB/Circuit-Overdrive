@@ -24,6 +24,37 @@ try {
   const phase = () => page.locator('body').getAttribute('data-phase');
   const click = id => page.locator('#'+id).click({force:true});
   await page.waitForFunction(()=>document.querySelector('#status').textContent==='Race selection');
+  // Only the owning pad may operate the picker, even when another slot is highlighted.
+  async function tapPad(slot, button) {
+    await page.evaluate(([slot,button])=>{
+      const buttons=window.reports[slot].buttons;
+      window.tick(); // Fresh neutral before the next edge, including after modal transitions.
+      buttons[button]={value:1,pressed:true}; window.tick();
+      buttons[button]={value:0,pressed:false}; window.tick();
+    },[slot,button]);
+  }
+  async function focusWithPad(id) {
+    for (let i=0; i<16; i++) {
+      if (await page.evaluate(()=>document.activeElement.id)===id) return;
+      await tapPad(1,13); // D-pad down through visible controls.
+    }
+    assert.fail('Owner could not navigate to '+id);
+  }
+  const picker=page.locator('#controller-dialog'), device=page.locator('#driver-device');
+  await click('controllers'); await device.selectOption('pad-1'); await click('use-device');
+  await focusWithPad('controllers'); await tapPad(1,0);
+  assert(await picker.isVisible(),'owner can open the picker');
+  await tapPad(1,15);
+  assert.equal(await device.inputValue(),'pad-2','owner can preview another slot with D-pad right');
+  await tapPad(2,1); assert(await picker.isVisible(),'previewed pad cannot dismiss the picker');
+  await tapPad(1,1); assert(!(await picker.isVisible()),'owner can dismiss with Back');
+  await focusWithPad('controllers'); await tapPad(1,0);
+  assert.equal(await device.inputValue(),'pad-1','Back preserved the original owner');
+  await tapPad(1,15); await focusWithPad('close-controller'); await tapPad(1,0);
+  assert(!(await picker.isVisible()),'owner can confirm Cancel');
+  await focusWithPad('controllers'); await tapPad(1,0);
+  assert.equal(await device.inputValue(),'pad-1','Cancel preserved the original owner');
+  await tapPad(1,1);
   await click('controllers');
   await page.selectOption('#driver-device','pad-1');
   await press(0,1); await press(7,1); await click('use-device');
@@ -58,6 +89,14 @@ try {
   await press(9,1); await tick(2); assert.equal(await phase(),'racing');
   await press(9,0); await tick(2); await press(9,1); await tick(2);
   assert.equal(await phase(),'paused');
+  const pausedTime = await page.locator('#timer').textContent();
+  await press(9,0); await tick(2);
+  await focusWithPad('controllers'); await tapPad(1,0); await tapPad(1,15);
+  await tapPad(1,1);
+  assert.equal(await phase(),'paused');
+  assert.equal(await page.locator('#timer').textContent(),pausedTime,'browsing the picker keeps the race paused');
+  await tapPad(1,9); assert.equal(await phase(),'racing','original pad resumes after Back');
+  await tapPad(1,9); assert.equal(await phase(),'paused');
   await click('controllers'); await page.selectOption('#driver-device','keyboard'); await click('use-device');
   await click('continue'); assert.equal(await phase(),'racing');
   await page.keyboard.press('Escape'); assert.equal(await phase(),'paused');
@@ -79,5 +118,5 @@ try {
   await page.reload();
   assert(await page.locator('#boot-note').isVisible());
   assert(await page.locator('#start').isDisabled());
-  console.log('Chromium '+browser.version()+' · synthetic standard pad · explicit slot, held grid buttons, analog drive, disconnect under load, neutral reacquisition, gamepad pause/resume and keyboard handoff passed.');
+  console.log('Chromium '+browser.version()+' · synthetic standard pad · owner-only picker navigation, Back and Cancel, held grid buttons, analog drive, disconnect under load, neutral reacquisition, gamepad pause/resume and keyboard handoff passed.');
 } finally { await browser.close(); }

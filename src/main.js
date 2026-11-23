@@ -307,7 +307,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) pause
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
   if (document.hidden || !document.hasFocus()) return false;
-  if ($('controller-dialog').open && $('profile-settings').open) return false;
+  if ($('controller-dialog').open) return input.source === 'gamepad' && controller.navigate(action);
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
   if (input.source === 'gamepad') {
     if (grid && action === 'confirm') action = 'arm';
@@ -427,7 +427,7 @@ function frame(time) {
   lastTime = time;
   if (!error && !document.hidden) {
     if ($('controller-dialog').open) controller.refresh();
-    if (!driving() && document.hasFocus() && !($('controller-dialog').open && $('profile-settings').open)) input.menu();
+    if (!driving() && document.hasFocus()) input.menu();
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
     try { render(alpha, elapsed); }
