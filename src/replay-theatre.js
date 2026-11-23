@@ -4,16 +4,14 @@
 import {createReplaySession,MAX_REPLAY_BYTES,MAX_SEEK_STEPS} from './replay-theatre-core.js';
 import {createScene} from './scene.js';
 import {FIELD,PLAYER_ID} from './field.js';
-import {STEP} from './sim.js';
+import {interpolateReplayPoses,createReplayPoses} from './replay-presentation.js';
 
 const $=id=>document.getElementById(id);
 const canvas=$('replay-world');
 const stamp=document.querySelector('meta[name="game-revision"]')?.content||'';
 const controls=['replay-play','replay-restart','replay-back','replay-forward','replay-download',
   'replay-seek','replay-follow','replay-camera','replay-rate'];
-const poses=FIELD.map(driver=>({id:driver.id,compression:new Array(4)}));
-const smooth=['x','y','z','groundY','roll','pitch','speed','steering'];
-const angles=['yaw','wheelSpin'];
+const poses=createReplayPoses();
 let session=null,scene=null,playing=false,seekTarget=null,frameTime=null,playBudget=0;
 let imported='',currentFileName='',lastHud=-1;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -40,21 +38,6 @@ function displayErrors(error){
   playing=false;seekTarget=null;
   $('replay-play').textContent='Play';
   notify('Cannot play replay: '+String(error?.message||error));
-}
-function fillPoses(race,alpha){
-  for(const driver of race.entrants){
-    const a=driver.previous,b=driver.current,p=poses[driver.id];
-    p.vx=driver.vehicle.velocity[0];p.vz=driver.vehicle.velocity[2];
-    p.gear=b.gear;p.rpm=b.rpm;p.brake=b.brake;
-    p.finished=driver.finishTicks!==null;
-    for(let wheel=0;wheel<4;wheel++)
-      p.compression[wheel]=a.compression[wheel]+(b.compression[wheel]-a.compression[wheel])*alpha;
-    for(const key of smooth)p[key]=a[key]+(b[key]-a[key])*alpha;
-    for(const key of angles) {
-      const delta=Math.atan2(Math.sin(b[key]-a[key]),Math.cos(b[key]-a[key]));
-      p[key]=a[key]+delta*alpha;
-    }
-  }
 }
 function dashboard(force=false){
   if(!session)return;
@@ -91,7 +74,7 @@ function render(elapsed){
   // interpolate between accepted simulation snapshots without changing physics.
   // Pause, seek and finished presentation use exact authoritative current poses.
   const alpha=playing && !session.finished && seekTarget===null?playBudget:1;
-  fillPoses(session.race,alpha);
+  interpolateReplayPoses(session.race,poses,alpha);
   const followId=Number($('replay-follow').value);
   scene.draw(poses,{mode:session.race.phase==='finished'?'finished':'racing',
     camera:$('replay-camera').value,followId,
