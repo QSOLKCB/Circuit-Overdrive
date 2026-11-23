@@ -24,3 +24,9 @@ An attempt belongs to one championship ID, calendar slot and seed. Only the acti
 The local version 1 save contains the edition, championship ID, v0.6.2 racing authority, game build revision and up to four ordered event classifications. Its limit is 8,192 JSON characters. Each row records driver ID, official finish ticks or null, and accepted recoveries. Totals and current round are derived from that history. A stamped save requires its exact build. Raw checkouts use a null build stamp and should be used for development.
 
 One origin-local storage write replaces the complete slot. Competing writes check the previous slot under a Web Lock. A stale tab cannot overwrite a later result or a replacement championship. A player with access to browser storage can edit local data. Validation enforces the format and consistency of a save. Replay imports have no role in settlement.
+
+## On the starting grid
+
+Choose **World Overdrive Championship** from course select. The calendar identifies both visits to each course. Standings list all six car numbers, names and points. Start the championship, read the round briefing, then choose **Start event**. Use the same grid arming, pause, recovery and restart controls as a standalone race.
+
+The results board shows the flag order, official times where available, each position's award, updated totals and the next round. After the fourth flag, open the trophy presentation to see the winning driver, all six totals and the four individual event boards. The chequered banner follows the device's reduced-motion preference.
