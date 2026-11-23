@@ -42,7 +42,9 @@ export function controllerLab(input) {
   return {
     close() { details.open = false; },
     navigate(action, pad) {
-      if (!details.open || document.activeElement !== readings || !input.pads.owns(pad)) return false;
+      // Opening <details> immediately exposes the readings, but focus stays on
+      // its summary until the browser dispatches the queued toggle event.
+      if (!details.open || !details.contains(document.activeElement) || !input.pads.owns(pad)) return false;
       // While inspecting the owner, its buttons are test inputs. Both optional
       // Back and the required Pause binding provide an exit using just the pad.
       if (action === 'back' || action === 'pause') {
