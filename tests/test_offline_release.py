@@ -40,8 +40,10 @@ class OfflineRelease(unittest.TestCase):
             run('git', '-c', 'user.name=Test', '-c', 'user.email=test@localhost', 'commit',
                 '--quiet', '--no-gpg-sign', '-m', 'release fixture', cwd=source)
             revision = run('git', 'rev-parse', 'HEAD', cwd=source).stdout.strip()
-            run('git', 'clone', '--quiet', '--depth=1', source.as_uri(), str(peer), cwd=temp)
+            run('git', 'clone', '--quiet', '--no-checkout', '--depth=1', source.as_uri(), str(peer), cwd=temp)
+            run('git', 'config', 'core.autocrlf', 'true', cwd=peer)
             run('git', 'checkout', '--quiet', '--detach', revision, cwd=peer)
+            self.assertIn(b'\r\n', (peer / 'scripts/offline-release.py').read_bytes())
             (source / 'src/main.js').write_text('// unstaged changes must never ship under this commit')
             (source / 'src/debug.js').write_text('development-only')
 
@@ -78,7 +80,7 @@ class OfflineRelease(unittest.TestCase):
                 self.assertIn('python3 -m http.server', archive.read(prefix + 'START-HERE.txt').decode())
                 self.assertEqual(manifest['sha256'], {
                     p: hashlib.sha256(archive.read(prefix + p)).hexdigest() for p in [*site_files, 'START-HERE.txt']})
-                self.assertEqual(archive.read(prefix + 'src/main.js'), (peer / 'src/main.js').read_bytes())
+                self.assertEqual(archive.read(prefix + 'src/main.js'), (peer / 'src/main.js').read_bytes().replace(b'\r\n', b'\n'))
                 self.assertIn(revision.encode(), archive.read(prefix + 'index.html'))
 
             (second / receipt).write_text('wrong receipt\n')

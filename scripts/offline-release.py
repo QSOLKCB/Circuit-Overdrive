@@ -70,7 +70,8 @@ def build_archive(repository, revision, temp):
     git_output('-C', str(snapshot), 'config', 'core.autocrlf', 'false')
     git_output('-C', str(snapshot), 'fetch', '--quiet', '--no-tags', '--depth=1', '--', repository, revision)
     git_output('-C', str(snapshot), 'checkout', '--quiet', '--detach', revision)
-    if (snapshot / 'scripts/offline-release.py').read_bytes() != Path(__file__).read_bytes():
+    # Python treats checkout CRLF and canonical LF as the same source.
+    if (snapshot / 'scripts/offline-release.py').read_text(encoding='utf-8') != Path(__file__).read_text(encoding='utf-8'):
         raise ValueError('Use the offline-release.py script committed at the target revision.')
 
     site = temp / 'Circuit-Overdrive'

@@ -73,7 +73,13 @@ test('stamp only the revision whose Git blobs match the entire runtime', async t
   const clean = await readSite(root);
   assert.equal(clean.revision,revision);
   assert(clean.files.get('index.html').toString().includes('name="game-revision" content="'+revision+'"'));
-  await writeFile(join(root,'src/sim.js'),'// Local handling experiment');
+  const sim = join(root,'src/sim.js');
+  const committed = clean.files.get('src/sim.js').toString('utf8');
+  await writeFile(sim,committed.replaceAll('\n','\r\n'));
+  const windows = await readSite(root);
+  assert.equal(windows.revision,revision);
+  assert.equal(windows.files.get('src/sim.js').toString(),committed);
+  await writeFile(sim,'// Local handling experiment');
   const dirty = await readSite(root);
   assert.equal(dirty.revision,null);
   assert(dirty.files.get('index.html').toString().includes('name="game-revision" content=""'));
