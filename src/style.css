@@ -851,3 +851,11 @@ body[data-phase=racing] #world,body[data-phase=countdown] #world {
 #controller-dialog select { display:block; max-width:100%; margin:.4rem 0; }
 #controller-dialog output { display:block; white-space:pre-wrap; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
 #driver-device { width:100%; }
+
+#profile-settings { margin:.7rem 0; }
+#profile-settings summary { cursor:pointer; padding:.5rem 0; }
+.profile-editor fieldset { min-width:0; margin:.6rem 0; }
+.profile-editor label,.profile-editor output { display:block; margin:.35rem 0; }
+.profile-editor input[type=range] { display:block; width:100%; }
+.profile-editor .buttons { gap:6px; }
+#controller-dialog [hidden] { display:none; }

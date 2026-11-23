@@ -276,6 +276,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) pause
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
   if (document.hidden || !document.hasFocus()) return false;
+  if ($('controller-dialog').open) return input.source === 'gamepad' && controller.navigate(action);
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
   if (input.source === 'gamepad') {
     if (grid && action === 'confirm') action = 'arm';
