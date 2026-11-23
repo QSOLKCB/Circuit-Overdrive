@@ -911,3 +911,16 @@ body[data-course=skyway] #title-last { color:#fbba61; }
 #nitro-energy::-webkit-meter-optimum-value { background:#ffc051; }
 #nitro-hud[data-boost=true] { border-color:#75ffe7; }
 #nitro-hud[data-boost=true] meter::-webkit-meter-optimum-value { background:#75ffe7; }
+
+/* Two peripheral streaks on each side during an accepted boost. */
+@media (prefers-reduced-motion: no-preference) {
+  body[data-effects=full][data-phase=racing] #hud:has(#nitro-hud[data-boost=true])::before,
+  body[data-effects=full][data-phase=racing] #hud:has(#nitro-hud[data-boost=true])::after {
+    content:""; position:absolute; top:32%; width:13%; height:42%; left:0;
+    pointer-events:none; background:linear-gradient(90deg,#baffefb3,#fff0);
+    clip-path:polygon(0 4%, 95% 26%, 0 7%, 0 90%, 76% 74%, 0 94%);
+  }
+  body[data-effects=full][data-phase=racing] #hud:has(#nitro-hud[data-boost=true])::after {
+    left:auto; right:0; transform:scaleX(-1);
+  }
+}
