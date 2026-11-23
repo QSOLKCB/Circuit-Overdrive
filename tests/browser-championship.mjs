@@ -108,6 +108,7 @@ async function lifecycle(source) {
   await press('enter-woc');
   await press('woc-calendar');
   assert.equal(await view(page),'calendar');
+  assert.match(await page.locator('#status').textContent(),/Event calendar/);
   await press('woc-back');
   await press('woc-standings');
   assert.equal(await page.locator('#woc tbody tr').count(),6);
@@ -133,17 +134,21 @@ async function lifecycle(source) {
   assert.equal(await phase(page),'paused');
   await click(page,'courses');
   assert.equal(await view(page),'briefing');
-  assert((await page.locator('#woc tbody tr td:last-child').allTextContents()).every(x=>x==='0'));
+  const points = await page.locator('#woc tbody tr td:last-child').allTextContents();
+  assert.equal(points.length,6);
+  assert(points.every(value=>value==='0'));
   await page.close();
 }
 
 try {
   const page = await openPage();
   await click(page,'sound');
+  await click(page,'choose-ridge');
   await page.locator('#enter-woc').focus();
   await page.keyboard.press('Enter');
   await page.keyboard.press('Enter');
   assert.equal(await view(page),'briefing');
+  assert.match(await page.locator('#status').textContent(),/Round 1.*Event briefing.*Overdrive Opening Cup/);
   const before = await page.locator('#timer').textContent();
   await frame(page,15);
   assert.equal(await page.locator('#timer').textContent(),before);
@@ -159,11 +164,18 @@ try {
   await page.keyboard.press('w');
   const result = await drive(page,'speedway',701,33);
   assert.equal(await view(page),'results');
+  assert.match(await page.locator('#status').textContent(),/Round 1.*Chequered flag.*Overdrive Opening Cup/);
   assert.deepEqual(await page.locator('#woc tbody tr').evaluateAll(rows=>rows.map(r=>Number(r.dataset.driver))),
     result.classification.map(d=>d.id));
   await click(page,'woc-next');
   assert.equal(await view(page),'briefing');
   assert.match(await page.locator('#woc-label').textContent(),/Round 2/);
+  assert.match(await page.locator('#status').textContent(),/Round 2.*Event briefing.*Redline Mountain Challenge/);
+  await click(page,'woc-back');
+  await click(page,'woc-leave');
+  assert.equal(await phase(page),'menu');
+  assert.equal(await page.locator('body').getAttribute('data-course'),'ridge');
+  assert.equal(await page.locator('#choose-ridge').getAttribute('aria-pressed'),'true');
   await page.close();
   for (const source of ['standard','touch']) await lifecycle(source);
   assert.deepEqual(errors,[]);

@@ -57,6 +57,7 @@ function calendarList(history) {
 export function championshipUI({revision, grid, leave, changed, formatTime}) {
   const panel = $('woc'), content = $('woc-content'), actions = $('woc-actions');
   let cup = null, view = null;
+  let announcement = '';
 
   function button(id, label, handler, primary = false) {
     const node = element('button',label);
@@ -163,11 +164,13 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
       button('new','New championship',() => show('replace'),true);
       button('back','Championship menu',back);
     }
+    announcement = label.textContent+' · '+title.textContent;
     panel.scrollTop = 0;
     changed();
     focus();
   }
   return {
+    get announcement() { return announcement; },
     get visible() { return view !== null; },
     get active() { return cup?.phase === 'event-active'; },
     get roundName() { return cup?.nextEvent?.name; },

@@ -23,6 +23,7 @@ const mixer = Object.keys(DEFAULT_VOLUMES);
 let reducedEffects;
 let quality = 'auto';
 let race = createRace();
+let standaloneCourse = race.course;
 let recording;
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
@@ -35,9 +36,9 @@ const input = attachDriverInput(window, () => driving() && focused(), handleActi
 const controller = controllerMenu(input, showSource);
 const revision = document.querySelector('meta[name=game-revision]').content || null;
 const championship = championshipUI({revision, formatTime, grid:() => enterGrid(true),
-  changed() { resetClock(); updatePanel(); },
+  changed() { resetClock(); updatePanel(true); },
   leave() {
-    installRace(createRace(undefined,race.course));
+    installRace(createRace(undefined,standaloneCourse));
     updatePanel();
     $('enter-woc').focus();
   }
@@ -145,9 +146,9 @@ function resume() {
   playAudio();
   updatePanel();
 }
-function updatePanel() {
+function updatePanel(screenChanged = false) {
   const mode = phase();
-  if (mode === lastPanel) return;
+  if (mode === lastPanel && !screenChanged) return;
   lastPanel = mode;
   document.body.dataset.phase = mode;
   $('menu').hidden = mode !== 'menu';
@@ -200,7 +201,7 @@ function updatePanel() {
   if (mode === 'paused' && !document.hidden && !modalOpen()) {
     $('continue').focus({preventScroll:true});
   }
-  const statuses = {championship:'World Overdrive Championship', menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
+  const statuses = {championship:championship.announcement, menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
     racing:'Race live', paused:'Paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Renderer offline'};
   set('status', championship.active ? championship.roundName+' · '+statuses[mode] : statuses[mode]);
 }
@@ -275,7 +276,11 @@ $('courses').onclick = () => {
 for (const course of [track,ridge]) drawCoursePreview($('preview-'+course.id),course);
 displayCourse(race.course);
 resetPresentation();
-$('enter-woc').onclick = () => { if (phase() === 'menu') championship.open(); };
+$('enter-woc').onclick = () => {
+  if (phase() !== 'menu') return;
+  standaloneCourse = race.course;
+  championship.open();
+};
 $('start').onclick = () => enterGrid();
 $('restart').onclick = () => { if (['paused','finished'].includes(phase())) enterGrid(championship.active); };
 $('continue').onclick = resume;
