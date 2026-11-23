@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.7.0; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
+This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.8.0; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
 
 ## 1. Non-negotiable project contracts
 
@@ -30,8 +30,9 @@ This is the forward development programme, not a claim that proposed features al
 | **v0.6.1** | CO-MUSIC-001 — SYNTH//OVERDRIVE | Bounded Phrase Sequencer, two playable original chiptune scores and four dormant future-mode compositions, WAV/score export and checksums |
 | **v0.6.2** | CO-REPLAY-001 — Replay Theatre | Source-stamped offline six-car playback, bounded seek, camera selection and verified revision compatibility |
 | **v0.7.0** | CO-007 — World Overdrive Championship | Four seeded events, persistent standings, exactly-once settlement, trophy and single-event replays |
+| **v0.8.0** | CO-008 — After Dark: Nightshift | Two night environments, car-mounted surface lighting, Midnight Protocol and seven browser verification jobs |
 
-**Published baseline** [v0.7.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.7.0) is at `3295b82004b64328072ac5fa64f8ba2b55394416`.
+**Published baseline** [v0.8.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.8.0) is at `8204da56fce6b40ab33cb66c684a2e780f3e3001`.
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -50,7 +51,7 @@ This is the forward development programme, not a claim that proposed features al
 | **NEON HORIZON** | Synthwave × chiptune · 120 BPM | Overdrive Speedway — playable now |
 | **IRON HORSEPOWER** | Industrial guitar-like chiptune · 150 BPM | Redline Ridge — playable now |
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive (CO-010) — soundtrack catalogue only until mode exists |
-| **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in the v0.8.0 candidate |
+| **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in v0.8.0 |
 | **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
 | **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |
 
@@ -95,7 +96,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | **v0.9.0** | **CO-009 — NITRO OVERDRIVE** | Separate arcade stunt/boost discipline: drift charging, bounded nitro, ramps, jumping, air manoeuvres and original stunt track | Physically driven command path, genuine airborne states, no scoring by shortcut, finite energy/cooldowns and replay integrity |
 | **v1.0.0** | **CO-010 — ROCKET OVERDRIVE / DEFY GRAVITY** | Dedicated rocket-racing mode with flight assistance, 3D traversable routes, wall/ceiling adhesion and transitions, air dodges and six-car AI | No car teleportation or fake wall riding; explicit surface-relative collision/gravity, 3D checkpoints, bounded contact and real-browser complete races |
 
-**v0.8.0 review candidate.** Four stacked CO-008 reviews cover car-mounted surface lighting, both night worlds, Midnight Protocol and certification. The inaugural championship retains its four daytime events. The release awaits owner review, a final main build and play-through. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
+**Published in v0.8.0.** Nightshift added car-mounted surface lighting, both night worlds and Midnight Protocol. The inaugural championship retains its four daytime events. CO-009 is in development for owner review. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
 
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 
