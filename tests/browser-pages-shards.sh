@@ -66,6 +66,7 @@ night-ridge|tests/browser-finish.mjs $url --require-replay --software-replay --r
 night-smoke|tests/browser-smoke.mjs $url --night
 headlights|tests/browser-headlights.mjs $url
 night-contact|tests/browser-effects.mjs $url --night
+nitro|tests/browser-nitro.mjs $url
 EOF
 diff -u "$test_dir/expected" "$test_dir/serial.calls"
 # Every shard starts by validating its own HTTP endpoint. Assert suite membership
@@ -87,7 +88,7 @@ check_lane ridge ridge night-ridge
 check_lane controllers gamepad profiles lab
 check_lane theatre theatre
 check_lane lifecycle smoke ridge-smoke night-smoke touch
-check_lane effects night-contact headlights
+check_lane effects night-contact headlights nitro
 diff -u <(tail -n +2 "$test_dir/serial.calls" | sort) \
   <(for shard in "${shards[@]}"; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
 inventory() { (cd "$test_dir/$1" && find . -type f | sort); }

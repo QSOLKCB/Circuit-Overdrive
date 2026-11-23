@@ -58,12 +58,16 @@ try {
     };
   });
   await page.goto(process.argv[2]);
+  const skyway=process.argv.includes('--skyway');
+  assert(!(skyway && process.argv.includes('--night')),'Skyway alternates with day Speedway and night Ridge');
   const waitPhase = phase => page.waitForFunction(value => document.body.dataset.phase === value,phase);
   const live = new Map(), samples = [];
   for (let cycle = 0; cycle < 8; cycle++) {
-    const course = cycle % 2 === 0 ? 'speedway' : 'ridge';
+    const course = skyway ? ['skyway','ridge','skyway','speedway'][cycle%4] : cycle % 2 === 0 ? 'speedway' : 'ridge';
+    const night=process.argv.includes('--night') || (skyway && course==='ridge');
     await page.locator('#choose-'+course).click();
-    if (process.argv.includes('--night')) await page.locator('#choose-night').click();
+    if (night) await page.locator('#choose-night').click();
+    else if (skyway && course!=='skyway') await page.locator('#choose-day').click();
     await page.locator('#start').click();
     await page.keyboard.down('w');
     // The grid hides the previous race's HUD. Require live motion and fresh
@@ -87,10 +91,10 @@ try {
     const footprint={retained,retainedPrograms,retainedBytes:counts.retainedBytes};
     if (live.has(course)) assert.deepEqual(footprint,live.get(course),'WebGL resources accumulated on '+course);
     live.set(course,footprint);
-    assert.equal(retainedPrograms,process.argv.includes('--night')?3:2,'live sky, material and night programs');
+    assert.equal(retainedPrograms,night?3:2,'live sky, material and night programs');
     assert(counts.retainedBytes>0 && counts.retainedBytes<=counts.allocatedBytes);
     assert(retained>0 && counts.pcm===8 && counts.peakVoices<=8);
-    samples.push({cycle:cycle+1,course,heapBytes:usedSize,retainedWebGLBuffers:retained,retainedPrograms,...counts});
+    samples.push({cycle:cycle+1,course,environment:night?'night':'day',heapBytes:usedSize,retainedWebGLBuffers:retained,retainedPrograms,...counts});
   }
   assert.deepEqual(errors,[]);
   const renderer = await page.evaluate(() => {
@@ -100,6 +104,7 @@ try {
   });
   if(process.env.NATIVE_GL==='1') assert.ok(renderer && !/swiftshader|llvmpipe|software/i.test(renderer));
   const source=await page.locator('meta[name=game-revision]').getAttribute('content');
+  if(process.env.REPLAY_REVISION) assert.equal(source,process.env.REPLAY_REVISION);
   const environment=await page.locator('body').getAttribute('data-environment') || 'day';
   if(process.argv.includes('--night')) assert.equal(environment,'night');
   console.log(JSON.stringify({browser:browser.version(),renderer,source,environment,samples},null,2));
