@@ -18,6 +18,9 @@ done
 [[ $ready == yes ]] || exit 1
 EVIDENCE_DIR="$evidence/smoke" node tests/browser-smoke.mjs "$base" 2>&1 | tee "$evidence/smoke.log"
 EVIDENCE_DIR="$evidence/ridge-smoke" node tests/browser-smoke.mjs "$base" --ridge 2>&1 | tee "$evidence/ridge-smoke.log"
+for suite in gamepad profiles; do
+  node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
+done
 replay_args=()
 if [[ ${NATIVE_GL:-0} != 1 ]]; then replay_args=(--software-replay); fi
 EVIDENCE_DIR="$evidence/speedway" node tests/browser-finish.mjs "$base" "${replay_args[@]}" 2>&1 | tee "$evidence/speedway.log"
