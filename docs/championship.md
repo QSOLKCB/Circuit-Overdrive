@@ -9,6 +9,8 @@ Six entrants contest four rounds on the original courses. The Speedway events ea
 | 3 | Speedway Grand Prix | Overdrive Speedway | 703 |
 | 4 | Ridge Championship Finale | Redline Ridge | 704 |
 
+All four events use daylight and play Digital Dominion. Returning to standalone racing restores the course and lighting selected before entering the championship.
+
 The five rivals keep their original cars, numbers and driving profiles. Each event seed feeds their existing pace, line and passing preferences. The field runs on the same 60 Hz simulation as a standalone race.
 
 ## Scoring at the flag

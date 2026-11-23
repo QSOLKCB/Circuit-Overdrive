@@ -10,7 +10,8 @@ Replay Theatre is a **source-bound, offline-first WebGL spectator**. It re-simul
 2. Open **Replay Theatre** from the game header or visit `replay-theatre.html` in a **stamped GitHub Pages or verified offline release**.
 3. Choose the JSON file using **Open local replay JSON**. The recording stays in your browser. No upload, account or server exists.
 4. Use Play/Pause, Restart, ±5 s, Timeline, ½×/1×/2×/4×, Follow car and Chase/High cameras.
-5. Select **Download to share** and send the original JSON file to a friend (email, USB or your choice of file transfer). They can import it into a compatible release.
+5. For a night race, select **Nightshift** under **Spectator lighting**. The environment can also be switched during playback or at a paused tick.
+6. Select **Download to share** and send the original JSON file to a friend (email, USB or your choice of file transfer). They can import it into a compatible release.
 
 The on-screen HUD follows your selected entrant, and the standings show all six competitors. The physical race is reconstructed from original VANILLAJS car, AI and course authority. Full playback includes the pre-race countdown; the *race timer* starts after green.
 
@@ -25,8 +26,11 @@ A source stamp is mandatory. Playback accepts either the **exact site revision**
 | v0.6.0 — Arcade Certification Lab | `020e5dc4c7e2485e01f0f47c698f80ee58fe228b` |
 | v0.6.1 — SYNTH//OVERDRIVE | `d81a2d4a09286029b87c2ac201edf8ab6448e023` |
 | v0.6.2 — Replay Theatre | `c97ee47e7577337032a55eb2e6ae53b855285573` |
+| v0.7.0 — World Overdrive Championship | `3295b82004b64328072ac5fa64f8ba2b55394416` |
 
-The source comparison between these tags contained no physics/AI/track/replay-authority changes. The Node test `tests/replay-theatre.test.mjs` pins the exact Git blob IDs of the authoritative files in v0.6.1 and fails if any authority changes are made without an explicit compatibility policy revision.
+The v0.7.0 authority audit compared committed trees with `git diff --exit-code v0.6.2 v0.7.0 -- src/ai.js src/contact.js src/field.js src/ridge.js src/speedway.js src/sim.js src/track.js src/replay.js tracks vendor`. Git returned exit code 0. The Node test `tests/replay-theatre.test.mjs` checks the individual blob IDs, including the vehicle, collision and math modules. Provenance tests cover every vendored file.
+
+Version 2 describes the course, seed and accepted ticks. Lighting is the viewer’s choice and starts at Day on each import. For example, after opening `circuit-overdrive-ridge-night-replay.json`, select Nightshift to restore Midnight Descent. The filename is a reminder for the driver. Changing lighting rebuilds the WebGL scene while retaining the current timeline, follow target and six-car classification. Downloads preserve the imported JSON text.
 
 **Not supported:** v0.5.0 and older recordings, including unstamped version 1 JSON, and revisions with different physics. Replaying old commands under different physics could produce a different race, so the UI refuses them. A file claiming an accepted revision is **not cryptographically authenticated**, and local JSON can be edited; the replay is evidence under an honest local workflow, not a secure multiplayer competition receipt.
 

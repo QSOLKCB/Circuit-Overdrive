@@ -7,6 +7,8 @@ Start sixth in the Ignition GT No. 27. Race five rivals in a standalone event or
 | Overdrive Speedway | Three laps of the 1.58 km circuit | Two long straights, a 17° banked turn and a reverse bend |
 | Redline Ridge | One 4.51 km mountain sprint | Forest switchbacks, a 270 m valley bridge, a 170 m tunnel and a downhill run to the flag |
 
+Choose **Day** or **Nightshift** before a standalone race. Nightshift Speedway runs under the pit and grandstand lights. On Redline Ridge — Midnight Descent, follow the reflectors into the valley, across the bridge and through the illuminated tunnel. Both events use car-mounted headlights and the original 144 BPM **Midnight Protocol** score. [Nightshift controls and spectator lighting](docs/nightshift.md)
+
 For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
 
 ## World Overdrive Championship
@@ -44,7 +46,7 @@ For a gamepad or wheel, open **Controller**, select the exposed slot, and set it
 
 At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Recordings from Pages and the offline ZIP also carry the exact source revision. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
 
-**Replay Theatre.** Import a locally saved JSON replay and watch all six cars in WebGL, switch the follow camera, adjust playback speed, and seek along an authoritative tick timeline. Shared files never leave the browser. Source-stamped replays from v0.6.0, v0.6.1 and v0.6.2 are admitted only because their physics-source fingerprints match the tested Theatre build. Unstamped v1 recordings and other incompatible revisions are rejected with an explanation. See [Replay Theatre guide](docs/replay-theatre.md).
+**Replay Theatre.** Import a locally saved JSON replay and watch all six cars in WebGL, switch the follow camera, adjust playback speed, and seek along an authoritative tick timeline. Shared files never leave the browser. Source-stamped replays from v0.6.0, v0.6.1, v0.6.2 and v0.7.0 are admitted only because their physics-source fingerprints match the tested Theatre build. Unstamped v1 recordings and other incompatible revisions are rejected with an explanation. See [Replay Theatre guide](docs/replay-theatre.md).
 
 ## Cockpit and sound
 

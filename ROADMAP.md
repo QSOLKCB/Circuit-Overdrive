@@ -50,7 +50,7 @@ This is the forward development programme, not a claim that proposed features al
 | **NEON HORIZON** | Synthwave × chiptune · 120 BPM | Overdrive Speedway — playable now |
 | **IRON HORSEPOWER** | Industrial guitar-like chiptune · 150 BPM | Redline Ridge — playable now |
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive (CO-010) — soundtrack catalogue only until mode exists |
-| **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — soundtrack catalogue only until mode exists |
+| **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in the v0.8.0 candidate |
 | **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
 | **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |
 

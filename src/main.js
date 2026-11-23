@@ -9,6 +9,7 @@ import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
+import {eventTitle, validateEnvironment} from './environment.js';
 import {createMap, drawCoursePreview} from './map.js';
 import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, progress, STEP} from './sim.js';
 
@@ -24,6 +25,8 @@ let reducedEffects;
 let quality = 'auto';
 let race = createRace();
 let standaloneCourse = race.course;
+let standaloneEnvironment = 'day';
+let environment = 'day';
 let recording;
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
@@ -47,7 +50,7 @@ const championship = championshipUI({revision, formatTime, grid:() => enterGrid(
     }
   },
   leave() {
-    installRace(createRace(undefined,standaloneCourse));
+    installRace(createRace(undefined,standaloneCourse),standaloneEnvironment);
     updatePanel();
     $('enter-woc').focus();
   }
@@ -108,14 +111,18 @@ function resetPresentation() {
   candidateSince = placeUntil = 0;
   placeMessage = '';
 }
-function installRace(next) {
+function installRace(next, nextEnvironment = environment) {
   const courseChanged = race.course !== next.course;
+  const sceneChanged = courseChanged || environment !== nextEnvironment;
+  environment = validateEnvironment(nextEnvironment);
   race = next;
   recording = null;
   resetPresentation();
   if (courseChanged) {
     camera = 'chase';
     drawMap = createMap($('map'),race.course);
+  }
+  if (sceneChanged) {
     scene?.dispose();
     initializeScene();
   }
@@ -127,7 +134,7 @@ function enterGrid(round = false) {
   stopAudio();
   resetClock();
   if (championship.active) championship.abandon(race);
-  installRace(round ? championship.takeGrid() : createRace(undefined,race.course));
+  installRace(round ? championship.takeGrid() : createRace(undefined,race.course), round ? 'day' : environment);
   grid = true;
   canvas.focus({preventScroll:true});
   updatePanel();
@@ -178,7 +185,7 @@ function updatePanel(screenChanged = false) {
   const copy = {grid:input.source === 'touch' ? 'Tap Drive with touch to start the countdown.' : input.source === 'keyboard' ? 'Press W or ↑ to take the wheel and start the countdown.' : 'Release all controls, then press Confirm to start the countdown.', paused:inputNotice || 'Resume when you’re ready to drive.',
     finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
-  set('panel-course',championship.active ? championship.roundName : race.course.name);
+  set('panel-course',championship.active ? championship.roundName : eventTitle(race.course,environment));
   set('courses',championship.active ? 'Leave event' : 'Course select');
   set('panel-copy', copy[mode] || '');
   if (mode === 'finished') {
@@ -222,7 +229,7 @@ function graphicsError(message) {
 }
 function initializeScene() {
   try {
-    scene = createScene(canvas, race.course, pixelRatio);
+    scene = createScene(canvas, race.course, pixelRatio, environment);
     error = '';
     updatePanel();
   } catch (failure) {
@@ -240,17 +247,24 @@ canvas.addEventListener('webglcontextrestored', () => {
 });
 function displayCourse(course) {
   const circuit = course.closed;
+  const night = environment === 'night';
+  const title = eventTitle(course,environment);
+  document.body.dataset.environment = environment;
   document.body.dataset.course = course.id;
+  $('choose-day').setAttribute('aria-pressed', String(!night));
+  $('choose-night').setAttribute('aria-pressed', String(night));
+  $('night-score').hidden = !night;
+  set('course-label', night ? course.name+' · After Dark' : 'Course select');
   $('choose-speedway').setAttribute('aria-pressed', String(circuit));
   $('choose-ridge').setAttribute('aria-pressed', String(!circuit));
-  set('title-first', circuit ? 'Overdrive' : 'Redline');
-  set('title-last', circuit ? 'Speedway' : 'Ridge');
+  set('title-first', night ? (circuit ? 'Nightshift' : 'Midnight') : (circuit ? 'Overdrive' : 'Redline'));
+  set('title-last', circuit ? 'Speedway' : night ? 'Descent' : 'Ridge');
   set('distance', (course.length/1000).toFixed(2) + ' km');
   set('format', circuit ? '3 laps' : 'Mountain sprint');
   set('progress-label', circuit ? 'Lap' : 'Checkpoint');
   set('progress-total', ' / ' + (circuit ? 3 : course.gates.length-2));
-  set('map-title', course.name);
-  set('panel-course', course.name);
+  set('map-title', title);
+  set('panel-course', title);
   set('split-header', circuit ? 'Your laps' : 'Checkpoint splits');
   $('distance-hud').hidden = circuit;
 }
@@ -259,6 +273,16 @@ function selectCourse(course) {
   resetClock();
   installRace(createRace(undefined,course));
 }
+function selectEnvironment(next) {
+  if (phase() !== 'menu' || next === environment) return;
+  environment = validateEnvironment(next);
+  resetClock();
+  scene?.dispose();
+  initializeScene();
+  displayCourse(race.course);
+}
+$('choose-day').onclick = () => selectEnvironment('day');
+$('choose-night').onclick = () => selectEnvironment('night');
 $('choose-speedway').onclick = () => selectCourse(track);
 $('choose-ridge').onclick = () => selectCourse(ridge);
 function downloadReplay(data, filename) {
@@ -271,7 +295,8 @@ function downloadReplay(data, filename) {
 }
 $('save-drive').onclick = () => {
   if (phase() === 'finished' && recording?.complete) {
-    downloadReplay(recording.export(),'circuit-overdrive-'+race.course.id+'-replay.json');
+    const suffix = environment === 'night' ? '-night-replay.json' : '-replay.json';
+    downloadReplay(recording.export(),'circuit-overdrive-'+race.course.id+suffix);
   }
 };
 $('courses').onclick = () => {
@@ -293,6 +318,8 @@ resetPresentation();
 $('enter-woc').onclick = () => {
   if (phase() !== 'menu') return;
   standaloneCourse = race.course;
+  standaloneEnvironment = environment;
+  selectEnvironment('day');
   championship.open();
 };
 $('start').onclick = () => enterGrid();
@@ -380,7 +407,8 @@ function handleAction(action) {
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
-    audio.selectMusic(championship.active ? 'championship' : race.course.id); // New race: reset the soundtrack timeline.
+    const score = championship.active ? 'championship' : environment === 'night' ? 'night' : race.course.id;
+    audio.selectMusic(score);
     recording = createRecording(race.course.id, race.seed, revision);
     resetClock();
     playAudio();

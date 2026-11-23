@@ -1,0 +1,36 @@
+{
+  "source": "a93032559757087b6d8792246ee81caecb005069",
+  "entry": "/c/Circuit-Overdrive/",
+  "course": "speedway",
+  "environment": "night",
+  "phase": "menu",
+  "browser": "Google Chrome 158.0.8127.36",
+  "renderer": "ANGLE SwiftShader",
+  "os": "Linux x86_64",
+  "viewport": [
+    1280,
+    720
+  ],
+  "menuViewportsChecked": [
+    [
+      390,
+      844
+    ],
+    [
+      768,
+      390
+    ],
+    [
+      1280,
+      720
+    ]
+  ],
+  "steps": [
+    "Open course select and activate Nightshift.",
+    "At each viewport, select Redline Ridge and then Overdrive Speedway. Verify the event title and the visible Start race control.",
+    "Capture the final menu from Chrome, then encode the screenshot as WebP at quality 88."
+  ],
+  "pageErrors": [],
+  "image": "selection.webp",
+  "sha256": "3d64dcc5b3983df1c0703b7b3d53a9caf8f6e63ca30675fa68b8145d5ae7522f"
+}

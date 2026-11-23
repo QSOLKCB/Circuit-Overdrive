@@ -25,12 +25,17 @@
   <canvas id="world" tabindex="-1" aria-label="Circuit Overdrive race. Use the selected driving controls."></canvas>
   <section id="menu" class="menu">
     <div class="intro">
-      <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Course select</div>
-      <h1><span id="title-first">Overdrive</span><br><em id="title-last">Speedway</em></h1>
+      <div class="eyebrow"><i class="checks" aria-hidden="true"></i><span id="course-label">Course select</span></div>
+      <h1 aria-live="polite"><span id="title-first">Overdrive</span><br><em id="title-last">Speedway</em></h1>
       <div class="specs"><div><small>Course length</small><strong id="distance">—</strong></div><div><small>Race format</small><strong id="format">3 laps</strong></div><div><small>Grid</small><strong>6 cars</strong></div></div>
       <div class="course-picker" role="group" aria-label="Select course">
         <button type="button" id="choose-speedway" aria-pressed="true"><canvas id="preview-speedway" width="78" height="48" aria-hidden="true"></canvas>Overdrive Speedway</button>
         <button type="button" id="choose-ridge" aria-pressed="false"><canvas id="preview-ridge" width="78" height="48" aria-hidden="true"></canvas>Redline Ridge</button>
+      </div>
+      <div class="environment-picker" role="group" aria-label="Race environment">
+        <button type="button" id="choose-day" aria-pressed="true">Day</button>
+        <button type="button" id="choose-night" aria-pressed="false">Nightshift</button>
+        <small id="night-score" hidden>Midnight Protocol · 144 BPM</small>
       </div>
       <button class="primary" id="start" type="button" disabled>Start race <span aria-hidden="true">➜</span></button>
       <button id="enter-woc" type="button" disabled>World Overdrive Championship</button>
