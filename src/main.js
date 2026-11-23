@@ -322,7 +322,7 @@ function handleAction(action) {
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
-    recording = createRecording(race.course.id,race.seed);
+    recording = createRecording(race.course.id, race.seed, document.querySelector('meta[name=game-revision]').content || null);
     resetClock();
     playAudio();
     updatePanel();

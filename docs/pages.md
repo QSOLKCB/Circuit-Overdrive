@@ -13,7 +13,7 @@ node --experimental-vm-modules scripts/package-site.mjs "$site_root/Circuit-Over
 python3 -m http.server 8000 --bind 127.0.0.1 --directory "$site_root"
 ```
 
-Open [the local game](http://127.0.0.1:8000/Circuit-Overdrive/). The packager copies the named runtime files byte for byte and verifies the static module graph using Node's JavaScript parser. It checks relative HTML and stylesheet asset paths, parses both track definitions and compares the packaged engine sources and notices with the SHA-256 provenance manifest. Direct artifact publishing skips Jekyll processing.
+Open [the local game](http://127.0.0.1:8000/Circuit-Overdrive/). A clean package stamps the exact Git commit into the HTML entry point. The packager copies the other named runtime files byte for byte and verifies the static module graph using Node's JavaScript parser. It checks relative HTML and stylesheet asset paths, parses both track definitions and compares the packaged engine sources and notices with the SHA-256 provenance manifest. Direct artifact publishing skips Jekyll processing.
 
 ## Reproduce browser verification
 
@@ -33,3 +33,5 @@ On software WebGL, the finish runner renders the interactive game at 640×360. I
 2. After owner review and merge into `main`, open **Actions → Pages** at the merge commit. The upload step packages only the tested allowlist. The deployment job reads the existing Pages configuration and deploys the artifact. [Workflow runs](https://github.com/QSOLKCB/Circuit-Overdrive/actions/workflows/pages.yml)
 3. Check the separate `public-browser` job. Its summary records the public URL, exact source SHA and workflow run. Download `public-browser-<sha>` for classification logs and screenshots. The `local-browser-<sha>` artifact identifies the package checks. [Production URL](https://qsolkcb.github.io/Circuit-Overdrive/)
 4. If the workflow reports a Pages permission or source error, verify the source setting above and that the `github-pages` environment permits deployments from `main`. If the HTTP verifier reports a stale file or wrong MIME type, inspect the failing URL in the log, check the deployed commit and allow for CDN propagation before rerunning the failed jobs. The public job allows up to ten minutes of retry delays for stale CDN bytes before browser play begins. Each retry compares the files with the same checked-out SHA. To run the public check locally, pass the production URL to the same command from the deployed checkout.
+
+The verification job also builds and independently reproduces the offline ZIP. Chromium drives its extracted contents. The Pages upload still uses the runtime-only directory. The workflow stores the ZIP and checksum as a review artifact for 14 days. Source revision and checksum are available in the job summary. [Offline release guide](offline-release.md)

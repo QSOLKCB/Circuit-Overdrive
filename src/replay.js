@@ -6,8 +6,10 @@ const validCourse = course => course === 'speedway' || course === 'ridge';
 const validSeed = seed => Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
 const inRange = (value, low) => Number.isFinite(value) && value >= low && value <= 1;
 
-export function createRecording(course, seed) {
-  if (!validCourse(course) || !validSeed(seed)) throw RangeError('Invalid replay header');
+const validRevision = value => typeof value === 'string' && /^[0-9a-f]{40}$/.test(value);
+
+export function createRecording(course, seed, revision = null) {
+  if (!validCourse(course) || !validSeed(seed) || (revision !== null && !validRevision(revision))) throw RangeError('Invalid replay header');
   const runs = [];
   let ticks = 0, overflow = false;
   return {
@@ -21,13 +23,19 @@ export function createRecording(course, seed) {
     get complete() { return !overflow; },
     export() {
       if (overflow) throw RangeError('This drive exceeds the 30-minute replay limit.');
-      return {version:1,course,seed,ticks,runs:runs.map(row=>row.slice())};
+      const header = revision === null ? {version:1} : {version:2,revision};
+      return {...header,course,seed,ticks,runs:runs.map(row=>row.slice())};
     }
   };
 }
 
-export function* replayCommands(data) {
-  if (data?.version !== 1 || !validCourse(data.course) || !validSeed(data.seed) ||
+export function* replayCommands(data, expectedRevision) {
+  const legacy = data?.version === 1 && !Object.hasOwn(data,'revision');
+  const identified = data?.version === 2 && validRevision(data.revision);
+  if (identified && expectedRevision !== undefined && data.revision !== expectedRevision) {
+    throw RangeError('Replay requires game revision ' + data.revision);
+  }
+  if ((!legacy && !identified) || !validCourse(data.course) || !validSeed(data.seed) ||
       !Number.isInteger(data.ticks) || data.ticks < 0 || data.ticks > LIMIT ||
       !Array.isArray(data.runs) || data.runs.length > data.ticks) throw RangeError('Invalid replay header');
   let count = 0;

@@ -2,6 +2,7 @@
 // Run from the checkout with node --experimental-vm-modules.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import {mkdir, readFile, realpath, rm, writeFile} from 'node:fs/promises';
 import {dirname, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -65,7 +66,37 @@ function validate(files) {
   }
 }
 
-export async function packageSite(source, destination) {
+// Compare the bytes we actually read with the immutable tree. A raw checkout
+// or locally edited game can still be played without claiming an exact revision.
+function matchCommittedFiles(root, files) {
+  const git = args => execFileSync('git', ['-C', root, ...args], {encoding:'utf8', stdio:['ignore','pipe','pipe']});
+  let top;
+  try { top = git(['rev-parse','--show-toplevel']).trim(); } catch { return null; }
+  if (resolve(top) !== root) return null;
+  const revision = git(['rev-parse','HEAD']).trim();
+  assert.match(revision, /^[0-9a-f]{40}$/);
+  const tree = git(['ls-tree','-rz',revision,'--',...siteFiles]);
+  const blobs = new Map(tree.split('\0').filter(Boolean).map(entry => {
+    const [metadata, name] = entry.split('\t');
+    return [name, metadata.split(' ')[2]];
+  }));
+  const normalized = [];
+  const oid = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+  for (const [name, bytes] of files) {
+    const expected = blobs.get(name);
+    if (oid(bytes) === expected) continue;
+    // Git may have checked out text with CRLF. Canonicalize only if the
+    // resulting bytes reproduce the original blob exactly.
+    if (!bytes.includes(13)) return null;
+    const lf = Buffer.from(bytes.toString('utf8').replaceAll('\r\n','\n'));
+    if (oid(lf) !== expected) return null;
+    normalized.push([name,lf]);
+  }
+  for (const [name, bytes] of normalized) files.set(name,bytes);
+  return revision;
+}
+
+export async function readSite(source) {
   const root = await realpath(source);
   const files = new Map();
   for (const name of siteFiles) {
@@ -73,6 +104,18 @@ export async function packageSite(source, destination) {
     assert.equal(await realpath(path), path, 'symlink in site allowlist: ' + name);
     files.set(name, await readFile(path));
   }
+  const revision = matchCommittedFiles(root, files);
+  if (revision) {
+    const marker = '<meta name="game-revision" content="">';
+    const html = files.get('index.html').toString();
+    assert(html.includes(marker), 'missing source revision marker');
+    files.set('index.html', Buffer.from(html.replace(marker, '<meta name="game-revision" content="'+revision+'">')));
+  }
+  return {files, revision};
+}
+
+export async function packageSite(source, destination) {
+  const {files} = await readSite(source);
   validate(files);
   await mkdir(dirname(destination), {recursive: true});
   await mkdir(destination); // The caller supplies a fresh directory. Never publish leftover files.

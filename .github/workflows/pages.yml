@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+env:
+  REPLAY_REVISION: ${{ github.sha }}
+
 # Keep the matching public site in place while its browser checks run.
 concurrency:
   group: pages-${{ github.ref }}
@@ -30,6 +33,22 @@ jobs:
         run: node --test tests/*.test.mjs
       - name: Assemble and validate the allowlisted site
         run: node --experimental-vm-modules scripts/package-site.mjs "$RUNNER_TEMP/public/Circuit-Overdrive"
+      - name: Build and independently verify offline release candidate
+        run: |
+          python3 tests/test_offline_release.py
+          python3 scripts/offline-release.py build "$RUNNER_TEMP/offline"
+          python3 scripts/offline-release.py verify "$RUNNER_TEMP/offline"
+          name="Circuit-Overdrive-${GITHUB_SHA}.zip"
+          python3 -m zipfile -e "$RUNNER_TEMP/offline/$name" "$RUNNER_TEMP/unpacked"
+          diff -r --exclude=START-HERE.txt --exclude=RELEASE.json "$RUNNER_TEMP/public/Circuit-Overdrive" "$RUNNER_TEMP/unpacked/Circuit-Overdrive"
+          cat "$RUNNER_TEMP/offline/$name.sha256" >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve the verified ZIP and checksum for owner review
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: offline-candidate-${{ github.sha }}
+          path: ${{ runner.temp }}/offline
+          if-no-files-found: error
+          retention-days: 14
       - name: Install browser test driver outside the package
         run: npm install --prefix "$RUNNER_TEMP/driver" --no-save --ignore-scripts --no-audit --no-fund playwright@1.64.0
       - name: Drive both courses under the Pages path
@@ -37,7 +56,7 @@ jobs:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/driver/node_modules/playwright/index.mjs
           CHROME_BIN: /usr/bin/google-chrome
         run: |
-          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$RUNNER_TEMP/public" > "$RUNNER_TEMP/server.log" 2>&1 &
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$RUNNER_TEMP/unpacked" > "$RUNNER_TEMP/server.log" 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
           url=http://127.0.0.1:8000/Circuit-Overdrive/
