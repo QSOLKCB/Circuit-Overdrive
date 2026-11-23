@@ -51,3 +51,49 @@ test('rejects hostile score shapes, non-aligned BPM, sparse patterns and invalid
   assert.throws(()=>a.renderRange(Number.MAX_SAFE_INTEGER,20),RangeError);
   assert.throws(()=>a.renderRange(0,49*BPS_RATE),RangeError);
 });
+
+test('rejects accessor-backed phrase and lane arrays before invoking a getter',()=>{
+  let calls=0;
+  const changing=score();
+  Object.defineProperty(changing.phrases[0].arp,0,{
+    configurable:true,enumerable:true,
+    get(){calls++;return calls===1 ? 69 : NaN;}
+  });
+  assert.throws(()=>createBoundedPhraseSequencer(changing),/own data properties/);
+  assert.equal(calls,0,'the hostile note getter must never execute');
+
+  const phraseGetter=score();
+  let phraseCalls=0;
+  Object.defineProperty(phraseGetter.phrases,0,{
+    configurable:true,enumerable:true,
+    get(){phraseCalls++;return structuredClone(pattern);}
+  });
+  assert.throws(()=>createBoundedPhraseSequencer(phraseGetter),/own data properties/);
+  assert.equal(phraseCalls,0,'the hostile phrase getter must never execute');
+
+  const disguisedHole=score();
+  delete disguisedHole.phrases[0].drums[7];
+  disguisedHole.phrases[0].drums.extra='H';
+  assert.throws(()=>createBoundedPhraseSequencer(disguisedHole),/dense|own data/);
+});
+
+test('200 BPM arp releases to zero inside a phrase even when decay is longer than the gate',()=>{
+  const isolated=score();
+  isolated.bpm=200; // 3,600 sample sixteenth; arp decay alone is 3,840 samples.
+  isolated.phrases=[{
+    bass:Array(16).fill(null),
+    lead:Array(16).fill(null),
+    arp:[69,...Array(15).fill(null)],
+    drums:Array(16).fill('.')
+  }];
+  const sequencer=createBoundedPhraseSequencer(isolated),frames=sequencer.stepSamples;
+  assert.equal(frames,3600);
+  const left=sequencer.renderRange(0,frames+1);
+  assert(left[2*(frames-200)]!==0,'there must be an audible sustain/release signal');
+  assert.equal(left[2*(frames-1)],0,'last frame of the short note must fade to zero');
+  assert.equal(left[2*frames],0,'the following rest must start at silence');
+  assert.deepEqual(
+    sequencer.renderRange(frames-64,128),
+    Int16Array.from([...sequencer.renderRange(frames-64,64),...sequencer.renderRange(frames,64)])
+  );
+});
