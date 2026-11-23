@@ -130,19 +130,29 @@ function contactRail(state, road) {
   const extent = (Math.abs(right[0] * road.rx + right[2] * road.rz) * touring.chassis.width
     + Math.abs(forward[0] * road.rx + forward[2] * road.rz) * touring.chassis.length) / 2;
   const penetration = Math.abs(road.lateral) + extent + 0.08 - track.barrierOffset;
-  if (penetration <= 0) return false;
+  if (penetration <= 0) return null;
   const side = Math.sign(road.lateral);
   const nx = road.rx * side;
   const nz = road.rz * side;
   state.position[0] -= penetration * nx;
   state.position[2] -= penetration * nz;
-  const out = Math.max(0, state.velocity[0] * nx + state.velocity[2] * nz);
+  const accepted = track.project(state.position[0], state.position[2]);
+  const [vx,,vz] = state.velocity;
+  const out = Math.max(0, vx * nx + vz * nz);
   const scrub = 1 - Math.min(0.35, out * 0.018);
-  state.velocity[0] = (state.velocity[0] - 1.08 * out * nx) * scrub;
-  state.velocity[2] = (state.velocity[2] - 1.08 * out * nz) * scrub;
+  state.velocity[0] = (vx - 1.08 * out * nx) * scrub;
+  state.velocity[2] = (vz - 1.08 * out * nz) * scrub;
+  if (state.wheels.some(wheel => wheel.grounded)) {
+    state.position[1] += accepted.y - road.y;
+    // On a bank, speed toward the outer rail includes a climb. When the rail
+    // removes that motion, preserve the suspension's speed relative to the road.
+    const [normalX, normalY, normalZ] = road.normal;
+    state.velocity[1] -= ((state.velocity[0] - vx) * normalX
+      + (state.velocity[2] - vz) * normalZ) / normalY;
+  }
   state.angularVelocity[1] *= 0.88;
   state.contacts.push('guardrail');
-  return true;
+  return accepted;
 }
 
 function signedStep(before, after) {
@@ -204,8 +214,9 @@ export function stepRace(race, intent = {}) {
     resetCar(race);
     return;
   }
-  race.contact = contactRail(next, road);
-  const acceptedRoad = race.contact ? track.project(next.position[0], next.position[2]) : road;
+  const contactRoad = contactRail(next, road);
+  race.contact = contactRoad !== null;
+  const acceptedRoad = contactRoad ?? road;
   race.vehicle = next;
   race.previous = race.current;
   race.current = snapshot(next, acceptedRoad);
