@@ -14,7 +14,7 @@ import {createReplaySession,validateTheatreReplay,REPLAY_COMPATIBLE_RELEASES,
 
 const REV='f1'.repeat(20);
 const RELEASES=['020e5dc4c7e2485e01f0f47c698f80ee58fe228b',
-  'd81a2d4a09286029b87c2ac201edf8ab6448e023'];
+  'd81a2d4a09286029b87c2ac201edf8ab6448e023','c97ee47e7577337032a55eb2e6ae53b855285573'];
 const blank={throttle:0,brake:0,steer:0};
 function tapeFor(course,ticks=600,revision=RELEASES[0]){
   const recorder=createRecording(course.id,27,revision),reference=createRace(27,course);
@@ -27,7 +27,7 @@ function tapeFor(course,ticks=600,revision=RELEASES[0]){
   return {data:recorder.export(),reference};
 }
 
-test('source-compatibility pins match the immutable v0.6.0/v0.6.1 race authority',()=>{
+test('source-compatibility pins match the immutable v0.6.0 through v0.6.2 race authority',()=>{
   assert.deepEqual(REPLAY_COMPATIBLE_RELEASES,RELEASES);
   const root=fileURLToPath(new URL('../',import.meta.url));
   // GitHub blob hashes were read directly from v0.6.1, and compare(v0.6.0,v0.6.1)
@@ -37,6 +37,7 @@ test('source-compatibility pins match the immutable v0.6.0/v0.6.1 race authority
     'src/contact.js':'1c4546c27a4ab938f8eb2491bf38f1e45a854b30',
     'src/field.js':'e3a0ae52d30362dee6874eed4bdb772001b34f8d',
     'src/ridge.js':'d13853850c93793e9b73684f556199f5fc92d414',
+    'src/speedway.js':'1a61b8ce5bbad92f4035d5166b68061209e92646',
     'src/sim.js':'76fd3091c36adaceb7e3e72a9f623aa4f2c2b3e8',
     'src/track.js':'8640d6ad053c63f4b2d4368e77d0dca6f32f2c27',
     'src/replay.js':'e7cd33164a077b573cbbddd1833e0a7fdb29372e',
@@ -52,7 +53,7 @@ test('source-compatibility pins match the immutable v0.6.0/v0.6.1 race authority
 
 test('reject legacy, mismatched, corrupt and accessor-backed JSON before simulating',()=>{
   const data=tapeFor(track,400).data;
-  assert.equal(validateTheatreReplay(data,REV).compatibility,'verified-compatible');
+  for (const revision of RELEASES) assert.equal(validateTheatreReplay({...data,revision},REV).compatibility,'verified-compatible');
   assert.equal(validateTheatreReplay({...data,revision:REV},REV).compatibility,'exact');
   assert.throws(()=>validateTheatreReplay(data,''),/Source revision unavailable/);
   assert.throws(()=>validateTheatreReplay({...data,version:1},REV),/Legacy/);

@@ -235,6 +235,43 @@ export class TouringAudio {
     this.#gain = this.#context = null;
   }
 
+  // The podium schedules only the stereo score, using the same pool and gain.
+  updateCelebration() {
+    if (!this.#active) return !this.#failed;
+    try {
+      if (this.#context.state !== 'running') throw Error('Audio interrupted');
+      if (this.#musicVoice) this.#musicVoice.target = 1;
+      this.#scheduleMusic(this.#context.currentTime);
+      return true;
+    } catch {
+      this.#fail();
+      return false;
+    }
+  }
+  #scheduleMusic(now) {
+    const ctx = this.#context;
+    if (this.#musicVoice && this.#musicGain) {
+      if (this.#musicNext < now) this.#musicNext=now+.006;
+      while (this.#musicFree.length && this.#musicNext < now+.09) {
+        const buffer=this.#musicFree.pop();
+        this.#musicVoice.write(buffer.getChannelData(0),buffer.getChannelData(1));
+        const source=ctx.createBufferSource();
+        source.buffer=buffer;
+        source.connect(this.#musicGain);
+        this.#musicSources.add(source);
+        source.onended=()=>{
+          source.onended=null;
+          if (ctx!==this.#context) return;
+          source.disconnect();
+          this.#musicSources.delete(source);
+          this.#musicFree.push(buffer);
+        };
+        source.start(this.#musicNext);
+        this.#musicNext+=BLOCK_SECONDS;
+      }
+    }
+  }
+
   update(player, command, course, race=null) {
     if (!this.#active) return !this.#failed;
     try {
@@ -265,26 +302,7 @@ export class TouringAudio {
         source.start(this.#next);
         this.#next += BLOCK_SECONDS;
       }
-      if (this.#musicVoice && this.#musicGain) {
-        if (this.#musicNext < now) this.#musicNext=now+.006;
-        while (this.#musicFree.length && this.#musicNext < now+.09) {
-          const buffer=this.#musicFree.pop();
-          this.#musicVoice.write(buffer.getChannelData(0),buffer.getChannelData(1));
-          const source=ctx.createBufferSource();
-          source.buffer=buffer;
-          source.connect(this.#musicGain);
-          this.#musicSources.add(source);
-          source.onended=()=>{
-            source.onended=null;
-            if (ctx!==this.#context) return;
-            source.disconnect();
-            this.#musicSources.delete(source);
-            this.#musicFree.push(buffer);
-          };
-          source.start(this.#musicNext);
-          this.#musicNext+=BLOCK_SECONDS;
-        }
-      }
+      this.#scheduleMusic(now);
       return true;
     } catch {
       this.#fail();

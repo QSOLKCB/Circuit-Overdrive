@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {createReplaySession,MAX_SEEK_STEPS} from '../src/replay-theatre-core.js';
 import {driverIntent} from './driver.mjs';
 import {installReplayController,selectReplayController,armReplayController} from './browser-controller-driver.mjs';
 
@@ -89,6 +91,27 @@ async function drive(page, courseId, seed, cruise) {
   },{courseId,seed,cruise});
 }
 
+async function verifyEventReplay(page, result, round, course, seed) {
+  const revision = await page.locator('meta[name=game-revision]').getAttribute('content');
+  assert.match(revision,/^[a-f0-9]{40}$/,'Serve a source-stamped package');
+  const [file] = await Promise.all([page.waitForEvent('download'),click(page,'woc-replay')]);
+  const data = JSON.parse(await readFile(await file.path(),'utf8'));
+  assert.equal(data.course,course);
+  assert.equal(data.seed,seed);
+  assert.equal(data.revision,revision);
+  assert.equal(data.ticks,result.ticks);
+  assert.match(file.suggestedFilename(),new RegExp('^woc-[a-f0-9]{32}-r'+round+'-'+course+'-'+seed+'-replay\\.json$'));
+  const session = createReplaySession(data,revision);
+  while (!session.finished) session.advance(MAX_SEEK_STEPS);
+  assert.deepEqual(session.race.order.map(({id,finishTicks,recoveries})=>({id,finishTicks,recoveries})),
+    result.classification);
+  if (process.env.EVIDENCE_DIR) await file.saveAs(process.env.EVIDENCE_DIR+'/'+file.suggestedFilename());
+  return data;
+}
+async function waitForSave(page,round) {
+  await page.waitForFunction(n => document.querySelector('#woc-save-status').textContent.includes('Saved locally · '+n+' / 4'),
+    round,{polling:30});
+}
 async function lifecycle(source) {
   const page = await openPage(source);
   const press = async id => {
@@ -167,15 +190,22 @@ try {
   assert.match(await page.locator('#status').textContent(),/Round 1.*Chequered flag.*Overdrive Opening Cup/);
   assert.deepEqual(await page.locator('#woc tbody tr').evaluateAll(rows=>rows.map(r=>Number(r.dataset.driver))),
     result.classification.map(d=>d.id));
-  await click(page,'woc-next');
-  assert.equal(await view(page),'briefing');
-  assert.match(await page.locator('#woc-label').textContent(),/Round 2/);
-  assert.match(await page.locator('#status').textContent(),/Round 2.*Event briefing.*Redline Mountain Challenge/);
+  await verifyEventReplay(page,result,1,'speedway',701);
+  await waitForSave(page,1);
   await click(page,'woc-back');
   await click(page,'woc-leave');
   assert.equal(await phase(page),'menu');
   assert.equal(await page.locator('body').getAttribute('data-course'),'ridge');
   assert.equal(await page.locator('#choose-ridge').getAttribute('aria-pressed'),'true');
+  await page.reload();
+  await click(page,'enter-woc');
+  await click(page,'woc-continue');
+  assert.equal(await view(page),'results');
+  assert.equal(await page.locator('#woc-replay').count(),0);
+  await click(page,'woc-next');
+  assert.equal(await view(page),'briefing');
+  assert.match(await page.locator('#woc-label').textContent(),/Round 2/);
+  assert.match(await page.locator('#status').textContent(),/Round 2.*Event briefing.*Redline Mountain Challenge/);
   await page.close();
   for (const source of ['standard','touch']) await lifecycle(source);
   assert.deepEqual(errors,[]);

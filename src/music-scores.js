@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Original QSOL-IMC race scores. Compact data, not sampled music or copyrighted melodies.
 // BPS-001 owns synthesis, timing and PCM. These are authored mathematical arrangements.
-export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER'});
+export const MUSIC_TITLES=Object.freeze({speedway:'NEON HORIZON',ridge:'IRON HORSEPOWER',championship:'DIGITAL DOMINION'});
 
 function phrase(root,melody,variation) {
   if (!Array.isArray(melody) || melody.length!==16) throw RangeError('16 melody steps required');
@@ -39,13 +39,12 @@ const IRON=Object.freeze([
 ]);
 
 
-// Future-mode scores remain dormant until the corresponding game mode ships.
+// Only the championship arrangement from this catalogue is selectable in a live race.
 // Each has authored interval motifs, rhythmic placement and a distinct harmonic
 // progression. They are reference music, not a playable gameplay-mode registry.
 export const FUTURE_MUSIC_TITLES=Object.freeze({
   rocket:'RASTER VELOCITY',
   night:'MIDNIGHT PROTOCOL',
-  championship:'DIGITAL DOMINION',
   derby:'STEEL RIOT'
 });
 const FUTURE_PROFILES=Object.freeze({
@@ -132,17 +131,19 @@ function futurePhrase(root,motif,index,mode) {
   });
   return {bass,lead,arp,drums};
 }
-/** Future-mode catalogue only. Never called by active course/music selection.
- * Data can be rendered offline now and activated only when a later mode ships.
- */
-export function scoreForFutureMode(mode) {
-  if (!Object.hasOwn(FUTURE_PROFILES,mode)) throw RangeError('Unknown future soundtrack');
+function catalogueScore(mode) {
   const profile=FUTURE_PROFILES[mode],motifs=FUTURE_MELODIES[mode];
   return {id:profile.id,mode:profile.mode,bpm:profile.bpm,seed:profile.seed,
     phrases:profile.roots.map((root,index)=>futurePhrase(root,motifs[index%motifs.length],index,profile.mode))};
 }
 
+export function scoreForFutureMode(mode) {
+  if (!Object.hasOwn(FUTURE_MUSIC_TITLES,mode)) throw RangeError('Unknown future soundtrack');
+  return catalogueScore(mode);
+}
+
 export function scoreForCourse(course) {
+  if (course==='championship') return catalogueScore(course);
   if(!Object.hasOwn(MUSIC_TITLES,course))throw RangeError('Unknown music course');
   const ridge=course==='ridge',form=ridge?IRON:NEON;
   return {

@@ -14,11 +14,10 @@ import {MUSIC_TITLES,FUTURE_MUSIC_TITLES,scoreForCourse,scoreForFutureMode} from
 const catalogue=[
   {id:'rocket',title:'RASTER VELOCITY',mode:'demoscene',bpm:180,frames:512000},
   {id:'night',title:'MIDNIGHT PROTOCOL',mode:'cyberpunk',bpm:144,frames:640000},
-  {id:'championship',title:'DIGITAL DOMINION',mode:'anthem',bpm:120,frames:768000},
   {id:'derby',title:'STEEL RIOT',mode:'industrial',bpm:150,frames:614400}
 ];
-test('four future scores have separate authored material and reproducible PCM, without activating future races',()=>{
-  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge']);
+test('three future scores have separate authored material and reproducible PCM, without activating future races',()=>{
+  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge','championship']);
   assert.deepEqual(Object.keys(FUTURE_MUSIC_TITLES),catalogue.map(c=>c.id));
   const hashes=new Set();
   for(const {id,title,mode,bpm,frames} of catalogue){

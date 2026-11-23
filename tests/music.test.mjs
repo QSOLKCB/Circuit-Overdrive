@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import test from 'node:test';
+import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {scoreForCourse,MUSIC_TITLES} from '../src/music-scores.js';
 import {musicForCourse,RaceMusic} from '../src/music.js';
@@ -8,8 +9,8 @@ import {createRace} from '../src/sim.js';
 import {ridge} from '../src/ridge.js';
 import {track} from '../src/track.js';
 
-test('two original score shapes compile to bounded stereo PCM and retain exact sample identity',()=>{
-  const expected=[['speedway',120,768000],['ridge',150,614400]];
+test('three original score shapes compile to bounded stereo PCM and retain exact sample identity',()=>{
+  const expected=[['speedway',120,768000],['ridge',150,614400],['championship',120,768000]];
   for(const [course,bpm,samples] of expected){
     const data=scoreForCourse(course);
     assert.equal(data.bpm,bpm);
@@ -100,4 +101,28 @@ test('soundtrack shares one gesture-owned device, remains optional and survives 
   assert(ctx.sources.length>count,'music and engine start again after pause');
   assert.equal(opened,1,'no second AudioContext');
   assert.equal(ctx.buffers.length,8,'bounded buffer pool');
+});
+
+test('the live championship uses the complete v0.6.2 anthem and schedules only music on the podium', async () => {
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  assert.equal(sha(JSON.stringify(scoreForCourse('championship'))),
+    '4c53018c378a567cd22566085a6f1bad71e078003384f806536f7820792b7164');
+  assert.equal(sha(musicForCourse('championship').wavLoop()),
+    '84fc886c1d5bef8348f921cdba50f501ab59cd039c83407dd51f58a722f8ce8b');
+  const ctx = fakeAudioContext();
+  const audio = new TouringAudio({contextFactory:()=>ctx});
+  assert(audio.selectMusic('championship'));
+  assert.equal(ctx.buffers.length,0);
+  assert(await audio.start());
+  assert(audio.updateCelebration());
+  assert(ctx.sources.length>0 && ctx.sources.every(s=>s.buffer.numberOfChannels===2));
+  assert(ctx.sources.some(s=>s.buffer.getChannelData(0).some(x=>x!==0)));
+  audio.stop();
+  ctx.advance(.2);
+  const count = ctx.sources.length;
+  assert(audio.updateCelebration());
+  assert.equal(ctx.sources.length,count);
+  assert(await audio.start());
+  ctx.state='interrupted';
+  assert.equal(audio.updateCelebration(),false);
 });

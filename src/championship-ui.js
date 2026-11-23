@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
-import {CALENDAR, POINTS, championshipStandings, createChampionship} from './championship.js';
+import {CALENDAR, POINTS, championshipStandings, createChampionship,
+  eventReplayMetadata, resumeChampionship} from './championship.js';
+import {championshipStorage} from './championship-storage.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {drawCoursePreview} from './map.js';
 
@@ -54,10 +56,51 @@ function calendarList(history) {
   return list;
 }
 
-export function championshipUI({revision, grid, leave, changed, formatTime}) {
+export function championshipUI({revision, grid, leave, changed, formatTime, downloadReplay, anthem}) {
   const panel = $('woc'), content = $('woc-content'), actions = $('woc-actions');
-  let cup = null, view = null;
   let announcement = '';
+  const slot = championshipStorage(() => window.localStorage, () => navigator.locks);
+  const status = $('woc-save-status');
+  let cup = null, view = null, stored = null, opened = false, tape = null;
+  let writes = Promise.resolve(), conflict = false;
+
+  function readSlot() {
+    const {available,text} = slot.read();
+    if (!available) {
+      status.textContent = 'Storage unavailable. Progress can be kept in this tab.';
+      return;
+    }
+    stored = text;
+    conflict = false;
+    cup = tape = null;
+    status.textContent = '';
+    if (text !== null) {
+      try {
+        cup = resumeChampionship(text,revision);
+        status.textContent = 'Local save loaded · '+cup.history.length+' / 4 events scored.';
+      } catch (error) {
+        status.textContent = 'Save could not be loaded. '+(error instanceof SyntaxError ?
+          'Invalid JSON.' : error.message+'.')+' Start a new championship to replace it.';
+      }
+    }
+  }
+  function persist() {
+    const owner = cup, next = owner.serialize();
+    status.textContent = 'Saving championship…';
+    writes = writes.then(async () => {
+      const result = await slot.write(stored,next);
+      if (result === 'saved') stored = next;
+      if (cup !== owner) return;
+      conflict = result === 'conflict';
+      status.textContent = result === 'saved' ? 'Saved locally · '+owner.history.length+' / 4 events scored.' :
+        conflict ? 'Another tab changed the save. This run is in this tab. Load the saved championship from the menu.' :
+        'Save unavailable. Progress is in this tab only.';
+      if (view === 'hub' && conflict && !$('woc-load')) addLoadButton();
+    });
+  }
+  function addLoadButton() {
+    button('load','Load saved championship',async () => { await writes; readSlot(); show('hub'); });
+  }
 
   function button(id, label, handler, primary = false) {
     const node = element('button',label);
@@ -78,8 +121,10 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
   }
   function newCup() {
     const id = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2,'0')).join('');
+    tape = null;
     cup = createChampionship(id,revision);
     cup.prepareEvent();
+    persist();
     show('briefing');
   }
   function next() {
@@ -112,7 +157,9 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
       content.append(calendarList(history));
       if (cup) button('continue','Continue championship',() => show(cup.phase === 'complete' ? 'trophy' :
         cup.phase === 'event-completed' ? 'results' : 'briefing'),true);
-      button('new',cup ? 'New championship' : 'Start championship',() => cup ? show('replace') : newCup(),!cup);
+      if (conflict) addLoadButton();
+      const replacing = cup || stored !== null;
+      button('new',replacing ? 'New championship' : 'Start championship',() => replacing ? show('replace') : newCup(),!cup);
       button('calendar','Event calendar',() => show('calendar'));
       button('standings','Standings',() => show('standings'));
       button('leave','Standalone racing',home);
@@ -137,7 +184,7 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
       route.height = 120;
       route.setAttribute('aria-label',event.course.name+' course map');
       drawCoursePreview(route,event.course);
-      content.append(route,pointsBoard(history));
+      content.append(route,pointsBoard(history),element('p','Soundtrack · Digital Dominion / 120 BPM'));
       button('grid','Start event',grid,true);
       button('back','Championship menu',back);
     } else if (screen === 'results') {
@@ -148,6 +195,12 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
       content.append(eventBoard(history.at(-1),history,formatTime));
       if (cup.nextEvent) content.append(element('p','Up next · '+cup.nextEvent.name+' · '+cup.nextEvent.course.name));
       button('next',cup.nextEvent ? 'Continue to round '+(n+1) : 'View championship trophy',next,true);
+      if (tape) button('replay','Save event replay',() => {
+        const data = tape.recording.export(), meta = tape.meta;
+        if (['version','revision','course','seed','ticks'].every(key => data[key] === meta[key])) {
+          downloadReplay(data,meta.filename);
+        }
+      });
       button('back','Championship menu',back);
     } else if (screen === 'trophy') {
       const winner = championshipStandings(history)[0];
@@ -162,11 +215,12 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
         content.append(event);
       }
       button('new','New championship',() => show('replace'),true);
+      button('anthem','Play Digital Dominion',anthem);
       button('back','Championship menu',back);
     }
     announcement = label.textContent+' · '+title.textContent;
     panel.scrollTop = 0;
-    changed();
+    changed(screen);
     focus();
   }
   return {
@@ -174,8 +228,14 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
     get visible() { return view !== null; },
     get active() { return cup?.phase === 'event-active'; },
     get roundName() { return cup?.nextEvent?.name; },
-    open:() => show('hub'), focus, back,
+    get celebrating() { return view === 'trophy'; },
+    open() {
+      if (!opened) { readSlot(); opened = true; }
+      show('hub');
+    },
+    focus, back,
     takeGrid() {
+      tape = null;
       const race = cup.startEvent();
       hide();
       return race;
@@ -183,6 +243,12 @@ export function championshipUI({revision, grid, leave, changed, formatTime}) {
     abandon(race) { cup.abandonEvent(race); },
     briefing:() => show('briefing'),
     step(race,command) { cup.stepEvent(race,command); },
-    finish(race) { cup.settleEvent(race); show('results'); }
+    finish(race,recording) {
+      cup.settleEvent(race);
+      const meta = eventReplayMetadata(cup,cup.history.length-1);
+      tape = meta && recording.complete ? {recording,meta} : null;
+      persist();
+      show('results');
+    }
   };
 }

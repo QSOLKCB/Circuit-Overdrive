@@ -1,6 +1,6 @@
 # CO-REPLAY-001 — REPLAY THEATRE
 
-**Milestone:** v0.6.2 candidate · **Status:** owner review required.
+Replay Theatre shipped in v0.6.2.
 
 Replay Theatre is a **source-bound, offline-first WebGL spectator**. It re-simulates all six cars from a saved recording’s accepted 60 Hz commands, seeded field and recovery requests. It does not take pre-recorded arbitrary car positions, invent checkpoints or change physics.
 
@@ -24,6 +24,7 @@ A source stamp is mandatory. Playback accepts either the **exact site revision**
 | --- | --- |
 | v0.6.0 — Arcade Certification Lab | `020e5dc4c7e2485e01f0f47c698f80ee58fe228b` |
 | v0.6.1 — SYNTH//OVERDRIVE | `d81a2d4a09286029b87c2ac201edf8ab6448e023` |
+| v0.6.2 — Replay Theatre | `c97ee47e7577337032a55eb2e6ae53b855285573` |
 
 The source comparison between these tags contained no physics/AI/track/replay-authority changes. The Node test `tests/replay-theatre.test.mjs` pins the exact Git blob IDs of the authoritative files in v0.6.1 and fails if any authority changes are made without an explicit compatibility policy revision.
 
@@ -55,4 +56,4 @@ The complete packaged browser test runs from `tests/browser-theatre.mjs`, integr
 
 **Remaining limitations:** real hardware input to the Theatre, physical-mobile browser UX, long-seek performance on older devices, and sound-synchronised replays require separate owner testing. Future editions may add trusted-compatible physics manifests or short video export, but no outbound service is needed for the current file-sharing workflow.
 
-**Release gate:** owner review, full green CI and accepted real-browser playback before the owner manually tags v0.6.2.
+CO-007 also exports an ordinary v2 tape for each completed championship round in a stamped build. Its source, course, seed and tick count match that round. Open the downloaded JSON with the same Theatre controls. The championship's other events and points live in its separate local save. Importing a recording can only start spectator playback.

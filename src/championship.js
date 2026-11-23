@@ -169,3 +169,15 @@ export function resumeChampionship(text, revision) {
   const phase = history.length === CALENDAR.length ? 'complete' : history.length ? 'event-completed' : 'event-ready';
   return session(id,revision,history,phase);
 }
+
+// Keep the Theatre's v2 tape unchanged. Its source, course, seed and duration
+// identify the race. The filename also identifies this specific championship.
+export function eventReplayMetadata(cup, index) {
+  const result = cup.history[index];
+  if (!cup.revision || !result) return null;
+  return Object.freeze({
+    version:2, revision:cup.revision, course:result.course, seed:result.seed,
+    ticks:result.elapsedTicks + 180, // v0.6.2's three-second fixed-tick countdown
+    filename:'woc-'+cup.id+'-r'+(index+1)+'-'+result.course+'-'+result.seed+'-replay.json'
+  });
+}
