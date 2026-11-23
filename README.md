@@ -1,6 +1,6 @@
 # Circuit Overdrive
 
-Start sixth in the Ignition GT No. 27 and race five rivals on either course. All six cars use the same four-wheel vehicle simulation.
+Start sixth in the Ignition GT No. 27. Race five rivals in a standalone event or compete for the World Overdrive Championship. All six cars use the same four-wheel vehicle simulation.
 
 | Course | Format | Landmarks |
 | --- | --- | --- |
@@ -8,6 +8,14 @@ Start sixth in the Ignition GT No. 27 and race five rivals on either course. All
 | Redline Ridge | One 4.51 km mountain sprint | Forest switchbacks, a 270 m valley bridge, a 170 m tunnel and a downhill run to the flag |
 
 For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
+
+## World Overdrive Championship
+
+Choose **World Overdrive Championship** from course select. The Opening Cup and Speedway Grand Prix each cover three laps of Overdrive Speedway. The Mountain Challenge and championship finale take the six-car field through Redline Ridge. Each round has its own race seed.
+
+At your chequered flag the six positions earn **10, 6, 4, 3, 2 and 1 points**. Rivals still racing keep their positions at the flag. The results show your award, every driver's total and the leader. After the fourth round the trophy goes to the standings winner. **Digital Dominion** accompanies the championship through the existing music mix.
+
+Progress saves between events on the same browser, origin and build. Use **Continue championship** to pick up the competition. In a stamped build, **Save event replay** downloads that round's Theatre tape. [Calendar, countback rules and player guide](docs/championship.md)
 
 ## Start the game
 
@@ -36,13 +44,13 @@ For a gamepad or wheel, open **Controller**, select the exposed slot, and set it
 
 At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Recordings from Pages and the offline ZIP also carry the exact source revision. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
 
-**NEW — [Replay Theatre](replay-theatre.html):** Import a locally saved JSON replay and watch all six cars in WebGL, switch the follow camera, adjust playback speed, and seek along an authoritative tick timeline. Shared files never leave the browser. Source-stamped replays from v0.6.0 and v0.6.1 are admitted only because their physics-source fingerprints match the tested Theatre build. Unstamped v1 recordings and other incompatible revisions are rejected with an explanation. See [Replay Theatre guide](docs/replay-theatre.md).
+**Replay Theatre.** Import a locally saved JSON replay and watch all six cars in WebGL, switch the follow camera, adjust playback speed, and seek along an authoritative tick timeline. Shared files never leave the browser. Source-stamped replays from v0.6.0, v0.6.1 and v0.6.2 are admitted only because their physics-source fingerprints match the tested Theatre build. Unstamped v1 recordings and other incompatible revisions are rejected with an explanation. See [Replay Theatre guide](docs/replay-theatre.md).
 
 ## Cockpit and sound
 
 The position display updates on every accepted race tick. A brief position-change notice waits for a place to hold for 0.2 seconds, so a door-to-door fight keeps a readable HUD. The map retains your latest completed lap or sprint split. The results highlight your fastest Speedway lap.
 
-**Settings** opens the master, engine and tyre/effects mix. Each control ranges from silence to full level. The original 48 kHz procedural mix follows the player’s drivetrain and grounded tyres. Listen for the shift lift, brake scrub, guardrail tap and the short reflection in the Ridge tunnel. Audio starts when you take the wheel. Pause or mute fades it out.
+**Settings** opens the master, engine, tyre/effects and music mix. Each control ranges from silence to full level. The original 48 kHz procedural mix follows the player’s drivetrain and grounded tyres. Listen for the shift lift, brake scrub, guardrail tap and the short reflection in the Ridge tunnel. Audio starts when you take the wheel. Pause or mute fades it out.
 
 **Driving effects** follows the browser’s reduced-motion and coarse-pointer capabilities by default. Mobile mode reduces the pixel dimensions to 75%. Full mode draws smoke during physical tyre slip, dust on the apron, tyre marks and brief sparks at a rail impact. Reduced mode retains up to 12 tyre marks and suppresses moving particles. Settings are saved locally when browser storage is available. Both chase cameras follow road grade, anticipate corners and give nearby rivals a little more room in the frame.
 

@@ -164,7 +164,7 @@ function loadRecordedRace(data,sourceText,fileName){
   setControls(true);
   dashboard(true);
   const label=candidate.recording.compatibility==='exact'?'exact source':
-    'verified compatible race physics (v0.6.0/v0.6.1)';
+    'verified compatible race physics at '+candidate.recording.revision;
   notify('Loaded '+candidate.recording.course+' · '+candidate.totalTicks+
     ' ticks · '+label+'. Press Play or move the timeline.');
   frameTime=null;

@@ -1,12 +1,12 @@
 # Circuit Overdrive — Roadmap
 
 **Owner:** QSOL-IMC · **Project:** [Circuit Overdrive](https://github.com/QSOLKCB/Circuit-Overdrive) · **Engine:** [VANILLAJS](https://github.com/QSOLKCB/VANILLAJS)  
-**Updated:** 2026-11-23 · **Licence:** Apache-2.0
+**Updated:** 2026-11-24 · **Licence:** Apache-2.0
 
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.6.0; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
+This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.6.2; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
 
 ## 1. Non-negotiable project contracts
 
@@ -28,8 +28,9 @@ This is the forward development programme, not a claim that proposed features al
 | **v0.5.0** | CO-005 — Controller Profiles | Standard gamepads, generic/digital/steering-wheel profile calibration, touch controls, and input-source-independent deterministic replay |
 | **v0.6.0** | CO-006 — Arcade Certification Lab | Device diagnostics, reproducible source-stamped offline ZIP, SHA-256 receipts, endurance evidence, keyboard handling and parallel browser verification |
 | **v0.6.1** | CO-MUSIC-001 — SYNTH//OVERDRIVE | Bounded Phrase Sequencer, two playable original chiptune scores and four dormant future-mode compositions, WAV/score export and checksums |
+| **v0.6.2** | CO-REPLAY-001 — Replay Theatre | Source-stamped offline six-car playback, bounded seek, camera selection and verified revision compatibility |
 
-**Current published tag:** [v0.6.1](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.6.1) at `d81a2d4a09286029b87c2ac201edf8ab6448e023`. Work after this tag belongs to future releases, not retroactive v0.6.1 claims.
+**Published baseline** [v0.6.2](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.6.2) is at `c97ee47e7577337032a55eb2e6ae53b855285573`.
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -49,7 +50,7 @@ This is the forward development programme, not a claim that proposed features al
 | **IRON HORSEPOWER** | Industrial guitar-like chiptune · 150 BPM | Redline Ridge — playable now |
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive (CO-010) — soundtrack catalogue only until mode exists |
 | **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — soundtrack catalogue only until mode exists |
-| **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — soundtrack catalogue only until mode exists |
+| **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active in the v0.7.0 candidate |
 | **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |
 
 Create distinct original melodies, bass figures, drums, harmonies and timbres. Industrial guitar-like tones may use bounded Karplus–Strong pluck, distortion and filtered power-chord synthesis. No sampled commercial recordings, existing copyrighted songs, music-generation service or runtime downloads.
@@ -80,9 +81,11 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Delivery:** one focused **CO-REPLAY-001 — Replay Theatre** PR, including accessible keyboard, controller and touch-operated browser controls, static-package allowlist and source stamp, bounded-memory/error UX, Node unit tests, real-browser replay completion on both courses, compatibility checks, and GitHub Pages/public verification. Owner review controls merge, tag and publication.
 
-**Release:** proposed `v0.6.2` after v0.6.1; do not mark as implemented until accepted and published.
+**Release:** published as v0.6.2 after PR #20.
 
 ## 5. Road to v1.0.0 — gameplay expansions
+
+**v0.7.0 review candidate.** CO-007 builds a four-event World Overdrive Championship on the two existing courses. Four seeds drive the established six-car simulation. The player flag settles each round, local saves retain its six-car order, and the final standings award the trophy. Digital Dominion and independent single-race Theatre exports accompany the competition. The owner controls acceptance and publication. [Championship guide](docs/championship.md) · [Acceptance record](docs/co-007-acceptance.md)
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |

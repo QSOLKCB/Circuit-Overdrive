@@ -34,8 +34,10 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 | Shard | Browser coverage |
 | --- | --- |
 | `speedway` | Speedway smoke test, Speedway finish with replay verification, mobile touch |
-| `ridge` | Ridge smoke test, Ridge finish with replay verification |
-| `controllers` | Standard gamepad, custom profiles and wheel mapping, controller diagnostics |
+| `ridge` | Ridge smoke test, Ridge finish with replay verification, full four-round championship |
+| `controllers` | Standard gamepad, custom profiles and wheel mapping, controller diagnostics, Replay Theatre |
+
+The championship runner checks all four live flag orders, awards and running totals against a separate field and scoreboard oracle. It exercises boundary saves, an interrupted round, storage failure, trophy countback, four event replays and spectator isolation. The Ridge artifact retains four JSON tapes, the score report and presentation captures.
 
 Before deployment, CI runs up to three browser shards on separate Ubuntu runners against the same verified release candidate. Each shard retains its own evidence, including logs from a failed suite. The required `verify` check waits for packaging and all three browser results. The workflow applies the bounded parallelism and shared-artifact patterns from OPT revision `8dc06e99e48711497380fb11237f5fe12b6c556d`. [OPT-PAR-001](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-PAR-001-bounded-parallel-execution.md) · [OPT-FAN-001](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-FAN-001-shared-materialization-fanout.md)
 

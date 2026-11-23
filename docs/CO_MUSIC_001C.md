@@ -1,5 +1,7 @@
 # CO-MUSIC-001C — Original Future-Mode Chiptune Collection
 
+CO-007 activates the original Digital Dominion arrangement for the championship. The catalogue below records the v0.6.1 assignments. [Current player guide](championship.md)
+
 **Status:** review candidate for the final v0.6.1 music PR. The future gameplay modes do not yet exist.
 
 Six original, deterministic soundtrack arrangements are represented as **inspectable note, bass, arpeggio and percussion data** in `src/music-scores.js`.

@@ -5,6 +5,8 @@ import {driverIntent} from './driver.mjs';
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/');
 const scenic = process.argv.includes('--ridge');
+const championship = process.argv.includes('--championship');
+assert(!(championship && scenic),'The championship measurement uses the Opening Cup');
 const browser = await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:['--enable-gpu','--use-angle=gl']});
 try {
@@ -32,7 +34,11 @@ try {
   const chromeHeight = await page.locator('#world').evaluate(canvas => innerHeight-canvas.clientHeight);
   await page.setViewportSize({width:1920,height:1080+chromeHeight});
   if (scenic) await page.locator('#choose-ridge').click();
-  await page.locator('#start').click();
+  if (championship) {
+    await page.locator('#enter-woc').click();
+    await page.locator('#woc-new').click();
+    await page.locator('#woc-grid').click();
+  } else await page.locator('#start').click();
   await page.keyboard.press('w');
   await page.waitForFunction(() => document.body.dataset.phase === 'racing');
   const sample = await page.evaluate(async scenic => {
@@ -112,5 +118,5 @@ try {
   assert.equal(sample.width,1920);
   assert.equal(sample.height,1080);
   assert(sample.sections.every(s=>s.samples>=60),'insufficient frame intervals');
-  console.log(JSON.stringify({browser:browser.version(),course:scenic?'ridge':'speedway',...sample},null,2));
+  console.log(JSON.stringify({browser:browser.version(),event:championship?'Overdrive Opening Cup':'standalone',course:scenic?'ridge':'speedway',...sample},null,2));
 } finally { await browser.close(); }
