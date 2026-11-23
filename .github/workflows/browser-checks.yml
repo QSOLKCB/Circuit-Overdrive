@@ -1,0 +1,89 @@
+name: Browser checks
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: Local archive or public Pages deployment
+        required: true
+        type: string
+      archive-id:
+        description: Verified offline artifact from this run
+        type: string
+      page-url:
+        description: URL returned by the Pages deployment job
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    name: ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [speedway, ridge, controllers]
+    env:
+      REPLAY_REVISION: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Download the verified offline archive
+        if: inputs.target == 'local'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          artifact-ids: ${{ inputs.archive-id }}
+          merge-multiple: true
+          path: ${{ runner.temp }}/offline
+      - name: Install the browser driver outside the application
+        run: npm install --prefix "$RUNNER_TEMP/driver" --no-save --ignore-scripts --no-audit --no-fund playwright@1.64.0
+      - name: Verify assets and drive the browser shard
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/driver/node_modules/playwright/index.mjs
+          CHROME_BIN: /usr/bin/google-chrome
+          TARGET: ${{ inputs.target }}
+          PAGE_URL: ${{ inputs.page-url }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          args=("--shard=$SHARD")
+          case "$TARGET" in
+            local)
+              zip="Circuit-Overdrive-${GITHUB_SHA}.zip"
+              (cd "$RUNNER_TEMP/offline" && sha256sum --strict --check "$zip.sha256")
+              python3 -m zipfile -e "$RUNNER_TEMP/offline/$zip" "$RUNNER_TEMP/unpacked"
+              python3 -m http.server 8000 --bind 127.0.0.1 --directory "$RUNNER_TEMP/unpacked" > "$RUNNER_TEMP/server.log" 2>&1 &
+              server=$!
+              trap 'kill "$server"' EXIT
+              url=http://127.0.0.1:8000/Circuit-Overdrive/
+              curl --retry 10 --retry-connrefused --retry-delay 1 -fs "$url" -o /dev/null || {
+                cat "$RUNNER_TEMP/server.log"
+                exit 1
+              }
+              ;;
+            public)
+              : "${PAGE_URL:?Missing Pages deployment URL}"
+              url="${PAGE_URL%/}/"
+              args+=(--wait-for-cdn)
+              ;;
+            *) exit 1 ;;
+          esac
+          bash scripts/browser-pages.sh "$url" "$RUNNER_TEMP/evidence" "${args[@]}"
+          printf '%s browser shard `%s` passed for `%s` at %s\n' "$TARGET" "$SHARD" "$GITHUB_SHA" "$url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ${{ inputs.target }}-browser-${{ github.sha }}-${{ matrix.shard }}
+          path: ${{ runner.temp }}/evidence
+          if-no-files-found: error
+          retention-days: 14
+          overwrite: true
