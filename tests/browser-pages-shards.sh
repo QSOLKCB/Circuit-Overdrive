@@ -35,7 +35,7 @@ ridge-smoke|tests/browser-smoke.mjs $url --ridge
 |tests/browser-profiles.mjs $url
 |tests/browser-touch.mjs $url
 |tests/browser-lab.mjs $url
-|tests/browser-theatre.mjs $url
+theatre|tests/browser-theatre.mjs $url
 speedway|tests/browser-finish.mjs $url --require-replay --software-replay
 ridge|tests/browser-finish.mjs $url --require-replay --software-replay --ridge
 EOF
