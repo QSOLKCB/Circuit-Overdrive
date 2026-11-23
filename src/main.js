@@ -1,21 +1,22 @@
 // SPDX-License-Identifier: Apache-2.0
 import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
-import {defaultVehicleSound} from '../vendor/vanillajs/modules/vehicle-audio/index.js';
-import {RaceAudio} from '../vendor/vanillajs/demos/horizon-lab/race-audio.js';
+import {TouringAudio, DEFAULT_VOLUMES} from './audio.js';
 import {attachRaceInput} from './input.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
-import {createMap} from './map.js';
+import {createMap, drawCoursePreview} from './map.js';
 import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, progress, STEP} from './sim.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('world');
 const clock = new FixedClock({step:STEP});
-const audio = new RaceAudio({
-  ...defaultVehicleSound(), cylinders:8, exhaustTone:.75, engineGain:.16, exhaustGain:.23, seed:27
-});
+const audio = new TouringAudio();
+const motion = matchMedia('(prefers-reduced-motion: reduce)');
+const mixer = Object.keys(DEFAULT_VOLUMES);
+let reducedEffects = motion.matches;
+let quality = 'auto';
 let race = createRace();
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
@@ -23,7 +24,8 @@ let lastTime = null, lastPanel = '', soundGeneration = 0;
 const phase = () => error ? 'error' : grid ? 'grid' : race.phase;
 const driving = () => ['countdown','racing'].includes(phase());
 const focused = () => document.activeElement === canvas && document.hasFocus() && !document.hidden;
-const input = attachRaceInput(window, () => driving() && focused());
+const input = attachRaceInput(window, () => driving() && focused(), handleAction);
+let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 const set = (id, value) => {
   const element = $(id), text = String(value);
   if (element.textContent !== text) element.textContent = text;
@@ -54,11 +56,18 @@ function resetClock() {
   clock.reset();
   input.clear();
 }
+function resetPresentation() {
+  scene?.resetEffects();
+  announcedPlace = candidatePlace = race.player.position;
+  candidateSince = placeUntil = 0;
+  placeMessage = '';
+}
 function enterGrid() {
   if (error) return;
   stopAudio();
   resetClock();
   race = createRace(race.seed, race.course);
+  resetPresentation();
   grid = true;
   canvas.focus({preventScroll:true});
   updatePanel();
@@ -72,7 +81,7 @@ function pause() {
   updatePanel();
 }
 function resume() {
-  if (phase() !== 'paused' || document.hidden || $('help').open) return;
+  if (phase() !== 'paused' || document.hidden || $('help').open || $('options').open) return;
   canvas.focus({preventScroll:true});
   if (!focused()) return;
   resetClock();
@@ -93,8 +102,9 @@ function updatePanel() {
   $('restart').className = mode === 'finished' ? 'primary' : '';
   $('courses').hidden = !['paused','finished'].includes(mode);
   $('results').hidden = mode !== 'finished';
-  $('lights').hidden = !driving();
-  const titles = {grid:'On the grid', paused:'Race paused', finished:'Race complete', error:'Graphics unavailable'};
+  $('signal').hidden = true;
+  $('lights').hidden = true;
+  const titles = {grid:'On the grid', paused:'Race paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Graphics unavailable'};
   const copy = {grid:'Press W or ↑ to take the wheel and start the countdown.', paused:'Resume when you’re ready to drive.',
     finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
@@ -116,14 +126,21 @@ function updatePanel() {
     const splitTimes = race.course.closed ? race.player.lapTicks : race.player.splitTicks;
     $('splits').replaceChildren(...splitTimes.map((ticks, i) => {
       const item = document.createElement('li'), time = document.createElement('strong');
+      if (race.course.closed && i === splitTimes.indexOf(Math.min(...splitTimes))) {
+        item.className='best-lap';
+        item.title='Fastest lap';
+      }
       item.append((race.course.closed ? 'Lap ' : 'CP ') + (i+1), time);
       time.textContent = formatTime(ticks);
       return item;
     }));
     $('restart').focus({preventScroll:true});
   }
+  if (mode === 'paused' && !document.hidden && !$('help').open && !$('options').open) {
+    $('continue').focus({preventScroll:true});
+  }
   const statuses = {menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
-    racing:'Race live', paused:'Paused', finished:'Chequered flag', error:'Renderer offline'};
+    racing:'Race live', paused:'Paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Renderer offline'};
   set('status', statuses[mode]);
 }
 function graphicsError(message) {
@@ -170,6 +187,7 @@ function selectCourse(course) {
   resetClock();
   race = createRace(race.seed, course);
   camera = 'chase';
+  resetPresentation();
   drawMap = createMap($('map'),course);
   displayCourse(course);
   scene?.dispose();
@@ -185,7 +203,9 @@ $('courses').onclick = () => {
   updatePanel();
   $(race.course.closed ? 'choose-speedway' : 'choose-ridge').focus();
 };
+for (const course of [track,ridge]) drawCoursePreview($('preview-'+course.id),course);
 displayCourse(race.course);
+resetPresentation();
 $('start').onclick = $('restart').onclick = enterGrid;
 $('continue').onclick = resume;
 $('sound').onclick = () => {
@@ -194,6 +214,38 @@ $('sound').onclick = () => {
   if (sound) playAudio();
   else stopAudio();
 };
+function applyQuality() {
+  reducedEffects = quality === 'reduced' || (quality === 'auto' && motion.matches);
+  document.body.dataset.effects = reducedEffects ? 'reduced' : 'full';
+  scene?.resetEffects();
+}
+function saveSettings() {
+  const volumes = Object.fromEntries(mixer.map(name => [name,Number($(name+'-volume').value)/100]));
+  try { localStorage.setItem('circuit-overdrive.settings',JSON.stringify({quality,volumes})); } catch {}
+}
+let saved;
+try { saved=JSON.parse(localStorage.getItem('circuit-overdrive.settings')); } catch {}
+for (const name of mixer) {
+  const slider=$(name+'-volume'), value=saved?.volumes?.[name];
+  slider.value=Math.round(100*(Number.isFinite(value) && value>=0 && value<=1 ? value : DEFAULT_VOLUMES[name]));
+  const apply=()=>{
+    audio.setVolume(name,Number(slider.value)/100);
+    set(name+'-level',slider.value+'%');
+  };
+  apply();
+  slider.oninput=()=>{ apply(); saveSettings(); };
+}
+if (['auto','reduced','full'].includes(saved?.quality)) quality=saved.quality;
+$('effects-quality').value=quality;
+$('effects-quality').onchange=()=>{
+  quality=$('effects-quality').value;
+  applyQuality();
+  saveSettings();
+};
+motion.addEventListener('change',applyQuality);
+applyQuality();
+$('settings').onclick=()=>{ pause(); $('options').showModal(); };
+$('close-settings').onclick=()=>$('options').close();
 $('controls').onclick = () => {
   pause();
   $('help').showModal();
@@ -203,27 +255,43 @@ window.addEventListener('blur', pause);
 canvas.addEventListener('blur', pause);
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 window.addEventListener('pagehide', pause);
-window.addEventListener('keydown', event => {
-  if (event.isComposing || event.ctrlKey || event.altKey || event.metaKey || $('help').open) return;
-  if (event.code === 'Escape' && (driving() || grid || phase() === 'paused')) {
-    event.preventDefault();
-    if (!event.repeat) phase() === 'paused' ? resume() : pause();
-  } else if (grid && focused() && ['KeyW','ArrowUp'].includes(event.code)) {
-    event.preventDefault();
-    if (event.repeat) return;
+function handleAction(action) {
+  if ($('help').open || $('options').open) return false;
+  if (action === 'pause' && (driving() || grid || phase() === 'paused')) {
+    phase() === 'paused' ? resume() : pause();
+    return true;
+  }
+  if (action === 'arm' && grid && focused()) {
     grid = false;
     startRace(race);
     resetClock();
     playAudio();
     updatePanel();
+    return true;
   }
-}, {capture:true});
+  return false;
+}
 function fixedUpdate() {
   if (!driving()) return;
   if (!focused()) { pause(); return; }
-  if (input.camera()) camera = camera === 'chase' ? 'high' : 'chase';
-  if (input.recover() && race.phase === 'racing') recoverCar(race);
-  stepRace(race, input.command());
+  const {command, camera:switchView, recover} = input.sample();
+  if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
+  if (recover && race.phase === 'racing') recoverCar(race);
+  stepRace(race, command);
+  scene.observe(race,reducedEffects);
+  if (driving() && sound && audio.update(race.player,command,race.course) === false) {
+    sound = false;
+    syncSound();
+  }
+  const place=race.player.position;
+  if (candidatePlace !== place) {
+    candidatePlace=place;
+    candidateSince=race.elapsedTicks;
+  } else if (place !== announcedPlace && race.elapsedTicks-candidateSince >= 12) {
+    placeMessage=(place<announcedPlace ? 'Up to P' : 'Back to P')+place;
+    announcedPlace=place;
+    placeUntil=race.elapsedTicks+90;
+  }
 }
 function drawHud(p) {
   const player = race.player;
@@ -237,6 +305,9 @@ function drawHud(p) {
     const metres = Math.max(0, race.course.length-Math.max(0,progress(player,race.course)));
     set('remaining', metres >= 1000 ? (metres/1000).toFixed(2)+' km' : Math.ceil(metres)+' m');
   }
+  const splits=race.course.closed ? player.lapTicks : player.splitTicks;
+  $('last-split').hidden = splits.length===0;
+  if (splits.length) set('last-split',(race.course.closed ? 'Lap ' : 'Split ')+splits.length+'  '+formatTime(splits.at(-1)));
   set('timer', formatTime(player.elapsedTicks));
   $('revs').style.width = Math.min(100, p.rpm / 75) + '%';
   let message = '';
@@ -246,13 +317,16 @@ function drawHud(p) {
     message = 'CP ' + player.splitTicks.length + '  ·  ' + formatTime(player.splitTicks.at(-1));
   }
   else if (race.phase === 'racing' && player.lapTicks.length && player.elapsedTicks - player.lapStartTick < 180) {
-    message = 'Lap ' + player.lapTicks.length + '  ·  ' + formatTime(player.lapTicks.at(-1));
+    const n = player.lapTicks.length;
+    message = (player.lap === 3 ? 'Final lap' : 'Lap '+n+' complete')+'  ·  '+formatTime(player.lapTicks.at(-1));
   }
+  else if (race.phase === 'racing' && race.elapsedTicks < placeUntil) message = placeMessage;
   $('feedback').hidden = !message;
   set('feedback', message);
   drawMap(race.entrants);
   const light = race.phase === 'countdown' ? Math.ceil(race.countdownTicks / 60) : race.phase === 'racing' && player.elapsedTicks < 42 ? 'GO!' : '';
-  $('lights').hidden = !light;
+  $('signal').hidden = $('lights').hidden = !light;
+  if (light) $('signal').dataset.light = light;
   set('lights', light);
 }
 function showNearby(player) {
@@ -272,6 +346,8 @@ const angles = ['yaw','wheelSpin'];
 function render(alpha, elapsed) {
   for (const driver of race.entrants) {
     const a = driver.previous, b = driver.current, p = poses[driver.id];
+    p.vx=driver.vehicle.velocity[0];
+    p.vz=driver.vehicle.velocity[2];
     p.gear=b.gear;
     p.rpm=b.rpm;
     p.brake=b.brake;
@@ -282,7 +358,7 @@ function render(alpha, elapsed) {
     for (const key of smoothFields) p[key] = a[key] + (b[key]-a[key])*alpha;
     for (const key of angles) p[key] = a[key] + Math.atan2(Math.sin(b[key]-a[key]), Math.cos(b[key]-a[key]))*alpha;
   }
-  scene.draw(poses, {mode:phase(), camera, dt:elapsed});
+  scene.draw(poses,{mode:phase(),camera,dt:elapsed,reducedEffects,reducedMotion:motion.matches || reducedEffects});
   if (!$('hud').hidden) drawHud(poses[PLAYER_ID]);
 }
 function frame(time) {
@@ -296,7 +372,6 @@ function frame(time) {
       console.error(failure);
       graphicsError('Rendering stopped. Reload to initialise the graphics device again.');
     }
-    if (driving() && sound) audio.update(race.player.vehicle, input.command());
   }
   requestAnimationFrame(frame);
 }

@@ -31,6 +31,24 @@ try {
   if (process.env.EVIDENCE_DIR) await page.screenshot({path:imageName('menu')});
   const waitPhase = phase => page.waitForFunction(p => document.body.dataset.phase === p, phase);
   const id = name => page.locator('#'+name);
+  await id('settings').click();
+  assert(await id('options').isVisible());
+  for (const name of ['master','engine','effects']) {
+    const slider=id(name+'-volume');
+    await slider.focus();
+    await page.keyboard.press('Home');
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await id(name+'-level').textContent(),'1%');
+    await slider.fill('80');
+  }
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.waitForFunction(() => document.body.dataset.effects==='reduced');
+  await id('effects-quality').selectOption('full');
+  assert.equal(await page.locator('body').getAttribute('data-effects'),'full');
+  await id('effects-quality').selectOption('auto');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.waitForFunction(() => document.body.dataset.effects==='full');
+  await id('close-settings').click();
   await id('controls').click();
   assert(await id('help').isVisible());
   await page.keyboard.press('Escape');
@@ -47,6 +65,23 @@ try {
   await id('sound').click();
   await id('continue').click();
   await waitPhase('countdown');
+  await waitPhase('racing');
+  for (const viewport of [{width:1920,height:1080},{width:1280,height:720}]) {
+    await page.setViewportSize(viewport);
+    const clear=await page.evaluate(()=>{
+      const timing=document.querySelector('.timing').getBoundingClientRect();
+      const map=document.querySelector('.course').getBoundingClientRect();
+      const dash=document.querySelector('.dash').getBoundingClientRect();
+      return timing.right < map.left && timing.left >= 0 && dash.top > map.bottom && dash.right <= innerWidth;
+    });
+    assert(clear,'HUD instruments must have separate space at '+viewport.width);
+  }
+  await id('settings').click();
+  await waitPhase('paused');
+  await id('effects-quality').selectOption('reduced');
+  await page.keyboard.press('Escape');
+  assert.equal(await page.locator('body').getAttribute('data-phase'),'paused');
+  await id('continue').click();
   await waitPhase('racing');
   await page.keyboard.down('w');
   await page.waitForFunction(() => Number(document.querySelector('#speed').textContent) >= 24);
@@ -116,6 +151,8 @@ try {
     window.AudioContext = class { constructor() { throw Error('Audio device unavailable'); } };
   });
   await silent.goto(url);
+  await silent.locator('#start').waitFor();
+  assert.equal(await silent.locator('body').getAttribute('data-effects'),'reduced');
   await silent.locator('#start').click();
   await silent.keyboard.down('w');
   await silent.waitForFunction(() => document.body.dataset.phase === 'racing'

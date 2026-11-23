@@ -30,6 +30,14 @@ Select a course and choose **Start race**, then press **W** or **↑** on the gr
 
 Losing focus clears the controls and pauses the countdown or race. Resume explicitly and press a fresh driving key. The header controls open the driving guide and toggle procedural engine audio. Use **Restart race** to return to the same grid or **Course select** to choose the other road from the pause or results screen.
 
+## Cockpit and sound
+
+The position display updates on every accepted race tick. A brief position-change notice waits for a place to hold for 0.2 seconds, so a door-to-door fight keeps a readable HUD. The map retains your latest completed lap or sprint split. The results highlight your fastest Speedway lap.
+
+**Settings** opens the master, engine and tyre/effects mix. Each control ranges from silence to full level. The original 48 kHz procedural mix follows the player’s drivetrain and grounded tyres. Listen for the shift lift, brake scrub, guardrail tap and the short reflection in the Ridge tunnel. Audio starts when you take the wheel. Pause or mute fades it out.
+
+**Driving effects** follows the browser’s reduced-motion preference by default. Full mode draws smoke during physical tyre slip, dust on the apron, tyre marks and brief sparks at a rail impact. Reduced mode retains up to 12 tyre marks and suppresses moving particles. Settings are saved locally when browser storage is available. Both chase cameras follow road grade, anticipate corners and give nearby rivals a little more room in the frame.
+
 ## How the race works
 
 - The Speedway track file defines seven corners with tangent circular arcs. A shared distance and lateral coordinate system supplies mesh vertices, wheel contact heights, rail boundaries, the minimap and eight gates. Where the banking changes, the asphalt mesh samples across the lane as well as along it to follow the wheel-contact surface. Distances are metres, +Y is up and local −Z is forward.
@@ -76,7 +84,7 @@ VANILLAJS is pinned at [9d95d74b355ec17add32db0b55f0f71130f9c004](https://github
 | Physical vehicle and contact primitives | `vehicle3d`, `collision`, `math` |
 | Lit WebGL scene and touring car rig | `render-lit`, `scenic3d`, `terrain` (imported by scenic3d) |
 | Fixed clock and keyboard cancellation | `time`, `input` |
-| Procedural sound and Web Audio buffer scheduling | `vehicle-audio`, `demos/horizon-lab/race-audio.js` |
+| Procedural vehicle voice and telemetry-to-sound mapping | `vehicle-audio`, `demos/horizon-lab/race-audio.js` |
 
 The track, game rules, scenery, car modifications, livery and interface are game-owned. The lit renderer supplies the complete WebGL path. A separate copy of render-webgl is unnecessary.
 
@@ -97,10 +105,11 @@ node tests/browser-finish.mjs http://127.0.0.1:8000/ --attack
 node tests/browser-smoke.mjs http://127.0.0.1:8000/ --ridge
 node tests/browser-finish.mjs http://127.0.0.1:8000/ --ridge
 node tests/browser-finish.mjs http://127.0.0.1:8000/ --ridge --attack
+node tests/browser-effects.mjs http://127.0.0.1:8000/
 node tests/browser-frames.mjs http://127.0.0.1:8000/
 node tests/browser-frames.mjs http://127.0.0.1:8000/ --ridge
 ```
 
-To check subpath hosting, serve the parent of a checkout named `Circuit-Overdrive` and append `Circuit-Overdrive/` to the test URL. The finish test drives the real browser keyboard handler with a deterministic digital driver and advances controlled animation timestamps. The standard finish replay classifies the whole field. The attack replay drives for the win and checks unfinished statuses. Both compare every rendered race position and the final standings with a separate same-runtime simulation. Set `NATIVE_GL=1` for a native OpenGL finish replay on a supported machine. The smoke and frame-interval tests use ordinary browser animation timing. The frame test requests native WebGL at 1920×1080 and reports the actual renderer, sample count, median, p95 and worst interval. Speedway samples 360 intervals at the start. The Ridge run samples the starting pack, open road, forest, bridge and tunnel as the player drives through each section. The PR records the executed environments and evidence.
+To check subpath hosting, serve the parent of a checkout named `Circuit-Overdrive` and append `Circuit-Overdrive/` to the test URL. The finish test drives the real browser keyboard handler with a deterministic digital driver and advances controlled animation timestamps. The standard finish replay classifies the whole field. The attack replay drives for the win and checks unfinished statuses. Both compare every rendered race position and the final standings with a separate same-runtime simulation. Set `NATIVE_GL=1` for a native OpenGL finish replay on a supported machine. The smoke and frame-interval tests use ordinary browser animation timing. The frame test requests native WebGL at 1920×1080 and reports the actual renderer, sample count, median, p95 and worst interval. Speedway samples the six-car standing start, the pack at speed and the 17° bank. The Ridge run samples the starting pack, open road, forest, bridge and tunnel as the player drives through each section. The PR records the executed environments and evidence.
 
 For the hosted game, package verification and deployment evidence, see the [GitHub Pages guide](docs/pages.md).
