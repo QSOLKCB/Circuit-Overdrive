@@ -74,7 +74,7 @@ export function createScene(canvas,course=track,pixelRatio=1,environment='day') 
     renderer.draw(car.detail,{matrix:root,material:trim});
     renderer.draw(livery.graphics,{matrix:root,material:PAINT});
     if(car.projectors) renderer.draw(car.projectors,{matrix:root,material:{roughness:.25,emission:1.25}});
-    renderer.draw(car.lamps,{matrix:root,material:{roughness:.24,emission:.29+1.7*(p.brake??0)}});
+    renderer.draw(car.lamps,{matrix:root,material:{roughness:.24,emission:(night ? .54 : .29)+1.7*(p.brake??0)}});
     for(const matrix of wheelTransforms(car.rig,p,root)) {
       renderer.draw(car.tyre,{matrix,material:car.tyreMaterial});
       renderer.draw(car.rim,{matrix,material:car.rimMaterial});

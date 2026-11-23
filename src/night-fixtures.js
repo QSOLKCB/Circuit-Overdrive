@@ -77,9 +77,18 @@ function speedwayFixtures(c,solid,lit,addLight) {
     addLight(at(-side*2.04,12.65,0),IVORY,39,4.8);
     if(Math.abs(turn)>.12) cornerBoard(c,s+7,side,solid,lit,AMBER);
   }
+  // Countdown boards mark the outside of the two steepest bank entries.
+  for(const entry of [148,934]) for(const number of [3,2,1]) {
+    const side=Math.sign(c.sample(entry+20).bank);
+    const at=mounted(c,entry-11*number,side*(c.barrierOffset+1.8));
+    box(solid,at,[0,1.8,0],[.18,3.7,.22],STEEL);
+    box(solid,at,[0,3.4,0],[1.82,2.25,.25],INK);
+    lettering(lit,String(number),.32,(x,y)=>at(x,2.61+y,-.14),IVORY);
+  }
   for(let i=0,n=Math.ceil(c.length/18);i<n;i++) for(const side of [-1,1]){
-    const at=mounted(c,i*c.length/n,side*(c.barrierOffset+.20));
-    box(lit,at,[0,1.13,0],[.23,.18,1.34],i%3===0 ? RED : ICE);
+    const s=i*c.length/n, at=mounted(c,s,side*(c.barrierOffset+.20));
+    const tint=Math.abs(c.sample(s).bank)>.06 ? (i%2 ? IVORY : RED) : ICE;
+    box(lit,at,[0,1.13,0],[.23,.18,1.34],tint);
   }
 }
 
@@ -182,15 +191,16 @@ function fixtureBatches(data,material,course) {
 export function buildNightWorld(course,batches) {
   const solid=[],lit=[], lights=lightIndex();
   (course.closed ? speedwayFixtures : ridgeFixtures)(course,solid,lit,lights.add);
+  // The fixture bake is incident light. Keep the original surface reflectance
+  // for the moving beams so a lit patch of asphalt cannot amplify them twice.
+  const baked=batch=>({...batch,receiverVertices:batch.vertices,
+    vertices:lights.bake(batch.vertices.slice())});
   const world=batches.map((batch,i)=>{
-    const panorama=course.closed ? i===3 : i===0;
-    if(panorama) return {...batch,receivesHeadlights:false};
-    return {...batch,vertices:lights.bake(batch.vertices)};
+    if(course.closed && i===3) return batch; // Mixed mountain and roadside tree batch.
+    if(!course.closed && i===0) return {...batch,receivesHeadlights:false};
+    return baked(batch);
   });
-  for(const b of fixtureBatches(solid,{roughness:.82},course)) {
-    lights.bake(b.vertices);
-    world.push(b);
-  }
+  for(const b of fixtureBatches(solid,{roughness:.82},course)) world.push(baked(b));
   return world.concat(fixtureBatches(lit,{emission:1.1,roughness:.42},course));
 }
 

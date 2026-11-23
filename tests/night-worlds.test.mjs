@@ -36,6 +36,7 @@ for(const course of [track,ridge]) {
     for(let k=0;k<day.length;k++){
       const {vertices:a,material}=day[k], b=night[k].vertices;
       assert.equal(a.length,b.length);
+      if(night[k].receiverVertices) assert.deepEqual(night[k].receiverVertices,a);
       for(let i=0;i<a.length;i+=11) {
         for(const j of [0,1,2,3,4,5,9,10])
           if(a[i+j]!==b[i+j]) assert.fail('night moves a surface at batch '+k+' vertex '+i/11);
