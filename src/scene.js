@@ -73,14 +73,18 @@ export function createScene(canvas,course=track,pixelRatio=1) {
     return root;
   }
   const glassDraws=[];
-  let lastMode;
+  let lastMode,lastFollow=PLAYER_ID;
   return {
     observe:effects.observe,
     resetEffects:effects.reset,
-    draw(poses,{mode='racing',camera='chase',dt=1/60,reducedMotion=false,reducedEffects=false}={}) {
+    draw(poses,{mode='racing',camera='chase',followId=PLAYER_ID,dt=1/60,reducedMotion=false,reducedEffects=false}={}) {
       if(renderer.lost)return;
-      const p = poses[PLAYER_ID];
-      if(lastMode==='menu' || (mode==='grid' && lastMode!==mode)) cameraRig.reset();
+      const p=poses[followId]??poses[PLAYER_ID];
+      if(!p || !Number.isInteger(followId) || followId<0 || followId>=poses.length)
+        throw RangeError('Invalid spectator camera target');
+      if(lastFollow!==followId || lastMode==='menu' || (mode==='grid' && lastMode!==mode))
+        cameraRig.reset();
+      lastFollow=followId;
       const aspect=canvas.clientWidth/Math.max(1,canvas.clientHeight);
       const view=mode==='menu' ? showroom(p,aspect,course) :
         cameraRig.update(p,poses,{camera,dt:mode==='paused'?0:dt,reducedMotion});
