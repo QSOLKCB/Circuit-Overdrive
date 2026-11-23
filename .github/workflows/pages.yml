@@ -41,7 +41,10 @@ jobs:
           server=$!
           trap 'kill "$server"' EXIT
           url=http://127.0.0.1:8000/Circuit-Overdrive/
-          curl --retry 10 --retry-connrefused --retry-delay 1 -fsS "$url" -o /dev/null
+          curl --retry 10 --retry-connrefused --retry-delay 1 -fs "$url" -o /dev/null || {
+            cat "$RUNNER_TEMP/server.log"
+            exit 1
+          }
           bash scripts/browser-pages.sh "$url" "$RUNNER_TEMP/evidence"
       - name: Preserve local browser reports and screenshots
         if: ${{ !cancelled() }}

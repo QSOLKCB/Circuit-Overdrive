@@ -25,6 +25,8 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 
 The HTTP verifier compares the served entry point and all runtime files with the checkout and checks the browser MIME types for HTML, CSS, JavaScript and JSON. Chromium starts both courses, drives both races to their results screens, and exercises pause, restart, focus loss, audio, and WebGL recovery. The finish harness restricts requests to the tested deployment. Screenshots and logs go to the specified evidence directory.
 
+On software WebGL, the finish runner renders the interactive game at 640×360. It queues the same digital keyboard transitions for the actual 60 Hz fixed-step callbacks and presents at least once every 15 simulation ticks. A synchronous WebGL readback bounds the queue of outstanding draws. The runner restores 1280×720 and waits for browser presentation before each screenshot. It prints the timer, checkpoint or lap, position and frame count every ten simulated seconds and fails after two minutes without progress. The smoke tests stay at 1280×720 throughout. Setting `NATIVE_GL=1` selects the original 1280×720 finish replay for local hardware.
+
 ## Production verification and troubleshooting
 
 1. Under **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. This repository reported that setting during CO-003 development.
