@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#111a24">
   <title>Circuit Overdrive</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/mobile.css">
 </head>
 <body data-phase="menu">
 <header>
@@ -27,8 +28,9 @@
         <button type="button" id="choose-speedway" aria-pressed="true"><canvas id="preview-speedway" width="78" height="48" aria-hidden="true"></canvas>Overdrive Speedway</button>
         <button type="button" id="choose-ridge" aria-pressed="false"><canvas id="preview-ridge" width="78" height="48" aria-hidden="true"></canvas>Redline Ridge</button>
       </div>
-      <button class="primary" id="start" type="button">Start race <span aria-hidden="true">➜</span></button>
+      <button class="primary" id="start" type="button" disabled>Start race <span aria-hidden="true">➜</span></button>
     </div>
+    <p id="boot-note" role="status">Loading the game. If this message stays visible, use a browser with WebGL and native JSON module support (Safari 17.2 or later).</p>
     <div class="car-caption"><b>27</b><div><small>Touring class</small><strong>Ignition GT</strong></div></div>
   </section>
   <section id="hud" hidden aria-label="Race instruments">
@@ -42,13 +44,14 @@
     <div class="dash instruments"><div class="speed"><strong id="speed">0</strong><small>km/h</small></div><div class="gear"><small>Gear</small><strong id="gear">1</strong></div><div id="rev-track" aria-label="Engine revs"><i id="revs"></i></div></div>
     <div id="feedback" role="status" hidden></div>
   </section>
+  <section id="touch-controls" aria-label="Touch driving controls"></section>
   <div id="signal" hidden><div class="lamp-row" aria-hidden="true"><i></i><i></i><i></i></div><div id="lights" role="status" hidden></div></div>
   <section id="overlay" class="overlay" hidden>
     <div class="panel">
       <div class="eyebrow"><i class="checks" aria-hidden="true"></i><span id="panel-course">Overdrive Speedway</span></div>
       <h2 id="panel-title"></h2><p id="panel-copy"></p>
       <div id="results" hidden><section><h3>Classification</h3><ol id="classification"></ol></section><section><h3 id="split-header">Your laps</h3><ol id="splits"></ol></section></div>
-      <div class="buttons"><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button><button id="courses" hidden>Course select</button></div>
+      <div class="buttons"><button class="primary" id="touch-arm" hidden>Drive with touch</button><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button><button id="courses" hidden>Course select</button></div>
     </div>
   </section>
 </main>
@@ -76,7 +79,7 @@
     <label for="effects-volume">Tyres &amp; effects <output for="effects-volume" id="effects-level">75%</output></label><input id="effects-volume" type="range" min="0" max="100" value="75">
   </fieldset>
   <label for="effects-quality">Driving effects</label>
-  <select id="effects-quality"><option value="auto">Follow motion preference</option><option value="full">Full</option><option value="reduced">Reduced</option></select>
+  <select id="effects-quality"><option value="auto">Follow device and motion preferences</option><option value="full">Full</option><option value="reduced">Reduced effects</option><option value="mobile">Mobile · lower resolution</option></select>
   <button id="close-settings" class="primary">Done</button>
 </dialog>
 <script type="module" src="./src/main.js"></script>

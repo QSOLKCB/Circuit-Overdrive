@@ -38,8 +38,8 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
   return lateral <= depth*horizontalSlope+bounds.r*Math.hypot(1,horizontalSlope);
 }
 
-export function createScene(canvas,course=track) {
-  const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio:1});
+export function createScene(canvas,course=track,pixelRatio=1) {
+  const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   let world,car,shadow,effects;
   try {
     const batches=course.closed ? speedwayBatches() : ridgeBatches(course);
