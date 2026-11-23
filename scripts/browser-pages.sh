@@ -18,10 +18,10 @@ for option in "$@"; do
 done
 
 case "$shard" in
-  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge championship) ;;
-  speedway) suites=(smoke touch speedway) ;;
-  ridge) suites=(ridge-smoke ridge championship) ;;
-  controllers) suites=(gamepad profiles lab theatre) ;;
+  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge championship night-speedway night-ridge night-smoke headlights night-contact) ;;
+  speedway) suites=(smoke touch speedway night-speedway night-contact) ;;
+  ridge) suites=(ridge-smoke ridge championship night-ridge) ;;
+  controllers) suites=(gamepad profiles lab theatre night-smoke headlights) ;;
 esac
 
 mkdir -p "$evidence"
@@ -38,13 +38,14 @@ done
 
 for suite in "${suites[@]}"; do
   case "$suite" in
-    smoke|ridge-smoke) args=(tests/browser-smoke.mjs "$base") ;;
-    speedway|ridge)
+    night-contact) args=(tests/browser-effects.mjs "$base") ;;
+    smoke|ridge-smoke|night-smoke) args=(tests/browser-smoke.mjs "$base") ;;
+    speedway|ridge|night-speedway|night-ridge)
       args=(tests/browser-finish.mjs "$base" --require-replay)
       if [[ ${NATIVE_GL:-0} != 1 ]]; then args+=(--software-replay); fi
       ;;
     *)
-      if [[ $suite == theatre || $suite == championship ]]; then
+      if [[ $suite == theatre || $suite == championship || $suite == headlights ]]; then
         mkdir -p "$evidence/$suite"
         EVIDENCE_DIR="$evidence/$suite" node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
       else
@@ -53,7 +54,17 @@ for suite in "${suites[@]}"; do
       continue
       ;;
   esac
-  if [[ $suite == ridge || $suite == ridge-smoke ]]; then args+=(--ridge); fi
+  if [[ $suite == ridge || $suite == ridge-smoke || $suite == night-ridge ]]; then args+=(--ridge); fi
+  if [[ $suite == night-* ]]; then args+=(--night); fi
   mkdir -p "$evidence/$suite"
   EVIDENCE_DIR="$evidence/$suite" node "${args[@]}" 2>&1 | tee "$evidence/${suite}.log"
+done
+
+# The filename records the driver's selection. The downloaded inputs, source,
+# seed, recovery requests and ticks must match byte for byte for the same drive.
+for course in speedway ridge; do
+  if [[ $shard == all || $shard == "$course" ]]; then
+    cmp "$evidence/$course/circuit-overdrive-$course-replay.json" \
+      "$evidence/night-$course/circuit-overdrive-$course-night-replay.json"
+  fi
 done

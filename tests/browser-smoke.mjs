@@ -7,6 +7,7 @@ const browser = await chromium.launch({
   args:['--use-angle=swiftshader', '--enable-unsafe-swiftshader']
 });
 const url = process.argv[2] || 'http://127.0.0.1:8000/';
+const night = process.argv.includes('--night');
 const scenic = process.argv.includes('--ridge');
 try {
   const context = await browser.newContext({viewport:{width:1280,height:720}});
@@ -28,21 +29,27 @@ try {
     };
   });
   // Count real scheduled PCM buffers while leaving the audio device path intact.
-  await page.addInitScript(() => {
+  await page.addInitScript(captureScore => {
     window.engineBuffers = 0;
     window.musicBuffers = 0;
     const start = AudioBufferSourceNode.prototype.start;
     AudioBufferSourceNode.prototype.start = function(...args) {
       if (this.buffer?.getChannelData(0).some(sample => sample !== 0)) {
-        if (this.buffer.numberOfChannels === 2) window.musicBuffers++;
+        if (this.buffer.numberOfChannels === 2) {
+          window.musicBuffers++;
+          if (captureScore && !window.countdownMusic) {
+            window.countdownMusic = [0,1].map(channel => this.buffer.getChannelData(channel).slice());
+          }
+        }
         else window.engineBuffers++;
       }
       return start.apply(this, args);
     };
-  });
+  },night);
   await page.goto(url);
   await page.waitForFunction(() => document.querySelector('#status').textContent === 'Race selection');
   if (scenic) await page.locator('#choose-ridge').click();
+  if (night) await page.locator('#choose-night').click();
   const imageName = name => process.env.EVIDENCE_DIR + '/' + (scenic ? 'ridge-' : '') + name + '.png';
   if (process.env.EVIDENCE_DIR) await page.screenshot({path:imageName('menu')});
   const waitPhase = phase => page.waitForFunction(p => document.body.dataset.phase === p, phase);
@@ -137,6 +144,18 @@ try {
   });
   assert(await page.evaluate(() => window.engineBuffers > 0), 'producer scheduled original non-silent engine PCM');
   assert(await page.evaluate(() => window.musicBuffers > 0), 'producer scheduled non-silent stereo soundtrack PCM');
+  if (night) {
+    const matches = await page.evaluate(async () => {
+      const {RaceMusic} = await import('./src/music.js');
+      const first = window.countdownMusic;
+      const reference = new RaceMusic('night');
+      const left = new Float32Array(first[0].length), right = new Float32Array(first[1].length);
+      reference.accept({phase:'countdown',elapsedTicks:0,player:{position:6}});
+      reference.write(left,right);
+      return left.every((sample,i)=>sample===first[0][i]) && right.every((sample,i)=>sample===first[1][i]);
+    });
+    assert(matches,'First stereo buffer scheduled by Nightshift must contain Midnight Protocol countdown PCM');
+  }
   await page.evaluate(() => {
     window.graphicsTest = document.querySelector('#world').getContext('webgl').getExtension('WEBGL_lose_context');
     window.graphicsTest.loseContext();
@@ -146,6 +165,7 @@ try {
   await waitPhase('paused');
   await id('continue').click();
   await waitPhase('countdown');
+  assert.equal(await page.locator('body').getAttribute('data-environment'),night?'night':'day');
   assert.deepEqual(failures, []);
   assert(urls.every(s => s.startsWith(url) || s.startsWith('data:')));
   console.log(JSON.stringify({url,...details,requests:urls.length,failures},null,2));

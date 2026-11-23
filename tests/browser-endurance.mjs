@@ -10,11 +10,42 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   const cdp = await page.context().newCDPSession(page);
   await page.addInitScript(() => {
-    const counts = window.resources = {uploads:0, deletes:0, pcm:0, started:0, ended:0, peakVoices:0};
+    const counts = window.resources = {uploads:0, deletes:0, allocatedBytes:0, retainedBytes:0,
+      programs:0, deletedPrograms:0, pcm:0, started:0, ended:0, peakVoices:0};
     const gl = WebGLRenderingContext.prototype;
     const create = gl.createBuffer, dispose = gl.deleteBuffer;
     gl.createBuffer = function() { const buffer = create.call(this); if (buffer) counts.uploads++; return buffer; };
-    gl.deleteBuffer = function(buffer) { if (buffer && this.isBuffer(buffer)) counts.deletes++; return dispose.call(this,buffer); };
+    // Game meshes and sky/lighting geometry use WebGL1 ARRAY_BUFFER.
+    const storage = gl.bufferData, sizes = new WeakMap();
+    gl.bufferData = function(target,data,usage) {
+      const result=storage.call(this,target,data,usage);
+      if(target===this.ARRAY_BUFFER){
+        const buffer=this.getParameter(this.ARRAY_BUFFER_BINDING);
+        const bytes=typeof data==='number'?data:data.byteLength;
+        counts.allocatedBytes+=bytes;
+        counts.retainedBytes+=bytes-(sizes.get(buffer)??0);
+        sizes.set(buffer,bytes);
+      }
+      return result;
+    };
+    gl.deleteBuffer = function(buffer) {
+      if (buffer && this.isBuffer(buffer)){
+        counts.deletes++;
+        counts.retainedBytes-=sizes.get(buffer)??0;
+        sizes.delete(buffer);
+      }
+      return dispose.call(this,buffer);
+    };
+    const createProgram=gl.createProgram, deleteProgram=gl.deleteProgram;
+    gl.createProgram=function(){
+      const program=createProgram.call(this);
+      if(program) counts.programs++;
+      return program;
+    };
+    gl.deleteProgram=function(program){
+      if(program && this.isProgram(program)) counts.deletedPrograms++;
+      return deleteProgram.call(this,program);
+    };
     const allocate = BaseAudioContext.prototype.createBuffer;
     BaseAudioContext.prototype.createBuffer = function(...args) { counts.pcm++; return allocate.apply(this,args); };
     const start = AudioBufferSourceNode.prototype.start;
@@ -32,6 +63,7 @@ try {
   for (let cycle = 0; cycle < 8; cycle++) {
     const course = cycle % 2 === 0 ? 'speedway' : 'ridge';
     await page.locator('#choose-'+course).click();
+    if (process.argv.includes('--night')) await page.locator('#choose-night').click();
     await page.locator('#start').click();
     await page.keyboard.down('w');
     // The grid hides the previous race's HUD. Require live motion and fresh
@@ -51,10 +83,14 @@ try {
     const {usedSize} = await cdp.send('Runtime.getHeapUsage');
     const counts = await page.evaluate(() => ({...window.resources}));
     const retained = counts.uploads-counts.deletes;
-    if (live.has(course)) assert.equal(retained,live.get(course),'WebGL buffers accumulated on '+course);
-    live.set(course,retained);
+    const retainedPrograms=counts.programs-counts.deletedPrograms;
+    const footprint={retained,retainedPrograms,retainedBytes:counts.retainedBytes};
+    if (live.has(course)) assert.deepEqual(footprint,live.get(course),'WebGL resources accumulated on '+course);
+    live.set(course,footprint);
+    assert.equal(retainedPrograms,process.argv.includes('--night')?3:2,'live sky, material and night programs');
+    assert(counts.retainedBytes>0 && counts.retainedBytes<=counts.allocatedBytes);
     assert(retained>0 && counts.pcm===8 && counts.peakVoices<=8);
-    samples.push({cycle:cycle+1,course,heapBytes:usedSize,retainedWebGLBuffers:retained,...counts});
+    samples.push({cycle:cycle+1,course,heapBytes:usedSize,retainedWebGLBuffers:retained,retainedPrograms,...counts});
   }
   assert.deepEqual(errors,[]);
   const renderer = await page.evaluate(() => {
@@ -62,5 +98,9 @@ try {
     const ext = gl.getExtension('WEBGL_debug_renderer_info');
     return gl.getParameter(ext?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER);
   });
-  console.log(JSON.stringify({browser:browser.version(),renderer,samples},null,2));
+  if(process.env.NATIVE_GL==='1') assert.ok(renderer && !/swiftshader|llvmpipe|software/i.test(renderer));
+  const source=await page.locator('meta[name=game-revision]').getAttribute('content');
+  const environment=await page.locator('body').getAttribute('data-environment') || 'day';
+  if(process.argv.includes('--night')) assert.equal(environment,'night');
+  console.log(JSON.stringify({browser:browser.version(),renderer,source,environment,samples},null,2));
 } finally { await browser.close(); }

@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import {driverIntent} from './driver.mjs';
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/');
+const night = process.argv.includes('--night');
+const reduced = process.argv.includes('--reduced');
 const scenic = process.argv.includes('--ridge');
 const championship = process.argv.includes('--championship');
 assert(!(championship && scenic),'The championship measurement uses the Opening Cup');
@@ -17,7 +19,12 @@ try {
   // No benchmark hooks are shipped. The renderer and fixed clock run normally.
   await page.route(new URL('src/main.js',url).href,async route => {
     const response=await route.fetch();
-    await route.fulfill({response,body:await response.text()+'\nwindow.observeRace=()=>race;'});
+    const source=await response.text();
+    const draw=/scene\.draw\(poses,[^\n]+?\);/;
+    assert(draw.test(source),'scene timing observation point');
+    await route.fulfill({response,body:source.replace(draw,call=>
+      'window.timeScene(canvas, race.player.distance, () => {'+call+'});')+
+      '\nwindow.observeRace=()=>race;'});
   });
   // Use the rendered, interpolated car centres and actual camera frustum to
   // select six-car opening intervals. This observation exists only in the runner.
@@ -29,11 +36,47 @@ try {
       begin+' window.frameCamera=view; window.frameCars=poses;')});
   });
   await page.addInitScript({content:'window.driveKeyboard = (' + driverIntent.toString() + ');'});
+  // Time command submission separately from GPU execution. Sample GPU work
+  // asynchronously and discard outstanding queries if the GPU clock is disjoint.
+  await page.addInitScript(() => {
+    const rows=window.sceneTiming=[];
+    let ext, frames=0;
+    const pending=[];
+    window.timeScene=(canvas,station,draw)=>{
+      const gl=canvas.getContext('webgl');
+      if(ext===undefined) ext=gl.getExtension('EXT_disjoint_timer_query');
+      if(ext && pending.length){
+        if(gl.getParameter(ext.GPU_DISJOINT_EXT)){
+          for(const item of pending.splice(0)) ext.deleteQueryEXT(item.query);
+        }else while(pending.length && ext.getQueryObjectEXT(pending[0].query,ext.QUERY_RESULT_AVAILABLE_EXT)){
+          const {row,query}=pending.shift();
+          row.gpu=ext.getQueryObjectEXT(query,ext.QUERY_RESULT_EXT)/1e6;
+          ext.deleteQueryEXT(query);
+        }
+      }
+      const query=ext && frames++%8===0 && pending.length<4 && ext.createQueryEXT();
+      if(query) ext.beginQueryEXT(ext.TIME_ELAPSED_EXT,query);
+      const start=performance.now();
+      draw();
+      const row={station,cpu:performance.now()-start};
+      if(query){
+        ext.endQueryEXT(ext.TIME_ELAPSED_EXT);
+        pending.push({query,row});
+      }
+      if(document.body.dataset.phase==='racing') rows.push(row);
+    };
+  });
   await page.goto(url.href);
   await page.locator('#start').waitFor();
   const chromeHeight = await page.locator('#world').evaluate(canvas => innerHeight-canvas.clientHeight);
   await page.setViewportSize({width:1920,height:1080+chromeHeight});
   if (scenic) await page.locator('#choose-ridge').click();
+  if (night) await page.locator('#choose-night').click();
+  if (reduced) {
+    await page.locator('#settings').click();
+    await page.locator('#effects-quality').selectOption('reduced');
+    await page.locator('#close-settings').click();
+  }
   if (championship) {
     await page.locator('#enter-woc').click();
     await page.locator('#woc-new').click();
@@ -105,18 +148,26 @@ try {
       }
       requestAnimationFrame(frame);
     });
-    return {renderer,profile:'high',effects:document.body.dataset.effects,width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,
+    const source=document.querySelector('meta[name=game-revision]').content;
+    return {renderer,source,profile:'high',effects:document.body.dataset.effects,width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,
       sections:sections.map(([section],i)=>{
         const sorted=intervals[i].sort((a,b)=>a-b), samples=sorted.length;
         const seconds=sorted.reduce((a,b)=>a+b,0)/1000;
         const percentile=f=>sorted[Math.ceil(samples*f)-1];
-        return {section,samples,seconds,simulationTicks:simulationTicks[i],maxTicksPerFrame:maxTicksPerFrame[i],meanFps:samples/seconds,medianMs:percentile(.5),
+        const timing=window.sceneTiming.filter(row=>row.station>=sections[i][1] && row.station<sections[i][2]);
+        const costs=field=>{
+          const values=timing.map(r=>r[field]).filter(Number.isFinite).sort((a,b)=>a-b);
+          return values.length ? {samples:values.length,medianMs:values[Math.ceil(values.length*.5)-1],
+            p95Ms:values[Math.ceil(values.length*.95)-1]} : null;
+        };
+        return {section,samples,seconds,cpuSubmission:costs('cpu'),gpuDraw:costs('gpu'),simulationTicks:simulationTicks[i],maxTicksPerFrame:maxTicksPerFrame[i],meanFps:samples/seconds,medianMs:percentile(.5),
           p95Ms:percentile(.95),maxMs:sorted.at(-1)};
       })};
   },scenic);
   assert.deepEqual(errors,[]);
+  assert(sample.renderer && !/swiftshader|llvmpipe|software/i.test(sample.renderer),'native GPU required: '+sample.renderer);
   assert.equal(sample.width,1920);
   assert.equal(sample.height,1080);
   assert(sample.sections.every(s=>s.samples>=60),'insufficient frame intervals');
-  console.log(JSON.stringify({browser:browser.version(),event:championship?'Overdrive Opening Cup':'standalone',course:scenic?'ridge':'speedway',...sample},null,2));
+  console.log(JSON.stringify({browser:browser.version(),environment:night?'night':'day',event:championship?'Overdrive Opening Cup':'standalone',course:scenic?'ridge':'speedway',...sample},null,2));
 } finally { await browser.close(); }

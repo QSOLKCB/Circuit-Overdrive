@@ -24,6 +24,7 @@ try {
   const phase = () => page.locator('body').getAttribute('data-phase');
   const click = id => page.locator('#'+id).click({force:true});
   await page.waitForFunction(()=>document.querySelector('#status').textContent==='Race selection');
+  await click('choose-night');
   // Only the owning pad may operate the picker, even when another slot is highlighted.
   async function tapPad(slot, button) {
     await page.evaluate(([slot,button])=>{

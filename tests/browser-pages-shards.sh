@@ -11,6 +11,15 @@ cat > "$test_dir/bin/node" <<'NODE'
 set -eu
 printf '%s|%s\n' "${EVIDENCE_DIR##*/}" "$*" >> "$CALLS"
 if [[ -n ${EVIDENCE_DIR:-} ]]; then touch "$EVIDENCE_DIR/captured"; fi
+if [[ $1 == tests/browser-finish.mjs ]]; then
+  course=speedway
+  suffix=''
+  for arg in "$@"; do
+    if [[ $arg == --ridge ]]; then course=ridge; fi
+    if [[ $arg == --night ]]; then suffix=-night; fi
+  done
+  touch "$EVIDENCE_DIR/circuit-overdrive-$course$suffix-replay.json"
+fi
 if [[ $1 == "${FAIL_SCRIPT:-}" ]]; then exit 73; fi
 NODE
 chmod +x "$test_dir/bin/node"
@@ -39,12 +48,17 @@ theatre|tests/browser-theatre.mjs $url
 speedway|tests/browser-finish.mjs $url --require-replay --software-replay
 ridge|tests/browser-finish.mjs $url --require-replay --software-replay --ridge
 championship|tests/browser-championship.mjs $url
+night-speedway|tests/browser-finish.mjs $url --require-replay --software-replay --night
+night-ridge|tests/browser-finish.mjs $url --require-replay --software-replay --ridge --night
+night-smoke|tests/browser-smoke.mjs $url --night
+headlights|tests/browser-headlights.mjs $url
+night-contact|tests/browser-effects.mjs $url --night
 EOF
 diff -u "$test_dir/expected" "$test_dir/serial.calls"
 # Each runner checks the HTTP package itself. Every other invocation belongs to exactly one shard.
-diff -u <(sed -n '1p;2p;6p;9p' "$test_dir/expected") "$test_dir/speedway.calls"
-diff -u <(sed -n '1p;3p;10p;11p' "$test_dir/expected") "$test_dir/ridge.calls"
-diff -u <(sed -n '1p;4p;5p;7p;8p' "$test_dir/expected") "$test_dir/controllers.calls"
+diff -u <(sed -n '1p;2p;6p;9p;12p;16p' "$test_dir/expected") "$test_dir/speedway.calls"
+diff -u <(sed -n '1p;3p;10p;11p;13p' "$test_dir/expected") "$test_dir/ridge.calls"
+diff -u <(sed -n '1p;4p;5p;7p;8p;14p;15p' "$test_dir/expected") "$test_dir/controllers.calls"
 diff -u <(tail -n +2 "$test_dir/serial.calls" | sort) \
   <(for shard in speedway ridge controllers; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
 inventory() { (cd "$test_dir/$1" && find . -type f | sort); }

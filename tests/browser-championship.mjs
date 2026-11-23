@@ -308,6 +308,7 @@ async function campaign() {
   const cdp = await page.context().newCDPSession(page);
   const revision = await page.locator('meta[name=game-revision]').getAttribute('content');
   await click(page,'choose-ridge');
+  await click(page,'choose-night');
   await page.locator('#enter-woc').focus();
   await page.keyboard.press('Enter');
   await capture(page,'championship-menu');
@@ -320,6 +321,7 @@ async function campaign() {
   assert.equal(await page.locator('#timer').textContent(),before);
   await page.keyboard.press('Enter');
   await page.keyboard.press('w');
+  assert.equal(await page.locator('body').getAttribute('data-environment'),'day');
   await page.waitForFunction(()=>{window.advanceFrame(2);return wocMetrics.music>0 && wocMetrics.engine>0;},null,{polling:30});
   await page.keyboard.press('Escape');
   await click(page,'settings');
@@ -387,6 +389,7 @@ async function campaign() {
       assert.equal(await phase(page),'menu');
       assert.equal(await page.locator('body').getAttribute('data-course'),'ridge');
       assert.equal(await page.locator('#choose-ridge').getAttribute('aria-pressed'),'true');
+      assert.equal(await page.locator('body').getAttribute('data-environment'),'night');
       await loadResults(page,results);
     }
     if (round===4) {

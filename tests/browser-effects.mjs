@@ -33,6 +33,7 @@ async function drive(quality) {
     });
   }
   await page.goto(url.href);
+  if(process.argv.includes('--night')) await page.locator('#choose-night').click({force:true});
   await page.evaluate(async()=>{
     const {LitRenderer}=await import('./vendor/vanillajs/modules/render-lit/index.js');
     const draw=LitRenderer.prototype.draw;
