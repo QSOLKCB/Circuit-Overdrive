@@ -28,3 +28,15 @@ With the exact package served at the repository subpath, the world inspection sa
 ```sh
 EVIDENCE_DIR="$OUT/worlds" node tests/browser-night-worlds.mjs "$URL"
 ```
+
+## Native world inspection
+
+Chrome 158.0.8127.36 on the NVIDIA GeForce RTX 5060 Ti rendered all thirteen views at 1024 × 576, using WebGL 1 through ANGLE OpenGL ES. The static package identified source `7d49db1e4bef03471c6ef2387849665286ada814`. Every view had six submitted entrants and passed its mixed bright/dark pixel and GL error checks. The recovery at the grid restored the same frame as the initial placement. [Complete capture receipt](evidence/co-008b/world-inspection.json)
+
+The tunnel centre marking remains visible in the overlapping fixed and moving light pools. In the middle third of the image height and middle two thirds of the width, all three channels exceeded 245 on 0 decoded pixels inside the tunnel, 0 on the bridge and 309 at the grid. Before separating the static lamp bake from headlight receiver albedo, those counts were 11,376, 566 and 9,301 on source `cfd59ef26b666cf3b0580430be028b8932e8e3cd`, with the same placements, dimensions and encoder. [Speedway grid](evidence/co-008b/speedway-grid.webp) · [Ridge bridge](evidence/co-008b/ridge-bridge.webp) · [Tunnel interior](evidence/co-008b/ridge-tunnel-inside.webp)
+
+The corrected source was exercised with the following command.
+
+```sh
+NATIVE_GL=1 CHROME_BIN=/usr/bin/google-chrome PLAYWRIGHT_MODULE=/home/trent/OFFLINE-GAMES/node_modules/playwright/index.mjs EVIDENCE_DIR=/tmp/co008-nightshift/b2-worlds node tests/browser-night-worlds.mjs http://127.0.0.1:18728/b2/Circuit-Overdrive/
+```
