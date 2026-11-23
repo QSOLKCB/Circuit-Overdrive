@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#12191d">
+  <title>Circuit Overdrive • Overdrive Speedway</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="./src/style.css">
+</head>
+<body data-phase="menu">
+<header>
+  <div class="brand" aria-label="Circuit Overdrive"><i class="streak" aria-hidden="true"></i><span>CIRCUIT <b>OVERDRIVE</b></span></div>
+  <nav aria-label="Game controls">
+    <button id="sound" type="button" aria-pressed="true"><span aria-hidden="true">◖))</span> Sound <b id="sound-state">on</b></button>
+    <button id="controls" type="button"><span aria-hidden="true">⌨</span> Controls</button>
+  </nav>
+</header>
+<main>
+  <canvas id="world" tabindex="-1" aria-label="Overdrive Speedway race. Use the arrow keys or WASD to drive."></canvas>
+  <section id="menu" class="menu">
+    <div class="intro">
+      <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Single player <span>/</span> Circuit race</div>
+      <h1>Overdrive<br><em>Speedway</em></h1>
+      <div class="specs"><div><small>Distance</small><strong id="distance">—</strong></div><div><small>Race length</small><strong>3 laps</strong></div><div><small>Car class</small><strong>Touring</strong></div></div>
+      <button class="primary" id="start" type="button">Start race <span aria-hidden="true">⟶</span></button>
+    </div>
+    <div class="car-caption"><b>27</b><div><small>Selected vehicle</small><strong>Ignition GT</strong></div></div>
+  </section>
+  <section id="hud" hidden aria-label="Race instruments">
+    <div class="timing instruments"><div><small>Lap</small><strong><span id="lap">1</span><i> / 3</i></strong></div><div><small>Race time</small><strong class="digits" id="timer">0:00.000</strong></div><div class="entrant"><small>Field</small><strong>Solo</strong></div></div>
+    <div class="course instruments"><small>Overdrive Speedway</small><canvas id="map" width="300" height="164" aria-label="Circuit map with your current position"></canvas></div>
+    <div class="dash instruments"><div class="speed"><strong id="speed">0</strong><small>km/h</small></div><div class="gear"><small>Gear</small><strong id="gear">1</strong></div><div id="rev-track"><i id="revs"></i></div></div>
+    <div id="feedback" hidden></div>
+  </section>
+  <div id="lights" role="status" hidden></div>
+  <section id="overlay" class="overlay" hidden>
+    <div class="panel">
+      <div class="eyebrow"><i class="checks"></i> Overdrive Speedway</div>
+      <h2 id="panel-title"></h2><p id="panel-copy"></p><ol id="results" hidden></ol>
+      <div class="buttons"><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button></div>
+    </div>
+  </section>
+</main>
+<footer><div><i class="live-dot"></i><span id="status" role="status">Starting renderer</span></div><div id="foot-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <span>Drive</span><kbd>ESC</kbd> <span>Pause</span></div></footer>
+<dialog id="help">
+  <div class="eyebrow"><i class="checks"></i> Ignition GT</div><h2>Driving controls</h2>
+  <dl><dt>Accelerate</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Change chase camera</dt><dd>C</dd></dl>
+  <button id="close-help" class="primary">Close controls</button>
+</dialog>
+<script type="module" src="./src/main.js"></script>
+</body></html>

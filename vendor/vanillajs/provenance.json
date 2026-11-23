@@ -1,0 +1,19 @@
+{
+  "repository": "https://github.com/QSOLKCB/VANILLAJS",
+  "commit": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "localChanges": [],
+  "sha256": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "NOTICE": "3e00b198d9b7e8cf9aba1b6095caf815dd276bd7cff6c3e517927bf690c2c302",
+    "demos/horizon-lab/race-audio.js": "39badae195e22e68580f65e2e47da72ad4cef5c21e9b613b54b12b2c64d2b122",
+    "modules/collision/index.js": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1",
+    "modules/input/index.js": "e157c0eaee89ea240fa0abe43ca24d02620c917f3188f75dcc4d765392eca025",
+    "modules/math/index.js": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7",
+    "modules/render-lit/index.js": "6f1fd13f577b41ada51242591661e80d55707b5152888655a25e79e0ea4b2a47",
+    "modules/scenic3d/index.js": "dfed00913da27f97806c39ddc5d472de1d9382994fed51101048b24d0775a30e",
+    "modules/terrain/index.js": "500756acf093f44e2e6c7e993a4b8f3f6f720abaf32db99fe0189d9b65fdc186",
+    "modules/time/index.js": "de94c0bc04e6a269504c5742455ce114f824c2c0d9d59a2fd94555df5d9bb4a2",
+    "modules/vehicle-audio/index.js": "fae1d9d8a9c68cffc02deb5233baf66e8ce94085d813c6e71111f8c456e0b283",
+    "modules/vehicle3d/index.js": "60e0bc1e11d44773af302ab8e76e8076aacd7b324461d2ea1f08ea86297797ad"
+  }
+}
