@@ -102,7 +102,8 @@ function buildProgram(gl) {
 function packReceivers(batches) {
   const cells=new Map();
   let count=0;
-  for(const {vertices:v,material,receivesHeadlights} of batches) {
+  for(const {vertices,receiverVertices,material,receivesHeadlights} of batches) {
+    const v=receiverVertices ?? vertices;
     if(receivesHeadlights===false || material.emission>0 || material.opacity<1) continue;
     count+=v.length/11;
     if(count>MAX_VERTICES) throw RangeError('Headlight receiver budget exceeded');

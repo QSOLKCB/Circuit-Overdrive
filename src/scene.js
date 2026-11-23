@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import { createHeadlightPass, selectHeadlights } from './headlights.js';
 import { LitRenderer } from '../vendor/vanillajs/modules/render-lit/index.js';
+import { nightFrame, validateEnvironment } from './environment.js';
+import { buildNightWorld, nightStars } from './night-fixtures.js';
 import { cross, normalize } from '../vendor/vanillajs/modules/math/index.js';
 import { ridgeBatches } from './ridge-scene.js';
 import { speedwayBatches } from './speedway.js';
@@ -17,8 +19,6 @@ const LIGHT = {
 };
 const RIDGE_LIGHT = {...LIGHT, ambient:.54, skyTop:[.13,.40,.63], skyBottom:[.81,.85,.79],
   sunDirection:[-.55,.83,-.30], fogColor:[.68,.76,.74], fogDensity:.00094};
-const NIGHT_LIGHT = {...LIGHT, ambient:.23, sunDirection:[-.52,.66,-.46], sunColor:[.21,.28,.46],
-  skyTop:[.012,.018,.085],skyBottom:[.14,.12,.24],fogColor:[.087,.10,.17],fogDensity:.0017};
 const PAINT = {roughness:.32,metalness:.18};
 const shadowMaterial={color:[.025,.037,.045],pattern:'shadow',opacity:.75};
 const shadowVertices=new Float32Array([
@@ -42,16 +42,19 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
 }
 
 export function createScene(canvas,course=track,pixelRatio=1,environment='day') {
-  if(environment!=='day' && environment!=='night') throw RangeError('Unknown racing environment');
+  const night=validateEnvironment(environment)==='night';
+  const light=night ? nightFrame(course) : course.closed ? LIGHT : RIDGE_LIGHT;
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
-  let world,car,shadow,effects,headlights;
+  let world,car,shadow,effects,headlights,stars;
   try {
-    const batches=course.closed ? speedwayBatches() : ridgeBatches(course);
+    const base=course.closed ? speedwayBatches() : ridgeBatches(course);
+    const batches=night ? buildNightWorld(course,base) : base;
     world=batches.map(({vertices,material,bounds})=>({mesh:renderer.mesh(vertices),material,bounds}));
-    car=touringMeshes(renderer);
+    car=touringMeshes(renderer,night);
+    if(night) stars=renderer.mesh(nightStars(course));
     effects=createDrivingEffects(renderer);
     shadow=renderer.mesh(shadowVertices);
-    if(environment==='night') headlights=createHeadlightPass(renderer.gl,batches);
+    if(night) headlights=createHeadlightPass(renderer.gl,batches);
   } catch (error) {
     renderer.dispose();
     throw error;
@@ -70,7 +73,8 @@ export function createScene(canvas,course=track,pixelRatio=1,environment='day') 
     renderer.draw(car.shell,{matrix:root,material:livery.paint});
     renderer.draw(car.detail,{matrix:root,material:trim});
     renderer.draw(livery.graphics,{matrix:root,material:PAINT});
-    renderer.draw(car.lamps,{matrix:root,material:{roughness:.24,emission:.29+1.7*(p.brake??0)}});
+    if(car.projectors) renderer.draw(car.projectors,{matrix:root,material:{roughness:.25,emission:1.25}});
+    renderer.draw(car.lamps,{matrix:root,material:{roughness:.24,emission:(night ? .54 : .29)+1.7*(p.brake??0)}});
     for(const matrix of wheelTransforms(car.rig,p,root)) {
       renderer.draw(car.tyre,{matrix,material:car.tyreMaterial});
       renderer.draw(car.rim,{matrix,material:car.rimMaterial});
@@ -96,9 +100,12 @@ export function createScene(canvas,course=track,pixelRatio=1,environment='day') 
       const view=mode==='menu' ? showroom(p,aspect,course) :
         cameraRig.update(p,poses,{camera,dt:mode==='paused'?0:dt,reducedMotion});
       lastMode=mode;
-      const light=headlights ? NIGHT_LIGHT : course.closed ? LIGHT : RIDGE_LIGHT;
       const orientation=lookAt(view.eye,view.target,view.roll), frame={...light,fov:view.fov};
       renderer.begin(view.eye,orientation,frame);
+      if(stars) renderer.draw(stars,{
+        matrix:columnMatrix([1,0,0],[0,1,0],[0,0,1],view.eye),
+        material:{emission:1.25,opacity:.98}
+      });
       const forward=normalize(view.target.map((v,i)=>v-view.eye[i]));
       const horizontalSlope=aspect*Math.tan(view.fov/2);
       for(const row of world) if(visible(row.bounds,view.eye,forward,horizontalSlope,light.far))
@@ -123,6 +130,10 @@ export function createScene(canvas,course=track,pixelRatio=1,environment='day') 
       for (const {matrix} of glassDraws) renderer.draw(car.glass,{matrix,material:glass});
       if(mode==='racing' || mode==='paused' || mode==='finished') effects.draw(view.eye,forward,reducedEffects);
     },
-    dispose(){headlights?.dispose();renderer.dispose();}
+    dispose(){
+      // A restored context has already released the previous generation's handles.
+      if(!renderer.lost) headlights?.dispose();
+      renderer.dispose();
+    }
   };
 }

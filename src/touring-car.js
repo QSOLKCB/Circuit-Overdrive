@@ -62,8 +62,8 @@ function number(out,n,point,color,normal) {
   });
 }
 
-function coachwork(){
-  const shell=[], detail=[], glass=[], lamps=[];
+function coachwork(night){
+  const shell=[], detail=[], glass=[], lamps=[], projectors=[];
   const stations=new Set(sections.map(row=>row[0]));
   for(const axle of [-1.31,1.31]){
     stations.add(axle-.395); stations.add(axle+.395);
@@ -156,7 +156,7 @@ function coachwork(){
     quad(detail,f(.24,.467),f(.79,.465),f(.81,.568),f(.24,.60),INK,[0,0,-1]);
     for(let i=0;i<3;i++){
       const x=.275+.17*i,front=face(side,-2.174);
-      quad(detail,front(x,.487),front(x+.141,.487),front(x+.143,.558),front(x,.566),
+      quad(night ? projectors : detail,front(x,.487),front(x+.141,.487),front(x+.143,.558),front(x,.566),
         i===2?[.98,.48,.085]:[.92,.96,.93],[0,0,-1]);
     }
   }
@@ -182,7 +182,7 @@ function coachwork(){
   }
   quad(detail,[-.94,1.055,1.737],[.94,1.055,1.737],[.94,1.11,2.058],[-.94,1.11,2.058],INK,[0,1,-.16]);
   quad(detail,[-.94,1.11,2.058],[.94,1.11,2.058],[.94,1.076,2.07],[-.94,1.076,2.07],STEEL,[0,.1,1]);
-  return {shell,detail,glass,lamps};
+  return {shell,detail,glass,lamps,projectors};
 }
 
 // Each identity has its own panel layout, high-contrast secondary colour and race number.
@@ -235,9 +235,9 @@ function raceGraphics(driver) {
   return new Float32Array(out);
 }
 
-export function touringMeshes(renderer) {
+export function touringMeshes(renderer,night=false) {
   const rig=buildVehicleVisual('touring',{profile:'low'});
-  const {shell,detail,glass,lamps}=coachwork();
+  const {shell,detail,glass,lamps,projectors}=coachwork(night);
   const mesh=v=>renderer.mesh(new Float32Array(v));
   // Identical wheel geometry appears four times in the upstream rig. Share the two GPU buffers.
   const tyre=rig.parts.find(part=>part.id==='front-left-tire'), alloy=rig.parts.find(part=>part.id==='front-left-alloy');
@@ -248,6 +248,7 @@ export function touringMeshes(renderer) {
       [.99,.68,.11],[side,0,0]);
   }
   return {rig,shell:mesh(shell),detail:mesh(detail),glass:mesh(glass),lamps:mesh(lamps),
+    projectors:night ? mesh(projectors) : null,
     tyre:mesh(tyre.vertices),rim:mesh(rim),tyreMaterial:tyre.material,rimMaterial:alloy.material,
     liveries:FIELD.map(d=>({paint:{color:[1,3,5].map(i=>parseInt(d.color.slice(i,i+2),16)/255),roughness:.27,metalness:.36},
       graphics:mesh(raceGraphics(d))}))};

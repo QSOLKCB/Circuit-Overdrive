@@ -1,0 +1,156 @@
+{
+  "source": "7d49db1e4bef03471c6ef2387849665286ada814",
+  "browser": "158.0.8127.36",
+  "viewport": [
+    1024,
+    576
+  ],
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "version": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+  "poses": "Grid and recovery from simulation. Other captures are controlled placements on sampled course surfaces.",
+  "captures": [
+    {
+      "file": "speedway-grid.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 33015,
+      "dark": 420145,
+      "roadBright": 13656,
+      "entrants": 6,
+      "playerStation": 1555.8867245756435,
+      "sha256": "b87e8a6b8c3da4ffe87eb77f5474b0cdd8b8daf64e73b173a0008542e9fa4138"
+    },
+    {
+      "file": "speedway-bank.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 18833,
+      "dark": 534409,
+      "roadBright": 7017,
+      "entrants": 6,
+      "playerStation": 208,
+      "sha256": "49c8e58bb70d46ec528c189d8cd0ce0a98b90d816e23fdc5233605213ffd462c"
+    },
+    {
+      "file": "speedway-backstraight.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 13074,
+      "dark": 554475,
+      "roadBright": 8657,
+      "entrants": 6,
+      "playerStation": 690.0000000000002,
+      "sha256": "c87150aeb9c7cd2adeda505a82271a6c9a3568857d413cb53a911f950f3cd14b"
+    },
+    {
+      "file": "speedway-recovered-grid.webp",
+      "reverse": false,
+      "recovery": true,
+      "bright": 33015,
+      "dark": 420145,
+      "roadBright": 13656,
+      "entrants": 6,
+      "playerStation": 1555.8867245756435,
+      "sha256": "b87e8a6b8c3da4ffe87eb77f5474b0cdd8b8daf64e73b173a0008542e9fa4138"
+    },
+    {
+      "file": "ridge-descent.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 14060,
+      "dark": 562939,
+      "roadBright": 8425,
+      "entrants": 6,
+      "playerStation": 430,
+      "sha256": "e1b19771dd703fd31285e38e51268869c7e9e925018d5a0c2ea8cf52f9ff593b"
+    },
+    {
+      "file": "ridge-forest.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 17131,
+      "dark": 552845,
+      "roadBright": 7690,
+      "entrants": 6,
+      "playerStation": 1070,
+      "sha256": "c69ae04bf5b29d723d85d35c3b8789af61c6325c97326a9bfecbd4652a3deca2"
+    },
+    {
+      "file": "ridge-bridge-entry.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 24340,
+      "dark": 520782,
+      "roadBright": 11478,
+      "entrants": 6,
+      "playerStation": 1792,
+      "sha256": "fa82ba81a443f2716cf84243f445f8fe3089321b015dbf0b61be3f9818edcea9"
+    },
+    {
+      "file": "ridge-bridge.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 20606,
+      "dark": 531595,
+      "roadBright": 11149,
+      "entrants": 6,
+      "playerStation": 1915,
+      "sha256": "be74c3bdb62988cb952f3d518fdde8277c10c7e173a5c32adb4858d1850a26a2"
+    },
+    {
+      "file": "ridge-bridge-exit.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 17124,
+      "dark": 539067,
+      "roadBright": 10483,
+      "entrants": 6,
+      "playerStation": 2062,
+      "sha256": "a5f2b116e124089b2eaab0294a96fbf9d4811c908bd3d86ca655cbc1fb5f20cb"
+    },
+    {
+      "file": "ridge-tunnel-entry.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 22045,
+      "dark": 476062,
+      "roadBright": 12157,
+      "entrants": 6,
+      "playerStation": 3052,
+      "sha256": "7b2dc74db732dac7c9afce006457172cf865ca337dbf28592af6bc006d4aec6c"
+    },
+    {
+      "file": "ridge-tunnel-inside.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 20290,
+      "dark": 226855,
+      "roadBright": 13512,
+      "entrants": 6,
+      "playerStation": 3137,
+      "sha256": "ae2e9755554608e289fad594702e0fd4e4f1128ed77a11719c4548a40d561af5"
+    },
+    {
+      "file": "ridge-tunnel-exit.webp",
+      "reverse": false,
+      "recovery": false,
+      "bright": 18820,
+      "dark": 323207,
+      "roadBright": 10896,
+      "entrants": 6,
+      "playerStation": 3231,
+      "sha256": "968a131dea48fdfe1895b9cb41f8630582acd76e9965728b449ff33c8136547f"
+    },
+    {
+      "file": "ridge-reverse-portal.webp",
+      "reverse": true,
+      "recovery": false,
+      "bright": 39344,
+      "dark": 380722,
+      "roadBright": 20097,
+      "entrants": 6,
+      "playerStation": 3255,
+      "sha256": "f678d56506744d4a710c1a9866d00c895403eed1df788d8b788e442f75dbdc5d"
+    }
+  ]
+}
