@@ -19,7 +19,7 @@ const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const coarse = matchMedia('(pointer: coarse)');
 let pixelRatio = 1;
 const mixer = Object.keys(DEFAULT_VOLUMES);
-let reducedEffects = motion.matches;
+let reducedEffects;
 let quality = 'auto';
 let race = createRace();
 let recording;
@@ -257,7 +257,9 @@ $('sound').onclick = () => {
 };
 function applyQuality() {
   const nextRatio = quality === 'mobile' || (quality === 'auto' && coarse.matches) ? .75 : 1;
-  reducedEffects = quality === 'reduced' || nextRatio < 1 || (quality === 'auto' && motion.matches);
+  const nextReduced = quality === 'reduced' || nextRatio < 1 || (quality === 'auto' && motion.matches);
+  if (nextReduced === reducedEffects && nextRatio === pixelRatio) return;
+  reducedEffects = nextReduced;
   if (pixelRatio !== nextRatio) {
     pixelRatio = nextRatio;
     if (scene && !error) { scene.dispose(); initializeScene(); }
@@ -288,8 +290,6 @@ $('effects-quality').onchange=()=>{
   applyQuality();
   saveSettings();
 };
-motion.addEventListener('change',applyQuality);
-coarse.addEventListener('change',applyQuality);
 applyQuality();
 $('settings').onclick=()=>{ pause(); $('options').showModal(); };
 $('close-settings').onclick=()=>$('options').close();
@@ -426,6 +426,9 @@ function frame(time) {
   const elapsed = lastTime === null ? 0 : Math.max(0, (time - lastTime) / 1000);
   lastTime = time;
   if (!error && !document.hidden) {
+    // Read the effective preference before drawing, including after a missed
+    // MediaQueryList change notification or a suspended browser tab.
+    if (quality === 'auto') applyQuality();
     if ($('controller-dialog').open) controller.refresh();
     if (!driving() && document.hasFocus()) input.menu();
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;

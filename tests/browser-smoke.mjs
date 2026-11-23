@@ -15,6 +15,18 @@ try {
   page.on('pageerror', e => failures.push(String(e)));
   page.on('request', r => urls.push(r.url()));
   page.on('response', r => {if(r.status() >= 400) failures.push(r.url()+' '+r.status());});
+  if (!scenic) await page.addInitScript(() => {
+    // Reproduce a missed change event while Chromium still updates .matches.
+    // The Ridge run exercises both preference transitions with normal delivery.
+    const matchMedia = window.matchMedia.bind(window);
+    window.matchMedia = query => {
+      const list = matchMedia(query);
+      if (list.media === '(prefers-reduced-motion: reduce)') {
+        list.addEventListener('change', event => event.stopImmediatePropagation(), {once:true});
+      }
+      return list;
+    };
+  });
   // Count real scheduled PCM buffers while leaving the audio device path intact.
   await page.addInitScript(() => {
     window.engineBuffers = 0;
