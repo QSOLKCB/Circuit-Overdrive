@@ -12,11 +12,12 @@
   <nav aria-label="Game controls">
     <button id="sound" type="button" aria-pressed="true">Sound <b id="sound-state">on</b></button>
     <button id="settings" type="button">Settings</button>
+    <button id="controllers" type="button">Controller</button>
     <button id="controls" type="button">Controls</button>
   </nav>
 </header>
 <main>
-  <canvas id="world" tabindex="-1" aria-label="Circuit Overdrive race. Use the arrow keys or WASD to drive."></canvas>
+  <canvas id="world" tabindex="-1" aria-label="Circuit Overdrive race. Use the selected driving controls."></canvas>
   <section id="menu" class="menu">
     <div class="intro">
       <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Course select</div>
@@ -55,8 +56,16 @@
 <dialog id="help" aria-labelledby="help-title">
   <h2 id="help-title">Driving controls</h2>
   <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
-  <p>Leaving the window pauses the race. Resume and press a fresh driving key.</p>
+  <p>Keyboard is the default. Choose Controller to select a device. Leaving the window or disconnecting the active controller pauses the race.</p>
   <button id="close-help" class="primary">Close controls</button>
+</dialog>
+<dialog id="controller-dialog" aria-labelledby="driver-title">
+  <h2 id="driver-title">Driving controller</h2>
+  <label for="driver-device">Input device</label>
+  <select id="driver-device"><option value="keyboard">Keyboard</option></select>
+  <p id="driver-layout"></p><output id="raw-input" aria-label="Current controller values"></output>
+  <p id="driver-status" role="status"></p>
+  <div class="buttons"><button id="use-device" class="primary">Use this device</button><button id="close-controller">Cancel</button></div>
 </dialog>
 <dialog id="options" aria-labelledby="options-title">
   <h2 id="options-title">Settings</h2>

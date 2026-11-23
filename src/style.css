@@ -846,3 +846,8 @@ body[data-phase=racing] #world,body[data-phase=countdown] #world {
     padding: 3px 0;
   }
 }
+
+#controller-dialog { width:min(38rem,94vw); max-height:85vh; overflow:auto; }
+#controller-dialog select { display:block; max-width:100%; margin:.4rem 0; }
+#controller-dialog output { display:block; white-space:pre-wrap; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+#driver-device { width:100%; }
