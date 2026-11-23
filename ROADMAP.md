@@ -65,7 +65,23 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Release:** proposed `v0.6.1`, **only after** the three PRs are reviewed, merged and verified.
 
-## 4. Road to v1.0.0 — gameplay expansions
+## 4. Replay spectator milestone — v0.6.2
+
+### CO-REPLAY-001 — REPLAY THEATRE: Watch, Inspect and Share
+
+**Purpose:** turn the existing **source-stamped JSON race recordings** into a genuinely watchable, offline-first replay experience. The input recording already exists, but an offline Node classification verifier is **not** a visual replay player. This separate patch milestone follows the v0.6.1 soundtrack work and precedes CO-007 without renumbering gameplay releases.
+
+**Core experience:** an in-game Replay Theatre entrypoint and a separately packaged browser page. Players can import a bounded `.json` replay, see the entire six-car race re-simulated with the exact game's VANILLAJS physics and AI, play/pause/restart, seek to a tick with bounded asynchronous re-simulation, select chase views or competitor follow cameras, and inspect position, lap/checkpoint and finishing classification. Exported records are shared **as files** with friends, who load them in a compatible release; no upload server, account, public storage or telemetry.
+
+**Source authority and longevity:** version 2 recordings contain an **exact 40-hex game revision**. Verify source identity before playback; reject malformed, oversized, truncated, overlong, non-finite, or mismatched recordings before simulating. No user-supplied scripts, URL-to-file fetch, remote game code or replay-originated DOM markup. Future physics changes may make old input streams diverge: publish or retain the matching **immutable offline build** so old recordings remain watchable, and report a clear incompatible-version message rather than pretending that new physics will reproduce them. Never claim a cryptographic signature or anti-cheat property for owner-editable files.
+
+**Deterministic spectator features:** driven by the exact same fixed-step `stepRace` and accepted recovery requests. Camera selection and playback-speed setting are presentation only. Timeline seeking resets and resimulates authoritative ticks in capped work batches; it cannot assign arbitrary car positions, edit official time or skip race gates. Once a replay finishes, the results must exactly match the independent Node verifier. Preserve source-identified replay export and make sharing workflow understandable.
+
+**Delivery:** one focused **CO-REPLAY-001 — Replay Theatre** PR, including accessible keyboard, controller and touch-operated browser controls, static-package allowlist and source stamp, bounded-memory/error UX, Node unit tests, real-browser replay completion on both courses, compatibility checks, and GitHub Pages/public verification. Owner review controls merge, tag and publication.
+
+**Release:** proposed `v0.6.2` after v0.6.1; do not mark as implemented until accepted and published.
+
+## 5. Road to v1.0.0 — gameplay expansions
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |
@@ -76,7 +92,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 
-## 5. Post-v1.0.0 — destruction, garage and economy
+## 6. Post-v1.0.0 — destruction, garage and economy
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |
@@ -88,7 +104,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Relevant internal donor:** [STREET-RACER](https://github.com/QSOLKCB/STREET-RACER) already implements original garage purchases, upgrades, a four-bay career, recovery jobs, validated save transactions, and a separate *Impact Arena* demonstration. Reuse **reviewed contracts**, not its distinct driving authority: preserve Circuit Overdrive's VANILLAJS simulation and exact import provenance. Cash means local fictional credits only. Car damage and repairs must be causally linked to actual vehicle state. A player must have a fair recoverable path after losing a car or funds.
 
-## 6. Shared verification policy for every future milestone
+## 7. Shared verification policy for every future milestone
 
 | Gate | Required evidence |
 | --- | --- |
@@ -104,7 +120,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 Review and update this document whenever milestones ship. Move entries into the **Released foundation** section only after the owner publishes that version. A future-roadmap feature must never be presented as a currently playable feature.
 
-## 7. Longer-term research backlog (not committed to dates)
+## 8. Longer-term research backlog (not committed to dates)
 
 - More original racing circuits and configurable car classes, gated by simulation and performance tests.
 - Championship ghosts, race comparisons and source-bound musical score receipts.
