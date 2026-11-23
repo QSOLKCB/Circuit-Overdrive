@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "name": "Overdrive Speedway",
+  "halfWidth": 12,
+  "barrierOffset": 14,
+  "corners": [
+    {"x": 0,   "z": -230, "radius": 132, "bankDegrees": 17},
+    {"x": 220, "z": -330, "radius": 100, "bankDegrees": 8},
+    {"x": 375, "z": -175, "radius": 97,  "bankDegrees": 10},
+    {"x": 315, "z": 20,   "radius": 172, "bankDegrees": 5},
+    {"x": 368, "z": 210,  "radius": 110, "bankDegrees": 14},
+    {"x": 96,  "z": 285,  "radius": 106, "bankDegrees": 8},
+    {"x": 0,   "z": 180,  "radius": 84,  "bankDegrees": 6}
+  ]
+}
