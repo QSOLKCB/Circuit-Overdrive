@@ -8,10 +8,10 @@ on:
 permissions:
   contents: read
 
-# Keep the matching public site in place while its browser checks run.
+# New PR heads supersede older tests. A deployment keeps its public check window.
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   package:

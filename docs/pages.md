@@ -1,6 +1,6 @@
 # Publishing Circuit Overdrive
 
-The Pages site is built from the exact revision of `main` that triggers the workflow. A pull request runs the same package and gameplay checks with a read-only token. The `deploy` job runs after verification on a push to `main`, using the `github-pages` environment with `pages: write` and `id-token: write`. Public validation runs separately with read-only permissions. [GitHub Pages custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+The Pages site is built from the exact revision of `main` that triggers the workflow. A pull request runs the same package and gameplay checks with a read-only token. The `deploy` job runs after verification on a push to `main`, using the `github-pages` environment with `pages: write` and `id-token: write`. Pushing an update to a PR cancels superseded tests for that PR. Deployments to main run serially so the public browser checks finish against the deployed revision. Public validation runs with read-only permissions. [GitHub Pages custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 
 ## Build and play the package locally
 
