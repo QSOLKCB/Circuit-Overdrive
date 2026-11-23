@@ -43,3 +43,6 @@
   #enter-woc {font-size:13px; min-height:44px}
   #woc-actions {gap:6px}
 }
+
+#woc-save-status {color:var(--mint); font:600 12px/1.5 var(--mono)}
+#woc-save-status:empty {display:none}

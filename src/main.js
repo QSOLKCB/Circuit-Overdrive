@@ -36,7 +36,16 @@ const input = attachDriverInput(window, () => driving() && focused(), handleActi
 const controller = controllerMenu(input, showSource);
 const revision = document.querySelector('meta[name=game-revision]').content || null;
 const championship = championshipUI({revision, formatTime, grid:() => enterGrid(true),
-  changed() { resetClock(); updatePanel(true); },
+  downloadReplay, anthem:playAudio,
+  changed(screen) {
+    resetClock();
+    stopAudio();
+    updatePanel(true);
+    if (screen === 'trophy') {
+      audio.selectMusic('championship');
+      playAudio();
+    }
+  },
   leave() {
     installRace(createRace(undefined,standaloneCourse));
     updatePanel();
@@ -77,7 +86,7 @@ function stopAudio() {
   audio.stop();
 }
 async function playAudio() {
-  if (!sound || !driving()) return;
+  if (!sound || !(driving() || (championship.celebrating && document.hasFocus() && !document.hidden && !modalOpen()))) return;
   const generation = ++soundGeneration;
   if (!await audio.start() && generation === soundGeneration) {
     sound = false;
@@ -124,6 +133,7 @@ function enterGrid(round = false) {
   updatePanel();
 }
 function pause() {
+  if (championship.celebrating) { stopAudio(); return; }
   if (grid) {
     grid = false;
     if (championship.active) {
@@ -251,14 +261,18 @@ function selectCourse(course) {
 }
 $('choose-speedway').onclick = () => selectCourse(track);
 $('choose-ridge').onclick = () => selectCourse(ridge);
-$('save-drive').onclick = () => {
-  if (phase() !== 'finished' || !recording?.complete) return;
-  const url = URL.createObjectURL(new Blob([JSON.stringify(recording.export())],{type:'application/json'}));
+function downloadReplay(data, filename) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'circuit-overdrive-'+race.course.id+'-replay.json';
+  link.download = filename;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url),1000);
+}
+$('save-drive').onclick = () => {
+  if (phase() === 'finished' && recording?.complete) {
+    downloadReplay(recording.export(),'circuit-overdrive-'+race.course.id+'-replay.json');
+  }
 };
 $('courses').onclick = () => {
   if (!['paused','finished'].includes(phase())) return;
@@ -366,7 +380,7 @@ function handleAction(action) {
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
-    audio.selectMusic(race.course.id); // New race: reset the soundtrack timeline.
+    audio.selectMusic(championship.active ? 'championship' : race.course.id); // New race: reset the soundtrack timeline.
     recording = createRecording(race.course.id, race.seed, revision);
     resetClock();
     playAudio();
@@ -392,7 +406,7 @@ function fixedUpdate() {
   }
   if (championship.active && race.phase === 'finished') {
     stopAudio();
-    championship.finish(race);
+    championship.finish(race,recording);
     return;
   }
   const place=race.player.position;
@@ -482,6 +496,10 @@ function frame(time) {
     if (quality === 'auto') applyQuality();
     if ($('controller-dialog').open) controller.refresh();
     if (!driving() && document.hasFocus()) input.menu();
+    if (championship.celebrating && sound && !modalOpen() && !audio.updateCelebration()) {
+      sound = false;
+      syncSound();
+    }
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
     try { render(alpha, elapsed); }
