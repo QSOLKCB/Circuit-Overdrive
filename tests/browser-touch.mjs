@@ -71,15 +71,22 @@ try {
   await send('touchStart',[gas,right]);
   await held('right','throttle');
   await page.waitForFunction(()=>Number(document.querySelector('#speed').textContent)>12);
-  // Chromium derives per-ID releases when that contact disappears. Moving a
-  // still-captured finger outside releases only its original control.
-  await send('touchMove',[gas,{...right,y:right.y-100}]);
+  // Lift the first finger while the second continues to steer. A new press
+  // can reapply throttle. Dragging out of steering leaves that pedal held.
+  await send('touchEnd',[gas]);
+  await held('right');
+  gas=await down(3,'throttle');
+  await send('touchStart',[gas]);
+  await held('right','throttle');
+  await send('touchMove',[{...right,y:right.y-100}]);
   await held('throttle');
   await send('touchEnd');
   await held();
   const brake=await down(1,'brake'), left=await down(2,'left');
   await send('touchStart',[brake,left]);
   await held('brake','left');
+  await send('touchEnd',[left]);
+  await held('brake');
   await send('touchCancel');
   await phase('paused');
   await held();

@@ -859,3 +859,5 @@ body[data-phase=racing] #world,body[data-phase=countdown] #world {
 .profile-editor input[type=range] { display:block; width:100%; }
 .profile-editor .buttons { gap:6px; }
 #controller-dialog [hidden] { display:none; }
+
+#controller-dialog:has(#profile-settings[open]) #raw-input { display:none; }

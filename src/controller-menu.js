@@ -10,16 +10,31 @@ export function controllerMenu(input, onSelect) {
   const dialog = $('controller-dialog'), list = $('driver-device');
   let signature = '', devices = [], message = '';
   let previewKey, mapper;
-  const editor = createProfileEditor($('profile-host'), {onSave:(pad,updated) => {
+  // Capture and Save can happen between frames. Some browsers replace the
+  // Gamepad object on each poll, so always read the current slot for a click.
+  function readDevice(expected) {
+    if (!expected) return null;
+    const key=deviceKey(expected);
+    return input.pads.devices().find(live=>live.index===expected.index && deviceKey(live)===key) || null;
+  }
+  const editor = createProfileEditor($('profile-host'), {readDevice, onSave:(pad,updated) => {
     previewKey = undefined;
     // Saving edits to the owner's device clears every held value before reuse.
-    if (input.source === 'gamepad' && input.pads.index === pad.index) {
+    if (input.source === 'gamepad' && input.pads.owns(pad)) {
       if (updated || pad.mapping === 'standard') input.select('gamepad',pad.index,updated || undefined);
       else input.pads.deselect();
     }
     refresh();
   }});
-  dialog.addEventListener('close', () => { editor.close(); previewKey = undefined; });
+  function close() {
+    // Native close events can arrive after fresh input on the next animation
+    // frame. Reset ownership synchronously while leaving the editor.
+    input.clear();
+    editor.close();
+    previewKey = undefined;
+    dialog.close();
+  }
+  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
   window.addEventListener('gamepaddisconnected', e => {
     if (dialog.open && e.gamepad?.index === currentPad()?.index) { editor.close(); previewKey = undefined; }
   });
@@ -43,6 +58,9 @@ export function controllerMenu(input, onSelect) {
   }
   function refresh() {
     if (!dialog.open) return;
+    // Mapping consumes only preview inputs. Poll the owner for loss here because
+    // the normal menu intentionally suppresses action edges while editing.
+    if ($('profile-settings').open && input.pads.index!==null) input.pads.poll();
     devices = input.pads.devices();
     const next = JSON.stringify(devices.map(p => [p.index,p.id,p.mapping,p.axes.length,p.buttons.length]));
     if (next !== signature) {
@@ -64,7 +82,7 @@ export function controllerMenu(input, onSelect) {
   list.onchange = () => { message = ''; present(); };
   $('use-device').onclick = () => {
     const pad = currentPad();
-    if (pad && !input.pads.devices().some(p=>p.index===pad.index && p.id===pad.id && p.mapping===pad.mapping)) {
+    if (pad && !readDevice(pad)) {
       message = 'Device changed. Select the connected controller again.'; refresh(); return;
     }
     const kind = pad ? 'gamepad' : list.value === 'touch' ? 'touch' : 'keyboard';
@@ -72,10 +90,10 @@ export function controllerMenu(input, onSelect) {
       message = 'This controller is missing a required control. Choose another layout or device.';
       present(); return;
     }
+    close();
     onSelect(kind);
-    dialog.close();
   };
-  $('close-controller').onclick = () => dialog.close();
+  $('close-controller').onclick = close;
   return {open, refresh};
 }
 
@@ -83,9 +101,13 @@ export function controllerMenu(input, onSelect) {
 export function menuAction(action) {
   const dialog = document.querySelector('dialog[open]');
   const active = document.activeElement;
-  if (action === 'back' && dialog) { dialog.close(); return true; }
+  if (action === 'back' && dialog) {
+    if (dialog.id === 'controller-dialog') document.getElementById('close-controller').click();
+    else dialog.close();
+    return true;
+  }
   if (action === 'confirm') {
-    if (active?.matches('button:enabled')) active.click();
+    if (active?.matches('button:enabled,summary,input[type=checkbox]:enabled')) active.click();
     else if (!dialog) document.querySelector('#start')?.click();
     return true;
   }
@@ -98,7 +120,7 @@ export function menuAction(action) {
     active.dispatchEvent(new Event('change',{bubbles:true}));
     return true;
   }
-  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled')].filter(el => el.getClientRects().length);
+  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled,summary')].filter(el => el.getClientRects().length);
   const index = available.indexOf(active);
   available[(index < 0 ? 0 : (index+(forward?1:-1)+available.length)%available.length)]?.focus();
   return true;

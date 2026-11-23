@@ -99,10 +99,11 @@ export function profileMapper(profile,device) {
   // Freeze the accepted calibration in the closure. An open settings draft cannot
   // change driving inputs before another explicit selection and neutral gate.
   const p=JSON.parse(JSON.stringify(profile)), t=p.tuning, actions=Object.entries(p.actions);
-  const axes=device.axes.length, buttons=device.buttons.length;
+  const axes=device.axes.length, buttons=device.buttons.length, id=device.id, mapping=device.mapping;
   const hats=[p.steering.left,p.steering.right,...Object.values(p.actions)].filter(b=>b.type==='hat');
   return pad => {
-    if (!pad || pad.connected===false || pad.axes?.length!==axes || pad.buttons?.length!==buttons) return null;
+    if (!pad || pad.connected===false || pad.id!==id || pad.mapping!==mapping ||
+        pad.axes?.length!==axes || pad.buttons?.length!==buttons) return null;
     const left=travel(pad,p.steering.left), right=travel(pad,p.steering.right);
     const throttle=trim(travel(pad,p.throttle)/t.throttleRange,.02);
     const brake=trim(travel(pad,p.brake)/t.brakeRange,.02);

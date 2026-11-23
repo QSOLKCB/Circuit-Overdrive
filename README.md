@@ -17,7 +17,7 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Open [the local game](http://127.0.0.1:8000/) in a modern browser with WebGL and native JSON module support. All code, sound and track geometry are local. The same files work in a static site's `/Circuit-Overdrive/` directory.
 
-Select a course and choose **Start race**, then press **W** or **↑** on the grid. Hold it through the three lights to accelerate at green. The race clock starts at green. Cross the finish three times on Speedway or reach the far end of the Ridge after seven checkpoints.
+Select a course and choose **Start race**. With the default keyboard, press **W** or **↑** on the grid. Hold it through the three lights to accelerate at green. The race clock starts at green. Cross the finish three times on Speedway or reach the far end of the Ridge after seven checkpoints.
 
 | Keys | Action |
 | --- | --- |
@@ -30,13 +30,17 @@ Select a course and choose **Start race**, then press **W** or **↑** on the gr
 
 Losing focus clears the controls and pauses the countdown or race. Resume explicitly and press a fresh driving key. The header controls open the driving guide and toggle procedural engine audio. Use **Restart race** to return to the same grid or **Course select** to choose the other road from the pause or results screen.
 
+For a gamepad or wheel, open **Controller**, select the exposed slot, and set its mapping before the race. On touchscreens, tap **Drive with touch** on the grid. Each device supplies the same three driving values to the six-car simulation. [Controller setup and compatibility matrix](docs/controllers.md)
+
+At the flag, **Save replay** downloads the accepted 60 Hz inputs and race seed. Run `node scripts/replay-drive.mjs PATH_TO_REPLAY.json` from the same game revision to reproduce the field classification. Pauses consume zero race ticks. Recordings are limited to 30 minutes of active simulation and stay on the device.
+
 ## Cockpit and sound
 
 The position display updates on every accepted race tick. A brief position-change notice waits for a place to hold for 0.2 seconds, so a door-to-door fight keeps a readable HUD. The map retains your latest completed lap or sprint split. The results highlight your fastest Speedway lap.
 
 **Settings** opens the master, engine and tyre/effects mix. Each control ranges from silence to full level. The original 48 kHz procedural mix follows the player’s drivetrain and grounded tyres. Listen for the shift lift, brake scrub, guardrail tap and the short reflection in the Ridge tunnel. Audio starts when you take the wheel. Pause or mute fades it out.
 
-**Driving effects** follows the browser’s reduced-motion preference by default. Full mode draws smoke during physical tyre slip, dust on the apron, tyre marks and brief sparks at a rail impact. Reduced mode retains up to 12 tyre marks and suppresses moving particles. Settings are saved locally when browser storage is available. Both chase cameras follow road grade, anticipate corners and give nearby rivals a little more room in the frame.
+**Driving effects** follows the browser’s reduced-motion and coarse-pointer capabilities by default. Mobile mode reduces the pixel dimensions to 75%. Full mode draws smoke during physical tyre slip, dust on the apron, tyre marks and brief sparks at a rail impact. Reduced mode retains up to 12 tyre marks and suppresses moving particles. Settings are saved locally when browser storage is available. Both chase cameras follow road grade, anticipate corners and give nearby rivals a little more room in the frame.
 
 ## How the race works
 

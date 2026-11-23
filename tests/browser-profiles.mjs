@@ -79,7 +79,45 @@ try {
   const saved=(await record()).devices[0].profile;
   assert.equal(saved.throttle.index,saved.brake.index); assert.equal(saved.tuning.invertSteer,true);
   await click('use-device');
+  // Replace the object between animation frames, as snapshot-based Gamepad
+  // implementations can. Calibration clicks must inspect the live slot.
+  await configure(index);
+  await id('profile-remap-action').selectOption('camera'); await click('profile-remap');
+  await capture([.08,.1],[]);
+  const ended=await page.evaluate(()=>{
+    const pad=window.padFixture[1];
+    window.padFixture[1]={...pad,buttons:pad.buttons.map((b,i)=>i===4 ? {value:1,pressed:true} : b)};
+    document.getElementById('profile-capture').click();
+    return document.getElementById('profile-step').closest('fieldset').hidden;
+  });
+  assert.equal(ended,true);
+  await frame([.08,.1],[]);
+  const refused=await page.evaluate(()=>{
+    const pad=window.padFixture[1];
+    window.padFixture[1]={...pad,axes:[.08,-.9]};
+    document.getElementById('profile-save').click();
+    return document.getElementById('profile-message').textContent;
+  });
+  assert.match(refused,/Release/);
+  assert.equal((await record()).devices[0].profile.actions.camera,undefined);
+  await frame([.08,.1],[]); await click('profile-save');
+  assert.equal((await record()).devices[0].profile.actions.camera.index,4);
+
+  // A different id with identical dimensions cannot inherit an active wheel's
+  // ownership, even when the browser has not delivered its disconnect event.
+  const changed=await page.evaluate(()=>{
+    window.padFixture[1]={...window.padFixture[1],id:'Replacement wheel'};
+    document.getElementById('profile-save').click();
+    return document.getElementById('profile-message').textContent;
+  });
+  assert.match(changed,/controller changed/);
+  await frame([.08,.1],[]);
+  assert(await id('use-device').isDisabled());
+  await click('close-controller'); await id('start').focus();
+  await frame([.08,.1],[1]); await frame([.08,.1],[]);
+  assert.equal(await page.locator('body').getAttribute('data-phase'),'menu');
+  assert.equal((await record()).devices.length,1);
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({browser:browser.version(),url,syntheticReports:['12-button digital','asymmetric wheel with shared pedal axis'],
-    checks:['ambiguous capture','overlapping pedal rejection','live normalized preview','neutral save gate','remap','reload','restore defaults','brake range','invert steering','explicit use']}));
+    checks:['ambiguous capture','overlapping pedal rejection','live normalized preview','neutral save gate','remap','reload','restore defaults','brake range','invert steering','explicit use','fresh report between frames','same-slot replacement while editing']}));
 } finally { await browser.close(); }

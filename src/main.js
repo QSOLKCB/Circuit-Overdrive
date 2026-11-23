@@ -2,6 +2,7 @@
 import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {TouringAudio, DEFAULT_VOLUMES} from './audio.js';
 import {attachDriverInput} from './driver-input.js';
+import {createRecording} from './replay.js';
 import {controllerMenu, menuAction} from './controller-menu.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
@@ -21,6 +22,7 @@ const mixer = Object.keys(DEFAULT_VOLUMES);
 let reducedEffects = motion.matches;
 let quality = 'auto';
 let race = createRace();
+let recording;
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
 let lastTime = null, lastPanel = '', soundGeneration = 0;
@@ -37,6 +39,8 @@ function showSource(kind) {
   $('foot-keys').hidden = kind !== 'keyboard';
   lastPanel = '';
   updatePanel();
+  if (phase() === 'menu') $('start').focus();
+  if (phase() === 'paused') $('continue').focus();
 }
 function lostController() {
   inputNotice = 'Controller unavailable. Reconnect and select it in Controller, or choose another input.';
@@ -46,7 +50,6 @@ function lostController() {
 }
 document.body.dataset.input = 'keyboard';
 $('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
-$('controller-dialog').addEventListener('close', () => { input.clear(); });
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 const set = (id, value) => {
   const element = $(id), text = String(value);
@@ -125,6 +128,7 @@ function updatePanel() {
   $('restart').className = mode === 'finished' ? 'primary' : '';
   $('courses').hidden = !['paused','finished'].includes(mode);
   $('results').hidden = mode !== 'finished';
+  $('save-drive').hidden = mode !== 'finished' || !recording?.complete;
   $('signal').hidden = true;
   $('lights').hidden = true;
   const titles = {grid:'On the grid', paused:'Race paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Graphics unavailable'};
@@ -218,6 +222,15 @@ function selectCourse(course) {
 }
 $('choose-speedway').onclick = () => selectCourse(track);
 $('choose-ridge').onclick = () => selectCourse(ridge);
+$('save-drive').onclick = () => {
+  if (phase() !== 'finished' || !recording?.complete) return;
+  const url = URL.createObjectURL(new Blob([JSON.stringify(recording.export())],{type:'application/json'}));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'circuit-overdrive-'+race.course.id+'-replay.json';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+};
 $('courses').onclick = () => {
   if (!['paused','finished'].includes(phase())) return;
   resetClock();
@@ -293,7 +306,8 @@ canvas.addEventListener('blur', event => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
-  if (document.hidden || !document.hasFocus() || $('controller-dialog').open) return false;
+  if (document.hidden || !document.hasFocus()) return false;
+  if ($('controller-dialog').open && $('profile-settings').open) return false;
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
   if (input.source === 'gamepad') {
     if (grid && action === 'confirm') action = 'arm';
@@ -308,6 +322,7 @@ function handleAction(action) {
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
+    recording = createRecording(race.course.id,race.seed);
     resetClock();
     playAudio();
     updatePanel();
@@ -321,7 +336,8 @@ function fixedUpdate() {
   const {command, camera:switchView, recover} = input.sample();
   if (!driving()) return; // A polled pause or disconnect takes effect on this same tick.
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
-  if (recover && race.phase === 'racing') recoverCar(race);
+  const recovered = recover && race.phase === 'racing' && recoverCar(race);
+  recording.record(command, recovered);
   stepRace(race, command);
   scene.observe(race,reducedEffects);
   if (driving() && sound && audio.update(race.player,command,race.course) === false) {
@@ -411,7 +427,7 @@ function frame(time) {
   lastTime = time;
   if (!error && !document.hidden) {
     if ($('controller-dialog').open) controller.refresh();
-    else if (!driving() && document.hasFocus()) input.menu();
+    if (!driving() && document.hasFocus() && !($('controller-dialog').open && $('profile-settings').open)) input.menu();
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
     try { render(alpha, elapsed); }

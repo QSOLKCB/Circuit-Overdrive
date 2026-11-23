@@ -74,6 +74,11 @@ export class GamepadInput {
   }
   get index() { return this.#selected?.index ?? null; }
   get ready() { return this.#ready; }
+  owns(pad) {
+    const owner=this.#selected;
+    return !!owner && !!pad?.connected && pad.index===owner.index && pad.id===owner.id &&
+      pad.mapping===owner.mapping && pad.axes?.length===owner.axes && pad.buttons?.length===owner.buttons;
+  }
   get available() { return !this.#blocked && typeof this.target.navigator?.getGamepads === 'function'; }
 
   #pads() {

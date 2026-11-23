@@ -28,7 +28,7 @@ function setText(node,text) { if (node.textContent!==text) node.textContent=text
 
 // The host calls update only for the explicitly highlighted device while its
 // dialog is open. Calibration never sends commands to the racing simulation.
-export function createProfileEditor(container,{onSave=()=>{}}={}) {
+export function createProfileEditor(container,{readDevice,onSave}) {
   let pad=null, identity='', draft=null, wizard=null, signature='', cachedMapper=null;
   const details=el('details'), summary=el('summary','Mapping and calibration'), body=el('div');
   details.id='profile-settings'; body.className='profile-editor';
@@ -103,6 +103,7 @@ export function createProfileEditor(container,{onSave=()=>{}}={}) {
   });
   const save=button('Save profile','profile-save',()=>{
     try {
+      pad=liveReading();
       const current=draft.throttle ? draft : null;
       const persistent=saveProfile(pad,current);
       const mapper=current ? profileMapper(current,pad) : null;
@@ -156,10 +157,18 @@ export function createProfileEditor(container,{onSave=()=>{}}={}) {
     notice('Test the response below. Release all controls, then save.');
     save.focus();
   }
+  function liveReading() {
+    const latest=readDevice(pad);
+    if (!latest || latest.index!==pad?.index || deviceKey(latest)!==deviceKey(pad)) {
+      throw Error('The controller changed. Select the connected device and calibrate again.');
+    }
+    return latest;
+  }
   function take() {
     if (!wizard || !pad) return;
     const step=wizard.steps[wizard.pos], work=wizard.work;
     try {
+      pad=liveReading();
       if (step==='neutral') {
         wizard.neutral=captureNeutral(pad);
         if (!wizard.neutral) throw Error('A reported input is missing or non-finite.');
