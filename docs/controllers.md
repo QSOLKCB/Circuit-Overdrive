@@ -22,3 +22,9 @@ Highlight a device and expand **Mapping and calibration**. Choose a generic/digi
 A digital pad can use separate directions, two face buttons for pedals and its own confirm/pause buttons. A wheel can expose separate axes, inverted axes, analog buttons, or a combined pedal axis with opposite excursions from the same rest point. Capture the actual travel. Adjust steering deadzone, inversion, sensitivity and curve, or either pedal's travel, before saving. Wheel degrees, force feedback and native HID reports are outside the supported browser interface.
 
 Profiles are versioned and stored on this browser only. Storage failure keeps a profile usable for the session. Unknown or incomplete layouts require calibration. Device names are matching hints for local settings; explicitly select the slot each time. Profiles never leave the browser.
+
+## Touch driving
+
+On a touch-capable screen select either course, tap **Start race**, then **Drive with touch** on the grid. The same source is available in the controller picker. Hold Gas or Brake with one finger and a steering arrow with another. Lift or move a finger off a control to release it. Use View, Recover and Pause beside the steering arrows. A cancelled gesture, lost capture, app switch or orientation change clears the controls and pauses active racing. Tap **Resume race**, then make fresh presses.
+
+Landscape offers the widest road view. Portrait keeps the instrument panel and controls accessible. **Settings → Driving effects → Mobile** limits the drawing buffer to 75% in each dimension and selects reduced effects. Automatic quality selects this mode when the browser reports a coarse primary pointer. Physics and timing always use the same fixed-step update.

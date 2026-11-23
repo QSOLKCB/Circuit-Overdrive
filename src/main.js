@@ -15,6 +15,8 @@ const canvas = $('world');
 const clock = new FixedClock({step:STEP});
 const audio = new TouringAudio();
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
+const coarse = matchMedia('(pointer: coarse)');
+let pixelRatio = 1;
 const mixer = Object.keys(DEFAULT_VOLUMES);
 let reducedEffects = motion.matches;
 let quality = 'auto';
@@ -26,7 +28,7 @@ const phase = () => error ? 'error' : grid ? 'grid' : race.phase;
 const driving = () => ['countdown','racing'].includes(phase());
 const modalOpen = () => !!document.querySelector('dialog[open]');
 const focused = () => (input.source !== 'keyboard' || document.activeElement === canvas) && document.hasFocus() && !document.hidden && !modalOpen();
-const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController);
+const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController, $('touch-controls'));
 const controller = controllerMenu(input, showSource);
 let inputNotice = '';
 function showSource(kind) {
@@ -116,6 +118,7 @@ function updatePanel() {
   $('menu').hidden = mode !== 'menu';
   $('hud').hidden = ['menu','grid','error'].includes(mode);
   $('overlay').hidden = !['grid','paused','finished','error'].includes(mode);
+  $('touch-arm').hidden = !(mode === 'grid' && input.hasTouch && (navigator.maxTouchPoints > 0 || input.source === 'touch'));
   $('continue').hidden = mode !== 'paused';
   $('restart').hidden = !['paused','finished'].includes(mode);
   $('restart').className = mode === 'finished' ? 'primary' : '';
@@ -124,7 +127,7 @@ function updatePanel() {
   $('signal').hidden = true;
   $('lights').hidden = true;
   const titles = {grid:'On the grid', paused:'Race paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Graphics unavailable'};
-  const copy = {grid:input.source === 'keyboard' ? 'Press W or ↑ to take the wheel and start the countdown.' : 'Release all controls, then press Confirm to start the countdown.', paused:inputNotice || 'Resume when you’re ready to drive.',
+  const copy = {grid:input.source === 'touch' ? 'Tap Drive with touch to start the countdown.' : input.source === 'keyboard' ? 'Press W or ↑ to take the wheel and start the countdown.' : 'Release all controls, then press Confirm to start the countdown.', paused:inputNotice || 'Resume when you’re ready to drive.',
     finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
   set('panel-copy', copy[mode] || '');
@@ -169,7 +172,7 @@ function graphicsError(message) {
 }
 function initializeScene() {
   try {
-    scene = createScene(canvas, race.course);
+    scene = createScene(canvas, race.course, pixelRatio);
     error = '';
     updatePanel();
   } catch (failure) {
@@ -227,6 +230,11 @@ displayCourse(race.course);
 resetPresentation();
 $('start').onclick = $('restart').onclick = enterGrid;
 $('continue').onclick = resume;
+$('touch-arm').onclick = () => {
+  if (!grid || !input.select('touch')) return;
+  showSource('touch');
+  handleAction('arm');
+};
 $('sound').onclick = () => {
   sound = !sound;
   syncSound();
@@ -234,7 +242,12 @@ $('sound').onclick = () => {
   else stopAudio();
 };
 function applyQuality() {
-  reducedEffects = quality === 'reduced' || (quality === 'auto' && motion.matches);
+  const nextRatio = quality === 'mobile' || (quality === 'auto' && coarse.matches) ? .75 : 1;
+  reducedEffects = quality === 'reduced' || nextRatio < 1 || (quality === 'auto' && motion.matches);
+  if (pixelRatio !== nextRatio) {
+    pixelRatio = nextRatio;
+    if (scene && !error) { scene.dispose(); initializeScene(); }
+  }
   document.body.dataset.effects = reducedEffects ? 'reduced' : 'full';
   scene?.resetEffects();
 }
@@ -254,7 +267,7 @@ for (const name of mixer) {
   apply();
   slider.oninput=()=>{ apply(); saveSettings(); };
 }
-if (['auto','reduced','full'].includes(saved?.quality)) quality=saved.quality;
+if (['auto','reduced','full','mobile'].includes(saved?.quality)) quality=saved.quality;
 $('effects-quality').value=quality;
 $('effects-quality').onchange=()=>{
   quality=$('effects-quality').value;
@@ -262,6 +275,7 @@ $('effects-quality').onchange=()=>{
   saveSettings();
 };
 motion.addEventListener('change',applyQuality);
+coarse.addEventListener('change',applyQuality);
 applyQuality();
 $('settings').onclick=()=>{ pause(); $('options').showModal(); };
 $('close-settings').onclick=()=>$('options').close();
@@ -271,7 +285,10 @@ $('controls').onclick = () => {
 };
 $('close-help').onclick = () => $('help').close();
 window.addEventListener('blur', pause);
-canvas.addEventListener('blur', () => { if (input.source === 'keyboard') pause(); });
+canvas.addEventListener('blur', event => {
+  if (grid && event.relatedTarget === $('touch-arm')) return;
+  if (input.source === 'keyboard') pause();
+});
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
@@ -406,4 +423,6 @@ function frame(time) {
   requestAnimationFrame(frame);
 }
 initializeScene();
+$('boot-note').hidden = true;
+$('start').disabled = false;
 requestAnimationFrame(frame);

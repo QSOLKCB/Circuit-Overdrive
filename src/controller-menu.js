@@ -33,7 +33,7 @@ export function controllerMenu(input, onSelect) {
     const standard = pad?.mapping === 'standard';
     $('driver-layout').textContent = pad ? (mapper ? 'Saved custom controls. Expand Mapping and calibration to preview or adjust them.' : standard
       ? 'Standard layout · left stick steers, right trigger accelerates and left trigger brakes. Bottom face button confirms, right goes back, top changes camera and left recovers. Menu pauses.'
-      : 'Open Mapping and calibration to set up this device.') : 'WASD or arrow keys to drive, Esc to pause, C for camera and R to recover.';
+      : 'Open Mapping and calibration to set up this device.') : list.value === 'touch' ? 'Steer and operate pedals with separate fingers. Lift a finger to release its control.' : 'WASD or arrow keys to drive, Esc to pause, C for camera and R to recover.';
     $('use-device').disabled = !!pad && !standard && !mapper;
     $('driver-status').textContent = message || (pad ? 'Release the pedals, steering and buttons before taking control.'
       : input.pads.available ? 'Press a controller button to make it visible to your browser.' : 'Gamepad access is unavailable in this browser or context.');
@@ -47,6 +47,7 @@ export function controllerMenu(input, onSelect) {
     if (next !== signature) {
       const previous = list.value;
       list.replaceChildren(new Option('Keyboard','keyboard'));
+      if (input.hasTouch) list.add(new Option('Touch controls','touch'));
       for (const p of devices) list.add(new Option('Slot '+(p.index+1)+' · '+(p.id || 'Controller')+' · '+(p.mapping==='standard'?'standard':'custom'),'pad-'+p.index));
       if ([...list.options].some(o => o.value === previous)) list.value = previous;
       signature = next;
@@ -56,7 +57,7 @@ export function controllerMenu(input, onSelect) {
   function open() {
     signature = ''; message = '';
     dialog.showModal(); refresh();
-    list.value = input.source === 'gamepad' && input.pads.index !== null ? 'pad-'+input.pads.index : 'keyboard';
+    list.value = input.source === 'gamepad' && input.pads.index !== null ? 'pad-'+input.pads.index : input.source === 'touch' ? 'touch' : 'keyboard';
     present(); list.focus();
   }
   function close() {
@@ -74,7 +75,7 @@ export function controllerMenu(input, onSelect) {
     if (pad && !input.pads.devices().some(p=>p.index===pad.index && p.id===pad.id && p.mapping===pad.mapping)) {
       message = 'Device changed. Select the connected controller again.'; refresh(); return;
     }
-    const kind = pad ? 'gamepad' : 'keyboard';
+    const kind = pad ? 'gamepad' : list.value === 'touch' ? 'touch' : 'keyboard';
     if (!input.select(kind, pad?.index, mapper || undefined)) {
       message = 'This controller is missing a required control. Choose another layout or device.';
       present(); return;
