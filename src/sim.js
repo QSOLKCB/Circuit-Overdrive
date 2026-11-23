@@ -27,6 +27,7 @@ export const rideHeight = touring.wheel.radius + touring.suspension.restLength
   - touring.mass * 9.81 / (4 * touring.suspension.spring);
 const staticCompression = touring.wheel.radius + touring.suspension.restLength - rideHeight;
 const railClearance = .08;
+const corneringAcceleration = 13.5; // m/s², below the touring tyres' level-asphalt grip limit.
 const maxStationStep = 2.5; // 120 m/s × 1/60 s plus the inside-corner projection margin.
 const gridClearance = touring.chassis.length / 2 + railClearance;
 
@@ -176,9 +177,13 @@ function controls(state, intent) {
     else { brake = throttle; throttle = 0; }
   }
   if (gear !== -1) throttle *= clamp((59 - speed) / 3, 0, 1);
-  // Shorten the digital wheel's reach at highway speed. The tyre solver still
-  // owns grip and slip; a held key remains steerable in both directions.
-  const steer = (intent.steer ?? 0) / (1 + 0.0007 * speed * speed);
+  // Bicycle-model radius = wheelbase / tan(lock). Limit the requested lock
+  // before the tyres saturate, keeping the entire stick or wheel range usable.
+  const [vx, vy, vz] = state.velocity;
+  const speedSquared = vx * vx + vy * vy + vz * vz;
+  const gripAngle = Math.atan2(touring.wheel.wheelbase * corneringAcceleration, speedSquared);
+  const engineLock = touring.steering.maxAngle / (1 + Math.abs(speed) * touring.steering.speedReduction);
+  const steer = (intent.steer ?? 0) * Math.min(1, gripAngle / engineLock);
   return { throttle, brake, steer, ...(gear === undefined ? {} : { gear }) };
 }
 
