@@ -18,7 +18,7 @@ done
 [[ $ready == yes ]] || exit 1
 EVIDENCE_DIR="$evidence/smoke" node tests/browser-smoke.mjs "$base" 2>&1 | tee "$evidence/smoke.log"
 EVIDENCE_DIR="$evidence/ridge-smoke" node tests/browser-smoke.mjs "$base" --ridge 2>&1 | tee "$evidence/ridge-smoke.log"
-for suite in gamepad profiles touch; do
+for suite in gamepad profiles touch lab; do
   node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
 done
 replay_args=()

@@ -54,6 +54,7 @@ Run the repository's Node tests, start an HTTP server and set `PLAYWRIGHT_MODULE
 node --test tests/*.test.mjs
 node tests/browser-gamepad.mjs "$URL"
 node tests/browser-profiles.mjs "$URL"
+node tests/browser-lab.mjs "$URL"
 node tests/browser-touch.mjs "$URL"
 node tests/browser-finish.mjs "$URL" --input=standard --software-replay
 node tests/browser-finish.mjs "$URL" --input=wheel --ridge --software-replay
@@ -62,7 +63,7 @@ node tests/browser-finish.mjs "$URL" --input=wheel --ridge --software-replay
 
 The finish runner also accepts `--input=digital` and `--input=touch`. The optional Linux WebKitGTK test needs GTK 4, WebKitGTK 6, Python GI and a graphical session. For comprehensive keyboard and controller checks of the static package, run `bash scripts/browser-pages.sh "$URL" /tmp/circuit-browser-evidence`.
 
-For hardware verification, record the OS/browser, transport, browser mapping, visible axis/button counts and chosen controls. Check neutral centre and both travel limits before arming, drive each course, pause under load, disconnect or interrupt the device, and verify that the return requires explicit control. The repository does not collect this information automatically.
+For a physical device, follow the lab procedure and record the result for that specific OS, browser and connection. [Hardware and mobile acceptance](hardware-acceptance.md)
 
 ## Race and replay verification
 

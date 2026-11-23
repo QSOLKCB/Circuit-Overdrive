@@ -36,21 +36,22 @@ export function standardGamepad(pad) {
   };
 }
 
-function readMapping(mapper, pad) {
+// Read the same bounded command for the live driver and the diagnostic display.
+// This calculation has no ownership, edge or arming state to consume.
+export function readMapping(mapper, pad) {
   let mapped;
   try { mapped = mapper(pad); } catch { return null; }
   if (!mapped || !Array.isArray(mapped.held) || mapped.held.length > actionNames.length
     || !mapped.held.every(action => actionNames.includes(action))) return null;
   const command = mapped.command;
   if (![command?.throttle, command?.brake, command?.steer].every(Number.isFinite)) return null;
+  const throttle = clamp(command.throttle, 0, 1);
+  const brake = clamp(command.brake, 0, 1);
+  const steer = clamp(command.steer, -1, 1);
   return {
-    command:{
-      throttle:clamp(command.throttle, 0, 1),
-      brake:clamp(command.brake, 0, 1),
-      steer:clamp(command.steer, -1, 1)
-    },
+    command:{throttle, brake, steer},
     held:mapped.held,
-    neutral:mapped.neutral !== false
+    neutral:mapped.neutral !== false && !mapped.held.length && !throttle && !brake && !steer
   };
 }
 
@@ -134,7 +135,7 @@ export class GamepadInput {
     if (!sample) return this.#lose('A mapped controller input is unreadable. Check the profile before driving.');
     const {command, held} = sample;
     if (!this.#ready) {
-      this.#ready = sample.neutral && !held.length && !command.throttle && !command.brake && !command.steer;
+      this.#ready = sample.neutral;
       return idle;
     }
     const actions = held.filter(action => !this.#held.has(action));

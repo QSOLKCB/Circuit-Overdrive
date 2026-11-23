@@ -66,10 +66,27 @@
   <h2 id="driver-title">Driving controller</h2>
   <label for="driver-device">Input device</label>
   <select id="driver-device"><option value="keyboard">Keyboard</option></select>
-  <p id="driver-layout"></p><output id="raw-input" aria-label="Current controller values"></output>
+  <p id="driver-layout"></p>
   <div id="profile-host"></div>
   <p id="driver-status" role="status"></p>
   <div class="buttons"><button id="use-device" class="primary">Use this device</button><button id="close-controller">Cancel</button></div>
+  <details id="controller-lab">
+    <summary>Controller diagnostics</summary>
+    <section id="lab-readings" tabindex="-1" aria-label="Controller readings">
+      <p>Move the highlighted controller to inspect its inputs. When testing the driving pad, Back or Pause returns to the picker.</p>
+      <dl>
+        <dt>Driving input</dt><dd id="lab-owner"></dd>
+        <dt>Connection</dt><dd id="lab-device"></dd>
+        <dt>Neutral</dt><dd id="lab-neutral"></dd>
+        <dt>Steering</dt><dd id="lab-steer"></dd>
+        <dt>Accelerator</dt><dd id="lab-throttle"></dd>
+        <dt>Brake</dt><dd id="lab-brake"></dd>
+        <dt>Calibration</dt><dd id="lab-calibration"></dd>
+        <dt>Axes</dt><dd id="lab-axes"></dd>
+        <dt>Buttons</dt><dd id="lab-buttons"></dd>
+      </dl>
+    </section>
+  </details>
 </dialog>
 <dialog id="options" aria-labelledby="options-title">
   <h2 id="options-title">Settings</h2>
