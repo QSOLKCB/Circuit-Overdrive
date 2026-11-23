@@ -1,13 +1,32 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
 set -euo pipefail
-base=${1:?Usage: bash scripts/browser-pages.sh BASE_URL EVIDENCE_DIRECTORY}
+base=${1:?Usage: bash scripts/browser-pages.sh BASE_URL EVIDENCE_DIRECTORY [--wait-for-cdn] [--shard=speedway|ridge|controllers]}
 evidence=${2:?Supply an evidence directory outside the site package}
-mkdir -p "$evidence/ridge-smoke" "$evidence/smoke" "$evidence/speedway" "$evidence/ridge"
-: > "$evidence/http.log"
+shift 2
+shard=all
 delays=(0)
+for option in "$@"; do
+  case "$option" in
+    --wait-for-cdn) delays=(0 15 30 60 120 180 195) ;;
+    --shard=speedway|--shard=ridge|--shard=controllers)
+      if [[ $shard != all ]]; then echo 'Supply only one browser shard.' >&2; exit 2; fi
+      shard=${option#--shard=}
+      ;;
+    *) echo "Unknown browser suite option: $option" >&2; exit 2 ;;
+  esac
+done
+
+case "$shard" in
+  all) suites=(smoke ridge-smoke gamepad profiles touch lab speedway ridge) ;;
+  speedway) suites=(smoke touch speedway) ;;
+  ridge) suites=(ridge-smoke ridge) ;;
+  controllers) suites=(gamepad profiles lab) ;;
+esac
+
+mkdir -p "$evidence"
+: > "$evidence/http.log"
 ready=no
-if [[ ${3:-} == --wait-for-cdn ]]; then delays=(0 15 30 60 120 180 195); fi
 for delay in "${delays[@]}"; do
   if (( delay )); then sleep "$delay"; fi
   if node scripts/verify-pages.mjs "$base" 2>&1 | tee -a "$evidence/http.log"; then
@@ -16,12 +35,20 @@ for delay in "${delays[@]}"; do
   fi
 done
 [[ $ready == yes ]] || exit 1
-EVIDENCE_DIR="$evidence/smoke" node tests/browser-smoke.mjs "$base" 2>&1 | tee "$evidence/smoke.log"
-EVIDENCE_DIR="$evidence/ridge-smoke" node tests/browser-smoke.mjs "$base" --ridge 2>&1 | tee "$evidence/ridge-smoke.log"
-for suite in gamepad profiles touch lab; do
-  node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
+
+for suite in "${suites[@]}"; do
+  case "$suite" in
+    smoke|ridge-smoke) args=(tests/browser-smoke.mjs "$base") ;;
+    speedway|ridge)
+      args=(tests/browser-finish.mjs "$base" --require-replay)
+      if [[ ${NATIVE_GL:-0} != 1 ]]; then args+=(--software-replay); fi
+      ;;
+    *)
+      node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
+      continue
+      ;;
+  esac
+  if [[ $suite == ridge || $suite == ridge-smoke ]]; then args+=(--ridge); fi
+  mkdir -p "$evidence/$suite"
+  EVIDENCE_DIR="$evidence/$suite" node "${args[@]}" 2>&1 | tee "$evidence/${suite}.log"
 done
-replay_args=()
-if [[ ${NATIVE_GL:-0} != 1 ]]; then replay_args=(--software-replay); fi
-EVIDENCE_DIR="$evidence/speedway" node tests/browser-finish.mjs "$base" --require-replay "${replay_args[@]}" 2>&1 | tee "$evidence/speedway.log"
-EVIDENCE_DIR="$evidence/ridge" node tests/browser-finish.mjs "$base" --require-replay "${replay_args[@]}" --ridge 2>&1 | tee "$evidence/ridge.log"

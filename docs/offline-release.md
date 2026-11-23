@@ -31,7 +31,9 @@ The builder packages the committed allowlist and validates its import graph and 
 | `Circuit-Overdrive/RELEASE.json` inside the ZIP | Game revision, engine repository/pin and SHA-256 for every other file in the ZIP |
 | `.zip.sha256` beside the ZIP | SHA-256 for the complete archive, including its manifest |
 
-The Pages verification job drives the extracted ZIP and compares its runtime files with the separately built Pages directory. It retains the review ZIP and receipt as an Actions artifact for 14 days. PR checks run with read-only repository access. A PR run identifies the tested GitHub merge revision, which can differ from the branch head. The owner can build the final approved revision with the same command. Publishing a release and assigning a tag are separate owner actions. [Pages procedure](pages.md)
+CI compares the release candidate's runtime files with the separately built Pages directory, then retains the verified ZIP and receipt together as `offline-candidate-<sha>` for 14 days. Three browser jobs download that same candidate, verify its checksum, and drive or inspect the extracted game under the repository subpath. Collect `local-browser-<sha>-speedway` and `local-browser-<sha>-ridge` for the two race classifications and replays, and `local-browser-<sha>-controllers` for the input diagnostics. The corresponding `public-browser-<sha>-<shard>` artifacts cover the deployed site after the protected `verify` check and production deployment succeed.
+
+PR checks run with read-only repository access. A PR run identifies the tested GitHub merge revision, which can differ from the branch head. The owner can build the final approved revision with the same command. Publishing a release and assigning a tag are separate owner actions. [Pages procedure](pages.md)
 
 ## Verify a recorded race
 
