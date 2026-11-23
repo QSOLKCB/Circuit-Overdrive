@@ -166,7 +166,8 @@ function checkIntent(intent) {
 function controls(state, intent) {
   const forward = rotate(state.orientation, [0, 0, -1]);
   const speed = state.velocity.reduce((sum, v, i) => sum + v * forward[i], 0);
-  let throttle = intent.throttle ?? 0;
+  const requestedThrottle = intent.throttle ?? 0;
+  let throttle = requestedThrottle;
   let brake = intent.brake ?? 0;
   let gear;
   if (brake > 0 && throttle === 0 && speed < 0.6) {
@@ -189,7 +190,9 @@ function controls(state, intent) {
   // Keep coasting taps precise at ordinary entry speeds. Blending in v²
   // keeps the maximum wheel angle decreasing even as the acceleration target rises.
   const highSpeedBlend = clamp((speedSquared - precisionSpeedSquared) / (fullAeroSpeedSquared - precisionSpeedSquared), 0, 1);
-  const corneringAcceleration = 13.5 + 4.5 * highSpeedBlend;
+  // At high speed a held pedal gets extra turn-in. Lifting eases the line
+  // even if the driver keeps the steering key down through a long sweep.
+  const corneringAcceleration = 13.5 + (1.5 + 3 * requestedThrottle) * highSpeedBlend;
   const gripAngle = Math.atan2(touring.wheel.wheelbase * corneringAcceleration, speedSquared);
   const engineLock = touring.steering.maxAngle / (1 + Math.abs(speed) * touring.steering.speedReduction);
   const steer = requestedSteer * Math.min(1, gripAngle / engineLock);

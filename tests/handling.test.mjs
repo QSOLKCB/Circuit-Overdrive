@@ -47,6 +47,22 @@ test('lifting and tapping right at 126 km/h leaves room to accelerate out of the
   assert.ok(player.distance > 310 && player.current.speed > 40, 'accelerate clear of the bank');
 });
 
+test('lifting at high speed with right steering held clears the Ridge opening sweep', () => {
+  const race = clearGrid(ridge);
+  const player = race.player;
+  let liftSpeed;
+  for (let tick = 0; tick < 1500 && player.distance < 415; tick++) {
+    const s = player.distance;
+    const coasting = s >= 265 && s < 360;
+    if (coasting) liftSpeed ??= player.current.speed;
+    stepRace(race, {throttle: Number(!coasting), steer: Number(s >= 231 && s < 390)});
+    assert.ok(!player.vehicle.contacts.includes('guardrail'), 'hit the rail while easing off or reapplying power');
+  }
+  assert.ok(liftSpeed > 47, 'lift above 169 km/h');
+  assert.ok(player.distance >= 415 && player.current.speed > 43);
+  assert.equal(player.recoveries, 0);
+});
+
 for (const { course, approach, turnIn, exit } of firstBends) {
   test(`${course.name} stays on its wheels through the first bend with held digital corrections`, () => {
     const race = clearGrid(course);
