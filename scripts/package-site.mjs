@@ -10,11 +10,12 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'bps', 'camera', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'field', 'gamepad', 'geometry', 'input', 'main', 'map', 'music', 'music-scores', 'profile-editor', 'profiles', 'replay', 'ridge', 'ridge-scene',
+const code = ['ai', 'audio', 'bps', 'camera', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'field', 'gamepad', 'geometry', 'input', 'main', 'map', 'music', 'music-scores', 'profile-editor', 'profiles', 'replay', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
   'scene', 'sim', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
-  'index.html', 'src/style.css', 'src/mobile.css', ...code.map(name => 'src/' + name + '.js'),
+  'index.html', 'replay-theatre.html', 'src/style.css', 'src/mobile.css', 'src/replay-theatre.css',
+  ...code.map(name => 'src/' + name + '.js'),
   'tracks/overdrive-speedway.json', 'tracks/redline-ridge.json',
   vendor + 'demos/horizon-lab/race-audio.js', ...engine.map(name => vendor + 'modules/' + name + '/index.js'),
   ...attribution
@@ -26,7 +27,7 @@ function dependencies(name, data) {
     return module.moduleRequests?.map(request => request.specifier) ?? module.dependencySpecifiers;
   }
   const source = data.toString();
-  if (name === 'index.html') {
+  if (name === 'index.html' || name === 'replay-theatre.html') {
     return [...source.matchAll(/\b(?:src|href)\s*=\s*["']([^"']+)["']/gi)]
       .map(match => match[1]).filter(url => url !== 'data:,');
   }
@@ -106,10 +107,13 @@ export async function readSite(source) {
   }
   const revision = matchCommittedFiles(root, files);
   if (revision) {
-    const marker = '<meta name="game-revision" content="">';
-    const html = files.get('index.html').toString();
-    assert(html.includes(marker), 'missing source revision marker');
-    files.set('index.html', Buffer.from(html.replace(marker, '<meta name="game-revision" content="'+revision+'">')));
+    const marker='<meta name="game-revision" content="">';
+    for (const name of ['index.html','replay-theatre.html']) {
+      const html=files.get(name).toString();
+      assert(html.includes(marker), 'missing source revision marker: '+name);
+      files.set(name,Buffer.from(html.replace(marker,
+        '<meta name="game-revision" content="'+revision+'">')));
+    }
   }
   return {files, revision};
 }
