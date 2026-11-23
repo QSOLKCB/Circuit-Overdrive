@@ -19,18 +19,28 @@ function plain(object,allowed,label) {
   for (const [key,desc] of Object.entries(Object.getOwnPropertyDescriptors(object)))
     if (!allowed.includes(key) || !Object.hasOwn(desc,'value') || !desc.enumerable) throw TypeError(label+' field: '+key);
 }
-function dense(values,name) {
+// Inspect numeric property descriptors before reading a single score element.
+// A getter may return a valid note during validation and NaN during rendering.
+function dense(values,name,min=STEPS,max=STEPS) {
   if (!Array.isArray(values) || Object.getPrototypeOf(values)!==Array.prototype ||
-      values.length!==STEPS || Reflect.ownKeys(values).length!==STEPS+1) throw RangeError(name+' must contain 16 dense steps');
+      values.length<min || values.length>max) throw RangeError(name+' has invalid length');
+  const descriptors=Object.getOwnPropertyDescriptors(values);
+  if (Reflect.ownKeys(descriptors).length!==values.length+1)
+    throw RangeError(name+' must be dense without extra properties');
+  for (let i=0;i<values.length;i++) {
+    const element=descriptors[i];
+    if (!element || !Object.hasOwn(element,'value') || !element.enumerable)
+      throw TypeError(name+' elements must be own data properties');
+  }
+  return values;
 }
 function scoreLength(score) {
   plain(score,['id','bpm','seed','mode','phrases'],'score');
   if (typeof score.id!=='string' || !/^[a-z][a-z0-9-]{2,35}$/.test(score.id)) throw RangeError('score id');
   int(score.bpm,90,220,'bpm');int(score.seed,0,0xffffffff,'seed');
   if (!MODES.includes(score.mode)) throw RangeError('mode');
-  if (!Array.isArray(score.phrases) || Object.getPrototypeOf(score.phrases)!==Array.prototype ||
-      score.phrases.length<1 || score.phrases.length>MAX_PHRASES ||
-      Reflect.ownKeys(score.phrases).length!==score.phrases.length+1) throw RangeError('phrases');
+  // Validate phrase-array element descriptors before iterating or compiling.
+  dense(score.phrases,'phrases',1,MAX_PHRASES);
   const stepSamples=BPS_RATE*60/(score.bpm*4);
   if (!Number.isSafeInteger(stepSamples)) throw RangeError('bpm must align with sample frames');
   if (score.phrases.length*STEPS*stepSamples>MAX_SAMPLES) throw RangeError('score exceeds PCM budget');
@@ -54,10 +64,15 @@ function random32(seed) {
 const pitch = midi => 440*2**((midi-69)/12);
 const soft = sample => sample/(1+.78*Math.abs(sample));
 function adsr(i,total,attack,decay,sustain,gate) {
-  if(i<attack)return (i+1)/Math.max(1,attack);
-  if(i<attack+decay)return 1-(1-sustain)*(i-attack+1)/Math.max(1,decay);
-  if(i<gate)return sustain;
-  return sustain*clamp((total-i-1)/Math.max(1,total-gate),0,1);
+  // The note-off boundary takes precedence over unfinished attack/decay.
+  // Release begins from the level actually reached at gate-off, not sustain.
+  const held = n => {
+    if (n<attack) return (n+1)/Math.max(1,attack);
+    if (n<attack+decay) return 1-(1-sustain)*(n-attack+1)/Math.max(1,decay);
+    return sustain;
+  };
+  if (i<gate) return held(i);
+  return held(gate-1)*clamp((total-i-1)/Math.max(1,total-gate),0,1);
 }
 function noteInto(left,right,offset,limit,note,lane,mode,seed,stepSamples) {
   const length=Math.min(limit-offset,stepSamples*(lane==='bass'?4:lane==='lead'?2:1));
