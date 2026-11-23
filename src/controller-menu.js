@@ -40,6 +40,13 @@ export function controllerMenu(input, onSelect) {
     list.value = input.source === 'gamepad' && input.pads.index !== null ? 'pad-'+input.pads.index : 'keyboard';
     present(); list.focus();
   }
+  function close() {
+    // Clear held input before returning to the menu. A queued native close
+    // event can otherwise erase fresh input from the following frame.
+    input.clear();
+    dialog.close();
+  }
+  dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
   list.onchange = () => { message = ''; present(); };
   $('use-device').onclick = () => {
     const pad = currentPad();
@@ -51,10 +58,10 @@ export function controllerMenu(input, onSelect) {
       message = 'This controller is missing a required control. Choose another layout or device.';
       present(); return;
     }
+    close();
     onSelect(kind);
-    dialog.close();
   };
-  $('close-controller').onclick = () => dialog.close();
+  $('close-controller').onclick = close;
   return {open, refresh};
 }
 
@@ -62,7 +69,11 @@ export function controllerMenu(input, onSelect) {
 export function menuAction(action) {
   const dialog = document.querySelector('dialog[open]');
   const active = document.activeElement;
-  if (action === 'back' && dialog) { dialog.close(); return true; }
+  if (action === 'back' && dialog) {
+    if (dialog.id === 'controller-dialog') document.getElementById('close-controller').click();
+    else dialog.close();
+    return true;
+  }
   if (action === 'confirm') {
     if (active?.matches('button:enabled')) active.click();
     else if (!dialog) document.querySelector('#start')?.click();

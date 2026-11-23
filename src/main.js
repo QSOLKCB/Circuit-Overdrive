@@ -44,7 +44,6 @@ function lostController() {
 }
 document.body.dataset.input = 'keyboard';
 $('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
-$('controller-dialog').addEventListener('close', () => { input.clear(); });
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 const set = (id, value) => {
   const element = $(id), text = String(value);
@@ -276,7 +275,7 @@ canvas.addEventListener('blur', () => { if (input.source === 'keyboard') pause()
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
-  if (document.hidden || !document.hasFocus() || $('controller-dialog').open) return false;
+  if (document.hidden || !document.hasFocus()) return false;
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
   if (input.source === 'gamepad') {
     if (grid && action === 'confirm') action = 'arm';
@@ -394,7 +393,7 @@ function frame(time) {
   lastTime = time;
   if (!error && !document.hidden) {
     if ($('controller-dialog').open) controller.refresh();
-    else if (!driving() && document.hasFocus()) input.menu();
+    if (!driving() && document.hasFocus()) input.menu();
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
     try { render(alpha, elapsed); }
