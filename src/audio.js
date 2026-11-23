@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import {createVehicleVoice, defaultVehicleSound} from '../vendor/vanillajs/modules/vehicle-audio/index.js';
 import {vehicleSoundControls} from '../vendor/vanillajs/demos/horizon-lab/race-audio.js';
+import {RaceMusic} from './music.js';
 
-export const DEFAULT_VOLUMES = Object.freeze({master:.8, engine:.85, effects:.75});
+export const DEFAULT_VOLUMES = Object.freeze({master:.8, engine:.85, effects:.75, music:.42});
 const RATE = 48000, FRAMES = 3072, BLOCK_SECONDS = FRAMES / RATE;
 const TAU = 2 * Math.PI;
 const unit = value => Math.max(0, Math.min(1,value));
@@ -128,26 +129,49 @@ export class TouringAudio {
   #next = 0;
   #free = [];
   #sources = new Set();
+  #musicVoice = null;
+  #musicGain = null;
+  #musicSources = new Set();
+  #musicFree = [];
+  #musicNext = 0;
   #levels = {...DEFAULT_VOLUMES};
   #voice = new TouringVoice();
   constructor({contextFactory = () => new AudioContext()} = {}) {
     this.contextFactory = contextFactory;
   }
+  // Music is prepared from owned score data; no AudioContext until the gesture.
+  selectMusic(courseId) {
+    try { this.#musicVoice = new RaceMusic(courseId); return true; }
+    catch { this.#musicVoice = null; return false; } // Music must never block racing.
+  }
   setVolume(channel, value) {
     if (!Object.hasOwn(DEFAULT_VOLUMES,channel) || !Number.isFinite(value)) throw RangeError('Invalid race audio volume');
     this.#levels[channel] = unit(value);
-    if (channel === 'master' && this.#active) {
-      try { this.#fade(this.#levels.master); } catch { this.#fail(); }
-    }
+    if (this.#active) {
+      try {
+        if (channel === 'master') this.#fade(this.#levels.master);
+        if (channel === 'music' && this.#musicGain) this.#fadeGain(this.#musicGain.gain,this.#levels.music);
+      } catch { this.#fail(); }
+    } else if (channel === 'music' && this.#musicGain) this.#musicGain.gain.value=this.#levels.music;
   }
-  #fade(to) {
-    const now = this.#context.currentTime, gain = this.#gain.gain;
+  #fadeGain(gain,to) {
+    const now = this.#context.currentTime;
     if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
     else {
       gain.cancelScheduledValues(now);
       gain.setValueAtTime(gain.value,now);
     }
     gain.linearRampToValueAtTime(to,now+.012);
+  }
+  #fade(to) { this.#fadeGain(this.#gain.gain,to); }
+  #prepareMusicDevice(ctx) {
+    if (!this.#musicVoice) return;
+    if (!this.#musicGain) {
+      this.#musicGain=ctx.createGain();
+      this.#musicGain.gain.value=this.#levels.music;
+      this.#musicGain.connect(this.#gain);
+      this.#musicFree=Array.from({length:4},()=>ctx.createBuffer(2,FRAMES,RATE));
+    }
   }
   async start() {
     if (this.#active) return true;
@@ -166,9 +190,11 @@ export class TouringAudio {
       await ctx.resume();
       if (generation !== this.#generation) return false;
       if (ctx.state !== 'running') throw Error('Audio unavailable');
+      this.#prepareMusicDevice(ctx);
       this.#voice.reset();
       this.#active = true;
       this.#next = ctx.currentTime+.016;
+      this.#musicNext = this.#next;
       this.#fade(this.#levels.master);
       return true;
     } catch {
@@ -183,6 +209,7 @@ export class TouringAudio {
     try {
       this.#fade(0);
       for (const source of this.#sources) source.stop(this.#context.currentTime+.013);
+      for (const source of this.#musicSources) source.stop(this.#context.currentTime+.013);
     } catch { this.#fail(); }
   }
   #fail() {
@@ -194,18 +221,27 @@ export class TouringAudio {
       try { source.disconnect(); } catch {}
     }
     this.#sources.clear();
+    for (const source of this.#musicSources) {
+      source.onended=null;
+      try { source.disconnect(); } catch {}
+    }
+    this.#musicSources.clear();
+    this.#musicFree = [];
     this.#free = [];
+    try { this.#musicGain?.disconnect(); } catch {}
+    this.#musicGain=null;
     try { this.#gain?.disconnect(); } catch {}
     try { this.#context?.close().catch(()=>{}); } catch {}
     this.#gain = this.#context = null;
   }
 
-  update(player, command, course) {
+  update(player, command, course, race=null) {
     if (!this.#active) return !this.#failed;
     try {
       const ctx = this.#context;
       if (ctx.state !== 'running') throw Error('Audio interrupted');
       this.#voice.accept(player,command,course);
+      if (this.#musicVoice && race) this.#musicVoice.accept(race);
       const now = ctx.currentTime;
       const late = this.#next < now;
       if (late) this.#next = now+.006;
@@ -228,6 +264,26 @@ export class TouringAudio {
         };
         source.start(this.#next);
         this.#next += BLOCK_SECONDS;
+      }
+      if (this.#musicVoice && this.#musicGain) {
+        if (this.#musicNext < now) this.#musicNext=now+.006;
+        while (this.#musicFree.length && this.#musicNext < now+.09) {
+          const buffer=this.#musicFree.pop();
+          this.#musicVoice.write(buffer.getChannelData(0),buffer.getChannelData(1));
+          const source=ctx.createBufferSource();
+          source.buffer=buffer;
+          source.connect(this.#musicGain);
+          this.#musicSources.add(source);
+          source.onended=()=>{
+            source.onended=null;
+            if (ctx!==this.#context) return;
+            source.disconnect();
+            this.#musicSources.delete(source);
+            this.#musicFree.push(buffer);
+          };
+          source.start(this.#musicNext);
+          this.#musicNext+=BLOCK_SECONDS;
+        }
       }
       return true;
     } catch {
