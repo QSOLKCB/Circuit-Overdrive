@@ -47,7 +47,9 @@ export function createProfileEditor(container,{onSave=()=>{}}={}) {
   candidateLabel.append(candidates); candidates.id='profile-candidates';
   const capture=button('Capture','profile-capture',take);
   const skip=button('Skip','profile-skip',()=>advance(true));
-  const cancel=button('Cancel calibration','profile-cancel',()=>{ wizard=null; refresh(); notice('Calibration cancelled.'); });
+  function cancelCapture() { wizard=null; refresh(); notice('Calibration cancelled.'); }
+  const cancel=button('Cancel calibration','profile-cancel',cancelCapture);
+  details.addEventListener('toggle',()=>{ if (!details.open && wizard) cancelCapture(); });
   const stage=el('fieldset'), stageTitle=el('legend','Capture controls');
   instructionsNode.id='profile-step'; instructionsNode.setAttribute('role','status');
   const wizardButtons=el('div'); wizardButtons.className='buttons'; wizardButtons.append(capture,skip,cancel);
@@ -218,8 +220,19 @@ export function createProfileEditor(container,{onSave=()=>{}}={}) {
     details.open=false; details.hidden=true;
     raw.textContent=preview.textContent=''; notice('');
   }
+  // Recording the owner's own buttons requires an independent confirmation.
+  // A second controller can conduct the calibration of the highlighted device.
+  function handlesLearningInput(action) {
+    if (!details.open) return false;
+    if (wizard) return true;
+    if (action==='confirm' && [calibrate,remap,...polarity.values()].includes(document.activeElement)) {
+      notice('To calibrate this controller, start with a click, tap or Enter. You can use Back to leave.');
+      return true;
+    }
+    return false;
+  }
   close();
-  return {close, update(device) {
+  return {close, handlesLearningInput, update(device) {
     const id=deviceKey(device);
     if (!id) { if (pad) close(); return; }
     pad=device;

@@ -10,8 +10,9 @@ try {
   await page.addInitScript(()=>{
     window.padFixture=[
       {id:'Test digital USB',index:0,axes:[],mapping:'',connected:true},
-      {id:'Test combined wheel',index:1,axes:[.08,.1],mapping:'',connected:true}
-    ].map(p=>({...p,buttons:Array.from({length:12},()=>({value:0,pressed:false}))}));
+      {id:'Test combined wheel',index:1,axes:[.08,.1],mapping:'',connected:true},
+      {id:'Test standard pad',index:2,axes:[0,0],mapping:'standard',connected:true}
+    ].map(p=>({...p,buttons:Array.from({length:p.mapping==='standard'?17:12},()=>({value:0,pressed:false}))}));
     Object.defineProperty(navigator,'getGamepads',{value:()=>[...window.padFixture]});
   });
   const id=s=>page.locator('#'+s), click=s=>id(s).click();
@@ -79,7 +80,44 @@ try {
   const saved=(await record()).devices[0].profile;
   assert.equal(saved.throttle.index,saved.brake.index); assert.equal(saved.tuning.invertSteer,true);
   await click('use-device');
+  // The owner can browse expanded settings. A button being learned must
+  // never activate Capture, shift focus, or dismiss the dialog by itself.
+  await click('controllers'); await id('driver-device').selectOption('pad-2'); await click('use-device');
+  async function ownerButton(button) {
+    await page.evaluate(async button=>{
+      const pad=window.padFixture[2];
+      const frames=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      await frames();
+      pad.buttons[button]={value:1,pressed:true}; await frames();
+      pad.buttons[button]={value:0,pressed:false}; await frames();
+    },button);
+  }
+  const summary=page.locator('#profile-settings summary');
+  const focused=el=>el.evaluate(node=>document.activeElement===node);
+  await click('controllers');
+  await ownerButton(13); assert(await focused(summary));
+  await ownerButton(13); assert(await focused(id('use-device')),'collapsed editor controls are skipped');
+  await ownerButton(12); await ownerButton(0);
+  assert(await id('profile-settings').evaluate(el=>el.open));
+  await ownerButton(13); assert(await focused(id('profile-family')),'owner browses an expanded editor');
+  await ownerButton(1); assert(!(await id('controller-dialog').isVisible()));
+
+  await click('controllers'); await summary.click(); await id('profile-calibrate').focus();
+  await ownerButton(0);
+  assert(!(await id('profile-capture').isVisible()),'owner Confirm cannot start learning its own buttons');
+  assert.match(await id('profile-message').textContent(),/click, tap or Enter/);
+  await click('profile-calibrate');
+  const prompt=await id('profile-step').textContent();
+  for (const button of [0,1,13]) await ownerButton(button);
+  assert.equal(await id('profile-step').textContent(),prompt);
+  assert(await focused(id('profile-capture')),'own raw inputs leave capture and focus untouched');
+  await summary.click(); await ownerButton(1); assert(!(await id('controller-dialog').isVisible()));
+
+  await configure(1); await id('profile-calibrate').focus(); await ownerButton(0);
+  assert(await id('profile-capture').isVisible(),'the owner can calibrate a second device');
+  await ownerButton(0); assert.match(await id('profile-step').textContent(),/fully left/);
+  await ownerButton(1); assert(!(await id('controller-dialog').isVisible()));
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({browser:browser.version(),url,syntheticReports:['12-button digital','asymmetric wheel with shared pedal axis'],
-    checks:['ambiguous capture','overlapping pedal rejection','live normalized preview','neutral save gate','remap','reload','restore defaults','brake range','invert steering','explicit use']}));
+    checks:['ambiguous capture','overlapping pedal rejection','live normalized preview','neutral save gate','remap','reload','restore defaults','brake range','invert steering','explicit use','expanded editor pad navigation','owner capture isolation','second-device calibration']}));
 } finally { await browser.close(); }
