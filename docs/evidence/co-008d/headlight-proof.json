@@ -1,0 +1,106 @@
+{
+  "stats": [
+    {
+      "station": 0,
+      "bank": 0,
+      "left": {
+        "lit": 23311,
+        "centre": 265.7160354942111,
+        "peak": 125
+      },
+      "right": {
+        "lit": 23339,
+        "centre": 373.2859924395721,
+        "peak": 125
+      },
+      "translated": {
+        "lit": 25492,
+        "centre": 320.3745685027268,
+        "peak": 125
+      },
+      "reversed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      },
+      "removed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      }
+    },
+    {
+      "station": 210,
+      "bank": -0.29670597283903605,
+      "left": {
+        "lit": 23647,
+        "centre": 251.89825691059187,
+        "peak": 136
+      },
+      "right": {
+        "lit": 27654,
+        "centre": 357.4712869981472,
+        "peak": 117
+      },
+      "translated": {
+        "lit": 25120,
+        "centre": 308.3603823523466,
+        "peak": 136
+      },
+      "reversed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      },
+      "removed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      }
+    }
+  ],
+  "calibration": {
+    "distance": [
+      86,
+      53,
+      33.33333333333333,
+      8.000000000000002,
+      0
+    ],
+    "angle": [
+      61,
+      61,
+      39,
+      4.666666666666666,
+      0
+    ],
+    "barrier": 232
+  },
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "browser": "158.0.8127.36",
+  "modules": {
+    "src/ai.js": "287cc768c7c8ae3f3395b41ac321f674cf04a1d7dbced0fc0c72c05afa42ab76",
+    "src/camera.js": "c222769d512cce5641b5e261c923e8c93b02ba6100ec38f151788c260de6a68a",
+    "src/contact.js": "2e0fb63ec8eb9e19dc1a1b2af56fadb37dc0fbd1f2d3b144a9c95cd370c9bde6",
+    "src/field.js": "2fd8817920fc0349ada856ca6f4a9931f36bae0cc5064be52090e23ccc7a2e8a",
+    "src/geometry.js": "3d3bc88d28e14017732e089eb4a43e745279924ff06847eb16a9d7045e686560",
+    "src/headlights.js": "57ec545b990ccdade851343e86fce00bad2f252a3c3b34a644a67012a7844beb",
+    "src/sim.js": "cbceffdf89b707cb13119c45fa68d9056346e0c5d2bf0a88dd321f6dab95fe63",
+    "src/speedway.js": "79628857d962c91688b419d90f09db027fe3b8bed27cf1029c4e189a5171c68e",
+    "src/touring-car.js": "fbd83d37722125b34cb185f633aae71a4d388deb8975c4afc0a4a2fc824871fa",
+    "src/track.js": "5cd9eb761b2c74f0eb313b719e7e6b850e901b2b970fd6a07437010ed9cc02fb",
+    "tracks/overdrive-speedway.json": "5168f9b201854fffd37b4eae6348abc2c860ae95ed650ca7a15001c1bd2c9c4e",
+    "vendor/vanillajs/modules/collision/index.js": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1",
+    "vendor/vanillajs/modules/math/index.js": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7",
+    "vendor/vanillajs/modules/render-lit/index.js": "6f1fd13f577b41ada51242591661e80d55707b5152888655a25e79e0ea4b2a47",
+    "vendor/vanillajs/modules/scenic3d/index.js": "dfed00913da27f97806c39ddc5d472de1d9382994fed51101048b24d0775a30e",
+    "vendor/vanillajs/modules/terrain/index.js": "500756acf093f44e2e6c7e993a4b8f3f6f720abaf32db99fe0189d9b65fdc186",
+    "vendor/vanillajs/modules/vehicle3d/index.js": "60e0bc1e11d44773af302ab8e76e8076aacd7b324461d2ea1f08ea86297797ad"
+  },
+  "sourceRevision": "2bc4ee997b9d2363c985d4fad53ad07c64a05de9",
+  "images": {
+    "bank-off.webp": "ecb0868a2561a6c665b3fa087a8e34caecd47a7eb8472140674d81621b5c04b0",
+    "bank-left.webp": "636976641ff7a4841c5338d57c212371b01482cf327feeb449429e31eb0d09c9",
+    "bank-right.webp": "37f7ce6fbce0bfe6fbb1becd69f4be8dc9ee9ae7b0ca72a9320f6248254cd90d"
+  }
+}

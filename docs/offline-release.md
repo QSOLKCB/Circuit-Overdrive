@@ -10,7 +10,7 @@ Extract the whole ZIP. Open a terminal in the extracted **Circuit-Overdrive** di
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-On Windows you can use `py -3` in place of `python3`. Open [the local game](http://127.0.0.1:8000/) in a WebGL-capable browser with native JSON modules. Both courses, all six cars, audio, touch controls and controller profiles use local files. The local server supplies the module MIME types. The browser stores controller profiles and championship progress per origin. Return to the same browser, address, port and source build to continue a championship. After a flag, wait for the local save confirmation. Each downloaded event recording opens separately in Replay Theatre.
+On Windows you can use `py -3` in place of `python3`. Open [the local game](http://127.0.0.1:8000/) in a WebGL-capable browser with native JSON modules. Day and Nightshift share both local courses. Headlight shaders, fixtures, all six cars, original synthesized audio and controls ship in the archive. The local server supplies the module MIME types. The browser stores controller profiles and championship progress per origin. Return to the same browser, address, port and source build to continue a championship. After a flag, wait for the local save confirmation. Each downloaded event recording opens separately in Replay Theatre.
 
 ## Build or reproduce a candidate
 
@@ -31,7 +31,11 @@ The builder packages the committed allowlist and validates its import graph and 
 | `Circuit-Overdrive/RELEASE.json` inside the ZIP | Game revision, engine repository/pin and SHA-256 for every other file in the ZIP |
 | `.zip.sha256` beside the ZIP | SHA-256 for the complete archive, including its manifest |
 
-CI compares the release candidate's runtime files with the separately built Pages directory, then retains the verified ZIP and receipt together as `offline-candidate-<sha>` for 14 days. Three browser jobs download that same candidate, verify its checksum, and drive or inspect the extracted game under the repository subpath. Collect `local-browser-<sha>-speedway` and `local-browser-<sha>-ridge` for the two standalone race classifications and replays. The Ridge shard also contains the four championship tapes, standings and trophy screenshot. The controllers artifact contains input diagnostics and Replay Theatre evidence. The corresponding `public-browser-<sha>-<shard>` artifacts cover the deployed site after the protected `verify` check and production deployment succeed.
+CI compares the release candidate's runtime files with the separately built Pages directory, then retains the verified ZIP and receipt together as `offline-candidate-<sha>` for 14 days. Seven browser jobs download that same candidate by artifact ID, verify its checksum and exercise the extracted game under the repository subpath. The separate test job can run while the archive is built and exercised.
+
+The `local-browser-<sha>-speedway` and `local-browser-<sha>-ridge` artifacts contain the standalone day and night races, classifications and byte-compared replays. The `championship` artifact holds four event tapes, standings, the trophy capture and the Node replay reconstruction receipt. The `effects` artifact holds the headlight pixel probe and night contact evidence. The `lifecycle`, `controllers` and `theatre` artifacts cover browser and touch input lifecycle, controller diagnostics, and Replay Theatre respectively.
+
+After the protected verification and deployment succeed, the corresponding `public-browser-<sha>-<shard>` artifacts contain fresh live-site evidence. An exact same-run match can reuse a pure Node replay reconstruction from the local championship. A missing or mismatched receipt falls back to reconstruction from the public download. Every browser drive and download runs on each target. [Replay receipt requirements and workflow](pages.md#reproduce-browser-verification)
 
 PR checks run with read-only repository access. A PR run identifies the tested GitHub merge revision, which can differ from the branch head. The owner can build the final approved revision with the same command. Publishing a release and assigning a tag are separate owner actions. [Pages procedure](pages.md)
 

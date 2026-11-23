@@ -8,12 +8,14 @@ import {join} from 'node:path';
 
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base=new URL(process.argv[2] || 'http://127.0.0.1:8000/Circuit-Overdrive/');
+// A reference URL enables day pixel parity between two independently stamped packages.
+const reference=process.argv.find(arg=>arg.startsWith('--day-reference='))?.slice('--day-reference='.length);
 const evidence=process.env.EVIDENCE_DIR;
 if(evidence) await mkdir(evidence,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:process.env.NATIVE_GL==='1' ? ['--enable-gpu','--use-angle=gl'] :
     ['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-try {
+async function inspect(base,variant) {
   const page=await browser.newPage({viewport:{width:1024,height:576}});
   const url=new URL('night-world-inspection',base), errors=[], captures=[];
   page.on('pageerror',e=>errors.push(e.message));
@@ -30,8 +32,8 @@ try {
     return html.querySelector('meta[name=game-revision]').content;
   });
   assert.match(source,/^[0-9a-f]{40}$/,'use a package assembled from an exact committed runtime');
-  if(process.env.REPLAY_REVISION) assert.equal(source,process.env.REPLAY_REVISION);
-  const environment=await page.evaluate(async()=>{
+  if(!reference && process.env.REPLAY_REVISION) assert.equal(source,process.env.REPLAY_REVISION);
+  const environment=await page.evaluate(async variant=>{
     const {createScene}=await import('./src/scene.js');
     const {track}=await import('./src/track.js'), {ridge}=await import('./src/ridge.js');
     const {createRace,startRace,stepRace,recoverCar,rideHeight}=await import('./src/sim.js');
@@ -41,9 +43,9 @@ try {
       scene?.dispose();
       course=id==='speedway'?track:ridge;
       race=createRace(27,course);
-      scene=createScene(canvas,course,1,'night');
+      scene=createScene(canvas,course,1,variant);
     };
-    window.photo=(station,reverse,recovery)=>{
+    window.photo=async(station,reverse,recovery)=>{
       if(recovery) {
         startRace(race);
         while(race.phase==='countdown') stepRace(race,{});
@@ -69,13 +71,16 @@ try {
         if(luma>95) {bright++;if(i<pixels.length*.52) roadBright++;}
       }
       if(gl.getError()!==gl.NO_ERROR) throw Error('GL error after course draw');
-      return {uri:canvas.toDataURL('image/webp',.91),bright,dark,roadBright,entrants:field.length,
-        playerStation:field[race.player.id].s};
+      // Read/encode before awaiting the digest: presenting a frame can clear the backbuffer.
+      const uri=variant==='night' ? canvas.toDataURL('image/webp',.91) : null;
+      const hash=await crypto.subtle.digest('SHA-256',pixels);
+      const rgba256=Array.from(new Uint8Array(hash),v=>v.toString(16).padStart(2,'0')).join('');
+      return {uri,bright,dark,roadBright,rgba256,entrants:field.length,playerStation:field[race.player.id].s};
     };
     window.openCourse('speedway');
     const gl=canvas.getContext('webgl'), info=gl.getExtension('WEBGL_debug_renderer_info');
     return {renderer:info && gl.getParameter(info.UNMASKED_RENDERER_WEBGL),version:gl.getParameter(gl.VERSION)};
-  });
+  },variant);
   for(const [course,sections] of [
     ['speedway',[['grid',null],['bank',208],['backstraight',690],['recovered-grid',null,false,true]]],
     ['ridge',[['descent',430],['forest',1070],['bridge-entry',1792],['bridge',1915],['bridge-exit',2062],
@@ -85,16 +90,38 @@ try {
     for(const [name,s,reverse=false,recovery=false] of sections) {
       const {uri,...stats}=await page.evaluate(args=>window.photo(...args),[s,reverse,recovery]);
       assert.equal(stats.entrants,6);
-      assert(stats.dark>50000 && stats.bright>650 && stats.roadBright>120,JSON.stringify({course,name,...stats}));
+      if(variant==='night') assert(stats.dark>50000);
+      assert(stats.bright>650 && stats.roadBright>120,JSON.stringify({course,name,...stats}));
       const file=course+'-'+name+'.webp';
-      const data=Buffer.from(uri.split(',')[1],'base64');
-      if(evidence) await writeFile(join(evidence,file),data);
-      captures.push({file,reverse,recovery,...stats,sha256:createHash('sha256').update(data).digest('hex')});
+      if(uri) {
+        const data=Buffer.from(uri.split(',')[1],'base64');
+        if(evidence) await writeFile(join(evidence,file),data);
+        stats.sha256=createHash('sha256').update(data).digest('hex');
+      }
+      captures.push({file,reverse,recovery,...stats});
     }
   }
   assert.deepEqual(errors,[]);
-  const report={source,browser:browser.version(),viewport:[1024,576],...environment,
+  await page.close();
+  return {source,browser:browser.version(),viewport:[1024,576],...environment,
     poses:'Grid and recovery from simulation. Other captures are controlled placements on sampled course surfaces.',captures};
-  if(evidence) await writeFile(join(evidence,'world-inspection.json'),JSON.stringify(report,null,2)+'\n');
+}
+try {
+  let report,filename;
+  if(reference) {
+    const baseline=await inspect(new URL(reference),'day'), candidate=await inspect(base,'day');
+    assert.notEqual(candidate.source,baseline.source,'day parity requires two distinct source revisions');
+    assert.equal(candidate.renderer,baseline.renderer);
+    const hashes=frames=>frames.map(({file,rgba256})=>({view:file.replace('.webp',''),rgba256}));
+    const views=hashes(candidate.captures);
+    assert.deepEqual(views,hashes(baseline.captures),'day RGBA framebuffer differs from reference');
+    report={baseline:baseline.source,candidate:candidate.source,renderer:candidate.renderer,browser:candidate.browser,
+      viewport:candidate.viewport,bytesPerFrame:1024*576*4,entrants:6,views};
+    filename='day-parity.json';
+  } else {
+    report=await inspect(base,'night');
+    filename='world-inspection.json';
+  }
+  if(evidence) await writeFile(join(evidence,filename),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report));
 } finally { await browser.close(); }

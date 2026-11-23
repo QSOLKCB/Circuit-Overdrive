@@ -79,6 +79,7 @@ try {
   await page.goto(url);
   await phase('menu');
   await tap('#choose-ridge');
+  await tap('#choose-night');
   await tap('#start');
   await phase('grid');
   assert.equal(await page.evaluate(()=>audioReport.contexts),0,'touch grid waits for an audio gesture');

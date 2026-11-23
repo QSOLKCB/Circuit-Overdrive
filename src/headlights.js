@@ -20,7 +20,7 @@ export function headlightSource(pose) {
 
 export function selectHeadlights(poses,focus,reduced,showroom) {
   if (poses.length>6) throw RangeError('Headlights require a six-car field or smaller');
-  if (!poses.includes(focus) || focus.finished) return [];
+  if (!focus || !poses.includes(focus) || focus.finished) return [];
   const source=headlightSource(focus);
   if (!source) return [];
   const sources=[source];
@@ -171,9 +171,14 @@ export function createHeadlightPass(gl,batches) {
   return {
     draw(sources,eye,q,frame,isVisible) {
       if (!sources.length) return;
-      if(sources.length>BEAM.maxSources || !sources.every(({position,direction})=>
-        position.length===3 && position.every(v=>Number.isFinite(v)&&Math.abs(v)<=WORLD_LIMIT) &&
-        direction.length===3 && Math.abs(Math.hypot(...direction)-1)<1e-5)) throw RangeError('Invalid headlight source');
+      if(sources.length>BEAM.maxSources) throw RangeError('Invalid headlight source count');
+      for(const source of sources) {
+        const position=source?.position, direction=source?.direction;
+        if(position?.length!==3 || direction?.length!==3 ||
+          ![0,1,2].every(i=>Number.isFinite(position[i]) && Math.abs(position[i])<=WORLD_LIMIT &&
+            Number.isFinite(direction[i])) || Math.abs(Math.hypot(...direction)-1)>=1e-5)
+          throw RangeError('Invalid headlight source');
+      }
       const vp=multiplyMatrices(perspective(frame.fov,gl.drawingBufferWidth/gl.drawingBufferHeight,
         frame.near,frame.far),viewMatrix(eye,q));
       if (!vp.every(Number.isFinite)) throw RangeError('Invalid headlight camera');

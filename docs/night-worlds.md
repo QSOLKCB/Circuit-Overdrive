@@ -40,3 +40,11 @@ The corrected source was exercised with the following command.
 ```sh
 NATIVE_GL=1 CHROME_BIN=/usr/bin/google-chrome PLAYWRIGHT_MODULE=/home/trent/OFFLINE-GAMES/node_modules/playwright/index.mjs EVIDENCE_DIR=/tmp/co008-nightshift/b2-worlds node tests/browser-night-worlds.mjs http://127.0.0.1:18728/b2/Circuit-Overdrive/
 ```
+
+## Day framebuffer comparison
+
+The published v0.7.0 package and CO-008D source `2bc4ee997b9d2363c985d4fad53ad07c64a05de9` produced identical SHA-256 hashes for all thirteen daytime framebuffers. Each scene drew the six-car field on a 1024 × 576 surface. Chrome 158.0.8127.36 used ANGLE SwiftShader for both builds. Each hash covers 2,359,296 raw RGBA bytes read synchronously after the draw. There was no observed pixel variance between runs. [Source stamps and per-view hashes](evidence/co-008d/day-parity.json)
+
+```sh
+CHROME_BIN=/usr/bin/google-chrome PLAYWRIGHT_MODULE=/home/trent/OFFLINE-GAMES/node_modules/playwright/index.mjs EVIDENCE_DIR=/tmp/co008-nightshift/d/day-parity node tests/browser-night-worlds.mjs http://127.0.0.1:18729/Circuit-Overdrive/ --day-reference=http://127.0.0.1:18728/day/Circuit-Overdrive/
+```

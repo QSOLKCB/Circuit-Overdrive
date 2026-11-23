@@ -23,13 +23,14 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
 
    On Windows with the Python launcher, use py -3 in place of python3.
 4. Open http://127.0.0.1:8000/ in a browser with WebGL and native JSON modules.
-   Choose a course and select Start race. Follow the grid prompt to take control.
+   Choose a course, choose Day or Nightshift and select Start race. Follow the grid prompt to take control.
    Or choose World Overdrive Championship for four scored events. Continue
    on the same browser, address and build after the local save confirmation.
    Save each event replay at the flag before starting the next round.
    Open Controller to select, calibrate or inspect an exposed device.
 5. For spectator playback, open http://127.0.0.1:8000/replay-theatre.html
-   and import a matching source-stamped JSON replay. No upload is performed.
+   and import a matching source-stamped JSON replay. Select Nightshift in
+   Spectator lighting to watch a night drive under its original lighting.
 6. Press Ctrl+C in the terminal when you are done.
 
 The server reads this folder on your computer. Both courses, the six-car field,

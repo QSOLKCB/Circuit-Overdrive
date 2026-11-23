@@ -1,0 +1,401 @@
+{
+  "machine": "AMD Ryzen 9 5950X, NVIDIA RTX 5060 Ti, driver 595.99.02, Ubuntu 26.04.1 LTS x86_64",
+  "field": 6,
+  "lighting": "Full Nightshift. Followed car and at most one racing rival within 48 m, static fixture lighting.",
+  "baseline": [
+    {
+      "browser": "158.0.8127.36",
+      "environment": "day",
+      "event": "standalone",
+      "course": "speedway",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "source": "3295b82004b64328072ac5fa64f8ba2b55394416",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "speedway six-car grid",
+          "samples": 133,
+          "seconds": 2.216499999999999,
+          "cpuSubmission": {
+            "samples": 152,
+            "medianMs": 0.5999999940395355,
+            "p95Ms": 0.7000000029802322
+          },
+          "gpuDraw": {
+            "samples": 19,
+            "medianMs": 1.151072,
+            "p95Ms": 1.258208
+          },
+          "simulationTicks": 133,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00451161741487,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "six-car close racing",
+          "samples": 155,
+          "seconds": 2.5833000000000004,
+          "cpuSubmission": {
+            "samples": 156,
+            "medianMs": 0.5999999940395355,
+            "p95Ms": 0.7000000029802322
+          },
+          "gpuDraw": {
+            "samples": 20,
+            "medianMs": 1.122048,
+            "p95Ms": 1.242496
+          },
+          "simulationTicks": 155,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.0007742035381,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "speedway banked turn",
+          "samples": 162,
+          "seconds": 2.6998999999999995,
+          "cpuSubmission": {
+            "samples": 163,
+            "medianMs": 0.5999999940395355,
+            "p95Ms": 0.6000000089406967
+          },
+          "gpuDraw": {
+            "samples": 20,
+            "medianMs": 1.097792,
+            "p95Ms": 1.18384
+          },
+          "simulationTicks": 162,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00222230452981,
+          "medianMs": 16.69999999999891,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.80000000000109
+        }
+      ]
+    },
+    {
+      "browser": "158.0.8127.36",
+      "environment": "day",
+      "event": "standalone",
+      "course": "ridge",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "source": "3295b82004b64328072ac5fa64f8ba2b55394416",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "six-car start",
+          "samples": 164,
+          "seconds": 2.7332,
+          "cpuSubmission": {
+            "samples": 166,
+            "medianMs": 0.7000000029802322,
+            "p95Ms": 0.800000011920929
+          },
+          "gpuDraw": {
+            "samples": 20,
+            "medianMs": 1.266528,
+            "p95Ms": 1.396352
+          },
+          "simulationTicks": 164,
+          "maxTicksPerFrame": 2,
+          "meanFps": 60.00292697204741,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "open descent",
+          "samples": 329,
+          "seconds": 5.483200000000001,
+          "cpuSubmission": {
+            "samples": 330,
+            "medianMs": 0.6000000089406967,
+            "p95Ms": 0.7000000029802322
+          },
+          "gpuDraw": {
+            "samples": 41,
+            "medianMs": 1.109472,
+            "p95Ms": 1.212
+          },
+          "simulationTicks": 329,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.001459002042594,
+          "medianMs": 16.700000000000728,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "forest",
+          "samples": 634,
+          "seconds": 10.566199999999997,
+          "cpuSubmission": {
+            "samples": 635,
+            "medianMs": 0.7000000029802322,
+            "p95Ms": 0.9000000059604645
+          },
+          "gpuDraw": {
+            "samples": 79,
+            "medianMs": 1.31552,
+            "p95Ms": 1.61104
+          },
+          "simulationTicks": 634,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.002649959304215,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.700000000004366,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "bridge",
+          "samples": 539,
+          "seconds": 8.983099999999991,
+          "cpuSubmission": {
+            "samples": 540,
+            "medianMs": 0.7000000029802322,
+            "p95Ms": 1
+          },
+          "gpuDraw": {
+            "samples": 67,
+            "medianMs": 1.30544,
+            "p95Ms": 1.59344
+          },
+          "simulationTicks": 539,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.001558482038554,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.80000000000291,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "tunnel",
+          "samples": 338,
+          "seconds": 5.633099999999991,
+          "cpuSubmission": {
+            "samples": 339,
+            "medianMs": 0.699999988079071,
+            "p95Ms": 0.800000011920929
+          },
+          "gpuDraw": {
+            "samples": 42,
+            "medianMs": 1.238784,
+            "p95Ms": 1.527008
+          },
+          "simulationTicks": 338,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00248531004252,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.70000000001164,
+          "maxMs": 16.80000000000291
+        }
+      ]
+    }
+  ],
+  "candidate": [
+    {
+      "browser": "158.0.8127.36",
+      "environment": "night",
+      "event": "standalone",
+      "course": "speedway",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "source": "2bc4ee997b9d2363c985d4fad53ad07c64a05de9",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "speedway six-car grid",
+          "samples": 133,
+          "seconds": 2.2165999999999992,
+          "cpuSubmission": {
+            "samples": 152,
+            "medianMs": 0.7000000029802322,
+            "p95Ms": 1
+          },
+          "gpuDraw": {
+            "samples": 19,
+            "medianMs": 1.345888,
+            "p95Ms": 1.555232
+          },
+          "simulationTicks": 133,
+          "maxTicksPerFrame": 2,
+          "meanFps": 60.00180456555086,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.800000000000182,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "six-car close racing",
+          "samples": 155,
+          "seconds": 2.5831999999999997,
+          "cpuSubmission": {
+            "samples": 156,
+            "medianMs": 0.7000000029802322,
+            "p95Ms": 0.800000011920929
+          },
+          "gpuDraw": {
+            "samples": 19,
+            "medianMs": 1.29232,
+            "p95Ms": 1.443872
+          },
+          "simulationTicks": 155,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00309693403531,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.799999999999272,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "speedway banked turn",
+          "samples": 162,
+          "seconds": 2.6998999999999995,
+          "cpuSubmission": {
+            "samples": 163,
+            "medianMs": 0.6000000089406967,
+            "p95Ms": 0.7000000029802322
+          },
+          "gpuDraw": {
+            "samples": 21,
+            "medianMs": 1.18096,
+            "p95Ms": 1.324576
+          },
+          "simulationTicks": 162,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00222230452981,
+          "medianMs": 16.69999999999891,
+          "p95Ms": 16.799999999999272,
+          "maxMs": 16.80000000000109
+        }
+      ]
+    },
+    {
+      "browser": "158.0.8127.36",
+      "environment": "night",
+      "event": "standalone",
+      "course": "ridge",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+      "source": "2bc4ee997b9d2363c985d4fad53ad07c64a05de9",
+      "profile": "high",
+      "effects": "full",
+      "width": 1920,
+      "height": 1080,
+      "sections": [
+        {
+          "section": "six-car start",
+          "samples": 164,
+          "seconds": 2.7331999999999996,
+          "cpuSubmission": {
+            "samples": 166,
+            "medianMs": 0.8999999910593033,
+            "p95Ms": 1.1000000089406967
+          },
+          "gpuDraw": {
+            "samples": 21,
+            "medianMs": 1.487264,
+            "p95Ms": 1.752672
+          },
+          "simulationTicks": 164,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.002926972047426,
+          "medianMs": 16.699999999999818,
+          "p95Ms": 16.800000000000182,
+          "maxMs": 16.800000000000182
+        },
+        {
+          "section": "open descent",
+          "samples": 329,
+          "seconds": 5.4830999999999985,
+          "cpuSubmission": {
+            "samples": 330,
+            "medianMs": 0.7999999970197678,
+            "p95Ms": 0.8999999910593033
+          },
+          "gpuDraw": {
+            "samples": 42,
+            "medianMs": 1.258016,
+            "p95Ms": 1.388352
+          },
+          "simulationTicks": 329,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00255330014045,
+          "medianMs": 16.700000000000728,
+          "p95Ms": 16.700000000000728,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "forest",
+          "samples": 634,
+          "seconds": 10.566200000000004,
+          "cpuSubmission": {
+            "samples": 635,
+            "medianMs": 0.7999999970197678,
+            "p95Ms": 0.9000000059604645
+          },
+          "gpuDraw": {
+            "samples": 79,
+            "medianMs": 1.381504,
+            "p95Ms": 1.472672
+          },
+          "simulationTicks": 634,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.00264995930417,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.700000000004366,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "bridge",
+          "samples": 539,
+          "seconds": 8.983,
+          "cpuSubmission": {
+            "samples": 540,
+            "medianMs": 0.7999999970197678,
+            "p95Ms": 0.9000000059604645
+          },
+          "gpuDraw": {
+            "samples": 68,
+            "medianMs": 1.38992,
+            "p95Ms": 1.494272
+          },
+          "simulationTicks": 539,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.002226427696755,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.79999999998836,
+          "maxMs": 16.80000000000291
+        },
+        {
+          "section": "tunnel",
+          "samples": 338,
+          "seconds": 5.633199999999997,
+          "cpuSubmission": {
+            "samples": 339,
+            "medianMs": 0.7999999970197678,
+            "p95Ms": 0.9000000059604645
+          },
+          "gpuDraw": {
+            "samples": 43,
+            "medianMs": 1.267584,
+            "p95Ms": 1.36848
+          },
+          "simulationTicks": 338,
+          "maxTicksPerFrame": 1,
+          "meanFps": 60.001420151956296,
+          "medianMs": 16.69999999999709,
+          "p95Ms": 16.80000000000291,
+          "maxMs": 16.80000000000291
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 CO-007 activates Digital Dominion for championship rounds. CO-008 activates Midnight Protocol for both standalone night courses. The catalogue below records the original v0.6.1 assignments. [Nightshift player guide](nightshift.md)
 
-**Status:** review candidate for the final v0.6.1 music PR. The future gameplay modes do not yet exist.
+The six-score catalogue shipped in v0.6.1. RASTER VELOCITY and STEEL RIOT remain reserved for later events.
 
 Six original, deterministic soundtrack arrangements are represented as **inspectable note, bass, arpeggio and percussion data** in `src/music-scores.js`.
 
@@ -28,7 +28,7 @@ node scripts/music-preview.mjs ../circuit-overdrive-soundtrack
 
 Use a **new**, nonexistent output directory. The command writes six `<mode>-preview.wav` references, six inspectable `<mode>-score.json` files and one `SHA256SUMS` with twelve entries.
 
-Each score JSON includes a title, score data, a fixed seed, the revision identifier when its runtime bytes match the committed Git tree, and either `playable` or `future-mode-only`. The source revision is not invented for dirty runtime files. The WAV reference renders are **not** embedded in the game; the game synthesizes the active two scores from its source data.
+Each score JSON includes a title, score data, a fixed seed, the revision identifier when its runtime bytes match the committed Git tree, and either `playable` or `future-mode-only`. The source revision is not invented for dirty runtime files. The WAV reference renders are **not** embedded in the game; the game synthesizes each selected score from its source data.
 
 ## Musical acceptance
 
@@ -38,8 +38,8 @@ The owner should listen to all six exported WAVs on real speakers or headphones,
 
 ## Separation from gameplay
 
-`MUSIC_TITLES`, `scoreForCourse` and `musicForCourse` continue to accept only Speedway and Ridge. The future catalogue uses separate `FUTURE_MUSIC_TITLES` and `scoreForFutureMode`; it does **not** create playable championship, night, rocket or demolition routes. No changes to VANILLAJS source pin, vehicle physics, simulation, replay, race classifications or audio-device lifecycle.
+The runtime selects Speedway, Ridge, championship and night scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
 
 ## Verification
 
-Run `node --test tests/music-catalogue.test.mjs tests/music.test.mjs tests/bps.test.mjs`, the full Node suite, the Python offline-release regression, and the packaged browser/Pages workflow. Record real execution outcomes and exact source SHAs. Full listening sign-off, merging and tagging `v0.6.1` remain owner-controlled.
+Run `node --test tests/music-catalogue.test.mjs tests/music.test.mjs tests/bps.test.mjs`, the full Node suite, the Python offline-release regression, and the packaged browser/Pages workflow. Record real execution outcomes and exact source SHAs. Owner listening review covers the mix on speakers and headphones.

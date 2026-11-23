@@ -25,7 +25,7 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 
 The HTTP verifier compares the served entry point and all runtime files with the checkout and checks the browser MIME types for HTML, CSS, JavaScript and JSON. Chromium starts both courses, drives both races to their results screens, and exercises pause, restart, focus loss, audio, and WebGL recovery. The finish harness restricts requests to the tested deployment. Screenshots and logs go to the specified evidence directory.
 
-By default the command runs every browser suite serially on one machine. To reproduce one CI failure, select its shard. For example, the following command checks the Speedway grid, its three-lap finish and mobile touch input.
+By default the command runs every browser suite serially on one machine. To reproduce one CI failure, select its shard. This example drives Speedway to the flag in daylight and at night, then compares the two downloaded replays.
 
 ```bash
 bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp -d)" --shard=speedway
@@ -33,13 +33,19 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 
 | Shard | Browser coverage |
 | --- | --- |
-| `speedway` | Speedway smoke test, Speedway finish with replay verification, mobile touch |
-| `ridge` | Ridge smoke test, Ridge finish with replay verification, full four-round championship |
-| `controllers` | Standard gamepad, custom profiles and wheel mapping, controller diagnostics, Replay Theatre |
+| `championship` | One continuous four-round World Overdrive Championship, including scores, saves, event replays and trophy |
+| `speedway` | Both three-lap Speedway races, finish classifications and byte-for-byte day/night replay comparison |
+| `ridge` | Both Ridge sprints, finish classifications and byte-for-byte day/night replay comparison |
+| `controllers` | Standard gamepad, custom profiles, wheel mapping and controller diagnostics |
+| `theatre` | Replay Theatre loading, playback, seeking and follow cameras |
+| `lifecycle` | Speedway and Ridge day smoke tests, Speedway night smoke test and mobile touch |
+| `effects` | Night contact effects and the WebGL headlight pixel comparison |
 
-The championship runner checks all four live flag orders, awards and running totals against a separate field and scoreboard oracle. It exercises boundary saves, an interrupted round, storage failure, trophy countback, four event replays and spectator isolation. The Ridge artifact retains four JSON tapes, the score report and presentation captures.
+The championship runner checks all four live flag orders, awards and running totals against a separate field and scoreboard oracle. It exercises boundary saves, an interrupted round, storage failure, trophy countback, four event replays and spectator isolation. The championship artifact retains the four JSON tapes, score report and presentation captures.
 
-Before deployment, CI runs up to three browser shards on separate Ubuntu runners against the same verified release candidate. Each shard retains its own evidence, including logs from a failed suite. The required `verify` check waits for packaging and all three browser results. The workflow applies the bounded parallelism and shared-artifact patterns from OPT revision `8dc06e99e48711497380fb11237f5fe12b6c556d`. [OPT-PAR-001](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-PAR-001-bounded-parallel-execution.md) · [OPT-FAN-001](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-FAN-001-shared-materialization-fanout.md)
+CI starts the Node, shell and Python test job alongside the package build. As soon as the verified ZIP is available, up to seven browser jobs can run concurrently on separate Ubuntu runners. Each downloads the producer's archive by artifact ID, verifies its checksum, serves it on loopback under `/Circuit-Overdrive/`, and checks the HTTP response bytes and MIME types before driving. Each shard retains its own evidence, including logs from a failed suite. The required `verify` check waits for the tests, package and every local browser job. [OPT bounded parallel execution](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-PAR-001-bounded-parallel-execution.md) · [OPT shared artifact fan-out](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-FAN-001-shared-materialization-fanout.md)
+
+After deployment, all seven jobs repeat their browser coverage against the actual Pages URL. The public championship job can reuse the local job's two deterministic Node reconstructions of an event replay. For each round, the receipt must match the repository, workflow run, checkout and served revision, SHA-256 of the raw downloaded tape, reconstruction batch sizes (240 and 63 ticks) and runtime fingerprint, including the Node binary and host. Both recorded classifications must match the public reference driver's six-car result. A missing or invalid receipt, or a mismatch in any field, runs both reconstructions from the public download. The championship log records the decision per round. The four live races, public downloads, HTTP checks, spectator session and championship assertions still execute on Pages. [OPT invariant-driven reuse](https://github.com/QSOLKCB/OPT/blob/8dc06e99e48711497380fb11237f5fe12b6c556d/optimizations/OPT-INV-001-invariant-driven-reuse.md)
 
 Before sharding, two successful serial verifications took 11m23s and 6m38s on GitHub-hosted Ubuntu. The browser step accounted for 10m37s and 6m05s, respectively. These times include both courses and all controller suites. [PR #15 run](https://github.com/QSOLKCB/Circuit-Overdrive/actions/runs/45152934832) · [Earlier release-candidate run](https://github.com/QSOLKCB/Circuit-Overdrive/actions/runs/45145677511)
 
@@ -49,7 +55,7 @@ On software WebGL, the finish runner renders the interactive game at 640×360. I
 
 1. Under **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. This repository reported that setting during CO-003 development.
 2. After owner review and merge into `main`, open **Actions → Pages** at the merge commit. The upload step packages only the tested allowlist. The deployment job reads the existing Pages configuration and deploys the artifact. [Workflow runs](https://github.com/QSOLKCB/Circuit-Overdrive/actions/workflows/pages.yml)
-3. Check the three `public-browser` jobs. The workflow summary records the public URL, exact source SHA and run. Download `public-browser-<sha>-<shard>` to inspect that group’s live-site evidence, or `local-browser-<sha>-<shard>` for the same group against the extracted archive. The Speedway and Ridge artifacts include the finish classifications and screenshots. [Production URL](https://qsolkcb.github.io/Circuit-Overdrive/)
+3. Check the seven `public-browser` jobs. The workflow summary records the public URL, exact source SHA and run. Download `public-browser-<sha>-<shard>` to inspect that group’s live-site evidence, or `local-browser-<sha>-<shard>` for the same group against the extracted archive. The Speedway and Ridge artifacts include the finish classifications and screenshots. [Production URL](https://qsolkcb.github.io/Circuit-Overdrive/)
 4. If the workflow reports a Pages permission or source error, verify the source setting above and that the `github-pages` environment permits deployments from `main`. If the HTTP verifier reports a stale file or wrong MIME type, inspect the failing URL in the log, check the deployed commit and allow for CDN propagation before rerunning the failed jobs. Public verification allows up to ten minutes of retry delays for stale CDN bytes before browser play begins. Each retry compares the files with the same checked-out SHA. To run the public check locally, pass the production URL to the same command from the deployed checkout.
 
-The packaging job builds and independently reproduces the offline ZIP once per run and records its source revision and checksum in the summary. Each local browser shard downloads the same `offline-candidate-<sha>` artifact, verifies its receipt and serves its extracted contents. The review ZIP and checksum are retained for 14 days. The Pages artifact contains the allowlisted runtime files. [Offline release guide](offline-release.md)
+The packaging job records the source revision and checksum in its summary. The verified ZIP and checksum are retained together for 14 days. The Pages artifact contains the allowlisted runtime files. [Offline release guide](offline-release.md) · [Nightshift acceptance](co-008-acceptance.md)

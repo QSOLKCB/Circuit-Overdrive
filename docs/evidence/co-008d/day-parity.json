@@ -1,0 +1,66 @@
+{
+  "baseline": "3295b82004b64328072ac5fa64f8ba2b55394416",
+  "candidate": "2bc4ee997b9d2363c985d4fad53ad07c64a05de9",
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "browser": "158.0.8127.36",
+  "viewport": [
+    1024,
+    576
+  ],
+  "bytesPerFrame": 2359296,
+  "entrants": 6,
+  "views": [
+    {
+      "view": "speedway-grid",
+      "rgba256": "3009f399c16ca8be1e0a84a084726faf07b3d62f70abf0eb6a004cf1b9c6cef7"
+    },
+    {
+      "view": "speedway-bank",
+      "rgba256": "95ebdc2c4affe85ca91e3d32608fc1f32816557f3e3a95331d8cf24c09d8a88b"
+    },
+    {
+      "view": "speedway-backstraight",
+      "rgba256": "64c533dd2474fc3301ef3f8d879c14dcd31af6705134ed9454d5468e1f440eae"
+    },
+    {
+      "view": "speedway-recovered-grid",
+      "rgba256": "3009f399c16ca8be1e0a84a084726faf07b3d62f70abf0eb6a004cf1b9c6cef7"
+    },
+    {
+      "view": "ridge-descent",
+      "rgba256": "9340afe6d78b0187d97a25f0206669b89238adec1ade045e8946c92aa8fd601e"
+    },
+    {
+      "view": "ridge-forest",
+      "rgba256": "0739518dcbfc4e8b7f3783db68327ad8c53bed7daf831d2ba964d6665216db08"
+    },
+    {
+      "view": "ridge-bridge-entry",
+      "rgba256": "6dc5728553d8c66a57dfac60c68d32391c83d06b70903ff12ecf70b691daa858"
+    },
+    {
+      "view": "ridge-bridge",
+      "rgba256": "4cb13208640561ced7b55360032bd6287f5980d456bdf282f2f89a0a5d7f801a"
+    },
+    {
+      "view": "ridge-bridge-exit",
+      "rgba256": "fe41dc83f2043e94cc3bc1ec96dcab4858095e2f39df88fe85123b477122f71d"
+    },
+    {
+      "view": "ridge-tunnel-entry",
+      "rgba256": "117fb97ca8be0b27a5e17ba1499e338244d1852ed49aac21d8adee1086235930"
+    },
+    {
+      "view": "ridge-tunnel-inside",
+      "rgba256": "e13da3fcef31b8215dbc9dc753fddca81c246c880f8ec2220a7edae17aeacfb9"
+    },
+    {
+      "view": "ridge-tunnel-exit",
+      "rgba256": "a68bab91674821d0fafed840a2b0c580f07ed0142b83a58d4287f3d409434981"
+    },
+    {
+      "view": "ridge-reverse-portal",
+      "rgba256": "11a5636bc6ae1e73623ba36be458064ee88e805e5052e8fc58047b100b9ffbce"
+    }
+  ]
+}

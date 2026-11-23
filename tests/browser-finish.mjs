@@ -10,6 +10,7 @@ import {installReplayController, selectReplayController, armReplayController, ve
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/');
 const scenic = process.argv.includes('--ridge');
+const night = process.argv.includes('--night');
 const attack = process.argv.includes('--attack');
 const recoverOnce = process.argv.includes('--recover');
 const source = process.argv.find(arg => arg.startsWith('--input='))?.slice(8) ?? 'keyboard';
@@ -83,8 +84,8 @@ try {
   });
   // Inject the local test driver from the runner. Published games contain only runtime files.
   await page.addInitScript({content:'window.driveKeyboard = (' + driverIntent.toString() + ');'});
-  if (process.env.EVIDENCE_DIR && scenic) {
-    await page.exposeFunction('captureSection', name => screenshot('ridge-' + name));
+  if (process.env.EVIDENCE_DIR && (scenic || night)) {
+    await page.exposeFunction('captureSection', name => screenshot((scenic ? 'ridge-' : 'speedway-') + name));
   }
   const entry = await page.goto(url.href);
   assert.equal(entry.status(),200);
@@ -94,12 +95,17 @@ try {
   await selectReplayController(page,source);
   if (scenic) await page.locator('#choose-ridge').click({force:true});
   assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'ridge' : 'speedway');
+  if (night) await page.locator('#choose-night').click({force:true});
+  const checkEnvironment=async()=>assert.equal(await page.locator('body').getAttribute('data-environment'),night?'night':'day');
+  await checkEnvironment();
   await page.locator('#sound').click({force: true});
   await page.locator('#start').click({force: true});
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'grid');
   await armReplayController(page,source);
+  await checkEnvironment();
+  if(night && process.env.EVIDENCE_DIR) await screenshot('starting-grid');
 
-  const result = await page.evaluate(async ({cruise, scenic, softwareReplay, source, recoverOnce}) => {
+  const result = await page.evaluate(async ({cruise, scenic, night, softwareReplay, source, recoverOnce}) => {
     const {createRace, startRace, stepRace, recoverCar, PENALTY_TICKS} = await import('./src/sim.js');
     const course = scenic ? (await import('./src/ridge.js')).ridge : (await import('./src/track.js')).track;
     const phase = () => document.body.dataset.phase;
@@ -143,7 +149,15 @@ try {
     }
     // Exercise the high chase through both tunnel portals during the sprint.
     const cameraChanges = scenic ? [2900,3300] : [];
-    const captures = [[-12,'start'],[460,'open'],[1000,'forest'],[1900,'bridge'],[3140,'tunnel']];
+    const captures = scenic
+      ? [[-12,'start'],[460,'open'],[1000,'forest'],[1900,'bridge'],[3140,'tunnel']]
+      : [[215,'bank'],[350,'road-at-speed']];
+    if(night && scenic) {
+      const [entry,exit]=course.features.tunnel;
+      captures.push([entry-22,'tunnel-entrance'],[exit-16,'tunnel-exit'],
+        [course.features.bridge[0]-22,'bridge-entrance'],[course.features.bridge[1]-16,'bridge-exit']);
+      captures.sort((a,b)=>a[0]-b[0]);
+    }
     function heldControls(intent) {
       const wanted = new Set();
       if (intent.throttle) wanted.add('KeyW');
@@ -206,7 +220,7 @@ try {
         key('keyup','KeyC');
         cameraChanges.shift();
       }
-      if (window.captureSection && captures.length && shadow.player.current.s >= captures[0][0]) {
+      if (window.captureSection && captures.length && shadow.player.distance >= captures[0][0]) {
         flush();
         await window.captureSection(captures.shift()[1]);
       }
@@ -254,7 +268,7 @@ try {
       remaining:text('remaining'), expectedSplits: scenic ? shadow.player.splitTicks : shadow.player.lapTicks,
       expectedSplitCount:scenic ? course.gates.length-2 : 3, expectedTicks: shadow.player.elapsedTicks, recoveries: shadow.player.recoveries
     };
-  }, {cruise:attack ? (scenic ? 42 : 38) : 30,scenic,softwareReplay,source,recoverOnce});
+  }, {cruise:attack ? (scenic ? 42 : 38) : 30,scenic,night,softwareReplay,source,recoverOnce});
   const time = ticks => {
     const ms = Math.round(ticks * 1000 / 60);
     return Math.floor(ms / 60000) + ':' + String(Math.floor(ms / 1000) % 60).padStart(2, '0')
@@ -291,7 +305,8 @@ try {
   if (process.env.EVIDENCE_DIR) {
     await screenshot(scenic ? (attack ? 'ridge-win' : 'ridge-finished') : attack ? 'win' : 'finished');
   }
-  const replay = await verifyReplayDownload(page,result,scenic?'ridge':'speedway',process.argv.includes('--require-replay'));
+  await checkEnvironment();
+  const replay = await verifyReplayDownload(page,result,scenic?'ridge':'speedway',process.argv.includes('--require-replay'),night);
   if (replay) {
     result.savedReplay=replay;
     if (source==='standard' || source==='wheel') assert(replay.analogTicks>=60,'partial pedal missing from recording');
@@ -299,6 +314,7 @@ try {
   await page.locator('#restart').click({force: true});
   assert.equal(await page.locator('body').getAttribute('data-phase'), 'grid');
   assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'ridge' : 'speedway');
+  await checkEnvironment();
   if (source==='keyboard') await page.keyboard.press('Escape');
   else if (source==='touch') {
     await armReplayController(page,source);
@@ -320,7 +336,7 @@ try {
   assert.equal(await page.locator('body').getAttribute('data-course'),scenic ? 'speedway' : 'ridge');
   assert(loaded.has(new URL('./tracks/redline-ridge.json',url).pathname));
   assert.deepEqual(failures, []);
-  console.log(JSON.stringify({browser:browser.version(), url:url.href, input:source, ...result}, null, 2));
+  console.log(JSON.stringify({browser:browser.version(), url:url.href, input:source, environment:night?'night':'day', ...result}, null, 2));
 } finally {
   clearTimeout(stallTimer);
   await browser.close();

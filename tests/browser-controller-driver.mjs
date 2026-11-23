@@ -92,7 +92,7 @@ export async function armReplayController(page, source) {
   });
 }
 
-export async function verifyReplayDownload(page, result, courseName, required) {
+export async function verifyReplayDownload(page, result, courseName, required, night=false) {
   const save = page.locator('#save-drive');
   if (!await save.count()) {
     if (required) throw Error('This build must expose the finished replay');
@@ -106,7 +106,7 @@ export async function verifyReplayDownload(page, result, courseName, required) {
   const {replayCommands} = await import('../src/replay.js');
   const {createRace,startRace,stepRace,recoverCar} = await import('../src/sim.js');
   const course = courseName==='ridge' ? (await import('../src/ridge.js')).ridge : (await import('../src/track.js')).track;
-  assert.equal(download.suggestedFilename(),'circuit-overdrive-'+courseName+'-replay.json');
+  assert.equal(download.suggestedFilename(),'circuit-overdrive-'+courseName+(night?'-night':'')+'-replay.json');
   const path=await download.path();
   assert((await stat(path)).size < 12*1024*1024, 'export exceeds the 30-minute command limit');
   const data=JSON.parse(await readFile(path,'utf8'));
