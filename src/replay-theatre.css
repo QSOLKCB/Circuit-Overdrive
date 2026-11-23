@@ -1,0 +1,51 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+/* CO-REPLAY-001 — stand-alone, accessible spectator layout. */
+body.replay-theatre { grid-template-rows:auto minmax(0,1fr) auto auto; }
+.replay-theatre header small {font:700 clamp(9px,1vw,13px) var(--mono);letter-spacing:.04em;color:var(--mint);margin-left:12px;}
+.replay-theatre header nav a {display:block;border:1px solid #6b8184;color:var(--cream);padding:9px 13px;text-decoration:none;font:700 12px var(--mono);}
+.replay-theatre header nav a:hover {background:#2a414b;}
+.replay-theatre .theatre-main {min-height:190px;position:relative;}
+.replay-theatre #replay-world {height:100%;width:100%;display:block;}
+.theatre-intro {position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  pointer-events:none;padding:clamp(14px,4vw,70px);background:linear-gradient(90deg,#091522f5 0%,#0d1d2de0 46%,#0b1f2c77 100%);}
+.theatre-intro h1 {margin:15px 0 13px;line-height:.87;font-size:clamp(45px,8vw,108px);font-family:var(--type);}
+.theatre-intro h1 em {color:var(--gold);}
+.theatre-intro p {max-width:48rem;line-height:1.4;font-weight:600;font-size:clamp(12px,1.3vw,17px);}
+.theatre-telemetry {position:absolute;top:12px;left:clamp(8px,2vw,26px);width:min(290px,48vw);max-height:calc(100% - 24px);overflow:auto;
+  color:var(--cream);background:#0b1822da;border:1px solid #849aa280;border-top:4px solid var(--gold);padding:9px 12px;}
+.theatre-telemetry h2 {font-size:20px;margin:0 0 8px;letter-spacing:-.02em;}
+.theatre-telemetry dl {font-size:11px;grid-template-columns:1fr auto;margin:0 0 10px;}
+.theatre-telemetry dd {font-size:11px;}
+.theatre-telemetry ol {padding:0;margin:0;list-style:none;}
+.theatre-telemetry li {display:flex;gap:8px;justify-content:space-between;padding:4px 0;border-bottom:1px solid #4f646b;font:700 11px var(--mono);}
+.theatre-telemetry li.is-follow {color:var(--gold);}
+.theatre-console {background:#101e29;border-top:2px solid var(--gold);padding:11px clamp(12px,2.4vw,42px);display:grid;gap:8px;min-width:0;}
+.theatre-console button,.theatre-console select {min-height:34px;border-color:#71868d;}
+.theatre-console button:disabled,.theatre-console select:disabled {opacity:.5;cursor:not-allowed;}
+.theatre-file-row,.theatre-playback,.theatre-views {display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.theatre-file-row label,.theatre-playback label,.theatre-views label {font:700 11px var(--mono);color:var(--mint);}
+.theatre-file-row input {max-width:min(390px,100%);font-size:12px;}
+.theatre-console p {margin:0;font:11px/1.35 var(--mono);color:#b8cdc9;}
+#replay-status {min-height:1.3em;color:#ffdd86;overflow-wrap:anywhere;}
+#replay-seek {flex:1 1 190px;min-width:120px;accent-color:var(--gold);}
+#replay-clock {min-width:125px;text-align:right;font:700 11px var(--mono);font-variant-numeric:tabular-nums;color:var(--cream);}
+#replay-follow {max-width:220px;}
+#replay-rate {min-width:90px;}
+.replay-theatre [type=file]::file-selector-button {background:#334b55;color:white;border:1px solid #8da2a5;padding:6px;cursor:pointer;}
+@media(max-width:800px) {
+  body.replay-theatre {grid-template-rows:auto minmax(180px,1fr) auto auto;}
+  .theatre-telemetry {width:min(224px,58vw);padding:6px 8px;}
+  .theatre-telemetry h2 {font-size:15px;}
+  .theatre-telemetry dd,.theatre-telemetry dl,.theatre-telemetry li {font-size:9px;}
+  .theatre-console {padding:8px;}
+  .theatre-file-row,.theatre-playback,.theatre-views {gap:5px;}
+  .theatre-console button,.theatre-console select {padding:6px;font-size:12px;}
+  .replay-theatre footer {font-size:9px;}
+}
+@media(max-height:560px) {
+  .theatre-intro h1 {font-size:43px;margin:5px 0;}
+  .theatre-intro p {margin:5px 0;font-size:11px;}
+  .theatre-telemetry ol {display:none;}
+  .theatre-console {gap:4px;}
+  .theatre-console p {font-size:9px;}
+}
