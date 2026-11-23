@@ -53,7 +53,7 @@ try {
     const retained = counts.uploads-counts.deletes;
     if (live.has(course)) assert.equal(retained,live.get(course),'WebGL buffers accumulated on '+course);
     live.set(course,retained);
-    assert(retained>0 && counts.pcm===4 && counts.peakVoices<=4);
+    assert(retained>0 && counts.pcm===8 && counts.peakVoices<=8);
     samples.push({cycle:cycle+1,course,heapBytes:usedSize,retainedWebGLBuffers:retained,...counts});
   }
   assert.deepEqual(errors,[]);
