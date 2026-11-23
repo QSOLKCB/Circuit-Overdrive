@@ -9,7 +9,7 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'camera', 'contact', 'effects', 'field', 'geometry', 'input', 'main', 'map', 'ridge', 'ridge-scene',
+const code = ['ai', 'audio', 'camera', 'contact', 'controller-menu', 'driver-input', 'effects', 'field', 'gamepad', 'geometry', 'input', 'main', 'map', 'ridge', 'ridge-scene',
   'scene', 'sim', 'speedway', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([

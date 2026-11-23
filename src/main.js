@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {TouringAudio, DEFAULT_VOLUMES} from './audio.js';
-import {attachRaceInput} from './input.js';
+import {attachDriverInput} from './driver-input.js';
+import {controllerMenu, menuAction} from './controller-menu.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {FIELD, PLAYER_ID} from './field.js';
@@ -23,8 +24,27 @@ let scene, error = '', grid = false, camera = 'chase', sound = true;
 let lastTime = null, lastPanel = '', soundGeneration = 0;
 const phase = () => error ? 'error' : grid ? 'grid' : race.phase;
 const driving = () => ['countdown','racing'].includes(phase());
-const focused = () => document.activeElement === canvas && document.hasFocus() && !document.hidden;
-const input = attachRaceInput(window, () => driving() && focused(), handleAction);
+const modalOpen = () => !!document.querySelector('dialog[open]');
+const focused = () => (input.source !== 'keyboard' || document.activeElement === canvas) && document.hasFocus() && !document.hidden && !modalOpen();
+const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController);
+const controller = controllerMenu(input, showSource);
+let inputNotice = '';
+function showSource(kind) {
+  inputNotice = '';
+  document.body.dataset.input = kind;
+  $('foot-keys').hidden = kind !== 'keyboard';
+  lastPanel = '';
+  updatePanel();
+}
+function lostController() {
+  inputNotice = 'Controller unavailable. Reconnect and select it in Controller, or choose another input.';
+  pause();
+  lastPanel = '';
+  updatePanel();
+}
+document.body.dataset.input = 'keyboard';
+$('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
+$('controller-dialog').addEventListener('close', () => { input.clear(); });
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 const set = (id, value) => {
   const element = $(id), text = String(value);
@@ -63,7 +83,7 @@ function resetPresentation() {
   placeMessage = '';
 }
 function enterGrid() {
-  if (error) return;
+  if (error || (input.source === 'gamepad' && input.pads.index === null)) { if (!error) controller.open(); return; }
   stopAudio();
   resetClock();
   race = createRace(race.seed, race.course);
@@ -81,7 +101,7 @@ function pause() {
   updatePanel();
 }
 function resume() {
-  if (phase() !== 'paused' || document.hidden || $('help').open || $('options').open) return;
+  if (phase() !== 'paused' || document.hidden || modalOpen() || !input.canStart()) return;
   canvas.focus({preventScroll:true});
   if (!focused()) return;
   resetClock();
@@ -105,7 +125,7 @@ function updatePanel() {
   $('signal').hidden = true;
   $('lights').hidden = true;
   const titles = {grid:'On the grid', paused:'Race paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Graphics unavailable'};
-  const copy = {grid:'Press W or ↑ to take the wheel and start the countdown.', paused:'Resume when you’re ready to drive.',
+  const copy = {grid:input.source === 'keyboard' ? 'Press W or ↑ to take the wheel and start the countdown.' : 'Release all controls, then press Confirm to start the countdown.', paused:inputNotice || 'Resume when you’re ready to drive.',
     finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
   set('panel-copy', copy[mode] || '');
@@ -136,7 +156,7 @@ function updatePanel() {
     }));
     $('restart').focus({preventScroll:true});
   }
-  if (mode === 'paused' && !document.hidden && !$('help').open && !$('options').open) {
+  if (mode === 'paused' && !document.hidden && !modalOpen()) {
     $('continue').focus({preventScroll:true});
   }
   const statuses = {menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
@@ -252,16 +272,23 @@ $('controls').onclick = () => {
 };
 $('close-help').onclick = () => $('help').close();
 window.addEventListener('blur', pause);
-canvas.addEventListener('blur', pause);
+canvas.addEventListener('blur', () => { if (input.source === 'keyboard') pause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 window.addEventListener('pagehide', pause);
 function handleAction(action) {
-  if ($('help').open || $('options').open) return false;
+  if (document.hidden || !document.hasFocus() || $('controller-dialog').open) return false;
+  if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
+  if (input.source === 'gamepad') {
+    if (grid && action === 'confirm') action = 'arm';
+    else if (grid && action === 'back') action = 'pause';
+    else if (phase() === 'paused' && action === 'back') action = 'pause';
+    else if (!grid && !driving() && action !== 'pause') return menuAction(action);
+  }
   if (action === 'pause' && (driving() || grid || phase() === 'paused')) {
     phase() === 'paused' ? resume() : pause();
     return true;
   }
-  if (action === 'arm' && grid && focused()) {
+  if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
     startRace(race);
     resetClock();
@@ -275,6 +302,7 @@ function fixedUpdate() {
   if (!driving()) return;
   if (!focused()) { pause(); return; }
   const {command, camera:switchView, recover} = input.sample();
+  if (!driving()) return; // A polled pause or disconnect takes effect on this same tick.
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
   if (recover && race.phase === 'racing') recoverCar(race);
   stepRace(race, command);
@@ -365,6 +393,8 @@ function frame(time) {
   const elapsed = lastTime === null ? 0 : Math.max(0, (time - lastTime) / 1000);
   lastTime = time;
   if (!error && !document.hidden) {
+    if ($('controller-dialog').open) controller.refresh();
+    else if (!driving() && document.hasFocus()) input.menu();
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
     try { render(alpha, elapsed); }
