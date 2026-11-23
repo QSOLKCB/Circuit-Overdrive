@@ -7,6 +7,7 @@ const browser = await chromium.launch({
   args:['--use-angle=swiftshader', '--enable-unsafe-swiftshader']
 });
 const url = process.argv[2] || 'http://127.0.0.1:8000/';
+const scenic = process.argv.includes('--ridge');
 try {
   const context = await browser.newContext({viewport:{width:1280,height:720}});
   const page = await context.newPage();
@@ -25,7 +26,9 @@ try {
   });
   await page.goto(url);
   await page.waitForFunction(() => document.querySelector('#status').textContent === 'Race selection');
-  if (process.env.EVIDENCE_DIR) await page.screenshot({path:process.env.EVIDENCE_DIR+'/menu.png'});
+  if (scenic) await page.locator('#choose-ridge').click();
+  const imageName = name => process.env.EVIDENCE_DIR + '/' + (scenic ? 'ridge-' : '') + name + '.png';
+  if (process.env.EVIDENCE_DIR) await page.screenshot({path:imageName('menu')});
   const waitPhase = phase => page.waitForFunction(p => document.body.dataset.phase === p, phase);
   const id = name => page.locator('#'+name);
   await id('controls').click();
@@ -47,7 +50,7 @@ try {
   await waitPhase('racing');
   await page.keyboard.down('w');
   await page.waitForFunction(() => Number(document.querySelector('#speed').textContent) >= 24);
-  if (process.env.EVIDENCE_DIR) await page.screenshot({path:process.env.EVIDENCE_DIR+'/racing.png'});
+  if (process.env.EVIDENCE_DIR) await page.screenshot({path:imageName('racing')});
   // Blur while held, then release in a different tab. A stale repeat cannot re-arm throttle.
   await page.evaluate(() => window.dispatchEvent(new Event('blur')));
   await waitPhase('paused');
@@ -74,7 +77,8 @@ try {
   await page.keyboard.press('w');
   await waitPhase('countdown');
   await page.waitForFunction(() => document.querySelector('#timer').textContent === '0:00.000');
-  assert.equal(await id('lap').textContent(), '1');
+  assert.equal(await id('lap').textContent(), scenic ? '0' : '1');
+  assert.equal(await page.locator('body').getAttribute('data-course'), scenic ? 'ridge' : 'speedway');
   const details = await page.evaluate(() => {
     const gl = document.querySelector('#world').getContext('webgl');
     const ext = gl.getExtension('WEBGL_debug_renderer_info');

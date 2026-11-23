@@ -656,3 +656,30 @@ body[data-phase="finished"] .panel {
   #results, #results li { font-size: 12px; }
   #results li { padding: 3px 0; }
 }
+
+.course-picker {
+  display: inline-flex;
+  pointer-events: auto;
+  margin-top: 18px;
+  border: 1px solid #8a979e;
+  background: #152026;
+}
+.course-picker button {
+  padding: 8px 13px;
+  border: 0;
+  background: transparent;
+  font: bold 12px var(--mono);
+}
+.course-picker button[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--night);
+}
+.course-picker button:focus-visible { outline-offset: -3px; outline-color: var(--red); }
+#remaining { font: bold 18px var(--mono); white-space: nowrap; }
+body[data-course="ridge"] #splits { margin-top: 0; }
+@media(max-width:700px) {
+  .course-picker { margin-top: 10px; }
+  .course-picker button { padding: 6px 9px; }
+  body[data-course="ridge"] .timing { flex-wrap: wrap; max-width: calc(100% - 133px); }
+  #remaining { font-size: 14px; }
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#12191d">
-  <title>Circuit Overdrive • Overdrive Speedway</title>
+  <title>Circuit Overdrive</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="./src/style.css">
 </head>
 <body data-phase="menu">
@@ -15,31 +15,35 @@
   </nav>
 </header>
 <main>
-  <canvas id="world" tabindex="-1" aria-label="Overdrive Speedway race. Use the arrow keys or WASD to drive."></canvas>
+  <canvas id="world" tabindex="-1" aria-label="Circuit Overdrive race. Use the arrow keys or WASD to drive."></canvas>
   <section id="menu" class="menu">
     <div class="intro">
       <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Pack racing <span>/</span> Six-car grid</div>
-      <h1>Overdrive<br><em>Speedway</em></h1>
-      <div class="specs"><div><small>Distance</small><strong id="distance">—</strong></div><div><small>Race length</small><strong>3 laps</strong></div><div><small>Car class</small><strong>Touring</strong></div></div>
+      <div class="course-picker" role="group" aria-label="Select course">
+        <button type="button" id="choose-speedway" aria-pressed="true">Overdrive Speedway</button>
+        <button type="button" id="choose-ridge" aria-pressed="false">Redline Ridge</button>
+      </div>
+      <h1><span id="title-first">Overdrive</span><br><em id="title-last">Speedway</em></h1>
+      <div class="specs"><div><small>Distance</small><strong id="distance">—</strong></div><div><small>Race format</small><strong id="format">3 laps</strong></div><div><small>Car class</small><strong>Touring</strong></div></div>
       <button class="primary" id="start" type="button">Start race <span aria-hidden="true">⟶</span></button>
     </div>
     <div class="car-caption"><b>27</b><div><small>Selected vehicle</small><strong>Ignition GT</strong></div></div>
   </section>
   <section id="hud" hidden aria-label="Race instruments">
-    <div class="timing instruments"><div><small>Lap</small><strong><span id="lap">1</span><i> / 3</i></strong></div><div><small>Race time</small><strong class="digits" id="timer">0:00.000</strong></div><div class="entrant"><small>Position</small><strong><span id="position">6</span><i> / 6</i></strong></div></div>
-    <div class="course instruments"><small>Overdrive Speedway</small><canvas id="map" width="320" height="200" aria-label="Full circuit map and close-range traffic display. Your car is outlined in white."></canvas><div id="nearby" hidden></div></div>
+    <div class="timing instruments"><div><small id="progress-label">Lap</small><strong><span id="lap">1</span><i id="progress-total"> / 3</i></strong></div><div id="distance-hud" hidden><small>To finish</small><strong id="remaining"></strong></div><div><small>Race time</small><strong class="digits" id="timer">0:00.000</strong></div><div class="entrant"><small>Position</small><strong><span id="position">6</span><i> / 6</i></strong></div></div>
+    <div class="course instruments"><small id="map-title">Overdrive Speedway</small><canvas id="map" width="320" height="200" aria-label="Full course map and close-range traffic display. Your car is outlined in white."></canvas><div id="nearby" hidden></div></div>
     <div class="dash instruments"><div class="speed"><strong id="speed">0</strong><small>km/h</small></div><div class="gear"><small>Gear</small><strong id="gear">1</strong></div><div id="rev-track"><i id="revs"></i></div></div>
     <div id="feedback" hidden></div>
   </section>
   <div id="lights" role="status" hidden></div>
   <section id="overlay" class="overlay" hidden>
     <div class="panel">
-      <div class="eyebrow"><i class="checks"></i> Overdrive Speedway</div>
+      <div class="eyebrow"><i class="checks"></i><span id="panel-course">Overdrive Speedway</span></div>
       <h2 id="panel-title"></h2><p id="panel-copy"></p><div id="results" hidden>
         <section><h3>Classification</h3><ol id="classification"></ol></section>
-        <section><h3>Your laps</h3><ol id="splits"></ol></section>
+        <section><h3 id="split-header">Your laps</h3><ol id="splits"></ol></section>
       </div>
-      <div class="buttons"><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button></div>
+      <div class="buttons"><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button><button id="courses" hidden>Course select</button></div>
     </div>
   </section>
 </main>

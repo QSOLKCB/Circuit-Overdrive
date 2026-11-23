@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 import { seededRandom } from '../vendor/vanillajs/modules/math/index.js';
-import { track } from './track.js';
+import { stationDelta, track } from './track.js';
 
 const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
 const approach = (a, b, amount) => a + clamp(b - a, -amount, amount);
-const laneLimit = track.halfWidth - 3;
 const passingSpace = 4.4;
 
 // Cruise in m/s; lateral is the driver's lateral acceleration budget on level asphalt.
@@ -30,20 +29,12 @@ export function createDriver(style, seed, lateral = 0) {
   };
 }
 
-// Signed shortest distance along the circuit, also when being lapped.
-function ahead(a, b) {
-  let gap = b.s - a.s;
-  if (gap > track.length / 2) gap -= track.length;
-  if (gap < -track.length / 2) gap += track.length;
-  return gap;
-}
-
-function planCorner(p, driver, profile) {
+function planCorner(p, driver, profile, course) {
   const horizon = 36 + p.speed * 1.8;
   const segment = horizon / 4;
-  let start = track.sample(p.s), speed = profile.cruise * driver.pace, bend = 0;
+  let start = course.sample(p.s), speed = profile.cruise * driver.pace, bend = 0;
   for (let i = 0; i < 4; i++) {
-    const end = track.sample(p.s + (i + 1) * segment);
+    const end = course.sample(p.s + (i + 1) * segment);
     const curvature = Math.atan2(end.tx * start.rx + end.tz * start.rz,
       end.tx * start.tx + end.tz * start.tz) / segment;
     if (i === 0) bend = curvature;
@@ -51,25 +42,26 @@ function planCorner(p, driver, profile) {
       const bankAssist = -Math.sign(curvature) * 9.81 * Math.sin((start.bank + end.bank) / 2);
       const lateralBudget = profile.lateral * driver.pace + bankAssist;
       // v² = corner speed² + 2 * available deceleration * distance to this segment.
-      speed = Math.min(speed, Math.sqrt(lateralBudget / Math.abs(curvature)
-        + 2 * profile.braking * i * segment));
+      const grade = -(start.normal[0] * start.tx + start.normal[2] * start.tz) / start.normal[1];
+      const braking = course.closed ? profile.braking : Math.max(2, profile.braking + 9.81 * grade);
+      speed = Math.min(speed, Math.sqrt(lateralBudget / Math.abs(curvature) + 2 * braking * i * segment));
     }
     start = end;
   }
   return { speed, home: clamp(driver.bias + bend * 145, -3.2, 3.2) };
 }
 
-function nearby(entrant, entrants) {
+function nearby(entrant, entrants, course) {
   const neighbours = [];
   for (const other of entrants) {
     if (other.id === entrant.id || other.finishTicks != null) continue;
-    const gap = ahead(entrant.current, other.current);
+    const gap = stationDelta(course, entrant.current.s, other.current.s);
     if (Math.abs(gap) >= 72) continue;
-    const velocity = other.vehicle.velocity;
+    const velocity = other.vehicle?.velocity;
     // Ignore a damaged drivetrain until the simulation has recovered that entrant.
     if (!Number.isFinite(velocity?.[0]) || !Number.isFinite(velocity[2])) continue;
     const [vx,,vz] = velocity;
-    const road = track.sample(other.current.s);
+    const road = course.sample(other.current.s);
     neighbours.push({id:other.id, gap, lateral:other.current.lateral, speed:vx*road.tx + vz*road.tz});
   }
   return neighbours;
@@ -88,7 +80,7 @@ function clearLane(p, lane, traffic) {
   return true;
 }
 
-function chooseLine(entrant, traffic, home, speed, profile) {
+function chooseLine(entrant, traffic, home, speed, profile, laneLimit) {
   const d = entrant.ai, p = entrant.current;
   const passing = traffic.find(car => car.id === d.passId);
   if (d.passId !== null && (!passing || passing.gap < -9 || passing.gap > 54)) {
@@ -133,14 +125,15 @@ function chooseLine(entrant, traffic, home, speed, profile) {
   }
 }
 
-export function aiCommand(entrant, entrants) {
+export function aiCommand(entrant, entrants, course = track) {
   const d = entrant.ai, p = entrant.current, profile = profiles[d.style];
+  const laneLimit = course.halfWidth - 3;
   if (d.hold > 0) d.hold--;
   if (--d.thinkIn <= 0) {
     d.thinkIn = profile.reaction;
-    const { speed, home } = planCorner(p, d, profile);
-    const traffic = nearby(entrant, entrants);
-    chooseLine(entrant, traffic, home, speed, profile);
+    const { speed, home } = planCorner(p, d, profile, course);
+    const traffic = nearby(entrant, entrants, course);
+    chooseLine(entrant, traffic, home, speed, profile, laneLimit);
     let cap = speed, left = -laneLimit, right = laneLimit;
     for (const car of traffic) {
       if (Math.abs(car.gap) < 6.5 && Math.abs(car.lateral - p.lateral) > .5) {
@@ -159,7 +152,7 @@ export function aiCommand(entrant, entrants) {
   }
   d.lane = approach(d.lane, d.safeLane, .085);
   const look = 8.5 + .48 * p.speed;
-  const target = track.sample(p.s + look, d.lane);
+  const target = course.sample(p.s + look, d.lane);
   const angle = Math.atan2(target.x - p.x, p.z - target.z) + p.yaw;
   const headingError = Math.atan2(Math.sin(angle), Math.cos(angle));
   const desiredSteer = clamp(headingError * (4.5 + p.speed * .14), -1, 1);

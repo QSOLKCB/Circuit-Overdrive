@@ -8,7 +8,17 @@ const direction = (angle) => ({x: Math.sin(angle), z: -Math.cos(angle)});
 const heading = (a, b) => Math.atan2(b.x - a.x, a.z - b.z);
 const move = (p, axis, distance) => ({x: p.x + axis.x * distance, z: p.z + axis.z * distance});
 
-function bounded(value, min, max, name) {
+// Between two projected stations, only a closed course can cross a seam.
+export function stationDelta(course, from, to) {
+  let delta = to - from;
+  if (course.closed) {
+    if (delta > course.length / 2) delta -= course.length;
+    if (delta < -course.length / 2) delta += course.length;
+  }
+  return delta;
+}
+
+export function bounded(value, min, max, name) {
   if (!Number.isFinite(value) || value < min || value > max) throw RangeError('Invalid ' + name);
   return value;
 }
@@ -38,7 +48,7 @@ function straight(start, end) {
   };
 }
 
-function centerAt(piece, distance) {
+export function centerAt(piece, distance) {
   const angle = piece.heading + distance * piece.curvature;
   const tx = Math.sin(angle), tz = -Math.cos(angle);
   if (piece.curvature === 0) {
@@ -47,7 +57,7 @@ function centerAt(piece, distance) {
   return {x: piece.center.x + tz / piece.curvature, z: piece.center.z - tx / piece.curvature, tx, tz};
 }
 
-function closestDistance(piece, x, z) {
+export function closestDistance(piece, x, z) {
   if (piece.curvature === 0) {
     return clamp((x - piece.start.x) * piece.tx + (z - piece.start.z) * piece.tz, 0, piece.length);
   }
@@ -157,7 +167,7 @@ export function buildTrack(data) {
   }
 
   const gates = Array.from({length: 8}, (_, i) => Object.freeze(sample(length * i / 8)));
-  return Object.freeze({name: data.name, halfWidth, barrierOffset, length, sample, project, sampleSurface,
+  return Object.freeze({id: 'speedway', closed: true, name: data.name, halfWidth, barrierOffset, length, sample, project, sampleSurface,
     gates: Object.freeze(gates)});
 }
 
