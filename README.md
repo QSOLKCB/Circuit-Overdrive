@@ -1,6 +1,6 @@
 # Circuit Overdrive
 
-Drive the Ignition GT No. 27 through three laps of Overdrive Speedway. The 1.58 km circuit links two acceleration straights, a 17° banked turn and a reverse bend through pine-covered hills. CO-001 is a single-entrant keyboard race.
+Start sixth in the Ignition GT No. 27 and race five rivals through three laps of Overdrive Speedway. The 1.58 km circuit links two acceleration straights, a 17° banked turn and a reverse bend through pine-covered hills. All six cars run the same four-wheel vehicle simulation.
 
 ## Start the game
 
@@ -33,6 +33,27 @@ Losing focus clears the controls and pauses the countdown or race. Resume explic
 - Times and penalties are counted in simulation ticks. Long browser stalls can drop elapsed wall time. The chase cameras interpolate poses and widen the field of view with speed. Audio uses wheel and engine telemetry and starts on a user gesture.
 - The bounded scene uses retained WebGL1 meshes. Graphics loss suspends play. After restoration the renderer rebuilds its buffers and the player can resume.
 
+## Pack racing
+
+| Grid | Car | Driver | Driving style |
+| --- | --- | --- | --- |
+| 1 | 14 · Blue | Mara Vale | Consistent pace and a steady line |
+| 2 | 83 · Amber | Kit Vega | Looks for passing room early |
+| 3 | 46 · Teal | Emi Park | Smooth turn-in and high corner speed |
+| 4 | 59 · Violet | Rory Flint | Covers a lane when challenged from behind |
+| 5 | 32 · Lime | Luca Reed | Conservative corner speeds and later reactions |
+| 6 | 27 · Scarlet | Player | Keyboard control |
+
+Each driver owns its physics, suspension, gear, gate history and recovery state. Each tick reads the same starting field to choose commands, advances the cars with VANILLAJS, resolves contacts in stable ID order, then scores the accepted motion. The fixed seed controls each rival’s pace variation, line preference and preferred passing side.
+
+AI drivers sample the curvature and banking ahead, plan braking distance and steer toward a point on their chosen line. A pass needs a clear lane and space to move into it. Drivers slow behind occupied lanes, leave space alongside and hold their choice through a pass. An immobilised driver can request the same penalised recovery as the player. A recovery searches already-travelled track for space clear of nearby traffic.
+
+Car-to-car contact uses chassis-length and chassis-width rectangles in the horizontal plane with a vertical clearance check. The sweep accounts for translation and turning within the tick. Equal-mass impulses exchange closing momentum, with limited sliding friction and low rebound. Bounded iterations settle overlaps between neighbours and the rails. Grounded corrections preserve height and vertical speed relative to the bank. The model approximates body contact and omits deformation and car-to-car rollover torque.
+
+The HUD shows your live position, the closest rival within 60 m, a full-course map and a heading-up traffic display. A white outline identifies your car. Live order uses distance driven toward each required gate. Reversing gives up progress. Passing a gate without validating it falls back to the last validated gate for classification.
+
+Each finisher records a time in ticks including three seconds per recovery. Finished competitors leave the active course. The field freezes when you finish. The results list finishers by penalty-adjusted time, then cars still racing in their on-track order. Grid ID breaks exact ties. Your lap splits include any penalties for that lap.
+
 ## Engine source
 
 VANILLAJS is pinned at [9d95d74b355ec17add32db0b55f0f71130f9c004](https://github.com/QSOLKCB/VANILLAJS/tree/9d95d74b355ec17add32db0b55f0f71130f9c004). The [manifest](vendor/vanillajs/provenance.json) lists every adopted source path and SHA-256 digest. The vendored [licence](vendor/vanillajs/LICENSE) and [notice](vendor/vanillajs/NOTICE) accompany those files.
@@ -59,6 +80,8 @@ The browser checks are optional development tools. With Playwright and Chromium 
 ```sh
 node tests/browser-smoke.mjs http://127.0.0.1:8000/
 node tests/browser-finish.mjs http://127.0.0.1:8000/
+node tests/browser-finish.mjs http://127.0.0.1:8000/ --attack
+node tests/browser-frames.mjs http://127.0.0.1:8000/
 ```
 
-To check subpath hosting, serve the parent of a checkout named `Circuit-Overdrive` and append `Circuit-Overdrive/` to the test URL. The finish test drives the real browser keyboard handler with a deterministic digital driver and advances controlled animation timestamps. The smoke test uses ordinary browser animation timing. The PR records the executed environments and evidence.
+To check subpath hosting, serve the parent of a checkout named `Circuit-Overdrive` and append `Circuit-Overdrive/` to the test URL. The finish test drives the real browser keyboard handler with a deterministic digital driver and advances controlled animation timestamps. The standard finish replay classifies the whole field. The attack replay drives for the win and checks unfinished statuses. Both compare every rendered race position and the final standings with a separate same-runtime simulation. Set `NATIVE_GL=1` for a native OpenGL finish replay on a supported machine. The smoke and frame-interval tests use ordinary browser animation timing. The frame test requests native WebGL at 1920×1080 and reports the actual renderer and 360 frame intervals from the standing start. The PR records the executed environments and evidence.

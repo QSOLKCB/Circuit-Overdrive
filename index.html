@@ -18,7 +18,7 @@
   <canvas id="world" tabindex="-1" aria-label="Overdrive Speedway race. Use the arrow keys or WASD to drive."></canvas>
   <section id="menu" class="menu">
     <div class="intro">
-      <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Single player <span>/</span> Circuit race</div>
+      <div class="eyebrow"><i class="checks" aria-hidden="true"></i> Pack racing <span>/</span> Six-car grid</div>
       <h1>Overdrive<br><em>Speedway</em></h1>
       <div class="specs"><div><small>Distance</small><strong id="distance">—</strong></div><div><small>Race length</small><strong>3 laps</strong></div><div><small>Car class</small><strong>Touring</strong></div></div>
       <button class="primary" id="start" type="button">Start race <span aria-hidden="true">⟶</span></button>
@@ -26,8 +26,8 @@
     <div class="car-caption"><b>27</b><div><small>Selected vehicle</small><strong>Ignition GT</strong></div></div>
   </section>
   <section id="hud" hidden aria-label="Race instruments">
-    <div class="timing instruments"><div><small>Lap</small><strong><span id="lap">1</span><i> / 3</i></strong></div><div><small>Race time</small><strong class="digits" id="timer">0:00.000</strong></div><div class="entrant"><small>Field</small><strong>Solo</strong></div></div>
-    <div class="course instruments"><small>Overdrive Speedway</small><canvas id="map" width="300" height="164" aria-label="Circuit map with your current position"></canvas></div>
+    <div class="timing instruments"><div><small>Lap</small><strong><span id="lap">1</span><i> / 3</i></strong></div><div><small>Race time</small><strong class="digits" id="timer">0:00.000</strong></div><div class="entrant"><small>Position</small><strong><span id="position">6</span><i> / 6</i></strong></div></div>
+    <div class="course instruments"><small>Overdrive Speedway</small><canvas id="map" width="320" height="200" aria-label="Full circuit map and close-range traffic display. Your car is outlined in white."></canvas><div id="nearby" hidden></div></div>
     <div class="dash instruments"><div class="speed"><strong id="speed">0</strong><small>km/h</small></div><div class="gear"><small>Gear</small><strong id="gear">1</strong></div><div id="rev-track"><i id="revs"></i></div></div>
     <div id="feedback" hidden></div>
   </section>
@@ -35,7 +35,10 @@
   <section id="overlay" class="overlay" hidden>
     <div class="panel">
       <div class="eyebrow"><i class="checks"></i> Overdrive Speedway</div>
-      <h2 id="panel-title"></h2><p id="panel-copy"></p><ol id="results" hidden></ol>
+      <h2 id="panel-title"></h2><p id="panel-copy"></p><div id="results" hidden>
+        <section><h3>Classification</h3><ol id="classification"></ol></section>
+        <section><h3>Your laps</h3><ol id="splits"></ol></section>
+      </div>
       <div class="buttons"><button class="primary" id="continue" hidden>Resume race</button><button id="restart" hidden>Restart race</button></div>
     </div>
   </section>

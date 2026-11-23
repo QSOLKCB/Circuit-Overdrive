@@ -4,6 +4,7 @@ import {defaultVehicleSound} from '../vendor/vanillajs/modules/vehicle-audio/ind
 import {RaceAudio} from '../vendor/vanillajs/demos/horizon-lab/race-audio.js';
 import {attachRaceInput} from './input.js';
 import {track} from './track.js';
+import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
 import {createMap} from './map.js';
 import {createRace, startRace, pauseRace, resumeRace, stepRace, recoverCar, STEP} from './sim.js';
@@ -93,12 +94,24 @@ function updatePanel() {
   $('lights').hidden = !driving();
   const titles = {grid:'On the grid', paused:'Race paused', finished:'Race complete', error:'Graphics unavailable'};
   const copy = {grid:'Press W or ↑ to take the wheel and start the countdown.', paused:'Resume when you’re ready to drive.',
-    finished:'Total time  ' + formatTime(race.elapsedTicks), error};
+    finished:'P' + race.player.position + ' of 6  ·  ' + formatTime(race.player.elapsedTicks), error};
   set('panel-title', titles[mode] || '');
   set('panel-copy', copy[mode] || '');
   if (mode === 'finished') {
     stopAudio();
-    $('results').replaceChildren(...race.lapTicks.map((ticks, i) => {
+    $('classification').replaceChildren(...race.order.map(driver => {
+      const item = document.createElement('li'), name = document.createElement('span');
+      const time = document.createElement('strong');
+      item.dataset.id = driver.id;
+      item.classList.toggle('player-row', driver.id === PLAYER_ID);
+      name.textContent = driver.position + '.  ' + driver.name + '  #' + driver.number;
+      name.style.setProperty('--paint',driver.color);
+      const penalty = driver.recoveries ? ' (+' + driver.recoveries*3 + 's)' : '';
+      time.textContent = (driver.finishTicks === null ? 'Racing at flag' : formatTime(driver.finishTicks)) + penalty;
+      item.append(name,time);
+      return item;
+    }));
+    $('splits').replaceChildren(...race.player.lapTicks.map((ticks, i) => {
       const item = document.createElement('li'), time = document.createElement('strong');
       item.append('Lap ' + (i+1), time);
       time.textContent = formatTime(ticks);
@@ -174,32 +187,56 @@ function fixedUpdate() {
   stepRace(race, input.command());
 }
 function drawHud(p) {
+  const player = race.player;
+  set('position', player.position);
+  showNearby(player);
   set('speed', Math.round(p.speed * 3.6));
   set('gear', p.gear < 0 ? 'R' : p.gear === 0 ? 'N' : p.gear);
-  set('lap', race.lap);
-  set('timer', formatTime(race.elapsedTicks));
+  set('lap', player.lap);
+  set('timer', formatTime(player.elapsedTicks));
   $('revs').style.width = Math.min(100, p.rpm / 75) + '%';
   let message = '';
-  if (race.wrongWay) message = 'Wrong way';
-  else if (race.recoveryCooldown > 0) message = 'Recovered  +3 s';
-  else if (race.phase === 'racing' && race.lapTicks.length && race.elapsedTicks - race.lapStartTick < 180) {
-    message = 'Lap ' + race.lapTicks.length + '  ·  ' + formatTime(race.lapTicks.at(-1));
+  if (player.wrongWay) message = 'Wrong way';
+  else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
+  else if (race.phase === 'racing' && player.lapTicks.length && player.elapsedTicks - player.lapStartTick < 180) {
+    message = 'Lap ' + player.lapTicks.length + '  ·  ' + formatTime(player.lapTicks.at(-1));
   }
   $('feedback').hidden = !message;
   set('feedback', message);
-  drawMap(p);
-  const light = race.phase === 'countdown' ? Math.ceil(race.countdownTicks / 60) : race.phase === 'racing' && race.elapsedTicks < 42 ? 'GO!' : '';
+  drawMap(race.entrants);
+  const light = race.phase === 'countdown' ? Math.ceil(race.countdownTicks / 60) : race.phase === 'racing' && player.elapsedTicks < 42 ? 'GO!' : '';
   $('lights').hidden = !light;
   set('lights', light);
 }
-const pose = {};
+function showNearby(player) {
+  let nearest = null, distance = 60;
+  for (const other of race.entrants) {
+    if (other === player || other.finishTicks !== null) continue;
+    const metres = Math.hypot(other.current.x-player.current.x, other.current.z-player.current.z);
+    if (metres < distance) { nearest = other; distance = metres; }
+  }
+  $('nearby').hidden = !nearest;
+  if (nearest) set('nearby', '#' + nearest.number + ' ' + nearest.name + ' · ' + Math.round(distance) + ' m');
+}
+
+const poses = FIELD.map(driver => ({id:driver.id, compression:new Array(4)}));
+const smoothFields = ['x','y','groundY','z','roll','pitch','speed','steering'];
+const angles = ['yaw','wheelSpin'];
 function render(alpha, elapsed) {
-  const a = race.previous, b = race.current;
-  Object.assign(pose, b);
-  for (const key of ['x','y','groundY','z','roll','pitch','speed','steering']) pose[key] = a[key] + (b[key] - a[key]) * alpha;
-  for (const key of ['yaw','wheelSpin']) pose[key] = a[key] + Math.atan2(Math.sin(b[key]-a[key]), Math.cos(b[key]-a[key])) * alpha;
-  scene.draw(pose, {mode:phase(), camera, dt:elapsed});
-  if (!$('hud').hidden) drawHud(pose);
+  for (const driver of race.entrants) {
+    const a = driver.previous, b = driver.current, p = poses[driver.id];
+    p.gear=b.gear;
+    p.rpm=b.rpm;
+    p.brake=b.brake;
+    for (let wheel=0;wheel<4;wheel++) {
+      p.compression[wheel]=a.compression[wheel]+(b.compression[wheel]-a.compression[wheel])*alpha;
+    }
+    p.finished = driver.finishTicks !== null;
+    for (const key of smoothFields) p[key] = a[key] + (b[key]-a[key])*alpha;
+    for (const key of angles) p[key] = a[key] + Math.atan2(Math.sin(b[key]-a[key]), Math.cos(b[key]-a[key]))*alpha;
+  }
+  scene.draw(poses, {mode:phase(), camera, dt:elapsed});
+  if (!$('hud').hidden) drawHud(poses[PLAYER_ID]);
 }
 function frame(time) {
   const elapsed = lastTime === null ? 0 : Math.max(0, (time - lastTime) / 1000);
@@ -212,7 +249,7 @@ function frame(time) {
       console.error(failure);
       graphicsError('Rendering stopped. Reload to initialise the graphics device again.');
     }
-    if (driving() && sound) audio.update(race.vehicle, input.command());
+    if (driving() && sound) audio.update(race.player.vehicle, input.command());
   }
   requestAnimationFrame(frame);
 }
