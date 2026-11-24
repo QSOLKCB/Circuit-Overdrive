@@ -69,3 +69,27 @@ test('Space and either Shift belong only to focused Nitro driving and need a fre
   assert.deepEqual(input.sample().command,{throttle:0,brake:0,steer:0,drift:false,boost:false});
   input.dispose();
 });
+
+test('Orbital keyboard actions are focus-owned and opposing physical dodge keys cancel at sampling',()=>{
+  const target=new EventTarget();
+  let mode='nitro', focused=true;
+  const input=attachRaceInput(target,()=>focused,()=>false,()=>mode);
+  function key(type,code,repeat=false) {
+    const event=Object.assign(new Event(type,{cancelable:true}),{code,repeat});
+    target.dispatchEvent(event); return event.defaultPrevented;
+  }
+  assert(!key('keydown','KeyQ'));
+  mode='rocket';
+  for (const code of ['KeyW','Space','ShiftRight','KeyE']) assert(key('keydown',code));
+  const powered={throttle:1,brake:0,steer:0,boost:true,assist:true,dodge:1};
+  assert.deepEqual(input.command(),powered);
+  key('keydown','KeyQ'); assert.equal(input.command().dodge,0);
+  key('keyup','KeyE'); assert.equal(input.command().dodge,-1);
+  target.dispatchEvent(new Event('blur')); focused=false;
+  assert(!key('keydown','KeyE'));
+  focused=true; key('keydown','KeyQ',true);
+  assert.deepEqual(input.command(),{throttle:0,brake:0,steer:0,boost:false,assist:false,dodge:0});
+  mode=undefined;
+  assert(!key('keydown','Space') && !key('keydown','KeyE'));
+  input.dispose();
+});

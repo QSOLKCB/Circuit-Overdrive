@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+import {createRocketScene} from './rocket-scene.js';
 import { createHeadlightPass, selectHeadlights } from './headlights.js';
 import { LitRenderer } from '../vendor/vanillajs/modules/render-lit/index.js';
 import { nightFrame, courseEnvironment } from './environment.js';
@@ -45,6 +46,7 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
 }
 
 export function createScene(canvas,course=track,pixelRatio=1,environment='day') {
+  if(course.discipline==='rocket') return createRocketScene(canvas,course,pixelRatio);
   const night=courseEnvironment(course,environment)==='night';
   const skyway=course.id==='skyway';
   const light=skyway ? SKYWAY_LIGHT : night ? nightFrame(course) : course.closed ? LIGHT : RIDGE_LIGHT;

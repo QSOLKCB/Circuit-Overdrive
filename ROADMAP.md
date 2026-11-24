@@ -101,7 +101,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Published in v0.9.0.** Nitro Skyway introduced its own six-car stunt sprint, three physical launch decks, drift-earned acceleration, the original 160 BPM Nitro Pulse score and source-bound v3 replay. [CO-009 review and driving evidence](docs/co-009-acceptance.md)
 
-**CO-010A is the first v1.0.0 review gate.** The physics lab evaluates wheel-supported wall and ceiling driving before work on Orbital Spine. [Architecture and feasibility proof](docs/rocket-physics.md)
+**CO-010 is in owner review.** The Gravity Engine feasibility gate demonstrated continuous wheel support from floor to wall to ceiling and back. Orbital Spine adds a six-car gravity sprint and its own controls. [Physics proof](docs/rocket-physics.md) · [Course](docs/orbital-spine.md) · [Driving guide](docs/rocket.md)
 
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 

@@ -138,3 +138,24 @@ export async function verifyReplayDownload(page, result, courseName, required, n
   assert.deepEqual(race.order.map(e=>({id:e.id,name:e.name,number:e.number,ticks:e.finishTicks,recoveries:e.recoveries})),result.expected);
   return {revision, ticks, runs:data.runs.length, analogTicks:analog, finishers:race.order.filter(e=>e.finishTicks!==null).length};
 }
+
+// Capture the frame delivered by the selected device to the game's fixed-step
+// caller. The wrapper returns the very same snapshot and never changes commands.
+export async function observeDrivingCommands(page) {
+  await page.route('**/src/driver-input.js',async route=>{
+    const response=await route.fetch(), source=await response.text();
+    const declaration='export function attachDriverInput(';
+    if (!source.includes(declaration)) throw Error('Driving input observer entry point missing');
+    const body=source.replace(declaration,'function ownedDriverInput(')+`
+      export function attachDriverInput(...args) {
+        const driver=ownedDriverInput(...args), sample=driver.sample;
+        driver.sample=()=>{
+          const snapshot=sample();
+          window.observedDrivingCommand=snapshot.command;
+          return snapshot;
+        };
+        return driver;
+      }`;
+    await route.fulfill({response,body});
+  });
+}

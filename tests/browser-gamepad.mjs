@@ -1,22 +1,36 @@
 // SPDX-License-Identifier: Apache-2.0
 // Real browser and race lifecycle, synthetic browser Gamepad reports.
 import assert from 'node:assert/strict';
+import {observeDrivingCommands} from './browser-controller-driver.mjs';
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 try {
   const page = await browser.newPage({viewport:{width:800,height:550}});
+  await observeDrivingCommands(page);
   const errors = [];
   page.on('pageerror', e=>errors.push(e.message));
   await page.addInitScript(() => {
     const pad = index => ({index, mapping:'standard', id:'Test pad '+index, connected:true,
       axes:[0,0,0,0], buttons:Array.from({length:17},()=>({value:0,pressed:false}))});
     window.reports = [null,pad(1),pad(2)];
-    Object.defineProperty(navigator,'getGamepads',{value:()=>window.reports});
+    window.padReads=0;
+    Object.defineProperty(navigator,'getGamepads',{value:()=>{ window.padReads++; return window.reports; }});
     window.press = (index,value) => { window.reports[1].buttons[index]={value,pressed:value>.5}; };
     let frame, time = 0;
     window.requestAnimationFrame = cb => { frame = cb; return 1; };
-    window.tick = (n=1) => { for(let i=0;i<n;i++) frame(time+=1000/60); };
+    const pixel=new Uint8Array(4);
+    let draws=0;
+    window.advanceFrame = ticks => {
+      frame(time+=ticks*1000/60);
+      // Synthetic RAF has no compositor backpressure. Complete the WebGL
+      // commands at least once every four frames, including menu navigation.
+      if (++draws%4===0) {
+        const gl=document.querySelector('#world').getContext('webgl');
+        gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+      }
+    };
+    window.tick = (n=1) => { for(let i=0;i<n;i++) window.advanceFrame(1); };
   });
   await page.goto(process.argv[2]);
   const tick = n => page.evaluate(n=>window.tick(n),n);
@@ -66,10 +80,19 @@ try {
   await press(0,1); await tick(2);
   assert.equal(await phase(),'countdown');
   await press(0,0); await tick(2);
-  const advance = async steps => page.evaluate(steps=>{
-    // Keep the accelerator within the ordinary bounded catch-up loop.
-    for (let i=0; i<steps; i++) window.tick(1);
-  },steps);
+  const advance = async steps => {
+    const reads=await page.evaluate(async steps=>{
+      const before=window.padReads;
+      // The selected pad holds the same report throughout this interval.
+      // The game's 60 Hz clock polls it once per tick, including countdown.
+      for(let left=steps;left>0;left-=12) {
+        window.advanceFrame(Math.min(left,12)); // 0.20 s, below the clock's 0.25 s clamp.
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+      return window.padReads-before;
+    },steps);
+    assert.equal(reads,steps,'one live pad reading for every requested simulation tick');
+  };
   await advance(183);
   assert.equal(await phase(),'racing');
   await press(7,.73); await page.evaluate(()=>{reports[1].axes[0]=.32;}); await advance(60);
@@ -125,6 +148,19 @@ try {
   assert.equal(await page.locator('#nitro-level').textContent(),'0%','holding both bumpers on a straight earns no charge');
   await page.evaluate(()=>{reports[1]=null;window.tick();});
   assert.equal(await phase(),'paused','disconnect while drifting and boosting clears owner');
+  await page.reload();
+  await click('choose-orbital'); await click('controllers'); await page.selectOption('#driver-device','pad-1');
+  await press(14,1); await press(4,1); await click('use-device'); await click('start'); await tick(3);
+  await tapPad(1,0); assert.equal(await phase(),'grid','Rocket assist and dodge must release before arming');
+  await press(14,0); await press(4,0); await tick(2); await tapPad(1,0); await advance(183);
+  assert.equal(await phase(),'racing');
+  for (const button of [7,4,5,14]) await press(button,1);
+  await advance(10);
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:1,brake:0,steer:0,boost:true,assist:true,dodge:-1});
+  assert(await page.locator('#rocket-energy').evaluate(el=>el.value)<100);
+  await press(15,1); await advance(2); assert.equal(await page.evaluate(()=>window.observedDrivingCommand.dodge),0);
+  await press(14,0); await advance(2); assert.equal(await page.evaluate(()=>window.observedDrivingCommand.dodge),1);
+  await page.evaluate(()=>{reports[1]=null;window.tick();}); assert.equal(await phase(),'paused');
   assert.deepEqual(errors,[]);
   // Losing a required track module leaves a readable HTML entry point even
   // on a browser that cannot start the main module graph.

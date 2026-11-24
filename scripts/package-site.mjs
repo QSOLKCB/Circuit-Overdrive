@@ -10,8 +10,8 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'controller-lab', 'controller-menu', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
-  'scene', 'sim', 'skyway', 'skyway-scene', 'speedway', 'touch', 'touring-car', 'track'];
+const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'controller-lab', 'controller-menu', 'driver-command', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
+  'orbital', 'orbital-scene', 'rocket-contact', 'rocket-dynamics', 'rocket-race', 'rocket-scene', 'scene', 'sim', 'skyway', 'skyway-scene', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
   'index.html', 'replay-theatre.html', 'src/style.css', 'src/mobile.css', 'src/championship.css', 'src/replay-theatre.css',

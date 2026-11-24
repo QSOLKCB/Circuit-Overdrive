@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
+import {dot,rotate} from '../vendor/vanillajs/modules/math/index.js';
 import {PLAYER_ID} from './field.js';
 
+// Oblique projection separates the inverted return span from the grid below it.
+function mapPoint(p,rocket) {
+  return rocket ? {x:p.x+.46*p.z,z:-p.y+.28*p.z} : p;
+}
 function courseOutline(track, boxWidth, boxHeight, cx, cy) {
-  const points = Array.from({length:192}, (_, i) => track.sample(track.length * i / (track.closed ? 192 : 191)));
+  const points = Array.from({length:192}, (_, i) => mapPoint(track.sample(track.length * i / (track.closed ? 192 : 191)),track.discipline==='rocket'));
   const xs = points.map(p => p.x), zs = points.map(p => p.z);
   const minX = Math.min(...xs), minZ = Math.min(...zs);
   const width = Math.max(...xs) - minX, height = Math.max(...zs) - minZ;
@@ -56,6 +61,9 @@ export function createMap(canvas, track) {
     ctx.stroke();
     ctx.setLineDash([]);
     const player=entrants[PLAYER_ID].current;
+    const rocket=track.discipline==='rocket';
+    const right=rocket ? rotate(player.orientation,[1,0,0]) : null;
+    const rear=rocket ? rotate(player.orientation,[0,0,1]) : null;
     const c=Math.cos(player.yaw), s=Math.sin(player.yaw);
 
     // The full map provides lap context. A second, heading-up view resolves cars
@@ -68,16 +76,21 @@ export function createMap(canvas, track) {
       ctx.strokeStyle=isPlayer ? '#fffbe7' : '#16202a';
       ctx.lineWidth=isPlayer ? 2.5 : 1;
       ctx.beginPath();
-      ctx.arc(x(p.x),y(p.z),isPlayer ? 5.5 : 4,0,2*Math.PI);
+      const point=mapPoint(p,rocket);
+      ctx.arc(x(point.x),y(point.z),isPlayer ? 5.5 : 4,0,2*Math.PI);
       ctx.fill(); ctx.stroke();
 
       const dx=p.x-player.x, dz=p.z-player.z;
-      const side=dx*c-dz*s, back=dx*s+dz*c;
+      const delta=rocket ? [dx,p.y-player.y,dz] : null;
+      const side=rocket ? dot(delta,right) : dx*c-dz*s, back=rocket ? dot(delta,rear) : dx*s+dz*c;
       const px=246+side*3.3, py=139+back*3.3;
       if (px<185 || px>307 || py<35 || py>183) continue;
       ctx.save();
       ctx.translate(px,py);
-      ctx.rotate(player.yaw-p.yaw);
+      if(rocket) {
+        const nose=rotate(p.orientation,[0,0,-1]);
+        ctx.rotate(Math.atan2(dot(nose,right),-dot(nose,rear)));
+      } else ctx.rotate(player.yaw-p.yaw);
       ctx.fillRect(-3.3,-7,6.6,14);
       ctx.strokeRect(-3.3,-7,6.6,14);
       ctx.restore();
