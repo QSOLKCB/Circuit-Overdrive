@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-The release table records the published game through v0.9.0. Later milestones require testing, review and owner sign-off. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
+The release table records the published game through v1.0.0. Later milestones require testing, review and owner sign-off. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
 
 ## 1. Non-negotiable project contracts
 
@@ -32,8 +32,9 @@ The release table records the published game through v0.9.0. Later milestones re
 | **v0.7.0** | CO-007 — World Overdrive Championship | Four seeded events, persistent standings, exactly-once settlement, trophy and single-event replays |
 | **v0.8.0** | CO-008 — After Dark: Nightshift | Two night environments, car-mounted surface lighting, Midnight Protocol and seven browser verification jobs |
 | **v0.9.0** | CO-009 — Nitro Overdrive | Nitro Skyway, three physical ramps, six-car stunt racing, measured drift charge, Nitro Pulse and v3 replay |
+| **v1.0.0** | CO-010 — Rocket Overdrive | Orbital Spine, automatic surface grip, six physical rocket cars and v4 replay |
 
-**Published baseline.** v0.9.0 is at `f7f45d1b6c3521dd728945b71cf20ab406603cb4`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.9.0)
+**Published baseline.** v1.0.0 is at `47b1a5c1562136bfd6b98ca9d4ef2ce07282200b`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.0.0)
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -101,7 +102,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Published in v0.9.0.** Nitro Skyway introduced its own six-car stunt sprint, three physical launch decks, drift-earned acceleration, the original 160 BPM Nitro Pulse score and source-bound v3 replay. [CO-009 review and driving evidence](docs/co-009-acceptance.md)
 
-**CO-010 is in owner review.** The Gravity Engine feasibility gate demonstrated continuous wheel support from floor to wall to ceiling and back. Orbital Spine adds a six-car gravity sprint and its own controls. [Physics proof](docs/rocket-physics.md) · [Course](docs/orbital-spine.md) · [Driving guide](docs/rocket.md)
+**Published in v1.0.0.** The Gravity Engine feasibility gate demonstrated continuous wheel support from floor to wall to ceiling and back. Orbital Spine adds a six-car gravity sprint and its own controls. [Physics proof](docs/rocket-physics.md) · [Course](docs/orbital-spine.md) · [Driving guide](docs/rocket.md)
 
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 
