@@ -2,7 +2,7 @@
 
 Select **Rocket Overdrive** on the course screen, start the race and arm the six-car grid. Orbital Spine is a point-to-point sprint. The timing gates run across the road, including the vertical and inverted spans. Each driver gets an official finish time.
 
-**Hold Space for flight assistance** before the ascending elbow. Accelerate into it with W or ↑. The magnetic suspension needs tyre contact and forward speed to engage. The HUD shows the surface name, attachment, loaded wheel contact and the distance to your next gate. Keep Space held through the crown and the inverted straight. Steer relative to the car as the chase camera rolls with its wheels. C switches to a higher chase view.
+**Hold Space for flight assistance** after arming the race and before the ascending elbow. Accelerate into it with W or ↑. The magnetic suspension needs tyre contact and forward speed to engage. The course HUD prompts you as you approach and shows whether Assist is held, whether the car is attached, and which gate is next. Keep Space held through the crown and the inverted straight. If you miss a gate, use Recover to return to a credited section and retry it. Steer relative to the car as the chase camera rolls with its wheels. C switches to a higher chase view.
 
 On the opening straight, accelerate and steer normally through the grid line and the first numbered gate. Flight assistance is optional here. If the car comes to rest on its side or roof, the HUD shows the recovery and the race returns it to a safe deck after 1.5 seconds, with the usual three-second penalty. You can also use Recover after a head-on collision.
 

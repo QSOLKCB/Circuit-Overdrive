@@ -15,6 +15,29 @@ function grid(seed=27) {
 }
 const held={...NEUTRAL_ROCKET,assist:true};
 
+test('held throttle and boost carry the player through the wall and ceiling timing gates with Assist',()=>{
+  const race=grid();
+  const player=race.player;
+  const roof=orbital.sections.find(section=>section.id==='inverted-spine');
+  const crossings=[];
+  let wallTicks=0,ceilingTicks=0,topSpeed=0;
+  for(let tick=0;tick<1600 && player.distance<roof.end && !player.recoveries;tick++) {
+    const previousGate=player.nextGate;
+    stepRocketRace(race,{...orbitalDrive(player),assist:true,throttle:1,brake:0,boost:true});
+    const body=player.vehicle;
+    topSpeed=Math.max(topSpeed,length(body.velocity));
+    const loaded=body.wheels.filter(wheel=>wheel.contact && wheel.load>0).length;
+    if(player.nextGate>previousGate) crossings.push({gate:player.nextGate,loaded});
+    if(body.attached && loaded>=2 && body.contactFrame?.id==='antenna-wall') wallTicks++;
+    if(body.attached && loaded>=2 && body.contactFrame?.id===roof.id) ceilingTicks++;
+  }
+  assert.deepEqual(crossings.map(event=>event.gate),[1,2,3,4,5],'the boosted car must credit the Antenna Wall and Inverted Spine gates');
+  assert(crossings.every(event=>event.loaded>=2));
+  assert.equal(player.recoveries,0);
+  assert(player.distance>=roof.end && topSpeed>64);
+  assert(wallTicks>30 && ceilingTicks>180);
+});
+
 test('six real bodies complete the ordered wall, inverted gate, free transfer and catch under deterministic tick inputs',()=>{
   const race=grid(),tape=[],flags=race.entrants.map(()=>({wall:0,roof:0,splits:[],air:0,dodge:0,boost:0,landed:false}));
   while(race.phase!=='finished' && tape.length<7000) {

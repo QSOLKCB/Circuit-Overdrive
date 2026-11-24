@@ -2,6 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {rotate} from '../vendor/vanillajs/modules/math/index.js';
+import {orbital} from '../src/orbital.js';
 import {createRocketBody, stepRocketBody, validateRocketCommand, NEUTRAL_ROCKET, ROCKET_LIMITS} from '../src/rocket-dynamics.js';
 
 const dt = 1 / 60;
@@ -273,6 +274,31 @@ test('a hard landing settles without penetration, unbounded energy or a velocity
   assert(normalClearance(state,floor)>.2 && normalClearance(state,floor)<1.2);
   assert.equal(ROCKET_LIMITS.maxSpeed,75);
   assert.equal(ROCKET_LIMITS.maxAngularSpeed,6);
+});
+
+test('the Crown exit keeps bounded magnetic pull through unloaded suspension at racing speed',()=>{
+  let station=460, unloadedTicks=0;
+  const opening=orbital.frame(station,4);
+  const spine=orbital.sections.find(section=>section.id==='inverted-spine');
+  let body=createRocketBody(opening);
+  body.velocity=opening.tangent.map(component=>component*74);
+  for(let tick=0; tick<170 && station<spine.start+100; tick++) {
+    body=advance(body,orbital.surface,1,{assist:true,throttle:1});
+    const road=orbital.projectNear(body.position,station);
+    station=road.station;
+    speedBounds(body);
+    if(road.id!==spine.id) continue;
+    assert(body.attached, `Assist lost at ${station} m with a continuous deck`);
+    assert(normalClearance(body,road)<.9);
+    if(body.wheels.every(wheel=>wheel.load===0)) {
+      unloadedTicks++;
+      assert(body.wheels.filter(wheel=>wheel.distance!==null).length>=2);
+      near(speed(body.adhesionAcceleration),ROCKET_LIMITS.adhesion);
+    }
+  }
+  assert(station>=spine.start+100);
+  assert(unloadedTicks>=2, 'exercise the spring unload that dropped adhesion');
+  assert(body.wheels.every(wheel=>wheel.contact && wheel.load>0));
 });
 
 test('a short magnetic gap cannot sustain a prior attached state or reacquire a distant face',()=>{
