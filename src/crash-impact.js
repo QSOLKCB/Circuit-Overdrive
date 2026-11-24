@@ -1,15 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
-// Planar time-of-impact authority for the flat test pad. SI, +Y yaw, -Z forward.
+// Planar time-of-impact authority. SI, +Y yaw, -Z forward.
 import {clamp} from '../vendor/vanillajs/modules/math/index.js';
 import {vehiclePreset,validateVehicle} from '../vendor/vanillajs/modules/vehicle3d/index.js';
 
 export const LAB_RULES=1, LAB_STEP=1/60, DRIVE_CAP=120;
+export const DERBY_IMPACT_RULES=1;
+export const DERBY_IMPACT_LIMITS=Object.freeze({cars:6,fixtures:16,passes:96,sweepSamples:65536});
 export const labRecipe=validateVehicle(vehiclePreset('arcade'));
 const {mass,inertia,chassis}=labRecipe, yawInertia=inertia[1];
 const radius=chassis.width/2, tip=chassis.length/2-radius;
 const stations=[-tip,0,tip];
+const fixtureStations=[0];
 const skin=.002, tolerance=1e-8, releaseGap=.035;
 const MAX_PASSES=24, MAX_SWEEP=40;
+const SWEEP_BUDGET=Symbol('sweep budget exhausted');
 const restitution=.14, friction=.24;
 const validId=n=>Number.isSafeInteger(n) && n>=0 && n<=255;
 const limited=(v,limit)=>Number.isFinite(v) && Math.abs(v)<=limit;
@@ -30,15 +34,29 @@ export function crashBarrier(id,x1,z1,x2,z2,r,material='concrete') {
 }
 
 export function impactWorld(cars,barriers=[],revision=null) {
-  if (!Array.isArray(cars) || !Array.isArray(barriers) || cars.length<1 || cars.length>4 || barriers.length>8 ||
+  return createImpactWorld(cars,barriers,revision,false);
+}
+
+export function derbyImpactWorld(cars,barriers=[],revision=null) {
+  return createImpactWorld(cars,barriers,revision,true);
+}
+
+function createImpactWorld(cars,barriers,revision,derby) {
+  const maxCars=derby ? DERBY_IMPACT_LIMITS.cars : 4;
+  const maxFixtures=derby ? DERBY_IMPACT_LIMITS.fixtures : 8;
+  if (!Array.isArray(cars) || !Array.isArray(barriers) || cars.length<1 || cars.length>maxCars || barriers.length>maxFixtures ||
       (revision!==null && (typeof revision!=='string' || !/^[0-9a-f]{40}$/.test(revision))))
     throw RangeError('Invalid impact world');
+  const bodies=[];
   for (const car of cars) {
     if (!car || ![car.x,car.z,car.yaw,car.vx,car.vz,car.spin].every(Number.isFinite))throw RangeError('Invalid body state');
-    crashCar(car.id,car); // Check launch limits before admitting the caller-owned body.
+    const body=crashCar(car.id,car);
+    if (derby) Object.defineProperty(body,'id',{writable:false,configurable:false});
+    bodies.push(derby ? body : car);
   }
-  const sorted=items=>items.slice().sort((a,b)=>a.id-b.id);
-  const bodies=sorted(cars),fixtures=sorted(Array.from(barriers,b=>crashBarrier(b.id,b.x1,b.z1,b.x2,b.z2,b.r,b.material)));
+  const byId=(a,b)=>a.id-b.id;
+  bodies.sort(byId);
+  const fixtures=Array.from(barriers,b=>crashBarrier(b.id,b.x1,b.z1,b.x2,b.z2,b.r,b.material)).sort(byId);
   const ids=[...bodies,...fixtures].map(o=>o.id),pairs=[];
   if(new Set(ids).size!==ids.length)throw RangeError('Duplicate impact participant');
   for (const a of bodies) {
@@ -46,7 +64,22 @@ export function impactWorld(cars,barriers=[],revision=null) {
     for (const b of fixtures) pairs.push({a,b,wall:true,active:false});
   }
   pairs.sort((p,q)=>p.a.id-q.a.id || p.b.id-q.b.id);
-  return {cars:bodies,barriers:fixtures,pairs,tick:0,revision};
+  const world={cars:bodies,barriers:fixtures,pairs,tick:0,revision};
+  if (derby) {
+    Object.defineProperty(world,'discipline',{value:'derby',enumerable:true});
+    world.technicalStop=null;
+    for (const key of ['cars','barriers','pairs','revision'])
+      Object.defineProperty(world,key,{writable:false,configurable:false});
+    for (const list of [bodies,fixtures,pairs]) Object.freeze(list);
+    for (const pair of pairs) {
+      pair.episodeId=null;
+      // An inherited intersection has no witnessed entry or valid attacker.
+      pair.active=stations.some(i=>(pair.wall ? fixtureStations : stations)
+        .some(j=>sample(pair,i,j,0).gap< -tolerance));
+      pair.latchedAt=pair.active ? 0 : null;
+    }
+  }
+  return world;
 }
 
 function centre(car,station,t) {
@@ -72,7 +105,7 @@ function sample(pair,i,j,t) {
 
 // The current separating plane remains valid until relative translation and tip
 // rotation can close its gap. An unresolved interval stops at its last safe pose.
-function sweep(pair,i,j,duration) {
+function sweep(pair,i,j,duration,work,atStart) {
   const {a,b,wall}=pair;
   const vx=a.vx-(wall ? 0 : b.vx),vz=a.vz-(wall ? 0 : b.vz);
   const acceleration=Math.abs(i)*a.spin**2+(wall ? 0 : Math.abs(j)*b.spin**2);
@@ -82,7 +115,11 @@ function sweep(pair,i,j,duration) {
   };
   let t=0;
   for (let iteration=0;iteration<MAX_SWEEP;iteration++) {
-    const hit=sample(pair,i,j,t);
+    if (work) {
+      if (work.sweepSamples===DERBY_IMPACT_LIMITS.sweepSamples) return SWEEP_BUDGET;
+      work.sweepSamples++;
+    }
+    const hit=iteration===0 && atStart ? atStart : sample(pair,i,j,t);
     if (hit.gap<=tolerance) return {t,hit};
     const closure=-vx*hit.nx-vz*hit.nz-angularProjection(a,i,t,hit.nx,hit.nz)
       +(wall ? 0 : angularProjection(b,j,t,hit.nx,hit.nz));
@@ -98,6 +135,34 @@ function sweep(pair,i,j,duration) {
     if (t>duration) return null;
   }
   return {t,limited:true};
+}
+
+function axisClear(from,to,min,max,padding) {
+  return Math.min(from,to)>max+padding || Math.max(from,to)<min-padding;
+}
+
+// A circle of radius tip+radius encloses every orientation of a chassis.
+// Test the relative line segment on each axis, with release-gap padding so
+// a rejected pair is provably separated even at the start of this interval.
+function derbyPairClear({a,b,wall},duration) {
+  const extent=tip+radius, padding=releaseGap+tolerance;
+  if (wall) {
+    const margin=extent+b.r+padding;
+    return axisClear(a.x,a.x+a.vx*duration,Math.min(b.x1,b.x2),Math.max(b.x1,b.x2),margin) ||
+      axisClear(a.z,a.z+a.vz*duration,Math.min(b.z1,b.z2),Math.max(b.z1,b.z2),margin);
+  }
+  const x=a.x-b.x,z=a.z-b.z,margin=2*extent+padding;
+  return axisClear(x,x+(a.vx-b.vx)*duration,0,0,margin) ||
+    axisClear(z,z+(a.vz-b.vz)*duration,0,0,margin);
+}
+
+function releaseDerbyPair(pair,observation) {
+  // A positional correction at the same instant is not evidence of separation
+  // through physical time, even when it moves the witnesses beyond the skin.
+  if (!pair.active || observation<=pair.latchedAt) return;
+  pair.active=false;
+  pair.episodeId=null;
+  pair.latchedAt=null;
 }
 
 function advance(cars,t) {
@@ -167,34 +232,80 @@ function resolve(world,pair,hit,elapsed,ordinal) {
 }
 
 export function stepImpacts(world) {
+  const derby=world.discipline==='derby';
+  if (derby && world.technicalStop) throw Error('Derby impact world stopped; create a fresh world');
   world.tick++;
   const contacts=[],stats={passes:0,candidates:0,accepted:0,limited:false};
+  const work=derby ? Object.assign(stats,{pairChecks:0,rejectedPairs:0,sweepSamples:0}) : null;
+  const maxPasses=derby ? DERBY_IMPACT_LIMITS.passes : MAX_PASSES;
   let elapsed=0;
-  for (let pass=0;pass<MAX_PASSES;pass++) {
+  passes: for (let pass=0;pass<maxPasses;pass++) {
     stats.passes++;
     let first=null;
     const remaining=LAB_STEP-elapsed;
+    const observation=world.tick-1+elapsed/LAB_STEP;
     for (const pair of world.pairs) {
+      if (derby) {
+        stats.pairChecks++;
+        if (derbyPairClear(pair,remaining)) {
+          stats.rejectedPairs++;
+          releaseDerbyPair(pair,observation);
+          continue;
+        }
+      }
       let gap=Infinity;
-      for (const i of stations) for (const j of pair.wall ? [0] : stations) {
+      for (const i of stations) for (const j of pair.wall ? fixtureStations : stations) {
         stats.candidates++;
-        if (pair.active) gap=Math.min(gap,sample(pair,i,j,0).gap);
-        const candidate=sweep(pair,i,j,remaining);
+        const atStart=pair.active && (!work || work.sweepSamples<DERBY_IMPACT_LIMITS.sweepSamples)
+          ? sample(pair,i,j,0) : null;
+        if (atStart) gap=Math.min(gap,atStart.gap);
+        const candidate=sweep(pair,i,j,remaining,work,atStart);
+        if (candidate===SWEEP_BUDGET) {
+          stats.limitReason='samples';
+          break passes;
+        }
         if (candidate && (!first || candidate.t<first.t)) first={...candidate,pair};
       }
-      if (gap>releaseGap) pair.active=false;
+      if (gap>releaseGap) {
+        if (derby) releaseDerbyPair(pair,observation);
+        else pair.active=false;
+      }
     }
     if (!first) {advance(world.cars,remaining); return {contacts,stats};}
     advance(world.cars,first.t); elapsed+=first.t;
-    if (first.limited) break;
+    if (first.limited) {
+      if (derby) stats.limitReason='sweep';
+      break;
+    }
+    if (derby && first.hit.gap< -skin) {
+      first.pair.active=true;
+      first.pair.latchedAt=world.tick-1+elapsed/LAB_STEP;
+    }
     const contact=resolve(world,first.pair,first.hit,elapsed,contacts.length);
-    if (contact) {contacts.push(contact); stats.accepted++;}
+    if (contact) {
+      if (derby) {
+        if (contact.newImpact) first.pair.episodeId=contact.id;
+        first.pair.latchedAt=world.tick-1+elapsed/LAB_STEP;
+        contact.episodeId=first.pair.episodeId;
+        contact.discipline='derby';
+        contact.rules=DERBY_IMPACT_RULES;
+      }
+      contacts.push(contact); stats.accepted++;
+    }
   }
   stats.limited=true;
   stats.unadvancedSeconds=LAB_STEP-elapsed;
   stats.residualPenetration=0;
-  for(const pair of world.pairs)for(const i of stations)for(const j of pair.wall?[0]:stations){
-    stats.residualPenetration=Math.max(stats.residualPenetration,-sample(pair,i,j,0).gap);
+  for (const pair of world.pairs) {
+    let gap=Infinity;
+    for (const i of stations) for (const j of pair.wall ? fixtureStations : stations)
+      gap=Math.min(gap,sample(pair,i,j,0).gap);
+    stats.residualPenetration=Math.max(stats.residualPenetration,-gap);
+    if (derby && gap>releaseGap) releaseDerbyPair(pair,world.tick-1+elapsed/LAB_STEP);
+  }
+  if (derby) {
+    stats.limitReason??='passes';
+    Object.defineProperty(world,'technicalStop',{value:Object.freeze({tick:world.tick,...stats}),writable:false,configurable:false});
   }
   return {contacts,stats};
 }

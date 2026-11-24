@@ -16,7 +16,7 @@ For the downloadable game, archive checksums and receipt verification, see the [
 
 ## Crash Lab — The Impact Facility
 
-Choose **Crash Lab** from course select. Arm the Ignition GT, hold gas and drive into a concrete wall, an angled steel rail or an opposing physical car. Inspect the measured impulse, local panel damage and remaining mechanical condition, then reset to repeat the setup. The result screen saves a v5 input replay and a separate local evidence receipt. Crash Lab shipped in v1.1.0 at `1f0527098b9eb9c27c678d9ad4bfa2b276374551`. The v1.1.1 candidate adds computational impact panels. A light strike leaves a local crease and harder hits buckle the bodywork and expose steel. [Published v1.1.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.0) · [Player guide](docs/crash-lab.md) · [Impact authority](docs/crash-impact.md) · [Computational panels](docs/computational-impact-panels.md) · [CO-011 certification](docs/co-011-acceptance.md)
+Choose **Crash Lab** from course select. Arm the Ignition GT, hold gas and drive into a concrete wall, an angled steel rail or an opposing physical car. Inspect the measured impulse, local panel damage and remaining mechanical condition, then reset to repeat the setup. The result screen saves a v5 input replay and a separate local evidence receipt. Published v1.1.1 adds computational panels. A light strike leaves a local crease and harder hits buckle the bodywork and expose steel. [Published v1.1.1](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Player guide](docs/crash-lab.md) · [Impact authority](docs/crash-impact.md) · [Computational panels](docs/computational-impact-panels.md) · [CO-011 certification](docs/co-011-acceptance.md)
 
 ## World Overdrive Championship
 

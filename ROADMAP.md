@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-The release table records the published game through v1.1.0. The v1.1.1 patch is a candidate for owner review. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
+The release table records the published game through v1.1.1. Total Destruction targets v1.2.0 through six owner review gates. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
 
 ## 1. Non-negotiable project contracts
 
@@ -34,8 +34,9 @@ The release table records the published game through v1.1.0. The v1.1.1 patch is
 | **v0.9.0** | CO-009 — Nitro Overdrive | Nitro Skyway, three physical ramps, six-car stunt racing, measured drift charge, Nitro Pulse and v3 replay |
 | **v1.0.0** | CO-010 — Rocket Overdrive | Orbital Spine, automatic surface grip, six physical rocket cars and v4 replay |
 | **v1.1.0** | CO-011 — Crash Lab: The Impact Experiment | Three instrumented impact trials, physical contact receipts, component impairment and source-bound v5 replay |
+| **v1.1.1** | CO-CRACK-001 — Computational Impact Panels | Deterministic per-car dents and exposed steel, exact reset, replay reconstruction and bounded WebGL updates |
 
-**Published Crash Lab baseline.** v1.1.0 is at `1f0527098b9eb9c27c678d9ad4bfa2b276374551`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.0) · [Driving guide](docs/crash-lab.md) · [CO-011 certification](docs/co-011-acceptance.md)
+**Published Total Destruction baseline.** v1.1.1 is at `541ba6ca27dabe644ab23fe9a061c91dda8794a6`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Crash Lab driving guide](docs/crash-lab.md) · [Computational panel evidence](docs/evidence/co-crack-001/README.md)
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -111,13 +112,12 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |
-| **v1.1.1 candidate** | **CO-CRACK-001 — COMPUTATIONAL IMPACT PANELS** | Repeatable dents, folds and exposed steel driven by the Crash Lab damage ledger | Independent per-car panels, exact reset and replay targets, bounded WebGL uploads and measured native-browser evidence |
-| **v1.2.0 planned** | **CO-012 — TOTAL DESTRUCTION** | Original vehicle-on-vehicle demolition derby arenas, knockouts, damage-aware AI, persistent mechanical effects within the round and classifications | Playable multi-car full derby; no phantom hits; recover/retire paths do not award illegitimate knockouts; crowd/pedestrians are not attack targets |
+| **v1.2.0 candidate development** | **CO-012 — TOTAL DESTRUCTION** | Two original demolition arenas, six physical competitors, damage-aware AI, legitimate knockouts and complete source-bound replays | Real browser matches on both arenas, deterministic settlements and measured six-car rendering |
 | **v1.3.0** | **CO-013 — STREET ROD: THE GARAGE** | Original buy/sell catalogue, multiple owned vehicles, garage bays, local integer credits, cash and inventory UI | Explicit validated transactions, unique car identities, bounded save/import/export, no negative funds or unintended duplication |
 | **v1.4.0** | **CO-014 — BUILT NOT BOUGHT** | Real vehicle-build variations: engine, intake, exhaust, gearing, tyres, suspension, paint, repairs, tuning and benchmark comparisons | Every fitted upgrade has a documented physical effect; no visual-only stats marketed as physical; race/replay revision tracks vehicle build |
 | **v1.5.0** | **CO-015 — STREET ROD: THE UNDERGROUND** | Earnable cash/reputation, rival challenges, garages and upgrades connected to championship, racing and derby modes | Results settle once against originating career revision; abandoned practice is non-paying; no real-money economy, microtransactions or monetization |
 
-The v1.1.1 candidate refines the display of the published Crash Lab damage ledger. CO-012 can reuse the panel transformation with independent damage values for each competitor. [Panel contract](docs/computational-impact-panels.md)
+CO-012A is the six-car authority review gate. The remaining gates cover arenas (B), AI and rules (C), the playable experience (D), v6 replay (E) and certification (F). [Six-car impact contract](docs/derby-impact.md) · [Reusable panels](docs/computational-impact-panels.md)
 
 **Relevant internal donor:** [STREET-RACER](https://github.com/QSOLKCB/STREET-RACER) already implements original garage purchases, upgrades, a four-bay career, recovery jobs, validated save transactions, and a separate *Impact Arena* demonstration. Reuse **reviewed contracts**, not its distinct driving authority: preserve Circuit Overdrive's VANILLAJS simulation and exact import provenance. Cash means local fictional credits only. Car damage and repairs must be causally linked to actual vehicle state. A player must have a fair recoverable path after losing a car or funds.
 

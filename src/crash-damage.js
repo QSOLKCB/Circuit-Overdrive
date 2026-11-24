@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import {clamp} from '../vendor/vanillajs/modules/math/index.js';
-import {DRIVE_CAP,LAB_STEP,impactWorld,stepImpacts} from './crash-impact.js';
+import {DRIVE_CAP,LAB_STEP,derbyImpactWorld,impactWorld,stepImpacts} from './crash-impact.js';
 
 export const COMPONENTS=Object.freeze(['front','rear','left','right','engine','steering','tyres','suspension']);
 const allocations=Object.freeze({
@@ -30,7 +30,12 @@ export function validateLabCommand(cmd) {
       !Number.isFinite(cmd.steer) || Math.abs(cmd.steer)>1) throw RangeError('Invalid laboratory controls');
 }
 export function damageWorld(cars,fixtures,revision=null) {
-  const world=impactWorld(cars,fixtures,revision);
+  return withDamage(impactWorld(cars,fixtures,revision));
+}
+export function derbyDamageWorld(cars,fixtures,revision=null) {
+  return withDamage(derbyImpactWorld(cars,fixtures,revision));
+}
+function withDamage(world) {
   for (const car of world.cars) car.damage=newDamage();
   return world;
 }
@@ -74,4 +79,26 @@ export function resolveLabTick(world) {
     }
   }
   return result;
+}
+
+// Commands are in the world's ascending driver-ID order. Validate and copy
+// the full batch first so a rejected rival command cannot move another car.
+export function stepDerbyTick(world,commands) {
+  if (world?.discipline!=='derby') throw TypeError('Expected a derby damage world');
+  if (world.technicalStop) throw Error('Derby impact world stopped; create a fresh world');
+  if (!Array.isArray(commands) || commands.length!==world.cars.length)
+    throw RangeError('Expected one derby command per car');
+  const accepted=world.cars.map((car,index)=>{
+    const command=Object.getOwnPropertyDescriptor(commands,String(index))?.value;
+    if (!command || typeof command!=='object') throw TypeError('Expected derby command data');
+    const fields=Object.getOwnPropertyDescriptors(command);
+    if (Reflect.ownKeys(fields).length!==3 ||
+        !['throttle','brake','steer'].every(key=>fields[key] && Object.hasOwn(fields[key],'value')))
+      throw TypeError('Expected throttle, brake and steer data');
+    const snapshot={throttle:fields.throttle.value,brake:fields.brake.value,steer:fields.steer.value};
+    validateLabCommand(snapshot);
+    return labCondition(car.damage).disabled ? neutralLab : snapshot;
+  });
+  for (const [index,car] of world.cars.entries()) driveLabCar(car,accepted[index]);
+  return {...resolveLabTick(world),commands:accepted};
 }

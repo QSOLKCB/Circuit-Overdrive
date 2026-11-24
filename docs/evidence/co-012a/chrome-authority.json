@@ -1,0 +1,52 @@
+{
+  "revision": "957ba00f0694fd7f6022e6f8c44cf1f0a28d6767",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "tick": 59,
+  "pairs": 111,
+  "stats": {
+    "passes": 4,
+    "candidates": 108,
+    "accepted": 3,
+    "limited": false,
+    "pairChecks": 444,
+    "rejectedPairs": 432,
+    "sweepSamples": 111
+  },
+  "episodeIds": [
+    "59/0/1/0",
+    "59/2/3/1",
+    "59/4/5/2"
+  ],
+  "damage": [
+    {
+      "id": 0,
+      "front": 64,
+      "engine": 57
+    },
+    {
+      "id": 1,
+      "front": 64,
+      "engine": 57
+    },
+    {
+      "id": 2,
+      "front": 64,
+      "engine": 57
+    },
+    {
+      "id": 3,
+      "front": 64,
+      "engine": 57
+    },
+    {
+      "id": 4,
+      "front": 64,
+      "engine": 57
+    },
+    {
+      "id": 5,
+      "front": 64,
+      "engine": 57
+    }
+  ]
+}
