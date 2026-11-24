@@ -1,0 +1,120 @@
+{
+  "baseline": "f7f45d1b6c3521dd728945b71cf20ab406603cb4",
+  "candidate": "6523dd53aceae5206b6b29316bb082105adfae53",
+  "node": "v22.18.0",
+  "platform": "linux",
+  "arch": "x64",
+  "seed": 708,
+  "results": [
+    {
+      "course": "speedway",
+      "environment": "day",
+      "ticks": 9847,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "lightSamples": 0,
+      "finishTicks": 9847,
+      "order": [
+        1,
+        3,
+        2,
+        0,
+        4,
+        5
+      ],
+      "v2Sha256": "f408ffdef5e5b5fed67e0fcad69b91f1eb129c7855bc39b261ed0ac07afc41cb",
+      "fieldCheckpointsSha256": "d63ae0e811356d2a576fcd06e8574598aca00f290032117ffba7cfa714c1454c"
+    },
+    {
+      "course": "speedway",
+      "environment": "night",
+      "ticks": 9847,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "lightSamples": 3282,
+      "finishTicks": 9847,
+      "order": [
+        1,
+        3,
+        2,
+        0,
+        4,
+        5
+      ],
+      "v2Sha256": "f408ffdef5e5b5fed67e0fcad69b91f1eb129c7855bc39b261ed0ac07afc41cb",
+      "fieldCheckpointsSha256": "d63ae0e811356d2a576fcd06e8574598aca00f290032117ffba7cfa714c1454c"
+    },
+    {
+      "course": "ridge",
+      "environment": "day",
+      "ticks": 9402,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "lightSamples": 0,
+      "finishTicks": 9402,
+      "order": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5
+      ],
+      "v2Sha256": "00d345ac91761cde23b3d773c6d5b52cc7ca78e617a55b9e082e91d5d57879e4",
+      "fieldCheckpointsSha256": "8027c2bf121440973bed8305b3e3c308faff8df923c4f1a8f0c8d133075fb73c"
+    },
+    {
+      "course": "ridge",
+      "environment": "night",
+      "ticks": 9402,
+      "contactTicks": 1,
+      "recoveries": 1,
+      "lightSamples": 3134,
+      "finishTicks": 9402,
+      "order": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5
+      ],
+      "v2Sha256": "00d345ac91761cde23b3d773c6d5b52cc7ca78e617a55b9e082e91d5d57879e4",
+      "fieldCheckpointsSha256": "8027c2bf121440973bed8305b3e3c308faff8df923c4f1a8f0c8d133075fb73c"
+    },
+    {
+      "course": "skyway",
+      "environment": "day",
+      "seed": 27,
+      "ticks": 3925,
+      "archivedBrowserRevision": "3d0f8b10512fbdae17b5fbe0bcd9f1d6ee11a320",
+      "recordingRevision": "f7f45d1b6c3521dd728945b71cf20ab406603cb4",
+      "runs": 952,
+      "runsSha256": "596ad8d87cc8a1546bd2486a22d6a045be272a7c8d66536350aa56b28a7cf20f",
+      "v3Sha256": "0539ee4192ef9d66f3f8456bfb266b33af125d211d740cb9919ccb36f6075dab",
+      "fieldSha256": "5a3295dde8531429690bc46776a5d08efa93961c9c7e784303c3800015da4bad",
+      "boosts": 73,
+      "airTicks": 353,
+      "landings": 3,
+      "stunts": 3,
+      "points": 913,
+      "finishTicks": 3745,
+      "order": [
+        1,
+        2,
+        3,
+        0,
+        4,
+        5
+      ],
+      "splits": [
+        728,
+        1305,
+        1634,
+        2175,
+        2657,
+        3068
+      ]
+    }
+  ]
+}

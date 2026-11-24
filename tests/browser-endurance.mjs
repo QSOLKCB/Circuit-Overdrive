@@ -58,13 +58,14 @@ try {
     };
   });
   await page.goto(process.argv[2]);
-  const skyway=process.argv.includes('--skyway');
+  const skyway=process.argv.includes('--skyway'), orbital=process.argv.includes('--orbital');
+  assert(!(orbital && (skyway || process.argv.includes('--night'))),'Orbital cycles include other disciplines');
   assert(!(skyway && process.argv.includes('--night')),'Skyway alternates with day Speedway and night Ridge');
   const waitPhase = phase => page.waitForFunction(value => document.body.dataset.phase === value,phase);
   const live = new Map(), samples = [];
   for (let cycle = 0; cycle < 8; cycle++) {
-    const course = skyway ? ['skyway','ridge','skyway','speedway'][cycle%4] : cycle % 2 === 0 ? 'speedway' : 'ridge';
-    const night=process.argv.includes('--night') || (skyway && course==='ridge');
+    const course = orbital ? ['orbital','ridge','orbital','skyway'][cycle%4] : skyway ? ['skyway','ridge','skyway','speedway'][cycle%4] : cycle % 2 === 0 ? 'speedway' : 'ridge';
+    const night=process.argv.includes('--night') || ((skyway || orbital) && course==='ridge');
     await page.locator('#choose-'+course).click();
     if (night) await page.locator('#choose-night').click();
     else if (skyway && course!=='skyway') await page.locator('#choose-day').click();

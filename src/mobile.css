@@ -16,7 +16,29 @@
 }
 body[data-input="touch"]:is([data-phase="countdown"],[data-phase="racing"]) #touch-controls {display: block;}
 #touch-controls > div {position: absolute; display: flex; gap: 5px;}
-.touch-steering {left: var(--safe-left); bottom: var(--safe-bottom);}
+.touch-steering {
+  left: var(--safe-left); bottom: var(--safe-bottom);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.touch-steering::before, .touch-steering.engaged::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  left: 50%; bottom: 7px;
+  width: 2px; height: 8px;
+  transform: translateX(-50%);
+  background: var(--cream);
+}
+.touch-steering.engaged::after {
+  left: var(--turn-position);
+  width: 9px; height: 5px;
+  border-radius: 3px;
+  background: white;
+  box-shadow: 0 0 0 1px var(--ink);
+}
 .touch-pedals {right: var(--safe-right); bottom: var(--safe-bottom);}
 .touch-actions {
   left: var(--safe-left);

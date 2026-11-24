@@ -57,6 +57,32 @@ try {
     return {id,x:rect.x+rect.width/2,y:rect.y+rect.height/2,radiusX:5,radiusY:5,force:.75};
   };
   const send = (type,touchPoints=[])=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints});
+  // observeDrivingCommands publishes the actual snapshot returned to fixedUpdate.
+  // Read its first write after the trusted event, even during a catch-up frame.
+  const touchSamples=[];
+  const nextTouchCommand = async (eventType,type,touchPoints) => {
+    await page.evaluate(eventType=>{
+      window.firstTouchSample=null;
+      document.querySelector('#touch-controls').addEventListener(eventType,event=>{
+        if (!event.isTrusted || event.pointerType!=='touch') throw Error('Expected a trusted touch pointer');
+        const previous=window.observedDrivingCommand, delivered=performance.now();
+        const captured=event.target.hasPointerCapture(event.pointerId);
+        Object.defineProperty(window,'observedDrivingCommand',{
+          configurable:true,
+          get:()=>previous,
+          set(command) {
+            Object.defineProperty(window,'observedDrivingCommand',{configurable:true,writable:true,value:command});
+            window.firstTouchSample={command,pointerId:event.pointerId,eventType,captured,dispatchToSampleMs:performance.now()-delivered};
+          }
+        });
+      },{once:true,capture:true});
+    },eventType);
+    await send(type,touchPoints);
+    await page.waitForFunction(()=>window.firstTouchSample,null,{timeout:4000});
+    const sample=await page.evaluate(()=>window.firstTouchSample);
+    touchSamples.push(sample);
+    return sample;
+  };
   const held = async (...names) => {
     await page.waitForFunction(wanted=>[...document.querySelectorAll('[data-touch].held')]
       .map(el=>el.dataset.touch).sort().join()===wanted.join(),names.sort(),{timeout:4000});
@@ -97,6 +123,30 @@ try {
   assert.equal(await page.getAttribute('body','data-input'),'touch');
   assert.equal(await safeLayout(insets.landscape),'clear','landscape controls, instruments and cutout clearance');
   await page.waitForFunction(()=>audioReport.gesture && audioReport.blocks>0);
+  const pedal=await down(1,'throttle'), arrow=await down(2,'left'), opposite=await down(2,'right');
+  const gasOnly={throttle:1,brake:0,steer:0};
+  assert.deepEqual((await nextTouchCommand('pointerdown','touchStart',[pedal])).command,gasOnly);
+  const first=await nextTouchCommand('pointerdown','touchStart',[arrow]);
+  assert.deepEqual(first.command,{...gasOnly,steer:-1});
+  const slide=async x=>{
+    const sample=await nextTouchCommand('pointermove','touchMove',[{...arrow,x}]);
+    assert.equal(sample.pointerId,first.pointerId,'same thumb owns the slide');
+    assert(sample.captured,'steering keeps pointer capture across both arrows');
+    assert.equal(sample.command.throttle,1,'other finger keeps throttle on');
+    assert.equal(sample.command.brake,0,'slide cannot acquire a pedal');
+    return sample.command.steer;
+  };
+  const centre=(arrow.x+opposite.x)/2;
+  const partial=await slide((arrow.x+centre)/2);
+  assert(partial>-1 && partial<0,'a small correction reaches the first accepted tick');
+  assert.equal(await slide(centre),0,'centre steering on the first tick');
+  assert.equal(await slide(opposite.x),1,'reverse through the same contact');
+  assert.deepEqual((await nextTouchCommand('pointerup','touchEnd',[opposite])).command,gasOnly);
+  assert.deepEqual((await nextTouchCommand('pointerdown','touchStart',[arrow])).command,{...gasOnly,steer:-1});
+  const brakeTarget=await down(2,'brake');
+  assert.deepEqual((await nextTouchCommand('pointermove','touchMove',[brakeTarget])).command,gasOnly);
+  await send('touchEnd');
+  await held();
   let gas=await down(1,'throttle'), right=await down(2,'right');
   await send('touchStart',[gas,right]);
   await held('right','throttle');
@@ -166,6 +216,7 @@ try {
       backing:[gl.drawingBufferWidth,gl.drawingBufferHeight], expectedBacking:[Math.floor(rect.width*.75),Math.floor(rect.height*.75)],
       effects:document.body.dataset.effects};
   });
+  report.touchSteering=touchSamples;
   assert.equal(report.effects,'reduced');
   assert.deepEqual(report.backing,report.expectedBacking,'coarse pointer selects the 75% mobile buffer');
   assert.equal(report.audio.contexts,1,'touch interruptions reuse the gesture-owned audio context');

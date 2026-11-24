@@ -8,6 +8,7 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
   const held = new Map();
   const counts = new Map();
   const pending = new Set();
+  let steer = 0;
 
   function group(className, controls) {
     const row = doc.createElement('div');
@@ -22,8 +23,9 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
       row.append(button);
     }
     container.append(row);
+    return row;
   }
-  group('touch-steering', [['left', '◀', 'Steer left'], ['right', '▶', 'Steer right']]);
+  const steeringPad = group('touch-steering', [['left', '◀', 'Steer left'], ['right', '▶', 'Steer right']]);
   group('touch-pedals', [['brake', 'Brake', 'Brake or reverse'], ['throttle', 'Gas', 'Accelerate']]);
   group('touch-nitro', [['drift','Drift','Hold drift'],['assist','Assist','Hold rocket assistance'],['boost','Boost','Hold boost']]);
   group('touch-dodge', [['dodgeLeft','◀ Dodge','Dodge left'],['dodgeRight','Dodge ▶','Dodge right']]);
@@ -36,12 +38,40 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
     counts.set(name, count);
     button.classList.toggle('held', count > 0);
   }
+  // Absolute thumb position across both arrows. The 3 px centre band absorbs
+  // contact jitter. The centre of either arrow gives full lock on the first tick.
+  function steeringValue(x, rect) {
+    const width = rect.right - rect.left;
+    const offset = x - (rect.left + width / 2);
+    const travel = width * .24 - 3;
+    if (travel <= 0 || Math.abs(offset) <= 3) return 0;
+    return Math.sign(offset) * Math.round(64 * Math.min(1, (Math.abs(offset) - 3) / travel)) / 64;
+  }
+  function refreshSteering() {
+    let left = 0, right = 0, active = false;
+    for (const contact of held.values()) {
+      if (contact.steer === null) continue;
+      left = Math.min(left, contact.steer);
+      right = Math.max(right, contact.steer);
+      active = true;
+    }
+    steer = left + right;
+    steeringPad.children[0].classList.toggle('held', left < 0);
+    steeringPad.children[1].classList.toggle('held', right > 0);
+    steeringPad.classList.toggle('engaged', active);
+    steeringPad.style.setProperty('--turn-position', (50 + 24 * steer) + '%');
+  }
+  function inside(event, rect) {
+    return event.clientX >= rect.left && event.clientX < rect.right &&
+      event.clientY >= rect.top && event.clientY < rect.bottom;
+  }
   function release(id) {
-    const button = held.get(id);
-    if (!button) return;
+    const contact = held.get(id);
+    if (!contact) return;
     held.delete(id);
-    changeCount(button, -1);
-    if (button.hasPointerCapture(id)) button.releasePointerCapture(id);
+    if (contact.steer === null) changeCount(contact.target, -1);
+    else refreshSteering();
+    if (contact.target.hasPointerCapture(id)) contact.target.releasePointerCapture(id);
   }
   function clear() {
     for (const id of held.keys()) release(id);
@@ -55,29 +85,39 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
   function drive(event) {
     const button = event.target;
     const name = button.dataset?.touch;
-    if (!enabled() || !counts.has(name) || event.button !== 0 || held.has(event.pointerId)) return;
-    if (name!=='throttle' && name!=='brake' && !drivingActions(discipline()).includes(name)) return;
+    const steering = button === steeringPad || name === 'left' || name === 'right';
+    if (!enabled() || event.button !== 0 || held.has(event.pointerId)) return;
+    if (!steering && (!counts.has(name) ||
+        (name!=='throttle' && name!=='brake' && !drivingActions(discipline()).includes(name)))) return;
     event.preventDefault();
     if (name === 'pause' || name === 'camera' || name === 'recover') {
       action(name);
       return;
     }
+    const rect = steering ? steeringPad.getBoundingClientRect() : null;
+    if (steering && !inside(event, rect)) return;
     try {
       button.setPointerCapture(event.pointerId);
     } catch {
       // The contact already ended, or the browser cannot retain it safely.
       return;
     }
-    held.set(event.pointerId, button);
-    changeCount(button, 1);
+    held.set(event.pointerId, {target:button, steer:steering ? steeringValue(event.clientX, rect) : null});
+    if (steering) refreshSteering();
+    else changeCount(button, 1);
   }
   function move(event) {
-    const button = held.get(event.pointerId);
-    if (!button) return;
-    const {left, right, top, bottom} = button.getBoundingClientRect();
-    if (event.clientX < left || event.clientX >= right || event.clientY < top || event.clientY >= bottom) {
-      // Leaving the pedal releases it. Crossing another control requires a new press.
-      release(event.pointerId);
+    const contact = held.get(event.pointerId);
+    if (!contact) return;
+    const steering = contact.steer !== null;
+    const rect = (steering ? steeringPad : contact.target).getBoundingClientRect();
+    if (!inside(event, rect)) return release(event.pointerId);
+    if (steering) {
+      const next = steeringValue(event.clientX, rect);
+      if (contact.steer !== next) {
+        contact.steer = next;
+        refreshSteering();
+      }
     }
   }
   function up(event) { release(event.pointerId); }
@@ -112,8 +152,7 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
       if (!enabled()) clear();
       const pressed = key => counts.get(key) > 0;
       const brake = Number(pressed('brake'));
-      const axes = {throttle:Number(!brake && pressed('throttle')), brake,
-        steer:Number(pressed('right'))-Number(pressed('left'))};
+      const axes = {throttle:Number(!brake && pressed('throttle')), brake, steer};
       const command=drivingCommand(axes,discipline(),pressed);
       const snapshot = {command, camera:pending.has('camera'), recover:pending.has('recover')};
       pending.clear();
