@@ -16,18 +16,19 @@
     <label for="scenario">Experiment</label>
     <select id="scenario"><option value="wall">01 / The Wall</option><option value="glancing">02 / The Glancing Blow</option><option value="opposing">03 / Two-Car Impact</option></select>
     <h1 id="lab-heading">The Wall</h1><p id="lab-aim"></p>
-    <div class="actions"><button class="primary" id="lab-arm">Arm controls</button><button id="lab-reset">Reset trial</button></div>
+    <div class="actions"><button class="primary" id="lab-arm" disabled>Arm controls</button><button id="lab-reset">Reset trial</button></div>
     <p id="lab-status" role="status">Loading facility…</p>
     <section class="instrument"><h2>Impact telemetry</h2>
+      <label id="lab-follow-control" hidden>Inspect chassis <select id="lab-follow"><option value="0">Player</option><option value="1">Opposing car</option></select></label>
       <dl><dt>Simulation tick</dt><dd id="lab-tick">0</dd><dt>Contact</dt><dd id="lab-contact">Clear</dd>
-      <dt>Last strike</dt><dd id="lab-strike">—</dd><dt>Approach speed</dt><dd id="lab-relative">—</dd>
+      <dt>Last strike</dt><dd id="lab-strike">—</dd><dt>Relative approach</dt><dd id="lab-relative">—</dd>
       <dt>Closing speed</dt><dd id="lab-closing">—</dd><dt>Normal impulse</dt><dd id="lab-impulse">—</dd>
       <dt>Slide impulse</dt><dd id="lab-tangent">—</dd><dt>Energy dissipated</dt><dd id="lab-energy">—</dd>
       <dt>Contact normal X/Z</dt><dd id="lab-normal">—</dd></dl>
     </section>
     <section class="instrument"><h2>Chassis condition</h2>
       <div class="condition"><div class="diagram" aria-label="Damage per chassis zone"><span id="zone-front">Front</span><span id="zone-left">Left</span><span id="zone-right">Right</span><span id="zone-rear">Rear</span></div>
-      <div id="components"></div></div><p id="lab-operational">Operational</p>
+      <div id="components"></div></div><p id="lab-operational">Operational</p><details><summary>Impact and handling details</summary><p id="lab-deltas"></p><p id="lab-forces"></p></details>
     </section>
     <div class="selectors"><label>Camera<select id="lab-camera"><option value="chase">Chase</option><option value="fixture">Impact zone</option><option value="inspect">Inspection</option></select></label>
       <label>Input<select id="lab-input"><option value="keyboard">Keyboard</option><option value="touch">Touch</option><option value="gamepad">Controller</option></select></label></div>

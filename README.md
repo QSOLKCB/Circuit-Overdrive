@@ -14,6 +14,10 @@ Choose **Day** or **Nightshift** on Speedway or Ridge. Nightshift Speedway runs 
 
 For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
 
+## Crash Lab — The Impact Facility
+
+Choose **Crash Lab** from course select. Arm the Ignition GT, hold gas and drive into a concrete wall, an angled steel rail or an opposing physical car. Inspect the measured impulse, local panel damage and remaining mechanical condition, then reset to repeat the setup. The result screen saves a v5 input replay and a separate local evidence receipt. CO-011 targets v1.1.0 and is in owner review. Published v1.0.0 is `47b1a5c1562136bfd6b98ca9d4ef2ce07282200b`. [Player guide](docs/crash-lab.md) · [Impact authority](docs/crash-impact.md) · [Certification](docs/co-011-acceptance.md)
+
 ## World Overdrive Championship
 
 Choose **World Overdrive Championship** from course select. The Opening Cup and Speedway Grand Prix each cover three laps of Overdrive Speedway. The Mountain Challenge and championship finale take the six-car field through Redline Ridge. Each round has its own race seed.
@@ -112,7 +116,7 @@ The track, game rules, scenery, car modifications, livery and interface are game
 
 ## Verification
 
-The v1.0.0 review candidate adds an independent Rocket Overdrive sprint on Orbital Spine. Drive against five rivals through an ascending wall, inverted straight and open jump. Grip follows the road automatically, even when you brake to a stop on the ceiling. Gravity takes over at the open jump. RASTER VELOCITY plays at 180 BPM. Save the v4 command tape at the flag and load it in Replay Theatre on the same build. [Rocket player guide](docs/rocket.md) · [Physics contract and force receipts](docs/rocket-physics.md) · [Certification record and captures](docs/co-010-acceptance.md)
+Published v1.0.0 added an independent Rocket Overdrive sprint on Orbital Spine. Drive against five rivals through an ascending wall, inverted straight and open jump. Grip follows the road automatically, even when you brake to a stop on the ceiling. Gravity takes over at the open jump. RASTER VELOCITY plays at 180 BPM. Save the v4 command tape at the flag and load it in Replay Theatre on the same build. [Rocket player guide](docs/rocket.md) · [Physics contract and force receipts](docs/rocket-physics.md) · [Certification record and captures](docs/co-010-acceptance.md)
 
 With Node 22.18 or newer, run
 

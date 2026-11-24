@@ -116,6 +116,8 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | **v1.4.0** | **CO-014 — BUILT NOT BOUGHT** | Real vehicle-build variations: engine, intake, exhaust, gearing, tyres, suspension, paint, repairs, tuning and benchmark comparisons | Every fitted upgrade has a documented physical effect; no visual-only stats marketed as physical; race/replay revision tracks vehicle build |
 | **v1.5.0** | **CO-015 — STREET ROD: THE UNDERGROUND** | Earnable cash/reputation, rival challenges, garages and upgrades connected to championship, racing and derby modes | Results settle once against originating career revision; abandoned practice is non-paying; no real-money economy, microtransactions or monetization |
 
+CO-011 is in candidate review for v1.1.0. The three instrumented trials, source-bound v5 format and component damage are scoped to the facility. [Driving guide](docs/crash-lab.md) · [Verification](docs/co-011-acceptance.md)
+
 **Relevant internal donor:** [STREET-RACER](https://github.com/QSOLKCB/STREET-RACER) already implements original garage purchases, upgrades, a four-bay career, recovery jobs, validated save transactions, and a separate *Impact Arena* demonstration. Reuse **reviewed contracts**, not its distinct driving authority: preserve Circuit Overdrive's VANILLAJS simulation and exact import provenance. Cash means local fictional credits only. Car damage and repairs must be causally linked to actual vehicle state. A player must have a fair recoverable path after losing a car or funds.
 
 ## 7. Shared verification policy for every future milestone

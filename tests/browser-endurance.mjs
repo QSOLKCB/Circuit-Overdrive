@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Count resources on a single real page across race restarts and course changes.
 import assert from 'node:assert/strict';
+import {countBrowserResources} from './browser-resources.mjs';
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:process.env.NATIVE_GL === '1' ? ['--enable-gpu','--use-angle=gl'] : ['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
@@ -9,54 +10,7 @@ try {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   const cdp = await page.context().newCDPSession(page);
-  await page.addInitScript(() => {
-    const counts = window.resources = {uploads:0, deletes:0, allocatedBytes:0, retainedBytes:0,
-      programs:0, deletedPrograms:0, pcm:0, started:0, ended:0, peakVoices:0};
-    const gl = WebGLRenderingContext.prototype;
-    const create = gl.createBuffer, dispose = gl.deleteBuffer;
-    gl.createBuffer = function() { const buffer = create.call(this); if (buffer) counts.uploads++; return buffer; };
-    // Game meshes and sky/lighting geometry use WebGL1 ARRAY_BUFFER.
-    const storage = gl.bufferData, sizes = new WeakMap();
-    gl.bufferData = function(target,data,usage) {
-      const result=storage.call(this,target,data,usage);
-      if(target===this.ARRAY_BUFFER){
-        const buffer=this.getParameter(this.ARRAY_BUFFER_BINDING);
-        const bytes=typeof data==='number'?data:data.byteLength;
-        counts.allocatedBytes+=bytes;
-        counts.retainedBytes+=bytes-(sizes.get(buffer)??0);
-        sizes.set(buffer,bytes);
-      }
-      return result;
-    };
-    gl.deleteBuffer = function(buffer) {
-      if (buffer && this.isBuffer(buffer)){
-        counts.deletes++;
-        counts.retainedBytes-=sizes.get(buffer)??0;
-        sizes.delete(buffer);
-      }
-      return dispose.call(this,buffer);
-    };
-    const createProgram=gl.createProgram, deleteProgram=gl.deleteProgram;
-    gl.createProgram=function(){
-      const program=createProgram.call(this);
-      if(program) counts.programs++;
-      return program;
-    };
-    gl.deleteProgram=function(program){
-      if(program && this.isProgram(program)) counts.deletedPrograms++;
-      return deleteProgram.call(this,program);
-    };
-    const allocate = BaseAudioContext.prototype.createBuffer;
-    BaseAudioContext.prototype.createBuffer = function(...args) { counts.pcm++; return allocate.apply(this,args); };
-    const start = AudioBufferSourceNode.prototype.start;
-    AudioBufferSourceNode.prototype.start = function(...args) {
-      const result = start.apply(this,args);
-      counts.started++;
-      counts.peakVoices = Math.max(counts.peakVoices, counts.started-counts.ended);
-      this.addEventListener('ended', () => counts.ended++, {once:true});
-      return result;
-    };
-  });
+  await page.addInitScript(countBrowserResources);
   await page.goto(process.argv[2]);
   const skyway=process.argv.includes('--skyway'), orbital=process.argv.includes('--orbital');
   assert(!(orbital && (skyway || process.argv.includes('--night'))),'Orbital cycles include other disciplines');

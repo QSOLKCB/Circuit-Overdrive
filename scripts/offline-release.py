@@ -31,6 +31,8 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
    Choose Nitro Overdrive to race Nitro Skyway. Hold Space while steering
    to drift, and hold Shift with the accelerator to spend earned nitro.
    A Nitro v3 replay requires this exact source revision.
+   Choose Crash Lab, select a fixture, arm the car and hold gas for a trial.
+   Save the v5 input and the separate evidence receipt at the result.
 
 5. For spectator playback, open http://127.0.0.1:8000/replay-theatre.html
    and import a matching source-stamped JSON replay. Select Nightshift in
@@ -87,10 +89,11 @@ def build_archive(repository, revision, temp):
     site = temp / 'Circuit-Overdrive'
     subprocess.run(['node', '--experimental-vm-modules', 'scripts/package-site.mjs', str(site)],
                    check=True, cwd=snapshot)
-    meta = RevisionMeta()
-    meta.feed((site / 'index.html').read_text(encoding='utf-8'))
-    if meta.revisions != [revision]:
-        raise ValueError('Packaged replay revision does not match the source commit.')
+    for page in site.glob('*.html'):
+        meta = RevisionMeta()
+        meta.feed(page.read_text(encoding='utf-8'))
+        if meta.revisions != [revision]:
+            raise ValueError(f'Packaged replay revision differs from the source commit in {page.name}.')
     provenance = json.loads((site / 'vendor/vanillajs/provenance.json').read_bytes())
     (site / 'START-HERE.txt').write_bytes(START_HERE)
     payload = {entry.relative_to(site).as_posix(): entry for entry in site.rglob('*') if entry.is_file()}
