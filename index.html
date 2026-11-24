@@ -31,8 +31,9 @@
       <div class="course-picker" role="group" aria-label="Select course">
         <button type="button" id="choose-speedway" aria-pressed="true"><canvas id="preview-speedway" width="78" height="48" aria-hidden="true"></canvas>Overdrive Speedway</button>
         <button type="button" id="choose-ridge" aria-pressed="false"><canvas id="preview-ridge" width="78" height="48" aria-hidden="true"></canvas>Redline Ridge</button>
+        <button type="button" id="choose-skyway" aria-pressed="false"><canvas id="preview-skyway" width="78" height="48" aria-hidden="true"></canvas>Nitro Overdrive</button>
       </div>
-      <div class="environment-picker" role="group" aria-label="Race environment">
+      <div id="environments" class="environment-picker" role="group" aria-label="Race environment">
         <button type="button" id="choose-day" aria-pressed="true">Day</button>
         <button type="button" id="choose-night" aria-pressed="false">Nightshift</button>
         <small id="night-score" hidden>Midnight Protocol · 144 BPM</small>
@@ -60,6 +61,11 @@
     </div>
     <div class="course instruments"><small id="map-title">Overdrive Speedway</small><canvas id="map" width="320" height="200" aria-label="Course and nearby traffic. Your car has a white outline."></canvas><div id="nearby" hidden></div><div id="last-split" hidden></div></div>
     <div class="dash instruments"><div class="speed"><strong id="speed">0</strong><small>km/h</small></div><div class="gear"><small>Gear</small><strong id="gear">1</strong></div><div id="rev-track" aria-label="Engine revs"><i id="revs"></i></div></div>
+    <div id="nitro-hud" class="instruments" hidden>
+      <label for="nitro-energy">Nitro <strong id="nitro-level">0%</strong></label>
+      <meter id="nitro-energy" min="0" max="100000" value="0"></meter>
+      <div><span id="nitro-state">Ready</span> · <span id="nitro-points">0 stunt pts</span></div>
+    </div>
     <div id="feedback" role="status" hidden></div>
   </section>
   <section id="touch-controls" aria-label="Touch driving controls"></section>
@@ -76,7 +82,7 @@
 <footer><div><i class="live-dot"></i><span id="status" role="status">Starting renderer</span></div><div id="foot-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <span>Drive</span><kbd>C</kbd> <span>Camera</span><kbd>Esc</kbd> <span>Pause</span></div></footer>
 <dialog id="help" aria-labelledby="help-title">
   <h2 id="help-title">Driving controls</h2>
-  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
+  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Skyway drift / boost</dt><dd>Space / Shift</dd><dt>Air attitude</dt><dd>Hold Drift, steer and use pedals in flight</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
   <p>Keyboard is the default. Choose Controller to select a device. Leaving the window or disconnecting the active controller pauses the race.</p>
   <button id="close-help" class="primary">Close controls</button>
 </dialog>

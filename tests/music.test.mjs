@@ -9,8 +9,8 @@ import {createRace} from '../src/sim.js';
 import {ridge} from '../src/ridge.js';
 import {track} from '../src/track.js';
 
-test('four original score shapes compile to bounded stereo PCM and retain exact sample identity',()=>{
-  const expected=[['speedway',120,768000],['ridge',150,614400],['championship',120,768000],['night',144,640000]];
+test('five original race scores compile to bounded stereo PCM and retain exact sample identity',()=>{
+  const expected=[['speedway',120,768000],['ridge',150,614400],['championship',120,768000],['night',144,640000],['nitro',160,576000]];
   for(const [course,bpm,samples] of expected){
     const data=scoreForCourse(course);
     assert.equal(data.bpm,bpm);
@@ -29,6 +29,14 @@ test('four original score shapes compile to bounded stereo PCM and retain exact 
     musicForCourse('ridge').renderRange(1200,1024));
   assert.throws(()=>scoreForCourse('..'),RangeError);
   assert.throws(()=>musicForCourse('..'),RangeError);
+});
+
+test('Nitro Pulse loops 128 sample-aligned sixteenths and reproduces its WAV',()=>{
+  const music=musicForCourse('nitro'), score=scoreForCourse('nitro');
+  assert.equal(MUSIC_TITLES.nitro,'NITRO PULSE');
+  assert.equal(music.sampleRate*60/(4*score.bpm),4500);
+  assert.equal(createHash('sha256').update(music.wavLoop()).digest('hex'),
+    'aca8683f9a00768df1698d5aca0111fd8950deaa2aeafe7affd5d9fc04acb84f');
 });
 
 test('race soundtrack is deterministic, stereo and driven only by read-only accepted state',()=>{

@@ -897,3 +897,17 @@ body[data-environment=night] .course small {max-width:152px; margin:auto;}
   .environment-picker button {min-height:44px;}
   body[data-environment=night] .course small {max-width:94px;}
 }
+
+body[data-course=skyway] { --gold:#ffe277; }
+#choose-skyway[aria-pressed=true] { border-color:#ffe277; color:#ffe277; background:#322b22; }
+body[data-course=skyway] #title-last { color:#fbba61; }
+#nitro-hud {
+  position:absolute; left:var(--safe-left,18px); bottom:var(--safe-bottom,16px);
+  width:min(208px,36vw); padding:8px 12px; border-left:3px solid #ffb748;
+  background:#112229eb; color:#fff5d6; font:600 12px/1.25 system-ui,sans-serif;
+}
+#nitro-hud label { display:flex; justify-content:space-between; text-transform:uppercase; }
+#nitro-energy { width:100%; height:12px; accent-color:#ffc051; }
+#nitro-energy::-webkit-meter-optimum-value { background:#ffc051; }
+#nitro-hud[data-boost=true] { border-color:#75ffe7; }
+#nitro-hud[data-boost=true] meter::-webkit-meter-optimum-value { background:#75ffe7; }

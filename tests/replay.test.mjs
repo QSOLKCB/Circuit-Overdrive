@@ -60,6 +60,8 @@ test('published recordings identify their revision before playback and keep lega
     assert.throws(() => [...replayCommands({...data,revision:invalid})],/Invalid replay header/);
   }
   assert.throws(() => [...replayCommands({...data,version:1})],/Invalid replay header/);
-  assert.throws(() => [...replayCommands({...data,version:3})],/Invalid replay header/);
+  // A touring tape cannot become a stunt recording by changing its version.
+  assert.throws(() => [...replayCommands({...data,version:3},revision)],/missing, unknown or accessor fields/);
+  assert.throws(() => [...replayCommands({...data,version:4})],/Invalid replay header/);
   assert.throws(() => createRecording('ridge',27,'unreleased'),/Invalid replay header/);
 });

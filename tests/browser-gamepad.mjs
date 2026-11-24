@@ -112,6 +112,19 @@ try {
   await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
   assert.equal(await phase(),'paused');
   await tick(2); await click('continue'); assert.equal(await phase(),'paused');
+  await page.reload();
+  await click('choose-skyway');
+  await click('controllers'); await page.selectOption('#driver-device','pad-1');
+  await press(4,1); await press(5,1); await click('use-device');
+  await click('start'); await tick(3);
+  await tapPad(1,0); assert.equal(await phase(),'grid','held Nitro controls prevent arming');
+  await press(4,0); await press(5,0); await tick(2);
+  await tapPad(1,0); assert.equal(await phase(),'countdown'); await advance(183);
+  await press(4,1); await press(5,1); await press(7,1); await advance(45);
+  assert(Number(await page.locator('#speed').textContent())>0);
+  assert.equal(await page.locator('#nitro-level').textContent(),'0%','holding both bumpers on a straight earns no charge');
+  await page.evaluate(()=>{reports[1]=null;window.tick();});
+  assert.equal(await phase(),'paused','disconnect while drifting and boosting clears owner');
   assert.deepEqual(errors,[]);
   // Losing a required track module leaves a readable HTML entry point even
   // on a browser that cannot start the main module graph.

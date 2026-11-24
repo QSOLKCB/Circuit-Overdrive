@@ -7,6 +7,8 @@ import {createRecording} from './replay.js';
 import {controllerMenu, menuAction} from './controller-menu.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
+import {skyway} from './skyway.js';
+import {createNitroRace,startNitroRace,stepNitroRace,recoverNitroCar} from './nitro-race.js';
 import {FIELD, PLAYER_ID} from './field.js';
 import {createScene} from './scene.js';
 import {courseEnvironment, eventTitle, validateEnvironment} from './environment.js';
@@ -23,6 +25,9 @@ let pixelRatio = 1;
 const mixer = Object.keys(DEFAULT_VOLUMES);
 let reducedEffects;
 let quality = 'auto';
+function standaloneRace(course) {
+  return course===skyway ? createNitroRace(undefined,course) : createRace(undefined,course);
+}
 let race = createRace();
 let standaloneCourse = race.course;
 let standaloneEnvironment = 'day';
@@ -35,7 +40,7 @@ const phase = () => error ? 'error' : championship.visible ? 'championship' : gr
 const driving = () => ['countdown','racing'].includes(phase());
 const modalOpen = () => !!document.querySelector('dialog[open]');
 const focused = () => (input.source !== 'keyboard' || document.activeElement === canvas) && document.hasFocus() && !document.hidden && !modalOpen();
-const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController, $('touch-controls'));
+const input = attachDriverInput(window, () => driving() && focused(), handleAction, lostController, $('touch-controls'), () => race.course===skyway);
 const controller = controllerMenu(input, showSource);
 const revision = document.querySelector('meta[name=game-revision]').content || null;
 const championship = championshipUI({revision, formatTime, grid:() => enterGrid(true),
@@ -50,7 +55,7 @@ const championship = championshipUI({revision, formatTime, grid:() => enterGrid(
     }
   },
   leave() {
-    installRace(createRace(undefined,standaloneCourse),standaloneEnvironment);
+    installRace(standaloneRace(standaloneCourse),standaloneEnvironment);
     updatePanel();
     $('enter-woc').focus();
   }
@@ -75,6 +80,7 @@ function lostController() {
 document.body.dataset.input = 'keyboard';
 $('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
+let stuntPoints=0, lastAward=0, awardUntil=0;
 const set = (id, value) => {
   const element = $(id), text = String(value);
   if (element.textContent !== text) element.textContent = text;
@@ -110,6 +116,7 @@ function resetPresentation() {
   announcedPlace = candidatePlace = race.player.position;
   candidateSince = placeUntil = 0;
   placeMessage = '';
+  stuntPoints=lastAward=awardUntil=0;
 }
 function installRace(next, nextEnvironment = environment) {
   const courseChanged = race.course !== next.course;
@@ -134,7 +141,7 @@ function enterGrid(round = false) {
   stopAudio();
   resetClock();
   if (championship.active) championship.abandon(race);
-  installRace(round ? championship.takeGrid() : createRace(undefined,race.course), round ? 'day' : environment);
+  installRace(round ? championship.takeGrid() : standaloneRace(race.course), round ? 'day' : environment);
   grid = true;
   canvas.focus({preventScroll:true});
   updatePanel();
@@ -249,19 +256,23 @@ canvas.addEventListener('webglcontextrestored', () => {
 function displayCourse(course) {
   const circuit = course.closed;
   const night = environment === 'night';
+  const nitro = course===skyway;
+  $('environments').hidden=nitro;
+  $('nitro-hud').hidden=!nitro;
+  $('choose-skyway').setAttribute('aria-pressed',String(nitro));
   const title = eventTitle(course,environment);
   document.body.dataset.environment = environment;
   document.body.dataset.course = course.id;
   $('choose-day').setAttribute('aria-pressed', String(!night));
   $('choose-night').setAttribute('aria-pressed', String(night));
   $('night-score').hidden = !night;
-  set('course-label', night ? course.name+' · After Dark' : 'Course select');
+  set('course-label', nitro ? 'Nitro Overdrive' : night ? course.name+' · After Dark' : 'Course select');
   $('choose-speedway').setAttribute('aria-pressed', String(circuit));
-  $('choose-ridge').setAttribute('aria-pressed', String(!circuit));
-  set('title-first', night ? (circuit ? 'Nightshift' : 'Midnight') : (circuit ? 'Overdrive' : 'Redline'));
-  set('title-last', circuit ? 'Speedway' : night ? 'Descent' : 'Ridge');
+  $('choose-ridge').setAttribute('aria-pressed', String(course===ridge));
+  set('title-first', nitro ? 'Nitro' : night ? (circuit ? 'Nightshift' : 'Midnight') : (circuit ? 'Overdrive' : 'Redline'));
+  set('title-last', nitro ? 'Skyway' : circuit ? 'Speedway' : night ? 'Descent' : 'Ridge');
   set('distance', (course.length/1000).toFixed(2) + ' km');
-  set('format', circuit ? '3 laps' : 'Mountain sprint');
+  set('format', nitro ? 'Stunt sprint' : circuit ? '3 laps' : 'Mountain sprint');
   set('progress-label', circuit ? 'Lap' : 'Checkpoint');
   set('progress-total', ' / ' + (circuit ? 3 : course.gates.length-2));
   set('map-title', title);
@@ -272,10 +283,10 @@ function displayCourse(course) {
 function selectCourse(course) {
   if (phase() !== 'menu' || course === race.course) return;
   resetClock();
-  installRace(createRace(undefined,course));
+  installRace(standaloneRace(course),course===skyway ? 'day' : environment);
 }
 function selectEnvironment(next) {
-  if (phase() !== 'menu' || next === environment) return;
+  if (phase() !== 'menu' || next === environment || race.course===skyway) return;
   environment = validateEnvironment(next);
   resetClock();
   scene?.dispose();
@@ -286,6 +297,7 @@ $('choose-day').onclick = () => selectEnvironment('day');
 $('choose-night').onclick = () => selectEnvironment('night');
 $('choose-speedway').onclick = () => selectCourse(track);
 $('choose-ridge').onclick = () => selectCourse(ridge);
+$('choose-skyway').onclick = () => selectCourse(skyway);
 function downloadReplay(data, filename) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));
   const link = document.createElement('a');
@@ -309,11 +321,11 @@ $('courses').onclick = () => {
     championship.briefing();
     return;
   }
-  installRace(createRace(undefined,race.course));
+  installRace(standaloneRace(race.course));
   updatePanel();
-  $(race.course.closed ? 'choose-speedway' : 'choose-ridge').focus();
+  $('choose-'+race.course.id).focus();
 };
-for (const course of [track,ridge]) drawCoursePreview($('preview-'+course.id),course);
+for (const course of [track,ridge,skyway]) drawCoursePreview($('preview-'+course.id),course);
 displayCourse(race.course);
 resetPresentation();
 $('enter-woc').onclick = () => {
@@ -407,8 +419,8 @@ function handleAction(action) {
   }
   if (action === 'arm' && grid && focused() && input.canStart()) {
     grid = false;
-    startRace(race);
-    const score = championship.active ? 'championship' : environment === 'night' ? 'night' : race.course.id;
+    if (race.course===skyway) startNitroRace(race); else startRace(race);
+    const score = championship.active ? 'championship' : race.course===skyway ? 'nitro' : environment === 'night' ? 'night' : race.course.id;
     audio.selectMusic(score);
     recording = createRecording(race.course.id, race.seed, revision);
     resetClock();
@@ -424,10 +436,16 @@ function fixedUpdate() {
   const {command, camera:switchView, recover} = input.sample();
   if (!driving()) return; // A polled pause or disconnect takes effect on this same tick.
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
-  const recovered = recover && race.phase === 'racing' && recoverCar(race);
+  const recovered = recover && race.phase === 'racing' && (race.course===skyway ? recoverNitroCar(race) : recoverCar(race));
   recording.record(command, recovered);
   if (championship.active) championship.step(race,command);
+  else if (race.course===skyway) stepNitroRace(race,command);
   else stepRace(race,command);
+  if (race.player.nitro?.rewarded) {
+    lastAward=race.player.nitro.points-stuntPoints;
+    stuntPoints=race.player.nitro.points;
+    awardUntil=race.elapsedTicks+90;
+  }
   scene.observe(race,reducedEffects);
   if (driving() && sound && audio.update(race.player,command,race.course,race) === false) {
     sound = false;
@@ -450,6 +468,14 @@ function fixedUpdate() {
 }
 function drawHud(p) {
   const player = race.player;
+  if (player.nitro) {
+    const n=player.nitro;
+    $('nitro-energy').value=n.energy;
+    set('nitro-level',Math.round(n.energy/1000)+'%');
+    set('nitro-state',n.airborne ? 'Airborne' : n.boosting ? 'Boost active' : n.charging ? 'Drift charging' : n.energy ? 'Nitro ready' : 'Build charge');
+    set('nitro-points',race.elapsedTicks<awardUntil ? '+'+lastAward+' landing · '+n.points+' pts' : n.points+' stunt pts');
+    $('nitro-hud').dataset.boost=String(n.boosting);
+  }
   set('position', player.position);
   showNearby(player);
   set('speed', Math.round(p.speed * 3.6));
@@ -503,6 +529,8 @@ function render(alpha, elapsed) {
     const a = driver.previous, b = driver.current, p = poses[driver.id];
     p.vx=driver.vehicle.velocity[0];
     p.vz=driver.vehicle.velocity[2];
+    p.boosting=!!driver.nitro?.boosting;
+    p.airborne=!!driver.nitro?.airborne;
     p.gear=b.gear;
     p.rpm=b.rpm;
     p.brake=b.brake;

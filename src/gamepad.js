@@ -2,11 +2,15 @@
 // W3C standard layout. The browser, rather than the product name, selects it.
 export const STANDARD_BUTTONS = Object.freeze({
   throttle:7, brake:6, confirm:0, back:1, pause:9, camera:3, recover:2,
-  up:12, down:13, left:14, right:15
+  up:12, down:13, left:14, right:15, drift:4, boost:5
 });
 const actionNames = ['confirm','back','pause','camera','recover','up','down','left','right'];
+const nitroNames = [...actionNames,'drift','boost'];
 const idle = Object.freeze({
   command:Object.freeze({throttle:0, brake:0, steer:0}), actions:Object.freeze([])
+});
+const nitroIdle = Object.freeze({
+  command:Object.freeze({...idle.command, drift:false, boost:false}), actions:idle.actions
 });
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 function outsideDeadzone(value, deadzone) {
@@ -14,14 +18,14 @@ function outsideDeadzone(value, deadzone) {
   return Math.sign(value) * Math.min(1, (Math.abs(value) - deadzone) / (1 - deadzone));
 }
 
-export function standardGamepad(pad) {
+export function standardGamepad(pad, nitro=false) {
   if (pad?.mapping !== 'standard' || !Number.isFinite(pad.axes?.[0])) return null;
   const buttons = pad.buttons;
   const throttle = buttons?.[STANDARD_BUTTONS.throttle]?.value;
   const brake = buttons?.[STANDARD_BUTTONS.brake]?.value;
   if (!Number.isFinite(throttle) || !Number.isFinite(brake)) return null;
   const held = [];
-  for (const action of actionNames) {
+  for (const action of nitro ? nitroNames : actionNames) {
     const button = buttons[STANDARD_BUTTONS[action]];
     if (!Number.isFinite(button?.value) || typeof button.pressed !== 'boolean') return null;
     if (button.pressed) held.push(action);
@@ -38,18 +42,20 @@ export function standardGamepad(pad) {
 
 // Read the same bounded command for the live driver and the diagnostic display.
 // This calculation has no ownership, edge or arming state to consume.
-export function readMapping(mapper, pad) {
+export function readMapping(mapper, pad, nitro=false) {
   let mapped;
-  try { mapped = mapper(pad); } catch { return null; }
-  if (!mapped || !Array.isArray(mapped.held) || mapped.held.length > actionNames.length
-    || !mapped.held.every(action => actionNames.includes(action))) return null;
+  try { mapped = mapper(pad,nitro); } catch { return null; }
+  const names = nitro ? nitroNames : actionNames;
+  if (!mapped || !Array.isArray(mapped.held) || mapped.held.length > names.length
+    || !mapped.held.every(action => names.includes(action))) return null;
   const command = mapped.command;
   if (![command?.throttle, command?.brake, command?.steer].every(Number.isFinite)) return null;
   const throttle = clamp(command.throttle, 0, 1);
   const brake = clamp(command.brake, 0, 1);
   const steer = clamp(command.steer, -1, 1);
   return {
-    command:{throttle, brake, steer},
+    command:nitro ? {throttle, brake, steer, drift:mapped.held.includes('drift'), boost:mapped.held.includes('boost')} :
+      {throttle, brake, steer},
     held:mapped.held,
     neutral:mapped.neutral !== false && !mapped.held.length && !throttle && !brake && !steer
   };
@@ -116,29 +122,30 @@ export class GamepadInput {
     this.#selected = null;
     this.#mapper = null;
   }
-  #lose(reason) {
+  #lose(reason,stopped) {
     this.deselect();
     this.onLost(reason);
-    return idle;
+    return stopped;
   }
-  poll() {
+  poll(nitro=false) {
+    const stopped = nitro ? nitroIdle : idle;
     const owner = this.#selected;
-    if (!owner) return idle;
+    if (!owner) return stopped;
     const pad = this.#pads()[owner.index];
     if (!pad?.connected || pad.index !== owner.index || pad.id !== owner.id || pad.mapping !== owner.mapping) {
-      return this.#lose('Selected controller is unavailable. Select a controller to reconnect.');
+      return this.#lose('Selected controller is unavailable. Select a controller to reconnect.',stopped);
     }
     if (pad.axes?.length !== owner.axes || pad.buttons?.length !== owner.buttons) {
-      return this.#lose('Controller layout changed. Check the profile before driving.');
+      return this.#lose('Controller layout changed. Check the profile before driving.',stopped);
     }
-    const sample = readMapping(this.#mapper, pad);
-    if (!sample) return this.#lose('A mapped controller input is unreadable. Check the profile before driving.');
+    const sample = readMapping(this.#mapper, pad, nitro);
+    if (!sample) return this.#lose('A mapped controller input is unreadable. Check the profile before driving.',stopped);
     const {command, held} = sample;
     if (!this.#ready) {
       this.#ready = sample.neutral;
-      return idle;
+      return stopped;
     }
-    const actions = held.filter(action => !this.#held.has(action));
+    const actions = held.filter(action => action !== 'drift' && action !== 'boost' && !this.#held.has(action));
     this.#held.clear();
     for (const action of held) this.#held.add(action);
     return {command, actions};

@@ -16,7 +16,7 @@ import {createReplaySession,validateTheatreReplay,REPLAY_COMPATIBLE_RELEASES,
 const REV='f1'.repeat(20);
 const RELEASES=['020e5dc4c7e2485e01f0f47c698f80ee58fe228b',
   'd81a2d4a09286029b87c2ac201edf8ab6448e023','c97ee47e7577337032a55eb2e6ae53b855285573',
-  '3295b82004b64328072ac5fa64f8ba2b55394416'];
+  '3295b82004b64328072ac5fa64f8ba2b55394416','8204da56fce6b40ab33cb66c684a2e780f3e3001'];
 const blank={throttle:0,brake:0,steer:0};
 function tapeFor(course,ticks=600,revision=RELEASES[0]){
   const recorder=createRecording(course.id,27,revision),reference=createRace(27,course);
@@ -29,7 +29,7 @@ function tapeFor(course,ticks=600,revision=RELEASES[0]){
   return {data:recorder.export(),reference};
 }
 
-test('source-compatibility pins match the immutable v0.6.0 through v0.7.0 race authority',()=>{
+test('source-compatibility pins match the immutable v0.6.0 through v0.8.0 legacy race authority',()=>{
   assert.deepEqual(REPLAY_COMPATIBLE_RELEASES,RELEASES);
   const root=fileURLToPath(new URL('../',import.meta.url));
   // GitHub blob hashes were read directly from v0.6.1, and compare(v0.6.0,v0.6.1)
@@ -42,7 +42,7 @@ test('source-compatibility pins match the immutable v0.6.0 through v0.7.0 race a
     'src/speedway.js':'1a61b8ce5bbad92f4035d5166b68061209e92646',
     'src/sim.js':'76fd3091c36adaceb7e3e72a9f623aa4f2c2b3e8',
     'src/track.js':'8640d6ad053c63f4b2d4368e77d0dca6f32f2c27',
-    'src/replay.js':'e7cd33164a077b573cbbddd1833e0a7fdb29372e',
+    'src/replay-v2.js':'e7cd33164a077b573cbbddd1833e0a7fdb29372e',
     'tracks/overdrive-speedway.json':'16cbb83d49908657a4de73e48c7bcfc45da67d35',
     'tracks/redline-ridge.json':'34c96746ba6fd0d069443056503a5dcbfd7541c6',
     'vendor/vanillajs/modules/collision/index.js':'60975e1e1d5914f0610de2e3ed3cbb241ce7f571',

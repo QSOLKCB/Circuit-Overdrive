@@ -117,7 +117,7 @@ test('versioned storage requires intentional neutral save, isolates device layou
   press(pad,4,0);
   assert.equal(saveProfile(pad,p,store),true);
   const [key]=records.keys(); const parsed=JSON.parse(records.get(key));
-  assert.equal(parsed.version,1); assert.deepEqual(parsed.devices[0].profile,p);
+  assert.equal(parsed.version,2); assert.deepEqual(parsed.devices[0].profile,p);
   assert.deepEqual(savedProfile({...pad,index:4},store),p);
   assert.equal(savedProfile({...pad,buttons:[...pad.buttons,{value:0}]},store),null);
   const other=device('read from storage');
@@ -150,4 +150,23 @@ test('explicit hat learns observed positions around an out-of-range neutral; unm
   p.steering.right.full=.75;
   assert.match(profileError(p,pad),/separate directions/);
   pad.axes[0]=999; assert.equal(map(pad),null);
+});
+
+test('v1 assignments migrate without guessing and v2 permits explicit independent Nitro controls',()=>{
+  const pad=device('migrating wheel',[.1,1,-.8]), old=wheel();
+  let raw=JSON.stringify({version:1,devices:[{key:deviceKey(pad),profile:old}]});
+  const store={getItem:()=>raw,setItem:(_,v)=>{raw=v;}};
+  const restored=savedProfile(pad,store);
+  assert.deepEqual(restored,old);
+  assert.equal(JSON.parse(raw).version,1,'reading an old save does not rewrite storage');
+  restored.actions.drift=button(4); restored.actions.boost=button(5);
+  assert.equal(saveProfile(pad,restored,store),true);
+  assert.equal(JSON.parse(raw).version,2);
+  const map=profileMapper(savedProfile(pad,store),pad);
+  press(pad,4,1); press(pad,5,1);
+  assert.deepEqual(map(pad,true).held,['drift','boost']);
+  assert.deepEqual(map(pad,false).held,[]);
+  assert.throws(()=>saveProfile(pad,restored,store),/Release/);
+  restored.actions.drift=restored.actions.confirm;
+  assert.match(profileError(restored,pad),/different control/);
 });

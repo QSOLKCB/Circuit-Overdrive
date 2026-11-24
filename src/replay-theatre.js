@@ -52,13 +52,15 @@ function dashboard(force=false){
   const driver=session.race.entrants[index]??session.race.player;
   const p=driver.current;
   set('replay-title',eventTitle(session.race.course,environment));
+  $('replay-nitro').hidden=!driver.nitro;
+  if (driver.nitro) set('replay-nitro',Math.round(driver.nitro.energy/1000)+'% nitro · '+driver.nitro.points+' stunt points');
   set('replay-driver','#'+driver.number+' '+driver.name);
   set('replay-place','P'+driver.position+' / 6');
   set('replay-speedometer',Math.round(p.speed*3.6)+' km/h');
   set('replay-gear',p.gear<0?'R':String(p.gear));
   set('replay-racetime',formatTime(driver.elapsedTicks));
   set('replay-progress',session.race.course.closed?'Lap '+driver.lap+' / 3':
-    'Checkpoint '+driver.splitTicks.length+' / 7');
+    'Checkpoint '+driver.splitTicks.length+' / '+(session.race.course.gates.length-2));
   const table=$('replay-standing');
   table.replaceChildren(...session.race.order.map(item=>{
     const line=document.createElement('li');
@@ -170,6 +172,7 @@ function loadRecordedRace(data,sourceText,fileName){
   $('replay-empty').hidden=true;
   $('replay-telemetry').hidden=false;
   setControls(true);
+  $('replay-environment').disabled=candidate.recording.version===3;
   dashboard(true);
   const label=candidate.recording.compatibility==='exact'?'exact source':
     'verified compatible race physics at '+candidate.recording.revision;

@@ -172,3 +172,18 @@ test('permission denial, missing API, and empty device lists keep controls neutr
   assert.deepEqual(input.devices(),[]);
   assert(input.available);
 });
+
+test('Nitro bumpers are held tick commands with neutral arming and disconnect clearance',()=>{
+  const p=pad(2), {input,slots}=fixture(p), zero={...rest,drift:false,boost:false};
+  press(p,'drift'); press(p,'boost');
+  assert(input.select(2));
+  assert.deepEqual(input.poll(true),{command:zero,actions:[]});
+  assert.equal(input.ready,false);
+  press(p,'drift',0); press(p,'boost',0); input.poll(true); assert(input.ready);
+  press(p,'drift'); press(p,'boost'); press(p,'throttle');
+  for(let i=0;i<3;i++) assert.deepEqual(input.poll(true),{command:{...zero,throttle:1,drift:true,boost:true},actions:[]});
+  assert.deepEqual(input.poll(),{command:{...rest,throttle:1},actions:[]});
+  slots[2]=null;
+  assert.deepEqual(input.poll(true),{command:zero,actions:[]});
+  assert.equal(input.index,null);
+});

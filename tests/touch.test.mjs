@@ -4,7 +4,7 @@ import test from 'node:test';
 import {attachTouchInput} from '../src/touch.js';
 
 const neutral = {throttle:0, brake:0, steer:0};
-function fixture() {
+function fixture(nitroMode=()=>false) {
   const win = new EventTarget(), orientation = new EventTarget(), doc = new EventTarget();
   const buttons = {};
   let enabled = true, pauses = 0;
@@ -25,7 +25,7 @@ function fixture() {
   Object.assign(doc,{defaultView:win,createElement:element});
   win.matchMedia = () => orientation;
   const container = element();
-  const touch = attachTouchInput(container,{enabled:()=>enabled,onPause:()=>{enabled=false; pauses++;}});
+  const touch = attachTouchInput(container,{nitroMode,enabled:()=>enabled,onPause:()=>{enabled=false; pauses++;}});
   // Delegate events as the DOM does, retaining the button as event.target.
   function fire(type, control, pointerId = 1, extras = {}) {
     const event = new Event(type,{cancelable:true});
@@ -108,5 +108,19 @@ test('switch, pause, restart and discrete actions clear without suppressing simu
   t.down('left',2); t.enable(false); assert.deepEqual(t.command(),neutral);
   t.enable(true); assert.deepEqual(t.command(),neutral);
   t.touch.dispose(); t.down('throttle',1);
+  assert.deepEqual(t.command(),neutral);
+});
+
+test('four fingers can steer, accelerate, drift and boost; cancellation clears every owner',()=>{
+  let nitro=true;
+  const t=fixture(()=>nitro);
+  for(const [index,control] of ['left','throttle','drift','boost'].entries()) t.down(control,index+1);
+  assert.deepEqual(t.command(),{throttle:1,brake:0,steer:-1,drift:true,boost:true});
+  t.up('drift',3);
+  assert.deepEqual(t.command(),{throttle:1,brake:0,steer:-1,drift:false,boost:true});
+  t.fire('pointercancel','boost',4);
+  assert.equal(t.pauses(),1);
+  t.enable(true); assert.deepEqual(t.command(),{throttle:0,brake:0,steer:0,drift:false,boost:false});
+  nitro=false; assert.equal(t.down('drift',7).defaultPrevented,false);
   assert.deepEqual(t.command(),neutral);
 });

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import {STANDARD_BUTTONS} from './gamepad.js';
 
-export const ACTION_NAMES = Object.freeze(['confirm','pause','back','camera','recover','up','down','left','right']);
+export const ACTION_NAMES = Object.freeze(['confirm','pause','back','camera','recover','up','down','left','right','drift','boost']);
 export const TUNING = Object.freeze({deadzone:.12, sensitivity:1, curve:1, invertSteer:false,
   throttleRange:1, brakeRange:1});
-const FILE = 'circuit-overdrive.controller-profiles', VERSION = 1, LIMIT = 16;
+const FILE = 'circuit-overdrive.controller-profiles', VERSION = 2, LIMIT = 16;
 const session = new Map();
 const within = (n,min,max) => Number.isFinite(n) && n >= min && n <= max;
 const unit = n => Math.max(0, Math.min(n,1));
@@ -101,7 +101,7 @@ export function profileMapper(profile,device) {
   const p=JSON.parse(JSON.stringify(profile)), t=p.tuning, actions=Object.entries(p.actions);
   const axes=device.axes.length, buttons=device.buttons.length, id=device.id, mapping=device.mapping;
   const hats=[p.steering.left,p.steering.right,...Object.values(p.actions)].filter(b=>b.type==='hat');
-  return pad => {
+  return (pad, nitro=true) => {
     if (!pad || pad.connected===false || pad.id!==id || pad.mapping!==mapping ||
         pad.axes?.length!==axes || pad.buttons?.length!==buttons) return null;
     const left=travel(pad,p.steering.left), right=travel(pad,p.steering.right);
@@ -111,6 +111,7 @@ export function profileMapper(profile,device) {
     if (![turn,throttle,brake].every(Number.isFinite)) return null;
     const held=[];
     for (const [name,b] of actions) {
+      if (!nitro && (name==='drift' || name==='boost')) continue;
       const amount=travel(pad,b);
       if (!Number.isFinite(amount)) return null;
       if (amount>=.5) held.push(name);
@@ -162,8 +163,12 @@ function entries(store) {
     const raw=store?.getItem(FILE);
     if (!raw || raw.length>131072) return [];
     const data=JSON.parse(raw);
-    if (data.version!==VERSION || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
-    return data.devices.filter(row=>row && typeof row.key==='string' && row.key.length<=1024);
+    if (![1,VERSION].includes(data.version) || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
+    return data.devices.filter(row=>{
+      if (!row || typeof row.key!=='string' || row.key.length>1024) return false;
+      // Old calibrations keep their exact assignments. Only v2 can bind the new controls.
+      return data.version===VERSION || !Object.keys(row.profile?.actions ?? {}).some(k=>k==='drift' || k==='boost');
+    });
   } catch { return []; }
 }
 export function savedProfile(pad,store=browserStore()) {

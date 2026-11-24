@@ -18,6 +18,8 @@ export function interpolateReplayPoses(race,poses,alpha) {
     if(!p||p.id!==driver.id)throw RangeError('Replay pose order mismatch');
     p.vx=driver.vehicle.velocity[0];
     p.vz=driver.vehicle.velocity[2];
+    p.boosting=!!driver.nitro?.boosting;
+    p.airborne=!!driver.nitro?.airborne;
     p.gear=b.gear;
     p.rpm=b.rpm;
     p.brake=b.brake;
