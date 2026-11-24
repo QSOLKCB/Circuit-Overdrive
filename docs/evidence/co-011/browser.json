@@ -1,0 +1,47 @@
+{
+  "browser": "158.0.8127.36",
+  "results": [
+    {
+      "scenario": "wall",
+      "revision": "14861ffb14fbacf02a3ab12d6c6fe04063e511bb",
+      "inputSha256": "baf35d935311f69a3ad8a5183ecab3b8416303cae87dfab0a8af7f674de8e701",
+      "finalStateSha256": "a2ede31edd7233fcc3b7a75588bd634bd989e0d812e895191820390d8fb1b69d",
+      "contactsSha256": "8de79570c40af0918dfca7a943f877dee5176028b33b982108cb56d407c0c857",
+      "rawTapeSha256": "a218a5d71010ee3d2b50c8733604f76b3c5d3992200c84d6b5294763f0d9c2cd",
+      "ticks": 273,
+      "result": "settled",
+      "impactTick": 220,
+      "zone": "front",
+      "impulse": 55855.65964997852,
+      "screenshotSha256": "150686704ee735c043806a4fa29a66c86dda6b5793c911eb9b7e32b6df91f86f"
+    },
+    {
+      "scenario": "glancing",
+      "revision": "14861ffb14fbacf02a3ab12d6c6fe04063e511bb",
+      "inputSha256": "e94c27332cb57d6b17415dcda89a5b94f709e377a2264e1dae0ea147ab4150b2",
+      "finalStateSha256": "2550e9d33b3321c40e72b2cf92a47ef64ed52610ae5d58a5009ea735bf432354",
+      "contactsSha256": "428dc361480adc70af508a16771d32cc0544546b4364170584ec181fbf466199",
+      "rawTapeSha256": "dd79105b4ded25ec0296b020ce435a0d9e3f3d20ba43209da5508abc977bb83b",
+      "ticks": 325,
+      "result": "impact and run-off",
+      "impactTick": 209,
+      "zone": "right",
+      "impulse": 6262.435749429269,
+      "screenshotSha256": "151144ca9249d4d54dfb14c67664faae1031651a9343ab9d729fccb8212e0c53"
+    },
+    {
+      "scenario": "opposing",
+      "revision": "14861ffb14fbacf02a3ab12d6c6fe04063e511bb",
+      "inputSha256": "46839ff07f5400db95f186225f5eefdb53f997b0078d3f3026cb685e9048cd54",
+      "finalStateSha256": "3cfe892dd2594a6b02fe6321a5da2f6f65508630adb6caf37d806b1be1859853",
+      "contactsSha256": "fb56796fc15d6e8bc71ce2009b17d996783398f5aa7e11fdad6560c23ba9b2b6",
+      "rawTapeSha256": "52d690d5015ff099c87ecbed74f5f7e54227ccfbffb3e59c515d38a5e35dfd40",
+      "ticks": 360,
+      "result": "post-impact run complete",
+      "impactTick": 180,
+      "zone": "front",
+      "impulse": 38620.64547722599,
+      "screenshotSha256": "9a97f7d07d8598cccc6fc05d81f06e409c06e6531c8bec49cd42da5b0315aeae"
+    }
+  ]
+}

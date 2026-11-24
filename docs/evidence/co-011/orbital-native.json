@@ -1,0 +1,333 @@
+{
+  "browser": "158.0.8127.36",
+  "environment": "day",
+  "event": "standalone",
+  "course": "orbital",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "source": "14861ffb14fbacf02a3ab12d6c6fe04063e511bb",
+  "profile": "high",
+  "effects": "full",
+  "width": 1920,
+  "height": 1080,
+  "fieldSize": 6,
+  "playerGates": 8,
+  "remainingEnergy": 79.59999999999968,
+  "recoveries": 0,
+  "sections": [
+    {
+      "section": "mass-driver",
+      "samples": 248,
+      "seconds": 4.1332,
+      "physicsCpu": {
+        "samples": 249,
+        "medianMs": 1.600000023841858,
+        "p95Ms": 2,
+        "maxMs": 4.799999982118607
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 249,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 250,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.6000000238418579
+      },
+      "gpuDraw": {
+        "samples": 31,
+        "medianMs": 0.985536,
+        "p95Ms": 1.165088,
+        "maxMs": 1.831008
+      },
+      "simulationTicks": 248,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00193554630794,
+      "medianMs": 16.699999999999818,
+      "p95Ms": 16.700000000000728,
+      "maxMs": 16.800000000000182
+    },
+    {
+      "section": "azimuth-bank through counterbank",
+      "samples": 287,
+      "seconds": 4.7831,
+      "physicsCpu": {
+        "samples": 288,
+        "medianMs": 2.0999999940395355,
+        "p95Ms": 2.2999999821186066,
+        "maxMs": 2.9000000059604645
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 288,
+      "airborneTicks": 10,
+      "landingTicks": 10,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 288,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.5
+      },
+      "gpuDraw": {
+        "samples": 36,
+        "medianMs": 0.986784,
+        "p95Ms": 1.725184,
+        "maxMs": 1.885536
+      },
+      "simulationTicks": 287,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00292697204741,
+      "medianMs": 16.69999999999891,
+      "p95Ms": 16.700000000000728,
+      "maxMs": 16.80000000000109
+    },
+    {
+      "section": "radial-elbow",
+      "samples": 146,
+      "seconds": 2.433299999999999,
+      "physicsCpu": {
+        "samples": 147,
+        "medianMs": 1.699999988079071,
+        "p95Ms": 2.199999988079071,
+        "maxMs": 2.5999999940395355
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 147,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 147,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.5999999940395355
+      },
+      "gpuDraw": {
+        "samples": 18,
+        "medianMs": 0.949088,
+        "p95Ms": 1.110976,
+        "maxMs": 1.110976
+      },
+      "simulationTicks": 146,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00082192906754,
+      "medianMs": 16.69999999999891,
+      "p95Ms": 16.700000000000728,
+      "maxMs": 16.80000000000109
+    },
+    {
+      "section": "antenna-wall",
+      "samples": 84,
+      "seconds": 1.4,
+      "physicsCpu": {
+        "samples": 85,
+        "medianMs": 1.9000000059604645,
+        "p95Ms": 2.9000000059604645,
+        "maxMs": 3
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 85,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 85,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5999999940395355,
+        "maxMs": 0.6000000238418579
+      },
+      "gpuDraw": {
+        "samples": 11,
+        "medianMs": 1.078048,
+        "p95Ms": 1.692736,
+        "maxMs": 1.692736
+      },
+      "simulationTicks": 84,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00000000000001,
+      "medianMs": 16.69999999999709,
+      "p95Ms": 16.700000000000728,
+      "maxMs": 16.799999999999272
+    },
+    {
+      "section": "crown-elbow",
+      "samples": 113,
+      "seconds": 1.8832000000000007,
+      "physicsCpu": {
+        "samples": 114,
+        "medianMs": 1.5999999940395355,
+        "p95Ms": 2.0999999940395355,
+        "maxMs": 2.7000000178813934
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 114,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 114,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.6000000238418579
+      },
+      "gpuDraw": {
+        "samples": 14,
+        "medianMs": 0.892896,
+        "p95Ms": 1.080864,
+        "maxMs": 1.080864
+      },
+      "simulationTicks": 113,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.004248088360214,
+      "medianMs": 16.69999999999709,
+      "p95Ms": 16.799999999999272,
+      "maxMs": 16.80000000000291
+    },
+    {
+      "section": "inverted-spine",
+      "samples": 319,
+      "seconds": 5.3165,
+      "physicsCpu": {
+        "samples": 320,
+        "medianMs": 1.5999999940395355,
+        "p95Ms": 2.0999999940395355,
+        "maxMs": 3
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 320,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 320,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.5,
+        "maxMs": 0.7999999821186066
+      },
+      "gpuDraw": {
+        "samples": 40,
+        "medianMs": 0.917792,
+        "p95Ms": 1.470336,
+        "maxMs": 1.630624
+      },
+      "simulationTicks": 319,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.001880936706485,
+      "medianMs": 16.700000000000728,
+      "p95Ms": 16.799999999999272,
+      "maxMs": 16.80000000000291
+    },
+    {
+      "section": "return-elbow through earthward-wall",
+      "samples": 188,
+      "seconds": 3.1332999999999993,
+      "physicsCpu": {
+        "samples": 189,
+        "medianMs": 1.5,
+        "p95Ms": 1.7000000178813934,
+        "maxMs": 2.300000011920929
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 189,
+      "airborneTicks": 0,
+      "landingTicks": 0,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 189,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.699999988079071
+      },
+      "gpuDraw": {
+        "samples": 23,
+        "medianMs": 0.936576,
+        "p95Ms": 1.022048,
+        "maxMs": 1.035456
+      },
+      "simulationTicks": 188,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00063830466283,
+      "medianMs": 16.69999999999709,
+      "p95Ms": 16.700000000000728,
+      "maxMs": 16.799999999999272
+    },
+    {
+      "section": "gravity-well through escape-bank",
+      "samples": 345,
+      "seconds": 5.749700000000001,
+      "physicsCpu": {
+        "samples": 346,
+        "medianMs": 1.5999999940395355,
+        "p95Ms": 2.100000023841858,
+        "maxMs": 2.7000000178813934
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 346,
+      "airborneTicks": 12,
+      "landingTicks": 12,
+      "boostTicks": 0,
+      "dodgeTicks": 0,
+      "cpuSubmission": {
+        "samples": 346,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.5
+      },
+      "gpuDraw": {
+        "samples": 44,
+        "medianMs": 0.95616,
+        "p95Ms": 1.429344,
+        "maxMs": 1.745536
+      },
+      "simulationTicks": 345,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.003130598118155,
+      "medianMs": 16.69999999999709,
+      "p95Ms": 16.799999999999272,
+      "maxMs": 16.80000000000291
+    },
+    {
+      "section": "launch-apron through catch-deck",
+      "samples": 309,
+      "seconds": 5.149800000000003,
+      "physicsCpu": {
+        "samples": 310,
+        "medianMs": 1.9000000059604645,
+        "p95Ms": 2.2000000178813934,
+        "maxMs": 2.7999999821186066
+      },
+      "minimumRacingCars": 6,
+      "attachedTicks": 246,
+      "airborneTicks": 64,
+      "landingTicks": 1,
+      "boostTicks": 28,
+      "dodgeTicks": 1,
+      "cpuSubmission": {
+        "samples": 310,
+        "medianMs": 0.30000001192092896,
+        "p95Ms": 0.4000000059604645,
+        "maxMs": 0.5999999940395355
+      },
+      "gpuDraw": {
+        "samples": 38,
+        "medianMs": 0.937376,
+        "p95Ms": 1.29072,
+        "maxMs": 1.3088
+      },
+      "simulationTicks": 309,
+      "maxTicksPerFrame": 1,
+      "meanFps": 60.00233018758007,
+      "medianMs": 16.69999999999709,
+      "p95Ms": 16.700000000004366,
+      "maxMs": 16.80000000000291
+    }
+  ]
+}
