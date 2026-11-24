@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172527"><meta name="game-revision" content="">
+<title>Derby Arena Preview — Circuit Overdrive</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/crash-lab.css">
+</head><body>
+<header><a href="./crash-lab.html">← Crash Lab</a><strong>Arena preview</strong><a href="./index.html">Circuit Overdrive</a></header>
+<main>
+  <section class="stage" aria-label="Arena view">
+    <canvas id="arena-world" aria-label="Three-dimensional demolition arena"></canvas>
+  </section>
+  <aside>
+    <div class="selectors">
+      <label>Arena<select id="arena-choice"></select></label>
+      <label>Camera<select id="arena-camera"><option value="raised">Raised</option><option value="reverse">Reverse angle</option></select></label>
+    </div>
+    <h1 id="arena-heading">The Crucible</h1>
+    <p>Run a fixed six-car launch to inspect the grid, walls and physical contacts.</p>
+    <div class="actions">
+      <button type="button" class="primary" id="arena-run" disabled>Run launch test</button>
+      <button type="button" id="arena-reset" disabled>Reset test</button>
+    </div>
+    <p id="arena-status" role="status">Loading arena…</p>
+    <section class="instrument" aria-label="Launch measurements">
+      <dl>
+        <dt>Car count</dt><dd id="arena-cars">0</dd>
+        <dt>Solid fixtures</dt><dd id="arena-fixtures">0</dd>
+        <dt>Simulation tick</dt><dd id="arena-tick">0</dd>
+        <dt>Car contacts</dt><dd id="arena-car-contacts">0</dd>
+        <dt>Fixture contacts</dt><dd id="arena-fixture-contacts">0</dd>
+        <dt>Latest normal impulse</dt><dd id="arena-impulse">—</dd>
+      </dl>
+    </section>
+  </aside>
+</main><script type="module" src="./src/derby-arena-preview.js"></script>
+</body></html>
