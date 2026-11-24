@@ -51,7 +51,7 @@ The release table records the published game through v0.9.0. Later milestones re
 | --- | --- | --- |
 | **NEON HORIZON** | Synthwave × chiptune · 120 BPM | Overdrive Speedway — playable now |
 | **IRON HORSEPOWER** | Industrial guitar-like chiptune · 150 BPM | Redline Ridge — playable now |
-| **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive (CO-010) — soundtrack catalogue only until mode exists |
+| **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive · Orbital Spine review candidate |
 | **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in v0.8.0 |
 | **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
 | **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |

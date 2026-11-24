@@ -99,7 +99,6 @@ function stopAudio() {
   audio.stop();
 }
 async function playAudio() {
-  if (race.course===orbital && !championship.celebrating) return;
   if (!sound || !(driving() || (championship.celebrating && document.hasFocus() && !document.hidden && !modalOpen()))) return;
   const generation = ++soundGeneration;
   if (!await audio.start() && generation === soundGeneration) {
@@ -436,11 +435,9 @@ function handleAction(action) {
     grid = false;
     if (race.course===orbital) startRocketRace(race);
     else if (race.course===skyway) startNitroRace(race); else startRace(race);
-    const score = championship.active ? 'championship' : race.course===skyway ? 'nitro' : environment === 'night' ? 'night' : race.course.id;
-    if (race.course!==orbital) {
-      audio.selectMusic(score);
-      recording = createRecording(race.course.id, race.seed, revision);
-    }
+    const score = championship.active ? 'championship' : race.course===orbital ? 'rocket' : race.course===skyway ? 'nitro' : environment === 'night' ? 'night' : race.course.id;
+    audio.selectMusic(score);
+    recording = createRecording(race.course.id, race.seed, revision);
     resetClock();
     playAudio();
     updatePanel();

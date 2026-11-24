@@ -6,7 +6,7 @@ Replay Theatre is a **source-bound, offline-first WebGL spectator**. It re-simul
 
 ## How to watch and share
 
-1. Finish a Speedway, Ridge or Nitro Skyway race in the main game. Select **Save replay**; your browser downloads a JSON file.
+1. Finish a Speedway, Ridge, Nitro Skyway or Orbital Spine race in the main game. Select **Save replay**; your browser downloads a JSON file.
 2. Open **Replay Theatre** from the game header or visit `replay-theatre.html` in a **stamped GitHub Pages or verified offline release**.
 3. Choose the JSON file using **Open local replay JSON**. The recording stays in your browser. No upload, account or server exists.
 4. Use Play/Pause, Restart, ±5 s, Timeline, ½×/1×/2×/4×, Follow car and Chase/High cameras.
@@ -28,6 +28,7 @@ A source stamp is mandatory. For touring v2, playback accepts either the **exact
 | v0.6.2 — Replay Theatre | `c97ee47e7577337032a55eb2e6ae53b855285573` |
 | v0.7.0 — World Overdrive Championship | `3295b82004b64328072ac5fa64f8ba2b55394416` |
 | v0.8.0 — Nightshift | `8204da56fce6b40ab33cb66c684a2e780f3e3001` |
+| v0.9.0 — Nitro Overdrive | `f7f45d1b6c3521dd728945b71cf20ab406603cb4` |
 
 The v0.7.0 authority audit compared committed trees with `git diff --exit-code v0.6.2 v0.7.0 -- src/ai.js src/contact.js src/field.js src/ridge.js src/speedway.js src/sim.js src/track.js src/replay.js tracks vendor`. Git returned exit code 0. The Node test `tests/replay-theatre.test.mjs` checks the individual blob IDs, including the vehicle, collision and math modules. Provenance tests cover every vendored file.
 
@@ -65,8 +66,23 @@ CO-007 also exports an ordinary v2 tape for each completed championship round in
 
 ## Nitro Skyway version 3
 
-Skyway recordings require the exact stamped source in both the archive and the viewer. The JSON object has exactly eight fields. `version` is 3, `discipline` is `nitro`, `rules` is 1, and `course` is `skyway`. The other fields are `revision` (40 lowercase hexadecimal digits), `seed` (unsigned 32-bit integer), `ticks` and `runs`.
+Skyway recordings require the exact stamped source or the audited published v0.9.0 source. The JSON object has exactly eight fields. `version` is 3, `discipline` is `nitro`, `rules` is 1, and `course` is `skyway`. The other fields are `revision` (40 lowercase hexadecimal digits), `seed` (unsigned 32-bit integer), `ticks` and `runs`.
 
 Each run contains `[length, throttle, brake, steer, drift, boost, recover]`. Length is a positive integer. The two pedals range from zero to one and steering from −1 to +1. The final three entries are booleans. All numbers must be finite. Run lengths must sum exactly to the declared 1–108,000 ticks. The viewer admits files up to 16 MiB, advances at most 240 ticks per seek frame and rejects an early or late flag. A recovery is recorded on the tick the race accepts it. Both new held controls are sampled during each 60 Hz update.
 
 The viewer reconstructs wheel contacts, charge, boost impulses, flight, landings and standings. Follow any car to see its energy and stunt points. Skyway uses its authored daylight environment. For terminal reconstruction run `node scripts/replay-drive.mjs FILE.json` from the matching clean checkout. The touring recorder and command decoder live byte-for-byte in `src/replay-v2.js`. The v0.7.0 to v0.8.0 authority comparison returned an empty diff. The test checks the historical simulator body after removing its one appended export declaration and verifies the other authority blob IDs.
+
+## Orbital Spine version 4
+
+Finish Rocket Overdrive and save the replay from the results screen. In Theatre, follow any of the six drivers to see fuel, boost and magnetic contact. The camera follows the interpolated chassis quaternion through walls and ceilings. Seeking and replay speed affect the spectator clock. The Theatre runs each physics tick in order and stays silent during playback.
+
+| Field | Orbital recording |
+| --- | --- |
+| `version`, `discipline`, `rules`, `course` | `4`, `"rocket"`, `1`, `"orbital"` |
+| `revision` | Exact matching 40-digit lowercase hexadecimal source SHA |
+| `seed`, `ticks` | Unsigned 32-bit race seed, 1–108,000 accepted ticks |
+| `runs` | Dense nonempty rows with exactly eight entries |
+
+A row is `[length, throttle, brake, steer, boost, assist, dodge, recover]`. Each positive integer length repeats the same accepted command. Pedals range from 0 to 1, steering from −1 to 1, boost and assist are booleans, and dodge is a signed integer equal to −1, 0 or +1. Recovery is a boolean for the accepted recovery request. All scalars must be finite. Row lengths must add up to the exact tick count. The file budget is 16 MiB and work per seek batch is at most 240 ticks. World positions, surface IDs, wheel forces, standings, and file-supplied code are never accepted as overrides. The race reconstructs these from the command stream and calibrated course.
+
+The published v0.9.0 SHA `f7f45d1b6c3521dd728945b71cf20ab406603cb4` is an audited touring and Nitro source. The pin test verifies the complete Nitro solver, Skyway, simulation, shared AI, contact code, course data and pinned engine blobs. A separate Node v22.18.0 run of that archived source reproduced the 3,925-tick Skyway drive from seed 27. Its 952 command runs hash to `596ad8d87cc8a1546bd2486a22d6a045be272a7c8d66536350aa56b28a7cf20f` using compact JSON. The final six entrants hash to `5a3295dde8531429690bc46776a5d08efa93961c9c7e784303c3800015da4bad` in that runtime. v4 requires the exact source. A revision stamp identifies the expected implementation and does not authenticate the driver.
