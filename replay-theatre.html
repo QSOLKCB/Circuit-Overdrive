@@ -20,12 +20,12 @@
   <section id="replay-empty" class="theatre-intro" aria-label="Choose a race replay">
     <div class="eyebrow"><i class="checks" aria-hidden="true"></i> CO-REPLAY-001</div>
     <h1>Replay<br><em>Theatre</em></h1>
-    <p>Relive every overtake, corner and finish with all six cars. Import a saved Circuit Overdrive race, then watch it unfold using the original race simulation.</p>
+    <p>Import a saved race or Crash Lab experiment. Follow a car through the original drive and inspect its finish or impact measurements.</p>
     <p>Share the <code>.json</code> with a friend. Everything runs locally; no uploads or online accounts.</p>
   </section>
   <aside class="theatre-telemetry" id="replay-telemetry" hidden aria-label="Race telemetry">
     <h2 id="replay-title">Race replay</h2><p id="replay-nitro" hidden></p><p id="replay-rocket" hidden></p>
-    <dl>
+    <div id="race-instruments"><dl>
       <dt>Camera car</dt><dd id="replay-driver">#27 Player</dd>
       <dt>Position</dt><dd id="replay-place">P6 / 6</dd>
       <dt>Speed</dt><dd id="replay-speedometer">0 km/h</dd>
@@ -33,7 +33,12 @@
       <dt>Race time</dt><dd id="replay-racetime">0:00.000</dd>
       <dt>Lap / checkpoint</dt><dd id="replay-progress">—</dd>
     </dl>
-    <ol id="replay-standing" aria-label="Live six-car standings"></ol>
+    <ol id="replay-standing" aria-label="Live six-car standings"></ol></div>
+    <section id="crash-instruments" hidden>
+      <p id="theatre-lab-state"></p><p id="theatre-lab-damage"></p>
+      <label for="theatre-impacts">Recorded impacts</label><select id="theatre-impacts"></select>
+      <p id="theatre-hit"></p><button id="theatre-hit-seek" type="button">Seek to impact</button>
+    </section>
   </aside>
 </main>
 <section class="theatre-console" aria-label="Replay controls">

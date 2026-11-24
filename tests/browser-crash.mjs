@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Real keyboard events, normal requestAnimationFrame and the shipped FixedClock.
 import assert from 'node:assert/strict';
+import {verifyCrashDownloads} from './crash-browser-replay.mjs';
 import {createHash} from 'node:crypto';
 import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
@@ -49,7 +50,8 @@ try{
     const bytes=await page.screenshot(dir?{path:dir+'/'+scenario+'.png'}:{});
     const screenshotSha256=createHash('sha256').update(bytes).digest('hex');
     if(dir)await writeFile(dir+'/'+scenario+'-live.json',JSON.stringify({revision,screenshotSha256,...live}));
-    results.push({scenario,revision,ticks:live.ticks,result:live.result,impactTick:hit.tick,zone:face,
+    const hashes=await verifyCrashDownloads(page,base,live,revision,dir);
+    results.push({scenario,revision,...hashes,ticks:live.ticks,result:live.result,impactTick:hit.tick,zone:face,
       impulse:hit.normalImpulse,screenshotSha256});
     await page.locator('#lab-reset').click();assert.equal(await page.locator('#lab-tick').textContent(),'0');
     assert.equal(await page.locator('#zone-'+face).getAttribute('data-damage'),'0');

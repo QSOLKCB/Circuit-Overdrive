@@ -3,6 +3,7 @@ import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {attachDriverInput} from './driver-input.js';
 import {savedMapper} from './profiles.js';
 import {TouringAudio,DEFAULT_VOLUMES} from './audio.js';
+import {crashRecorder,crashReceipt} from './crash-replay.js';
 import {CrashVoice} from './crash-audio.js';
 import {createCrashScene} from './crash-scene.js';
 import {createTrial,startTrial,stepTrial,latestImpact,scenarios} from './crash-trial.js';
@@ -13,7 +14,7 @@ const clock=new FixedClock({step:1/60,maxFrame:.1,maxSteps:6});
 const stamp=document.querySelector('meta[name="game-revision"]').content||null;
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 const audio=new TouringAudio({voice:new CrashVoice()});
-let trial,scene,paused=false,muted=false,lost=false,lastTime=null,tail=0;
+let trial,recorder,scene,paused=false,muted=false,lost=false,lastTime=null,tail=0;
 const set=(id,text)=>{if($(id).textContent!==text)$(id).textContent=text;};
 const status=text=>set('lab-status',text);
 const running=()=>trial?.phase==='running' && !paused && !lost;
@@ -41,6 +42,8 @@ for(const [name,initial] of Object.entries(DEFAULT_VOLUMES)){
 }
 function syncButtons(){
   $('lab-arm').disabled=lost || !scene || trial.phase==='finished';
+  $('lab-save').disabled=$('lab-receipt').disabled=!stamp || trial.phase!=='finished';
+  set('lab-export-note',stamp?'':'Replay export requires a source-stamped package.');
   set('lab-arm',running()?'Pause':paused?'Resume':'Arm controls');
   $('lab-touch').hidden=input.source!=='touch' || !running();
 }
@@ -72,7 +75,7 @@ function reset(){
   const id=$('scenario').value;
   const rebuild=!trial || trial.scenario!==id || !scene;
   input.clear();audio.stop();tail=0;paused=false;clock.setPaused(true);
-  trial=createTrial(id,27,stamp);
+  trial=createTrial(id,27,stamp);recorder=crashRecorder(trial);
   if(rebuild && !lost){
     scene?.dispose();scene=null;
     try{scene=createCrashScene(canvas,id,matchMedia('(pointer: coarse)').matches?.8:1);}
@@ -106,7 +109,7 @@ function frame(ms){
     const {command,camera}=input.sample();
     if(!running())return;
     if(camera){const e=$('lab-camera');e.selectedIndex=(e.selectedIndex+1)%e.length;}
-    stepTrial(trial,command);
+    stepTrial(trial,command);recorder.record(command);
     if(!muted)audio.update(trial,command);
     if(trial.phase==='finished'){
       clock.setPaused(true);input.clear();tail=.32;
@@ -133,6 +136,16 @@ $('lab-input').onchange=()=>{
     $('lab-input').value=input.source;status('Input unavailable · '+input.source+' selected');
   }
   syncButtons();
+};
+function download(data,name){
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$('lab-save').onclick=()=>download(recorder.export(),'crash-'+trial.scenario+'-replay.json');
+$('lab-receipt').onclick=async()=>{
+  const completed=trial;
+  try{download(await crashReceipt(recorder.export(),completed,navigator.userAgent),'crash-'+completed.scenario+'-receipt.json');}
+  catch(error){status('Evidence export unavailable · '+error.message);}
 };
 function suspend(reason){pause(reason);input.clear();audio.stop();tail=0;lastTime=null;}
 window.addEventListener('blur',()=>suspend('Window inactive'));
