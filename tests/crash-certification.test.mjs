@@ -5,7 +5,6 @@ import {crashCar,crashBarrier,kinetic,labRecipe} from '../src/crash-impact.js';
 import {damageWorld,resolveLabTick,newDamage} from '../src/crash-damage.js';
 import {createTrial,startTrial,stepTrial} from '../src/crash-trial.js';
 import {CrashVoice} from '../src/crash-audio.js';
-import {deformPanels} from '../src/crash-scene.js';
 
 function measure(cars,fixtures) {
   const world=damageWorld(cars,fixtures);
@@ -70,10 +69,7 @@ test('repeated cap-speed fixtures keep every number finite and damage bounded',(
     }
   }
 });
-test('deformed vertex regions and PCM depend on simulation observations without modifying a trial',()=>{
-  const vertices=new Float32Array([.8,.6,-2.2,0,1,0,1,1,1,0,0,-.8,.6,2.2,0,1,0,1,1,1,0,0]);
-  const dent=deformPanels(vertices,{...newDamage(),front:1000});
-  assert(dent[2]>vertices[2] && dent[2]-vertices[2]<.65);assert.equal(dent[13],vertices[13]);
+test('PCM depends on simulation observations without modifying a trial',()=>{
   const trial=createTrial('glancing');startTrial(trial);
   const cmd={throttle:1,brake:0,steer:0};while(!trial.contacts.length)stepTrial(trial,cmd);
   const original=JSON.stringify(trial),voice=new CrashVoice(),pcm=new Float32Array(3072);

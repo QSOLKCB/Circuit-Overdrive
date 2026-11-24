@@ -1,0 +1,535 @@
+{
+  "revision": "1f0527098b9eb9c27c678d9ad4bfa2b276374551",
+  "browser": "158.0.8127.36",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "width": 1920,
+  "height": 1080,
+  "viewport": {
+    "width": 2320,
+    "height": 1134
+  },
+  "cycles": [
+    {
+      "scenario": "wall",
+      "result": "settled",
+      "ticks": 274,
+      "frames": 275,
+      "intervalMs": {
+        "samples": 274,
+        "median": 16.699999999999818,
+        "p95": 16.700000000000728,
+        "worst": 16.800000000000182
+      },
+      "physicsMs": {
+        "samples": 274,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.5
+      },
+      "solverMs": {
+        "samples": 274,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.5
+      },
+      "contactPhysicsMs": {
+        "samples": 1,
+        "median": 0.5,
+        "p95": 0.5,
+        "worst": 0.5
+      },
+      "contactSolverMs": {
+        "samples": 1,
+        "median": 0.5,
+        "p95": 0.5,
+        "worst": 0.5
+      },
+      "drawCpuMs": {
+        "samples": 275,
+        "median": 0.20000001788139343,
+        "p95": 0.3999999761581421,
+        "worst": 7.199999988079071
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.500608,
+        "p95": 0.592256,
+        "worst": 0.827584
+      },
+      "candidatesPerTick": {
+        "samples": 274,
+        "median": 3,
+        "p95": 3,
+        "worst": 6
+      },
+      "contactsPerTick": {
+        "samples": 274,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "damageEventsPerTick": {
+        "samples": 274,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 1,
+      "damageEvents": 1,
+      "retainedBuffers": 10,
+      "retainedBytes": 844560,
+      "programs": 2,
+      "meshes": 9,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 12,
+      "heapBytes": 4073668,
+      "audio": {
+        "uploads": 14,
+        "deletes": 4,
+        "allocatedBytes": 1072920,
+        "retainedBytes": 844560,
+        "programs": 2,
+        "deletedPrograms": 0,
+        "pcm": 4,
+        "started": 78,
+        "ended": 78,
+        "peakVoices": 3
+      }
+    },
+    {
+      "scenario": "glancing",
+      "result": "impact and run-off",
+      "ticks": 325,
+      "frames": 326,
+      "intervalMs": {
+        "samples": 325,
+        "median": 16.699999999999818,
+        "p95": 16.700000000000728,
+        "worst": 16.80000000000109
+      },
+      "physicsMs": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.20000001788139343
+      },
+      "solverMs": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "contactPhysicsMs": {
+        "samples": 20,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.20000001788139343
+      },
+      "contactSolverMs": {
+        "samples": 20,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "worst": 5.9000000059604645
+      },
+      "gpuDrawMs": {
+        "samples": 41,
+        "median": 0.525184,
+        "p95": 0.542912,
+        "worst": 3.864928
+      },
+      "candidatesPerTick": {
+        "samples": 325,
+        "median": 3,
+        "p95": 6,
+        "worst": 9
+      },
+      "contactsPerTick": {
+        "samples": 325,
+        "median": 0,
+        "p95": 1,
+        "worst": 2
+      },
+      "damageEventsPerTick": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 21,
+      "damageEvents": 1,
+      "retainedBuffers": 10,
+      "retainedBytes": 844560,
+      "programs": 2,
+      "meshes": 9,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 12,
+      "heapBytes": 4248768,
+      "audio": {
+        "uploads": 29,
+        "deletes": 19,
+        "allocatedBytes": 2149008,
+        "retainedBytes": 844560,
+        "programs": 4,
+        "deletedPrograms": 2,
+        "pcm": 4,
+        "started": 169,
+        "ended": 169,
+        "peakVoices": 3
+      }
+    },
+    {
+      "scenario": "opposing",
+      "result": "post-impact run complete",
+      "ticks": 360,
+      "frames": 361,
+      "intervalMs": {
+        "samples": 360,
+        "median": 16.69999999999891,
+        "p95": 16.700000000000728,
+        "worst": 16.80000000000109
+      },
+      "physicsMs": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.5
+      },
+      "solverMs": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "contactPhysicsMs": {
+        "samples": 118,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.20000001788139343
+      },
+      "contactSolverMs": {
+        "samples": 118,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.10000002384185791
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.30000001192092896,
+        "p95": 0.4000000059604645,
+        "worst": 10.199999988079071
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.527648,
+        "p95": 0.762304,
+        "worst": 3.779744
+      },
+      "candidatesPerTick": {
+        "samples": 360,
+        "median": 9,
+        "p95": 18,
+        "worst": 18
+      },
+      "contactsPerTick": {
+        "samples": 360,
+        "median": 0,
+        "p95": 1,
+        "worst": 1
+      },
+      "damageEventsPerTick": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 118,
+      "damageEvents": 2,
+      "retainedBuffers": 15,
+      "retainedBytes": 1058400,
+      "programs": 2,
+      "meshes": 14,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 24,
+      "heapBytes": 4621248,
+      "audio": {
+        "uploads": 60,
+        "deletes": 45,
+        "allocatedBytes": 4116624,
+        "retainedBytes": 1058400,
+        "programs": 6,
+        "deletedPrograms": 4,
+        "pcm": 4,
+        "started": 269,
+        "ended": 269,
+        "peakVoices": 3
+      }
+    },
+    {
+      "scenario": "wall",
+      "result": "settled",
+      "ticks": 273,
+      "frames": 274,
+      "intervalMs": {
+        "samples": 273,
+        "median": 16.700000000000728,
+        "p95": 16.799999999999272,
+        "worst": 16.80000000000291
+      },
+      "physicsMs": {
+        "samples": 273,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "solverMs": {
+        "samples": 273,
+        "median": 0,
+        "p95": 0,
+        "worst": 0.09999999403953552
+      },
+      "contactPhysicsMs": {
+        "samples": 1,
+        "median": 0.09999999403953552,
+        "p95": 0.09999999403953552,
+        "worst": 0.09999999403953552
+      },
+      "contactSolverMs": {
+        "samples": 1,
+        "median": 0.09999999403953552,
+        "p95": 0.09999999403953552,
+        "worst": 0.09999999403953552
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "worst": 4.800000011920929
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.526624,
+        "p95": 3.745472,
+        "worst": 4.4472
+      },
+      "candidatesPerTick": {
+        "samples": 273,
+        "median": 3,
+        "p95": 3,
+        "worst": 6
+      },
+      "contactsPerTick": {
+        "samples": 273,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "damageEventsPerTick": {
+        "samples": 273,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 1,
+      "damageEvents": 1,
+      "retainedBuffers": 10,
+      "retainedBytes": 844560,
+      "programs": 2,
+      "meshes": 9,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 12,
+      "heapBytes": 4405320,
+      "audio": {
+        "uploads": 74,
+        "deletes": 64,
+        "allocatedBytes": 5189544,
+        "retainedBytes": 844560,
+        "programs": 8,
+        "deletedPrograms": 6,
+        "pcm": 4,
+        "started": 347,
+        "ended": 347,
+        "peakVoices": 3
+      }
+    },
+    {
+      "scenario": "glancing",
+      "result": "impact and run-off",
+      "ticks": 325,
+      "frames": 326,
+      "intervalMs": {
+        "samples": 325,
+        "median": 16.700000000000728,
+        "p95": 16.700000000000728,
+        "worst": 16.80000000000291
+      },
+      "physicsMs": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "solverMs": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "contactPhysicsMs": {
+        "samples": 20,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.10000002384185791
+      },
+      "contactSolverMs": {
+        "samples": 20,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.10000002384185791
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.19999998807907104,
+        "p95": 0.30000001192092896,
+        "worst": 5.4000000059604645
+      },
+      "gpuDrawMs": {
+        "samples": 41,
+        "median": 0.524992,
+        "p95": 0.676736,
+        "worst": 3.766016
+      },
+      "candidatesPerTick": {
+        "samples": 325,
+        "median": 3,
+        "p95": 6,
+        "worst": 9
+      },
+      "contactsPerTick": {
+        "samples": 325,
+        "median": 0,
+        "p95": 1,
+        "worst": 2
+      },
+      "damageEventsPerTick": {
+        "samples": 325,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 21,
+      "damageEvents": 1,
+      "retainedBuffers": 10,
+      "retainedBytes": 844560,
+      "programs": 2,
+      "meshes": 9,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 12,
+      "heapBytes": 4553236,
+      "audio": {
+        "uploads": 89,
+        "deletes": 79,
+        "allocatedBytes": 6265632,
+        "retainedBytes": 844560,
+        "programs": 10,
+        "deletedPrograms": 8,
+        "pcm": 4,
+        "started": 438,
+        "ended": 438,
+        "peakVoices": 3
+      }
+    },
+    {
+      "scenario": "opposing",
+      "result": "post-impact run complete",
+      "ticks": 360,
+      "frames": 361,
+      "intervalMs": {
+        "samples": 360,
+        "median": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "worst": 16.80000000000291
+      },
+      "physicsMs": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.20000001788139343
+      },
+      "solverMs": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0.09999999403953552,
+        "worst": 0.10000002384185791
+      },
+      "contactPhysicsMs": {
+        "samples": 118,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.20000001788139343
+      },
+      "contactSolverMs": {
+        "samples": 118,
+        "median": 0,
+        "p95": 0.10000002384185791,
+        "worst": 0.10000002384185791
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.30000001192092896,
+        "p95": 0.4000000059604645,
+        "worst": 9.400000005960464
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.527776,
+        "p95": 3.756992,
+        "worst": 7.873408
+      },
+      "candidatesPerTick": {
+        "samples": 360,
+        "median": 9,
+        "p95": 18,
+        "worst": 18
+      },
+      "contactsPerTick": {
+        "samples": 360,
+        "median": 0,
+        "p95": 1,
+        "worst": 1
+      },
+      "damageEventsPerTick": {
+        "samples": 360,
+        "median": 0,
+        "p95": 0,
+        "worst": 1
+      },
+      "accepted": 118,
+      "damageEvents": 2,
+      "retainedBuffers": 15,
+      "retainedBytes": 1058400,
+      "programs": 2,
+      "meshes": 14,
+      "sparkMeshesPerScene": 1,
+      "flashFrames": 24,
+      "heapBytes": 4499676,
+      "audio": {
+        "uploads": 120,
+        "deletes": 105,
+        "allocatedBytes": 8233248,
+        "retainedBytes": 1058400,
+        "programs": 12,
+        "deletedPrograms": 10,
+        "pcm": 4,
+        "started": 538,
+        "ended": 538,
+        "peakVoices": 3
+      }
+    }
+  ]
+}
