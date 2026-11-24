@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import {LitRenderer} from '../vendor/vanillajs/modules/render-lit/index.js';
-import {clamp} from '../vendor/vanillajs/modules/math/index.js';
 import {box,lettering,quad,triangle} from './geometry.js';
 import {bodyTransform,touringMeshes,wheelTransforms} from './touring-car.js';
 import {rideHeight,carRecipe} from './sim.js';
 import {lookAt} from './camera.js';
 import {scenarios,latestImpact} from './crash-trial.js';
+import {IMPACT_PANEL_ZONES,createImpactPanelGeometry,deformImpactPanel} from './impact-panels.js';
 
 const zinc=[.45,.53,.54],ink=[.055,.085,.095],paint=[.95,.87,.66],orange=[1,.28,.045],teal=[.09,.46,.49];
 const at=(x,y,z)=>[x,y,-z];
@@ -55,26 +55,52 @@ function facility(scenario) {
   }
   return new Float32Array(out);
 }
-export function deformPanels(source,damage) {
-  const out=new Float32Array(source);
-  for(let i=0;i<out.length;i+=11) {
-    const x=source[i],z=source[i+2],front=clamp((-z-.62)/1.58,0,1)*damage.front/1000;
-    const rear=clamp((z-.68)/1.52,0,1)*damage.rear/1000;
-    const side=clamp((Math.abs(x)-.46)/.52,0,1)*(x<0?damage.left:damage.right)/1000;
-    out[i]-=Math.sign(x)*.28*side;out[i+1]+=.22*front-.09*rear;out[i+2]+=.64*front-.53*rear;
+function impactBody(renderer,raw,livery) {
+  const zones=IMPACT_PANEL_ZONES.map(name=>({name,damage:0,parts:[]}));
+  function layer(vertices,options) {
+    const {fixed,panels}=createImpactPanelGeometry(vertices,options);
+    const parts=[];
+    if(fixed.length)parts.push({mesh:renderer.mesh(fixed)});
+    for(const zone of zones){
+      const panel=panels[zone.name];
+      if(!panel)continue;
+      const part={mesh:renderer.mesh(panel.clean),panel,zone};
+      parts.push(part);
+      zone.parts.push(part);
+    }
+    return parts;
   }
-  return out;
+  const trim=new Float32Array(raw.detail.length+livery.graphics.length);
+  trim.set(raw.detail);
+  trim.set(livery.graphics,raw.detail.length);
+  return {
+    zones,paint:livery.paint,bakedPaint:{...livery.paint,color:[1,1,1]},
+    shell:layer(raw.shell,{paint:livery.paint.color,exposedMetal:true}),
+    trim:layer(trim),lamps:layer(raw.lamps),glass:renderer.mesh(raw.glass)
+  };
+}
+function drawImpactBody(renderer,rig,damage,root) {
+  // One canonical presentation per ledger value. This also covers seek,
+  // pause, reset and context restoration without a separate animation clock.
+  for(const zone of rig.zones){
+    const value=damage[zone.name];
+    if(value===zone.damage)continue;
+    for(const {mesh,panel} of zone.parts)renderer.update(mesh,deformImpactPanel(panel,value));
+    zone.damage=value;
+  }
+  for(const {mesh,zone} of rig.shell)
+    renderer.draw(mesh,{matrix:root,material:zone?.damage?rig.bakedPaint:rig.paint});
+  for(const {mesh} of rig.trim)renderer.draw(mesh,{matrix:root});
+  const material={emission:.32*(1-damage.front/1000)};
+  for(const {mesh} of rig.lamps)renderer.draw(mesh,{matrix:root,material});
 }
 export function createCrashScene(canvas,scenario,pixelRatio=1) {
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   try {
     const worldMesh=renderer.mesh(facility(scenario));
     const raw=touringMeshes({mesh:vertices=>vertices}),tyre=renderer.mesh(raw.tyre),rim=renderer.mesh(raw.rim);
-    const cars=Array.from({length:scenario==='opposing'?2:1},(_,i)=>{
-      const livery=raw.liveries[i===0?5:0];
-      const parts=[raw.shell,raw.detail,livery.graphics,raw.lamps,raw.glass].map(vertices=>({vertices,mesh:renderer.mesh(vertices)}));
-      return {parts,paint:livery.paint,key:'0/0/0/0'};
-    });
+    const cars=Array.from({length:scenario==='opposing'?2:1},(_,i)=>
+      impactBody(renderer,raw,raw.liveries[i===0?5:0]));
     const sparkle=[];for(let i=0;i<8;i++){
       const a=2.4*i,r=.35+i*.09;
       triangle(sparkle,[0,.18,0],[Math.cos(a)*r,.36+i*.09,Math.sin(a)*r],[.08,.22,0],orange);
@@ -102,16 +128,12 @@ export function createCrashScene(canvas,scenario,pixelRatio=1) {
         }
         renderer.begin(eye,lookAt(eye,target),light);renderer.draw(worldMesh);
         for(let i=0;i<poses.length;i++){
-          const body=trial.world.cars[i],rig=cars[i],d=body.damage;
-          const key=[d.front,d.rear,d.left,d.right].join('/');
-          if(key!==rig.key){for(const part of rig.parts) renderer.update(part.mesh,deformPanels(part.vertices,d));rig.key=key;}
-          const root=bodyTransform(poses[i]),[shell,detail,graphics,lamps,glass]=rig.parts;
-          renderer.draw(shell.mesh,{matrix:root,material:rig.paint}); renderer.draw(detail.mesh,{matrix:root});
-          renderer.draw(graphics.mesh,{matrix:root});renderer.draw(lamps.mesh,{matrix:root,material:{emission:.32*(1-d.front/1000)}});
+          const body=trial.world.cars[i],rig=cars[i],root=bodyTransform(poses[i]);
+          drawImpactBody(renderer,rig,body.damage,root);
           for(const matrix of wheelTransforms(raw.rig,poses[i],root)){
             renderer.draw(tyre,{matrix,material:raw.tyreMaterial});renderer.draw(rim,{matrix,material:raw.rimMaterial});
           }
-          renderer.draw(glass.mesh,{matrix:root,material:{pattern:'glass',opacity:.80}});
+          renderer.draw(rig.glass,{matrix:root,material:{pattern:'glass',opacity:.80}});
         }
         const hit=latestImpact(trial,follow),age=hit ? trial.world.tick-hit.tick : 12;
         if(!reducedMotion && age<12 && hit.normalImpulse>500){
