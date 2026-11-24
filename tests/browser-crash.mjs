@@ -15,7 +15,8 @@ try{
   let page;
   for(const scenario of ['wall','glancing','opposing']){
     if(page)await page.context().close();
-    page=await browser.newPage({viewport:{width:1100,height:760},acceptDownloads:true});
+    const context=await browser.newContext({viewport:{width:1100,height:760},acceptDownloads:true});
+    page=await context.newPage();
     page.on('pageerror',err=>errors.push(err.message));
     await page.route('**/*',async route=>{
       const url=route.request().url();
