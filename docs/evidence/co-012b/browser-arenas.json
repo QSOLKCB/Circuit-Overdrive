@@ -1,0 +1,729 @@
+{
+  "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+  "browser": "158.0.8127.36",
+  "node": "v22.18.0",
+  "native": true,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "width": 1920,
+  "height": 1080,
+  "results": [
+    {
+      "id": "crucible",
+      "tick": 480,
+      "fixtures": 8,
+      "cars": 6,
+      "carContacts": 745,
+      "fixtureContacts": 301,
+      "first": {
+        "vehicle": {
+          "id": "97/2/3/0",
+          "tick": 97,
+          "time": 0.005400978823233845,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            2,
+            3
+          ],
+          "kind": "vehicle",
+          "material": "bodywork",
+          "point": [
+            0.17499999999999916,
+            0.5000000000000004
+          ],
+          "normal": [
+            -0.17948717942469558,
+            0.9837603124858042
+          ],
+          "relativeVelocity": [
+            2.31437642091113e-15,
+            -37.796635283291295
+          ],
+          "relativeSpeed": 37.796635283291295,
+          "closing": 37.18282973720262,
+          "normalImpulse": 24617.004276752865,
+          "tangentialImpulse": -2855.491533118741,
+          "effectiveMass": 580.7482527091006,
+          "normalEnergy": 401460.4730975835,
+          "preKinetic": 428575.69162144215,
+          "postKinetic": 6043.810861124253,
+          "dissipated": 422531.8807603179,
+          "sites": [
+            {
+              "id": 2,
+              "x": 0.17499999999999916,
+              "z": -2.184166305007564,
+              "zone": "front",
+              "damage": {
+                "front": 166,
+                "engine": 149,
+                "steering": 63,
+                "tyres": 38,
+                "suspension": 73
+              }
+            },
+            {
+              "id": 3,
+              "x": 0.17499999999999905,
+              "z": -2.184166305007564,
+              "zone": "front",
+              "damage": {
+                "front": 166,
+                "engine": 149,
+                "steering": 63,
+                "tyres": 38,
+                "suspension": 73
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "97/2/3/0",
+          "discipline": "derby"
+        },
+        "fixed": {
+          "id": "276/1/84/0",
+          "tick": 276,
+          "time": 0.0018347698472371027,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            1,
+            84
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            -15.237763725094062,
+            30.3
+          ],
+          "normal": [
+            0,
+            -1
+          ],
+          "relativeVelocity": [
+            -1.3631565221447646,
+            24.38907503959487
+          ],
+          "relativeSpeed": 24.427140172170283,
+          "closing": 24.38907503959487,
+          "normalImpulse": 33257.72362258815,
+          "tangentialImpulse": 1173.6102886248786,
+          "effectiveMass": 1196.1684371727092,
+          "normalEnergy": 355756.63029710937,
+          "preKinetic": 358011.12885065057,
+          "postKinetic": 6752.03700245282,
+          "dissipated": 351259.09184819774,
+          "sites": [
+            {
+              "id": 1,
+              "x": -0.05439872672668623,
+              "z": -2.1984812676834196,
+              "zone": "front",
+              "damage": {
+                "front": 291,
+                "engine": 261,
+                "steering": 110,
+                "tyres": 66,
+                "suspension": 128
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "276/1/84/0",
+          "discipline": "derby"
+        }
+      },
+      "fixedEntries": {
+        "80": {
+          "id": "278/0/80/2",
+          "tick": 278,
+          "time": 0.009269568270132296,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            0,
+            80
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            -14.006344491515263,
+            -30.3
+          ],
+          "normal": [
+            1.0605115459105968e-15,
+            1
+          ],
+          "relativeVelocity": [
+            1.3812129773500494,
+            -24.71297908517778
+          ],
+          "relativeSpeed": 24.751547114336805,
+          "closing": 24.71297908517778,
+          "normalImpulse": 33699.41164139908,
+          "tangentialImpulse": 1189.1757301581597,
+          "effectiveMass": 1196.1685114064578,
+          "normalEnergy": 365268.7960862683,
+          "preKinetic": 367583.4704489795,
+          "postKinetic": 6932.5568396841545,
+          "dissipated": 360650.9136092954,
+          "sites": [
+            {
+              "id": 0,
+              "x": -0.05439819806824904,
+              "z": -2.198481297225033,
+              "zone": "front",
+              "damage": {
+                "front": 299,
+                "engine": 269,
+                "steering": 113,
+                "tyres": 68,
+                "suspension": 131
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "278/0/80/2",
+          "discipline": "derby"
+        },
+        "84": {
+          "id": "276/1/84/0",
+          "tick": 276,
+          "time": 0.0018347698472371027,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            1,
+            84
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            -15.237763725094062,
+            30.3
+          ],
+          "normal": [
+            0,
+            -1
+          ],
+          "relativeVelocity": [
+            -1.3631565221447646,
+            24.38907503959487
+          ],
+          "relativeSpeed": 24.427140172170283,
+          "closing": 24.38907503959487,
+          "normalImpulse": 33257.72362258815,
+          "tangentialImpulse": 1173.6102886248786,
+          "effectiveMass": 1196.1684371727092,
+          "normalEnergy": 355756.63029710937,
+          "preKinetic": 358011.12885065057,
+          "postKinetic": 6752.03700245282,
+          "dissipated": 351259.09184819774,
+          "sites": [
+            {
+              "id": 1,
+              "x": -0.05439872672668623,
+              "z": -2.1984812676834196,
+              "zone": "front",
+              "damage": {
+                "front": 291,
+                "engine": 261,
+                "steering": 110,
+                "tyres": 66,
+                "suspension": 128
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "276/1/84/0",
+          "discipline": "derby"
+        }
+      },
+      "fieldSha256": "1d2167b1a3eedb724cbe218f5ebfd6b450bb6115a60c8716a2b0087d0fd6b4ab",
+      "resources": {
+        "uploads": 26,
+        "buffers": 26,
+        "bytes": 867528,
+        "programs": 2
+      },
+      "mesh": {
+        "frames": 4,
+        "frameDraws": 96,
+        "totalDraws": 384,
+        "uploads": 25,
+        "skippedIdentical": 0,
+        "vertices": 19716,
+        "bytes": 867504,
+        "meshes": 25,
+        "profile": "high",
+        "lost": false,
+        "disposed": false
+      },
+      "intervalMs": {
+        "samples": 480,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "cpuDrawMs": {
+        "samples": 481,
+        "median": 0.8,
+        "p95": 0.9,
+        "worst": 1.3
+      },
+      "gpuDrawMs": {
+        "samples": 60,
+        "median": 1.2213,
+        "p95": 1.565,
+        "worst": 3.4822
+      },
+      "physicsTickMs": {
+        "samples": 480,
+        "median": 0.1,
+        "p95": 0.1,
+        "worst": 0.2
+      },
+      "peak": {
+        "passes": 5,
+        "pairChecks": 315,
+        "rejectedPairs": 295,
+        "candidates": 120,
+        "sweepSamples": 136,
+        "accepted": 4
+      }
+    },
+    {
+      "id": "iron-pit",
+      "tick": 480,
+      "fixtures": 10,
+      "cars": 6,
+      "carContacts": 830,
+      "fixtureContacts": 581,
+      "first": {
+        "vehicle": {
+          "id": "94/2/3/0",
+          "tick": 94,
+          "time": 0.004207459369631072,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            2,
+            3
+          ],
+          "kind": "vehicle",
+          "material": "bodywork",
+          "point": [
+            0.14999999999999925,
+            0.5
+          ],
+          "normal": [
+            -0.35897435897435825,
+            0.933347421702631
+          ],
+          "relativeVelocity": [
+            2.244458392942759e-15,
+            -36.65478723343642
+          ],
+          "relativeSpeed": 36.65478723343642,
+          "closing": 34.2116511573864,
+          "normalImpulse": 20661.113846011896,
+          "tangentialImpulse": -4958.667323042855,
+          "effectiveMass": 529.7547315700385,
+          "normalEnergy": 310022.2892205285,
+          "preKinetic": 403072.0281385481,
+          "postKinetic": 8349.394807768833,
+          "dissipated": 394722.63333077927,
+          "sites": [
+            {
+              "id": 2,
+              "x": 0.34999999999999926,
+              "z": -2.135013736160065,
+              "zone": "front",
+              "damage": {
+                "front": 127,
+                "engine": 114,
+                "steering": 48,
+                "tyres": 29,
+                "suspension": 55
+              }
+            },
+            {
+              "id": 3,
+              "x": 0.34999999999999915,
+              "z": -2.135013736160065,
+              "zone": "front",
+              "damage": {
+                "front": 127,
+                "engine": 114,
+                "steering": 48,
+                "tyres": 29,
+                "suspension": 55
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "94/2/3/0",
+          "discipline": "derby"
+        },
+        "fixed": {
+          "id": "247/3/84/2",
+          "tick": 247,
+          "time": 0.007933480298756405,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            3,
+            84
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            0.5602917635350033,
+            25.29999999999999
+          ],
+          "normal": [
+            2.2535870350599895e-15,
+            -1
+          ],
+          "relativeVelocity": [
+            -0.5750225260806153,
+            22.621490450926043
+          ],
+          "relativeSpeed": 22.6287976067408,
+          "closing": 22.621490450926043,
+          "normalImpulse": 30925.700756013826,
+          "tangentialImpulse": 495.6952265450658,
+          "effectiveMass": 1199.205142541939,
+          "normalEnergy": 306835.7212019136,
+          "preKinetic": 307237.5175720328,
+          "postKinetic": 5973.7306282751015,
+          "dissipated": 301263.78694375773,
+          "sites": [
+            {
+              "id": 3,
+              "x": -0.024745419119587237,
+              "z": -2.199685931073502,
+              "zone": "front",
+              "damage": {
+                "front": 249,
+                "engine": 224,
+                "steering": 94,
+                "tyres": 57,
+                "suspension": 109
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "247/3/84/2",
+          "discipline": "derby"
+        }
+      },
+      "fixedEntries": {
+        "80": {
+          "id": "250/2/80/0",
+          "tick": 250,
+          "time": 0.001725291625257949,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            2,
+            80
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            -0.23487413645352248,
+            -25.299999999999997
+          ],
+          "normal": [
+            1.640478797580451e-15,
+            1
+          ],
+          "relativeVelocity": [
+            0.587781145168238,
+            -23.13034312206546
+          ],
+          "relativeSpeed": 23.137810173374152,
+          "closing": 23.13034312206546,
+          "normalImpulse": 31621.352936560565,
+          "tangentialImpulse": 506.77349444267736,
+          "effectiveMass": 1199.2052493704157,
+          "normalEnergy": 320795.06289762195,
+          "preKinetic": 321214.9792061077,
+          "postKinetic": 6245.474333088261,
+          "dissipated": 314969.5048730194,
+          "sites": [
+            {
+              "id": 2,
+              "x": -0.02474375507512053,
+              "z": -2.1996859733189895,
+              "zone": "front",
+              "damage": {
+                "front": 261,
+                "engine": 234,
+                "steering": 99,
+                "tyres": 60,
+                "suspension": 114
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "250/2/80/0",
+          "discipline": "derby"
+        },
+        "84": {
+          "id": "247/3/84/2",
+          "tick": 247,
+          "time": 0.007933480298756405,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            3,
+            84
+          ],
+          "kind": "fixed",
+          "material": "concrete",
+          "point": [
+            0.5602917635350033,
+            25.29999999999999
+          ],
+          "normal": [
+            2.2535870350599895e-15,
+            -1
+          ],
+          "relativeVelocity": [
+            -0.5750225260806153,
+            22.621490450926043
+          ],
+          "relativeSpeed": 22.6287976067408,
+          "closing": 22.621490450926043,
+          "normalImpulse": 30925.700756013826,
+          "tangentialImpulse": 495.6952265450658,
+          "effectiveMass": 1199.205142541939,
+          "normalEnergy": 306835.7212019136,
+          "preKinetic": 307237.5175720328,
+          "postKinetic": 5973.7306282751015,
+          "dissipated": 301263.78694375773,
+          "sites": [
+            {
+              "id": 3,
+              "x": -0.024745419119587237,
+              "z": -2.199685931073502,
+              "zone": "front",
+              "damage": {
+                "front": 249,
+                "engine": 224,
+                "steering": 94,
+                "tyres": 57,
+                "suspension": 109
+              }
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "247/3/84/2",
+          "discipline": "derby"
+        },
+        "88": {
+          "id": "303/0/88/2",
+          "tick": 303,
+          "time": 0.009734540893377105,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            0,
+            88
+          ],
+          "kind": "fixed",
+          "material": "steel",
+          "point": [
+            -11.021807373921039,
+            2.6046810616223617
+          ],
+          "normal": [
+            0.8506022835469226,
+            0.5258096188020533
+          ],
+          "relativeVelocity": [
+            -0.22332242242277137,
+            -0.20476228303914717
+          ],
+          "relativeSpeed": 0.30298596817704043,
+          "closing": 0.2976245404698919,
+          "normalImpulse": 205.2484620614605,
+          "tangentialImpulse": -39.10819639554077,
+          "effectiveMass": 604.9316709434511,
+          "normalEnergy": 26.792534738243077,
+          "preKinetic": 28.916388255985055,
+          "postKinetic": 1.786464341208803,
+          "dissipated": 27.129923914776253,
+          "sites": [
+            {
+              "id": 0,
+              "x": -0.9532947152932126,
+              "z": 1.0204170442240281,
+              "zone": "left",
+              "damage": {}
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "303/0/88/2",
+          "discipline": "derby"
+        },
+        "89": {
+          "id": "345/5/89/1",
+          "tick": 345,
+          "time": 0.004567970458419261,
+          "rules": 1,
+          "revision": "c0a4f566b03836d928f69d088f94278e5e59723f",
+          "participants": [
+            5,
+            89
+          ],
+          "kind": "fixed",
+          "material": "steel",
+          "point": [
+            11.022734558611964,
+            -0.6061784043262332
+          ],
+          "normal": [
+            -0.8497960357316536,
+            -0.5271116557758576
+          ],
+          "relativeVelocity": [
+            0.11738400402947123,
+            0.2919794445542458
+          ],
+          "relativeSpeed": 0.3146919135348044,
+          "closing": 0.25365822975405683,
+          "normalImpulse": 347.00445830354977,
+          "tangentialImpulse": 83.28106999285194,
+          "effectiveMass": 1200,
+          "normalEnergy": 38.605498513177125,
+          "preKinetic": 54.40509699721228,
+          "postKinetic": 5.81897794196846,
+          "dissipated": 48.58611905524382,
+          "sites": [
+            {
+              "id": 5,
+              "x": -0.9747207079025866,
+              "z": 0.023335429427369936,
+              "zone": "left",
+              "damage": {}
+            }
+          ],
+          "newImpact": true,
+          "episodeId": "345/5/89/1",
+          "discipline": "derby"
+        }
+      },
+      "fieldSha256": "c981b1a0b7c4d9404e74b6c7bc2eaa01ec9836473999f8ee65abcb6a208fc3a1",
+      "resources": {
+        "uploads": 54,
+        "buffers": 28,
+        "bytes": 892872,
+        "programs": 2
+      },
+      "mesh": {
+        "frames": 2,
+        "frameDraws": 98,
+        "totalDraws": 196,
+        "uploads": 27,
+        "skippedIdentical": 0,
+        "vertices": 20292,
+        "bytes": 892848,
+        "meshes": 27,
+        "profile": "high",
+        "lost": false,
+        "disposed": false
+      },
+      "intervalMs": {
+        "samples": 480,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "cpuDrawMs": {
+        "samples": 481,
+        "median": 0.8,
+        "p95": 0.9,
+        "worst": 1.1
+      },
+      "gpuDrawMs": {
+        "samples": 60,
+        "median": 1.1844,
+        "p95": 1.339,
+        "worst": 8.0824
+      },
+      "physicsTickMs": {
+        "samples": 480,
+        "median": 0.1,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "peak": {
+        "passes": 10,
+        "pairChecks": 750,
+        "rejectedPairs": 690,
+        "candidates": 300,
+        "sweepSamples": 349,
+        "accepted": 9
+      }
+    }
+  ],
+  "captures": {
+    "crucible-grid": {
+      "arena": "crucible",
+      "tick": 0,
+      "sha256": "70d16cd3869e5e29a36f0e79eab028d6678d79c6b66206edc4c130868ac7d549"
+    },
+    "crucible-first-contact": {
+      "arena": "crucible",
+      "tick": 99,
+      "sha256": "473b45bab84436c267a30ee6b5036db3caa60e0d3cc4b4fd799ec50a451c47f9"
+    },
+    "crucible-reverse": {
+      "arena": "crucible",
+      "tick": 99,
+      "sha256": "27c65cb4014c32c16cc15496a9f7d9eb750990358b372c80da4e2c1543aa5df8"
+    },
+    "iron-pit-grid": {
+      "arena": "iron-pit",
+      "tick": 0,
+      "sha256": "9fd6b8677825af359e167190eb9665c91bac22585997dd8701aa3c4ce2725819"
+    },
+    "iron-pit-first-contact": {
+      "arena": "iron-pit",
+      "tick": 96,
+      "sha256": "bf3ce6f662b006acf0044db219952a5f20d4f4f445568778f7b37faa480e9545"
+    },
+    "iron-pit-reverse": {
+      "arena": "iron-pit",
+      "tick": 96,
+      "sha256": "700c043bb35104dce73c23e2ed58501dca34a027c7aea7a864a9b09c547e40f2"
+    }
+  },
+  "contextRestoration": {
+    "tick": 6,
+    "meshes": 25,
+    "bytes": 867504
+  },
+  "disposal": {
+    "stats": {
+      "frames": 1,
+      "frameDraws": 96,
+      "totalDraws": 96,
+      "uploads": 25,
+      "skippedIdentical": 0,
+      "vertices": 0,
+      "bytes": 0,
+      "meshes": 0,
+      "profile": "high",
+      "lost": false,
+      "disposed": true
+    },
+    "buffers": 26,
+    "bytes": 867528,
+    "programs": 2
+  },
+  "errors": []
+}

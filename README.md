@@ -18,6 +18,8 @@ For the downloadable game, archive checksums and receipt verification, see the [
 
 Choose **Crash Lab** from course select. Arm the Ignition GT, hold gas and drive into a concrete wall, an angled steel rail or an opposing physical car. Inspect the measured impulse, local panel damage and remaining mechanical condition, then reset to repeat the setup. The result screen saves a v5 input replay and a separate local evidence receipt. Published v1.1.1 adds computational panels. A light strike leaves a local crease and harder hits buckle the bodywork and expose steel. [Published v1.1.1](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Player guide](docs/crash-lab.md) · [Impact authority](docs/crash-impact.md) · [Computational panels](docs/computational-impact-panels.md) · [CO-011 certification](docs/co-011-acceptance.md)
 
+The **Derby arena preview** link in Crash Lab opens The Crucible and Iron Pit for CO-012B review. Inspect both arenas and run the repeatable six-car launch to see physical wall, obstacle and car contacts. [Arena contract and review controls](docs/derby-arenas.md)
+
 ## World Overdrive Championship
 
 Choose **World Overdrive Championship** from course select. The Opening Cup and Speedway Grand Prix each cover three laps of Overdrive Speedway. The Mountain Challenge and championship finale take the six-car field through Redline Ridge. Each round has its own race seed.

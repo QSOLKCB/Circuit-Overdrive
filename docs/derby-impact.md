@@ -4,7 +4,7 @@ The first Total Destruction gate admits up to six physical chassis into a shared
 
 ## World and tick
 
-`derbyDamageWorld(cars, fixtures, revision)` admits 1–6 cars and up to 16 fixed capsule fixtures. The world owns copied launch states with unique immutable driver IDs and starts each car with a fresh eight-channel ledger. Drivers and fixtures use distinct IDs in 0–255, so pairs have a total order independent of input array order. The arena gate will validate enclosure, fixtures and spawn placements against this envelope.
+`derbyDamageWorld(cars, fixtures, revision)` admits 1–6 cars and up to 16 fixed capsule fixtures. The world owns copied launch states with unique immutable driver IDs and starts each car with a fresh eight-channel ledger. Drivers and fixtures use distinct IDs in 0–255, so pairs have a total order independent of input array order. The arena definitions validate enclosure, fixtures and spawn placements against this envelope. [Arena contract](derby-arenas.md)
 
 `stepDerbyTick(world, commands)` takes one throttle, brake and steer record per car in ascending driver-ID order. It checks and snapshots the whole batch before moving any car. Cars with engine or tyre damage at 1,000 use neutral controls and stay in the collision world. They can coast, rebound and receive impulses. Each remaining car uses the same 60 Hz planar road forces and damage-dependent coefficients. The step returns the effective command batch, accepted contacts and solver measurements. [Damage and driving condition](crash-damage.md)
 
