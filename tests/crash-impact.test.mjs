@@ -57,3 +57,14 @@ test('fixture identities, finite launches and field size are bounded',()=>{
   assert.throws(()=>impactWorld([crashCar(80)],[wall])); assert.throws(()=>crashCar(1,{vx:Infinity}));
   assert.throws(()=>crashCar(1,{spin:13})); assert.throws(()=>crashBarrier(1,0,0,0,0,.2));
 });
+test('both velocity components are finite numbers before car or world admission',()=>{
+  for(const axis of ['vx','vz']){
+    for(const invalid of ['-100',null,true,NaN,Infinity,-Infinity]){
+      assert.throws(()=>crashCar(1,{[axis]:invalid}),RangeError);
+      const car={...crashCar(1,{z:3}),[axis]:invalid};
+      assert.throws(()=>impactWorld([car],[wall]),RangeError);
+    }
+  }
+  assert.throws(()=>crashCar(1,{vx:100,vz:100}),RangeError);
+  assert.equal(crashCar(1,{vz:-120}).vz,-120);
+});

@@ -16,7 +16,7 @@ const limited=(v,limit)=>Number.isFinite(v) && Math.abs(v)<=limit;
 
 export function crashCar(id,{x=0,z=0,yaw=0,vx=0,vz=0,spin=0}={}) {
   if (!validId(id) || ![x,z].every(v=>limited(v,1000)) || !limited(yaw,2*Math.PI) ||
-      !Number.isFinite(Math.hypot(vx,vz)) || Math.hypot(vx,vz)>DRIVE_CAP || !limited(spin,12))
+      ![vx,vz].every(Number.isFinite) || Math.hypot(vx,vz)>DRIVE_CAP || !limited(spin,12))
     throw RangeError('Invalid laboratory car');
   return {id,x,z,yaw,vx,vz,spin};
 }
@@ -34,6 +34,10 @@ export function impactWorld(cars,barriers=[],revision=null) {
   if (cars.length<1 || cars.length>4 || barriers.length>8 || new Set(ids).size!==ids.length ||
       (revision!==null && (typeof revision!=='string' || !/^[0-9a-f]{40}$/.test(revision))))
     throw RangeError('Invalid impact world');
+  for (const car of cars) {
+    if (!car || ![car.x,car.z,car.yaw,car.vx,car.vz,car.spin].every(Number.isFinite))throw RangeError('Invalid body state');
+    crashCar(car.id,car); // Check launch limits before admitting the caller-owned body.
+  }
   const sorted=items=>items.slice().sort((a,b)=>a.id-b.id);
   const bodies=sorted(cars), fixtures=sorted(barriers), pairs=[];
   for (const a of bodies) {
