@@ -1,0 +1,61 @@
+{
+  "revision": "ed432eb14a2bd22136429d610451275eea30ff51",
+  "browser": "158.0.8127.36",
+  "reducedMotion": true,
+  "impact": {
+    "tick": 225,
+    "firstImpact": 224,
+    "damage": {
+      "front": 815,
+      "rear": 0,
+      "left": 0,
+      "right": 0,
+      "engine": 733,
+      "steering": 309,
+      "tyres": 187,
+      "suspension": 358
+    },
+    "uploads": 18,
+    "speed": 5.6226856414771005
+  },
+  "paused": {
+    "tick": 230,
+    "firstImpact": 224,
+    "damage": {
+      "front": 815,
+      "rear": 0,
+      "left": 0,
+      "right": 0,
+      "engine": 733,
+      "steering": 309,
+      "tyres": 187,
+      "suspension": 358
+    },
+    "uploads": 18,
+    "speed": 4.189286415586804
+  },
+  "afterCamera": {
+    "tick": 230,
+    "firstImpact": 224,
+    "damage": {
+      "front": 815,
+      "rear": 0,
+      "left": 0,
+      "right": 0,
+      "engine": 733,
+      "steering": 309,
+      "tyres": 187,
+      "suspension": 358
+    },
+    "uploads": 18,
+    "speed": 4.189286415586804
+  },
+  "brakeTicks": [
+    226,
+    227,
+    228,
+    229,
+    230
+  ],
+  "errors": []
+}

@@ -1,0 +1,1814 @@
+{
+  "revision": "ed432eb14a2bd22136429d610451275eea30ff51",
+  "browser": "158.0.8127.36",
+  "node": "v22.18.0",
+  "host": "x64 Linux 7.0.0-43-generic",
+  "native": true,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "size": [
+    1920,
+    1080
+  ],
+  "cycles": 8,
+  "baseline": false,
+  "checks": {
+    "wall": {
+      "impact": {
+        "id": "221/0/80/0",
+        "tick": 221,
+        "time": 0.008434271865044045,
+        "rules": 1,
+        "revision": "ed432eb14a2bd22136429d610451275eea30ff51",
+        "participants": [
+          0,
+          80
+        ],
+        "kind": "fixed",
+        "material": "concrete",
+        "point": [
+          0,
+          -55.35
+        ],
+        "normal": [
+          0,
+          1
+        ],
+        "relativeVelocity": [
+          0,
+          -40.83016056284979
+        ],
+        "relativeSpeed": 40.83016056284979,
+        "closing": 40.83016056284979,
+        "normalImpulse": 55855.65964997852,
+        "tangentialImpulse": 0,
+        "effectiveMass": 1200,
+        "normalEnergy": 1000261.2069528566,
+        "preKinetic": 1000261.2069528566,
+        "postKinetic": 19605.119656276023,
+        "dissipated": 980656.0872965805,
+        "sites": [
+          {
+            "id": 0,
+            "x": 0,
+            "z": -2.200000000000003,
+            "zone": "front",
+            "damage": {
+              "front": 815,
+              "engine": 733,
+              "steering": 309,
+              "tyres": 187,
+              "suspension": 358
+            }
+          }
+        ],
+        "newImpact": true
+      },
+      "terminalTick": 274,
+      "damage": [
+        {
+          "front": 815,
+          "rear": 0,
+          "left": 0,
+          "right": 0,
+          "engine": 733,
+          "steering": 309,
+          "tyres": 187,
+          "suspension": 358
+        }
+      ],
+      "liveResetPixelsIdentical": true,
+      "tapeSha256": "0c1adea3bf7613cbfcbe586f68a52771486ede61ea60ad8527391d8733e958a5",
+      "meshChanges": [
+        2
+      ],
+      "oppositeVerticesChanged": 0,
+      "pixels": {
+        "changedPixels": 23893,
+        "resetChanged": 0,
+        "bounds": [
+          662,
+          364,
+          904,
+          536
+        ],
+        "width": 1280,
+        "height": 720
+      },
+      "liveFinal": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "8a758ca80e8bee818a8f22b476d0ffb0394dc11ba93095291c010a57beb6a3b9",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "32aecfe97ef42d8ad71d01bb80459e71e4b567c708008bcc3524400fc4ca53a1",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "de86193acf6c5a66e941c844d5b0ec9f47d0f71c9e04a6d069a7bca6bb373591",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ],
+      "replayFirstImpact": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "8a758ca80e8bee818a8f22b476d0ffb0394dc11ba93095291c010a57beb6a3b9",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "32aecfe97ef42d8ad71d01bb80459e71e4b567c708008bcc3524400fc4ca53a1",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "de86193acf6c5a66e941c844d5b0ec9f47d0f71c9e04a6d069a7bca6bb373591",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ]
+    },
+    "glancing": {
+      "impact": {
+        "id": "209/0/81/0",
+        "tick": 209,
+        "time": 0.01457898015798553,
+        "rules": 1,
+        "revision": "ed432eb14a2bd22136429d610451275eea30ff51",
+        "participants": [
+          0,
+          81
+        ],
+        "kind": "fixed",
+        "material": "steel",
+        "point": [
+          0.9484860593182327,
+          -47.521136562168046
+        ],
+        "normal": [
+          -0.9728062146853664,
+          0.23162052730604188
+        ],
+        "relativeVelocity": [
+          0,
+          -39.01058244249332
+        ],
+        "relativeSpeed": 39.01058244249332,
+        "closing": 9.035651675846122,
+        "normalImpulse": 6262.435749429269,
+        "tangentialImpulse": -1502.9845798630245,
+        "effectiveMass": 607.9655225274497,
+        "normalEnergy": 24818.06494482861,
+        "preKinetic": 913095.325501541,
+        "postKinetic": 825621.8423811075,
+        "dissipated": 87473.48312043352,
+        "sites": [
+          {
+            "id": 0,
+            "x": 0.9484860593182327,
+            "z": -1.4508300141233903,
+            "zone": "right",
+            "damage": {
+              "right": 19,
+              "steering": 5,
+              "tyres": 13,
+              "suspension": 11
+            }
+          }
+        ],
+        "newImpact": true
+      },
+      "terminalTick": 325,
+      "damage": [
+        {
+          "front": 0,
+          "rear": 0,
+          "left": 0,
+          "right": 19,
+          "engine": 0,
+          "steering": 5,
+          "tyres": 13,
+          "suspension": 11
+        }
+      ],
+      "liveResetPixelsIdentical": true,
+      "tapeSha256": "0d88158908bb627562c4dff1bc1174bb6f92c6c99986b63a3e892b74bb4c8f34",
+      "meshChanges": [
+        2
+      ],
+      "oppositeVerticesChanged": 0,
+      "pixels": {
+        "changedPixels": 2934,
+        "resetChanged": 0,
+        "bounds": [
+          493,
+          361,
+          656,
+          467
+        ],
+        "width": 1280,
+        "height": 720
+      },
+      "liveFinal": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "765e440c661b4dd88bf0cd10b638cde1489cb19feb13ccb94d3509b722127043",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "b704021cbf6a38e0b46e5461c66c67e14872103729cb7fbc8c25b5578b7365af",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "10943bf66865439630c0955a1e152d6e6801c0cf06c84d6ca0bd3910effc6606",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "ac7d600cfa0b0dd180e1422299ff314a2177a77779aab137753f3610fb278775",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ],
+      "replayFirstImpact": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "765e440c661b4dd88bf0cd10b638cde1489cb19feb13ccb94d3509b722127043",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "b704021cbf6a38e0b46e5461c66c67e14872103729cb7fbc8c25b5578b7365af",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "10943bf66865439630c0955a1e152d6e6801c0cf06c84d6ca0bd3910effc6606",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "ac7d600cfa0b0dd180e1422299ff314a2177a77779aab137753f3610fb278775",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ]
+    },
+    "opposing": {
+      "impact": {
+        "id": "180/0/1/0",
+        "tick": 180,
+        "time": 0.008140715034915489,
+        "rules": 1,
+        "revision": "ed432eb14a2bd22136429d610451275eea30ff51",
+        "participants": [
+          0,
+          1
+        ],
+        "kind": "vehicle",
+        "material": "bodywork",
+        "point": [
+          0.09999999999999783,
+          -30.346512784156175
+        ],
+        "normal": [
+          -0.10256410254308002,
+          0.994726396990415
+        ],
+        "relativeVelocity": [
+          2.8548135475880066e-15,
+          -57.376694505702076
+        ],
+        "relativeSpeed": 57.376694505702076,
+        "closing": 57.074112596876766,
+        "normalImpulse": 38620.64547722599,
+        "tangentialImpulse": -2518.8375152924673,
+        "effectiveMass": 593.5748739508738,
+        "normalEnergy": 966771.5212856381,
+        "preKinetic": 1022320.4065696162,
+        "postKinetic": 51766.1979553226,
+        "dissipated": 970554.2086142936,
+        "sites": [
+          {
+            "id": 0,
+            "x": 0.09999999999999783,
+            "z": -2.1948582372644267,
+            "zone": "front",
+            "damage": {
+              "front": 401,
+              "engine": 360,
+              "steering": 152,
+              "tyres": 92,
+              "suspension": 176
+            }
+          },
+          {
+            "id": 1,
+            "x": 0.0999999999999977,
+            "z": -2.1948582372644267,
+            "zone": "front",
+            "damage": {
+              "front": 401,
+              "engine": 360,
+              "steering": 152,
+              "tyres": 92,
+              "suspension": 176
+            }
+          }
+        ],
+        "newImpact": true
+      },
+      "terminalTick": 360,
+      "damage": [
+        {
+          "front": 405,
+          "rear": 0,
+          "left": 0,
+          "right": 0,
+          "engine": 363,
+          "steering": 153,
+          "tyres": 92,
+          "suspension": 177
+        },
+        {
+          "front": 405,
+          "rear": 0,
+          "left": 0,
+          "right": 0,
+          "engine": 363,
+          "steering": 153,
+          "tyres": 92,
+          "suspension": 177
+        }
+      ],
+      "liveResetPixelsIdentical": true,
+      "tapeSha256": "2cbfa0ced761ade7f783f2aeeb86839354f800886dce13d7b2afdda2169d6ac9",
+      "meshChanges": [
+        2,
+        2
+      ],
+      "oppositeVerticesChanged": 0,
+      "pixels": {
+        "changedPixels": 3491,
+        "resetChanged": 0,
+        "bounds": [
+          437,
+          351,
+          730,
+          437
+        ],
+        "width": 1280,
+        "height": 720
+      },
+      "liveFinal": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "c5ddb8ce9c920b8bdb78f885f35925c846e655c037993ccfaf1d42d1f2a5054c",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "1e7fe36219ec8ec3cafbffa31acefbc3480c5a3c6c5d197baa285f9097893f98",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "de86193acf6c5a66e941c844d5b0ec9f47d0f71c9e04a6d069a7bca6bb373591",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ],
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "d93bfa23aa7811a2d3f2acd1a884598df829aec6e310311db86536b53a415dac",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "5ebc19faf12a627ebdc5b0f1cbc03875a8153d42de7394ed53c069083b860d99",
+            "vertices": 924
+          },
+          {
+            "hash": "7160901df20e5d8fd26de48b811df4ff84a5523334ff4a8079c3a85a60245a7f",
+            "vertices": 348
+          },
+          {
+            "hash": "d344385857f8c149e3f4e02324a79e2aa7a329c5fc52a1dd3974c0a54d3731d9",
+            "vertices": 402
+          },
+          {
+            "hash": "ffc11ec35d0728a685f46fcb8b9d41a03abe03bc183e1a76bfc273a9e3446354",
+            "vertices": 126
+          },
+          {
+            "hash": "e00a33cc4951bf5394d353cdae61e57280785e289ae26c5b3e5607f092e1eb88",
+            "vertices": 126
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ],
+      "replayFirstImpact": [
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "60bf8171782e15b888a85f6b0a744a0923c65294414ba7b7e9419c0aa4de610a",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+            "vertices": 936
+          },
+          {
+            "hash": "7f55cf10f2a78480fe191670ed54f0f801d03dc47f4b0a57918c8b4e612215cd",
+            "vertices": 348
+          },
+          {
+            "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+            "vertices": 414
+          },
+          {
+            "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+            "vertices": 138
+          },
+          {
+            "hash": "de86193acf6c5a66e941c844d5b0ec9f47d0f71c9e04a6d069a7bca6bb373591",
+            "vertices": 138
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ],
+        [
+          {
+            "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+            "vertices": 1974
+          },
+          {
+            "hash": "97e2299dfa9b31dec9bb6ed75693e35d7e5bfb74cdcea1b0e854dce70936489f",
+            "vertices": 576
+          },
+          {
+            "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+            "vertices": 354
+          },
+          {
+            "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+            "vertices": 144
+          },
+          {
+            "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+            "vertices": 144
+          },
+          {
+            "hash": "5ebc19faf12a627ebdc5b0f1cbc03875a8153d42de7394ed53c069083b860d99",
+            "vertices": 924
+          },
+          {
+            "hash": "102f5e50f223a77f6a7631135ef0a5c2536a2728f31cc33bdcc2cc8e264b43e8",
+            "vertices": 348
+          },
+          {
+            "hash": "d344385857f8c149e3f4e02324a79e2aa7a329c5fc52a1dd3974c0a54d3731d9",
+            "vertices": 402
+          },
+          {
+            "hash": "ffc11ec35d0728a685f46fcb8b9d41a03abe03bc183e1a76bfc273a9e3446354",
+            "vertices": 126
+          },
+          {
+            "hash": "e00a33cc4951bf5394d353cdae61e57280785e289ae26c5b3e5607f092e1eb88",
+            "vertices": 126
+          },
+          {
+            "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+            "vertices": 72
+          },
+          {
+            "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+            "vertices": 24
+          }
+        ]
+      ]
+    }
+  },
+  "captures": {
+    "wall-clean": {
+      "sha256": "4477e19e2eb9c9ee8e46dc2ba6bb4dd9b12fa7d085cbf027c842a6cf90baa481",
+      "tick": 0
+    },
+    "wall-inspect-0": {
+      "sha256": "3be803bda79918e3607b5112a27778277492359d709f923227f8db6afada0f17",
+      "tick": 274
+    },
+    "wall-before-contact": {
+      "sha256": "520c199bbbd77f9ab618656863f4df1ad7edb9581670e3f8dfc5fb7dfd7b8ee4",
+      "tick": 220
+    },
+    "wall-contact": {
+      "sha256": "0cef58a5e0a9f366a0f74568972cac29d402713ef8d4cf41082c16f7e51224d5",
+      "tick": 221
+    },
+    "wall-control-clean": {
+      "sha256": "1f9925901811273048c039b247f56112ee2d386a5ffb7204183a3429af7aa9a8",
+      "tick": 274
+    },
+    "wall-control-damaged": {
+      "sha256": "5a9b0873e7ca809bb4a465c94b9d67f0216ab226ac814332ef419fd922c409fa",
+      "tick": 274
+    },
+    "wall-reset": {
+      "sha256": "59209fc7351707b0e8e89e2d14d8c73a65aaa92b98eedb0030aa64d8192d5882",
+      "tick": 0
+    },
+    "glancing-clean": {
+      "sha256": "a4afb21eb756550e2763e99bf7ebc34c87dd81ea145d8c33521f3288165b22b8",
+      "tick": 0
+    },
+    "glancing-inspect-0": {
+      "sha256": "9dff3c66962b1800b9b44299bede3a35cb9aa03509c6b6cc84fa35d8a925bd8a",
+      "tick": 325
+    },
+    "glancing-before-contact": {
+      "sha256": "55196e6a20fb75c4597c114cbcfb6306f85fee51c31de88cb4ab7603bb96141f",
+      "tick": 208
+    },
+    "glancing-contact": {
+      "sha256": "d31ab06db70b7b7457b59c9f821c011f8281b886c795319c2f153c12b714d480",
+      "tick": 209
+    },
+    "glancing-control-clean": {
+      "sha256": "5f4b3c7ae51434989bc652e8239de858c7fda383902b68e281262a9fa67bedd9",
+      "tick": 325
+    },
+    "glancing-control-damaged": {
+      "sha256": "a391eccca72966cd1fd49623dc4a24d26161bc27c51f853c0af6516d289a2928",
+      "tick": 325
+    },
+    "opposing-clean": {
+      "sha256": "3189bd8f93c895a3cb7f4d9185f80555f31567e2fef900f455b10e5b15c97da8",
+      "tick": 0
+    },
+    "opposing-inspect-0": {
+      "sha256": "a6fb42d03d397149c30d92c8d144b3a1726f13eec1681b58e32d1b0e1dcd501d",
+      "tick": 360
+    },
+    "opposing-inspect-1": {
+      "sha256": "c90a47e63cf887847b2487e236a600f18fd6acb2fde8b5b7c7bb65a3d764529a",
+      "tick": 360
+    },
+    "replay-impact": {
+      "sha256": "a5539760ec41a8603113efa13116000730068453bf7b91c7b148bbda6e1cdd65",
+      "tick": 180
+    },
+    "replay-impact-reseek": {
+      "sha256": "a9ded00e6a953ba4b1138daaa53d5d06b49d0bb890d8099d0ef059743c349966",
+      "tick": 180
+    },
+    "opposing-before-contact": {
+      "sha256": "b5951757cb07b17425a57133627ef77e50d871701135f3c6a804f92e2ea2c560",
+      "tick": 179
+    },
+    "opposing-contact": {
+      "sha256": "6fdcea64fa6d1bb7d625ad333bef8581c3dfdffeb0c0188804aef58eba6e76aa",
+      "tick": 180
+    },
+    "opposing-control-clean": {
+      "sha256": "533d2f1ddc88a86fb6a83f8047aaaaff7a64c13d7969fa802626f299d2146758",
+      "tick": 180
+    },
+    "opposing-control-damaged": {
+      "sha256": "6fdcea64fa6d1bb7d625ad333bef8581c3dfdffeb0c0188804aef58eba6e76aa",
+      "tick": 180
+    }
+  },
+  "readings": [
+    {
+      "cycle": 1,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.2
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5292,
+        "p95": 3.3701,
+        "worst": 3.4456
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0.1,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 1.8,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 4864468,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 1,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.4,
+        "worst": 2.6
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5301,
+        "p95": 3.3586,
+        "worst": 3.3896
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 2.2,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 4949396,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 1,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5299,
+        "p95": 0.7753,
+        "worst": 3.3642
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0.1,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 4.3,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5106604,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 2,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.4
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5277,
+        "p95": 0.6128,
+        "worst": 0.7339
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 1.9,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5111036,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 2,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.6
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5346,
+        "p95": 3.4031,
+        "worst": 3.6822
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 2.3,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5124328,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 2,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 6.7
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5304,
+        "p95": 0.8508,
+        "worst": 4.2144
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 8.8,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5276448,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 3,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.1
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5298,
+        "p95": 0.6929,
+        "worst": 3.8533
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 1.8,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5398940,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 3,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.4
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5186,
+        "p95": 0.7852,
+        "worst": 4.313
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0,
+        "worst": 0
+      },
+      "updateMs": 2.1,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5007584,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 3,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.6
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5338,
+        "p95": 0.7897,
+        "worst": 3.7682
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 5.6,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5326916,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 4,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.5
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5279,
+        "p95": 0.7523,
+        "worst": 3.8152
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0.1,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 2.1,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5200972,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 4,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.2
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5182,
+        "p95": 0.65,
+        "worst": 3.8297
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0,
+        "worst": 0
+      },
+      "updateMs": 1.9,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5204624,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 4,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.3
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5337,
+        "p95": 3.7727,
+        "worst": 3.7824
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 5.1,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5341696,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 5,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.1
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5306,
+        "p95": 3.4291,
+        "worst": 3.7782
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0.1,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 1.7,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5228968,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 5,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.5
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5291,
+        "p95": 3.7356,
+        "worst": 3.8126
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 2.2,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5189420,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 5,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.5
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5314,
+        "p95": 2.9171,
+        "worst": 3.7285
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 5.2,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5347064,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 6,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.3
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5271,
+        "p95": 0.8541,
+        "worst": 3.6711
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 1.9,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5231728,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 6,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.4,
+        "worst": 3.3
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5353,
+        "p95": 0.8045,
+        "worst": 3.8178
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 2.9,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5195608,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 6,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.7
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5304,
+        "p95": 0.5917,
+        "worst": 2.0129
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 5.4,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5365408,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 7,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.3
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5317,
+        "p95": 0.8046,
+        "worst": 3.4111
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 2,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5236060,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 7,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.4,
+        "worst": 2.1
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.532,
+        "p95": 0.6612,
+        "worst": 3.4165
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 1.8,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5253692,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 7,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.3
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5449,
+        "p95": 3.3025,
+        "worst": 3.4126
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 5,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5384216,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 8,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.2
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5297,
+        "p95": 3.3593,
+        "worst": 3.4307
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0.1,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 1.7,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5286408,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 8,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 2.1
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5316,
+        "p95": 0.8399,
+        "worst": 3.4318
+      },
+      "geometryCpuMs": {
+        "samples": 2,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 1.7,
+      "impactUploads": 2,
+      "resetUploads": 2,
+      "skippedIdentical": 0,
+      "heapBytes": 5287516,
+      "buffers": 17,
+      "bufferBytes": 844560,
+      "meshes": 16,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 8,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.4,
+        "p95": 0.5,
+        "worst": 3.9
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.534,
+        "p95": 0.8366,
+        "worst": 4.1785
+      },
+      "geometryCpuMs": {
+        "samples": 8,
+        "median": 0,
+        "p95": 0.2,
+        "worst": 0.2
+      },
+      "updateMs": 5.8,
+      "impactUploads": 8,
+      "resetUploads": 4,
+      "skippedIdentical": 0,
+      "heapBytes": 5420140,
+      "buffers": 29,
+      "bufferBytes": 1058400,
+      "meshes": 28,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    }
+  ],
+  "contextRestoration": {
+    "tick": 273,
+    "geometry": [
+      [
+        {
+          "hash": "5611ce071358c1b9799879f7d55efa147ce060550d8c9c74fd69356de84739e3",
+          "vertices": 1974
+        },
+        {
+          "hash": "8a758ca80e8bee818a8f22b476d0ffb0394dc11ba93095291c010a57beb6a3b9",
+          "vertices": 576
+        },
+        {
+          "hash": "7fed3600e6d1942232fc0c8b1bcc60f95bd27e7c0828b5e838ace216e17725fc",
+          "vertices": 354
+        },
+        {
+          "hash": "417f173790ab7bc8659a17a73ef40b2229987352d2eb3b321aea79d02250dcce",
+          "vertices": 144
+        },
+        {
+          "hash": "d3fa6d509fae5ac242bcf2e077d5d57b6aaae76b7f3587008d9e02f1be193adb",
+          "vertices": 144
+        },
+        {
+          "hash": "32c677a115c097d4eebf5f57be560075fa7d895225c941331948907b3779b29b",
+          "vertices": 936
+        },
+        {
+          "hash": "32aecfe97ef42d8ad71d01bb80459e71e4b567c708008bcc3524400fc4ca53a1",
+          "vertices": 348
+        },
+        {
+          "hash": "99f3a5e05d4fdded27b994c0f2ae3f895d5c4bab63371ff587e353199a4ad12c",
+          "vertices": 414
+        },
+        {
+          "hash": "0b321e7077b532d89ef9d85fd75d85ffb0b931c0d4a236eeced3e45f5ee5e5b6",
+          "vertices": 138
+        },
+        {
+          "hash": "de86193acf6c5a66e941c844d5b0ec9f47d0f71c9e04a6d069a7bca6bb373591",
+          "vertices": 138
+        },
+        {
+          "hash": "b186e585442b31b4bbbe453ef44927f8f3a76c3b7be7f79fad561dc5eef5d842",
+          "vertices": 72
+        },
+        {
+          "hash": "75371cc6d5bcdf777bb738afd8e9816dedd939b73b85a1e396375943d7acc4d1",
+          "vertices": 24
+        }
+      ]
+    ]
+  },
+  "disposal": {
+    "disposals": 27,
+    "buffers": 0,
+    "retainedBytes": 0,
+    "programs": 0
+  },
+  "errors": []
+}

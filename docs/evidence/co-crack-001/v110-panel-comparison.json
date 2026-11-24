@@ -1,0 +1,142 @@
+{
+  "revision": "1f0527098b9eb9c27c678d9ad4bfa2b276374551",
+  "browser": "158.0.8127.36",
+  "node": "v22.18.0",
+  "host": "x64 Linux 7.0.0-43-generic",
+  "native": true,
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "size": [
+    1920,
+    1080
+  ],
+  "cycles": 1,
+  "readings": [
+    {
+      "cycle": 1,
+      "scenario": "wall",
+      "frameIntervalMs": {
+        "samples": 273,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 274,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 5.1
+      },
+      "gpuDrawMs": {
+        "samples": 34,
+        "median": 0.5521,
+        "p95": 0.675,
+        "worst": 0.7862
+      },
+      "geometryCpuMs": {
+        "samples": 5,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 4.9,
+      "impactUploads": 4,
+      "resetUploads": 4,
+      "skippedIdentical": 2,
+      "heapBytes": 4811440,
+      "buffers": 10,
+      "bufferBytes": 844560,
+      "meshes": 9,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 1,
+      "scenario": "glancing",
+      "frameIntervalMs": {
+        "samples": 325,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 326,
+        "median": 0.2,
+        "p95": 0.3,
+        "worst": 5.3
+      },
+      "gpuDrawMs": {
+        "samples": 40,
+        "median": 0.5512,
+        "p95": 3.7453,
+        "worst": 3.8845
+      },
+      "geometryCpuMs": {
+        "samples": 5,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.1
+      },
+      "updateMs": 5,
+      "impactUploads": 5,
+      "resetUploads": 5,
+      "skippedIdentical": 0,
+      "heapBytes": 4770236,
+      "buffers": 10,
+      "bufferBytes": 844560,
+      "meshes": 9,
+      "vertices": 19194,
+      "bytes": 844536,
+      "programs": 2,
+      "webglError": 0
+    },
+    {
+      "cycle": 1,
+      "scenario": "opposing",
+      "frameIntervalMs": {
+        "samples": 360,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8
+      },
+      "drawCpuMs": {
+        "samples": 361,
+        "median": 0.3,
+        "p95": 0.4,
+        "worst": 9.1
+      },
+      "gpuDrawMs": {
+        "samples": 45,
+        "median": 0.5336,
+        "p95": 3.3974,
+        "worst": 8.6433
+      },
+      "geometryCpuMs": {
+        "samples": 20,
+        "median": 0,
+        "p95": 0.1,
+        "worst": 0.2
+      },
+      "updateMs": 16.6,
+      "impactUploads": 16,
+      "resetUploads": 8,
+      "skippedIdentical": 6,
+      "heapBytes": 4908384,
+      "buffers": 15,
+      "bufferBytes": 1058400,
+      "meshes": 14,
+      "vertices": 24054,
+      "bytes": 1058376,
+      "programs": 2,
+      "webglError": 0
+    }
+  ],
+  "disposal": {
+    "disposals": 6,
+    "buffers": 0,
+    "retainedBytes": 0,
+    "programs": 0
+  },
+  "errors": []
+}
