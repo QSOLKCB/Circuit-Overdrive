@@ -3,6 +3,9 @@
 // Only data from source-stamped, compatible replay files is accepted.
 // Never imports code from recordings, reads a wall clock, or alters race rules.
 import {createRace,startRace,stepRace,recoverCar} from './sim.js';
+import {LAB_TICKS,createTrial,startTrial,stepTrial,scenarios} from './crash-trial.js';
+import {LAB_RULES} from './crash-impact.js';
+import {validateLabCommand} from './crash-damage.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {skyway} from './skyway.js';
@@ -49,6 +52,28 @@ function dense(values,length,name) {
   return descriptors;
 }
 const validUnit=n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=1;
+function validateCrashTape(source,revision) {
+  const fields=own(source,['version','revision','discipline','rules','scenario','seed','ticks','runs'],'Crash replay');
+  const value=k=>fields[k].value;
+  if(value('revision')!==revision)throw RangeError('Crash replay needs its exact source revision');
+  const scenario=value('scenario'),seed=value('seed'),ticks=value('ticks'),raw=value('runs');
+  if(value('discipline')!=='crash-lab' || value('rules')!==LAB_RULES ||
+      typeof scenario!=='string' || !Object.hasOwn(scenarios,scenario))throw RangeError('Unknown experiment or rules');
+  if(!Number.isSafeInteger(seed)||seed<0||seed>0xffffffff || !Number.isSafeInteger(ticks)||ticks<1||ticks>LAB_TICKS ||
+      !Array.isArray(raw)||raw.length<1||raw.length>ticks)throw RangeError('Invalid experiment duration or seed');
+  dense(raw,raw.length,'Crash runs');
+  let total=0;
+  const runs=raw.map(row=>{
+    dense(row,4,'Crash row');
+    const [length,throttle,brake,steer]=row;
+    validateLabCommand({throttle,brake,steer});
+    if(!Number.isSafeInteger(length)||length<1 || length>ticks-total)throw RangeError('Invalid crash run length');
+    total+=length;return Object.freeze(Array.from(row));
+  });
+  if(total!==ticks)throw RangeError('Truncated experiment');
+  return Object.freeze({version:5,revision,discipline:'crash-lab',rules:LAB_RULES,scenario,seed,ticks,
+    runs:Object.freeze(runs),compatibility:'exact'});
+}
 /** Validated, copied RLE. Old source compatibility is allowed ONLY for the exact
  * releases whose authority blobs are pinned in tests/replay-theatre.test.mjs.
  */
@@ -62,6 +87,7 @@ export function validateTheatreReplay(recording,siteRevision) {
   if(info.version.value===1)
     throw RangeError('Legacy v1 replay has no source revision. Re-record it with a source-stamped release.');
   const version=info.version.value;
+  if (version===5) return validateCrashTape(recording,siteRevision);
   if (version!==2 && version!==3 && version!==4) throw RangeError('Unsupported replay version');
   const fields=own(recording,version===2 ? headerKeys : [...headerKeys,'discipline','rules'],'Replay');
   const get=name=>fields[name].value;
@@ -113,14 +139,16 @@ export function decodeReplayRun(version,row) {
   } else if (version===3) {
     command.drift=row[4]; command.boost=row[5];
   }
-  return {command,recover:row.at(-1)};
+  return {command,recover:version===5 ? false : row.at(-1)};
 }
 /** Rebuild from the race start on backwards seeks. No unbounded checkpoint
  * snapshots or arbitrary pose assignment. At most MAX_SEEK_STEPS per call.
  */
 export function createReplaySession(source,siteRevision) {
   const tape=validateTheatreReplay(source,siteRevision);
-  const rules=tape.version===4 ? {create:createRocketRace,start:startRocketRace,step:stepRocketRace,recover:recoverRocketCar} :
+  const crash=tape.version===5;
+  const rules=crash ? {create:seed=>createTrial(tape.scenario,seed,tape.revision),start:startTrial,step:stepTrial} :
+    tape.version===4 ? {create:createRocketRace,start:startRocketRace,step:stepRocketRace,recover:recoverRocketCar} :
     tape.version===3 ? {create:seed=>createNitroRace(seed,skyway,tape.rules),start:startNitroRace,step:stepNitroRace,recover:recoverNitroCar} :
     {create:seed=>createRace(seed,tape.course==='ridge' ? ridge : track),start:startRace,step:stepRace,recover:recoverCar};
   let race,at,runIndex,remaining;
@@ -131,7 +159,7 @@ export function createReplaySession(source,siteRevision) {
   }
   function one(){
     if(at>=tape.ticks)return false;
-    if(race.phase==='finished')throw RangeError('Replay contains controls after the chequered flag');
+    if(race.phase==='finished')throw RangeError(crash?'Controls after the experiment result':'Replay contains controls after the chequered flag');
     if(!remaining) {
       if(runIndex>=tape.runs.length)throw RangeError('Truncated replay');
       remaining=tape.runs[runIndex][0];
@@ -142,7 +170,7 @@ export function createReplaySession(source,siteRevision) {
     at++;remaining--;
     if(remaining===0)runIndex++;
     if(at===tape.ticks && race.phase!=='finished')
-      throw RangeError('Replay ended before the recorded race reached the finish');
+      throw RangeError(crash?'Recording ended before the experiment reached a result':'Replay ended before the recorded race reached the finish');
     return true;
   }
   reset();

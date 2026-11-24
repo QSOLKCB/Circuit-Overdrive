@@ -2,6 +2,8 @@
 // CO-REPLAY-001: source-bound six-car spectator. Reads local JSON, never executes it.
 // Camera, tempo and seek operations only change presentation or re-simulate ticks.
 import {createReplaySession,MAX_REPLAY_BYTES,MAX_SEEK_STEPS} from './replay-theatre-core.js';
+import {createCrashScene} from './crash-scene.js';
+import {scenarios} from './crash-trial.js';
 import {createScene} from './scene.js';
 import {courseEnvironment,eventTitle} from './environment.js';
 import {FIELD,PLAYER_ID} from './field.js';
@@ -41,6 +43,24 @@ function displayErrors(error){
   $('replay-play').textContent='Play';
   notify('Cannot play replay: '+String(error?.message||error));
 }
+let selectedImpact='';
+function crashDashboard(id){
+  const t=session.race,car=t.world.cars[id],title=scenarios[t.scenario].name;
+  set('replay-title',title);
+  set('theatre-lab-state',(id?'Opposing car':'Player')+' · '+Math.round(Math.hypot(car.vx,car.vz)*3.6)+' km/h · tick '+t.world.tick+' · '+(t.result||'Running'));
+  set('theatre-lab-damage',Object.entries(car.damage).map(([k,v])=>k+' '+v+'/1000').join(' · '));
+  const hits=t.contacts.filter(h=>h.newImpact && h.sites.some(s=>s.id===id));
+  const picker=$('theatre-impacts');
+  if(picker.length!==hits.length || (hits.length && picker.options[0]?.value!==hits[0].id)){
+    picker.replaceChildren(...hits.map(hit=>new Option('Tick '+hit.tick+' · '+hit.sites.find(s=>s.id===id).zone,hit.id)));
+  }
+  const hit=hits.find(h=>h.id===selectedImpact)??hits.at(-1);
+  picker.disabled=!hit;$('theatre-hit-seek').disabled=!hit;
+  if(hit)picker.value=hit.id;
+  set('theatre-hit',hit ? scenarios[t.scenario].target+' · '+hit.closing.toFixed(1)+' m/s closing · '+
+    hit.normalImpulse.toFixed(0)+' N·s normal · '+hit.tangentialImpulse.toFixed(0)+' N·s slide · '+
+    (hit.dissipated/1000).toFixed(1)+' kJ lost · normal '+hit.normal.map(v=>v.toFixed(2)).join(' / ') : 'No accepted impact at this tick');
+}
 function dashboard(force=false){
   if(!session)return;
   const tick=session.tick;
@@ -49,6 +69,7 @@ function dashboard(force=false){
   $('replay-seek').value=String(tick);
   set('replay-clock',shortTime(tick)+' / '+shortTime(session.totalTicks));
   const index=Number($('replay-follow').value);
+  if(session.recording.version===5){crashDashboard(index);return;}
   const driver=session.race.entrants[index]??session.race.player;
   const p=driver.current;
   set('replay-title',eventTitle(session.race.course,environment));
@@ -85,6 +106,9 @@ function render(elapsed){
   // interpolate between accepted simulation snapshots without changing physics.
   // Pause, seek and finished presentation use exact authoritative current poses.
   const alpha=playing && !session.finished && seekTarget===null?playBudget:1;
+  if(session.recording.version===5){
+    scene.draw(session.race,{camera:$('replay-camera').value,follow:Number($('replay-follow').value),alpha,reducedMotion:reducedMotion.matches});return;
+  }
   interpolateReplayPoses(session.race,poses,alpha);
   const followId=Number($('replay-follow').value);
   scene.draw(poses,{mode:session.race.phase==='finished'?'finished':'racing',
@@ -99,7 +123,7 @@ function restart(){
   if(!session)return;
   pause();seekTarget=null;session.reset();
   $('replay-play').disabled=false; // Restart also cancels any in-flight seek.
-  scene?.resetEffects();
+  scene?.resetEffects?.();
   lastHud=-1;dashboard(true);
   notify('Restarted. Press Play to watch.');
 }
@@ -107,7 +131,7 @@ function targetTick(tick){
   if(!session||!Number.isSafeInteger(tick))return;
   pause();
   seekTarget=Math.min(session.totalTicks,Math.max(0,tick));
-  if(seekTarget<session.tick){session.reset();scene?.resetEffects();}
+  if(seekTarget<session.tick){session.reset();scene?.resetEffects?.();}
   notify('Seeking — simulating accepted race ticks…');
   $('replay-play').disabled=true;
 }
@@ -125,7 +149,7 @@ function frame(ms){
         session.seekBatch(target);
         if(session.tick>=target) {
           seekTarget=null;
-          if(session.recording.version===4) scene?.resetEffects();
+          if(session.recording.version===4) scene?.resetEffects?.();
           $('replay-play').disabled=false;
           notify('Position '+shortTime(session.tick)+' · '+session.recording.compatibility+' source.');
         }
@@ -138,7 +162,8 @@ function frame(ms){
         }
         if(session.finished) {
           pause();
-          notify('Chequered flag! Race reconstructed from '+session.totalTicks+
+          if(session.recording.version===5)notify('Experiment reconstructed · '+session.race.result+' · '+session.tick+' ticks.');
+          else notify('Chequered flag! Race reconstructed from '+session.totalTicks+
             ' recorded ticks. Classification is shown at the left.');
         }
       }
@@ -148,11 +173,12 @@ function frame(ms){
   }
   requestAnimationFrame(frame);
 }
-function installScene(course,nextEnvironment) {
-  nextEnvironment=courseEnvironment(course,nextEnvironment);
+function installScene(race,nextEnvironment) {
+  const crash=!!race.scenario,course=race.course;
+  nextEnvironment=crash?'day':courseEnvironment(course,nextEnvironment);
   scene?.dispose();
   scene=null;
-  scene=createScene(canvas,course,coarse.matches?.75:1,nextEnvironment);
+  scene=crash ? createCrashScene(canvas,race.scenario,coarse.matches?.75:1) : createScene(canvas,course,coarse.matches?.75:1,nextEnvironment);
   environment=nextEnvironment;
   $('replay-environment').value=environment;
   document.body.dataset.environment=environment;
@@ -160,21 +186,21 @@ function installScene(course,nextEnvironment) {
 function loadRecordedRace(data,sourceText,fileName){
   const candidate=createReplaySession(data,stamp);
   // Construct the new scene only after source/shape admission has succeeded.
-  installScene(candidate.race.course,'day');
+  installScene(candidate.race,'day');
   session=candidate;
   imported=sourceText;currentFileName=fileName;
   seekTarget=null;pause();lastHud=-1;
   $('replay-seek').max=String(candidate.totalTicks);
-  for(const option of FIELD){
-    // Rebuild the selector with stable numeric IDs; no replay-supplied HTML.
-    const element=document.createElement('option');
-    element.value=String(option.id);
-    element.textContent='#'+option.number+' '+option.name;
-    $('replay-follow').append(element);
-  }
-  // A previous session may have populated the picker.
-  while($('replay-follow').options.length>FIELD.length)$('replay-follow').remove(0);
-  $('replay-follow').value=String(PLAYER_ID);
+  const crash=candidate.recording.version===5;
+  const drivers=crash ? candidate.race.world.cars.map(c=>({id:c.id,label:c.id?'Opposing car':'Player'})) :
+    FIELD.map(d=>({id:d.id,label:'#'+d.number+' '+d.name}));
+  $('replay-follow').replaceChildren(...drivers.map(d=>new Option(d.label,String(d.id))));
+  $('replay-follow').value=String(crash?0:PLAYER_ID);
+  $('replay-camera').replaceChildren(...(crash?[['Chase','chase'],['Impact zone','fixture'],['Inspection','inspect']]:
+    [['Low chase','chase'],['High chase','high']]).map(([text,value])=>new Option(text,value)));
+  $('race-instruments').hidden=crash;$('crash-instruments').hidden=!crash;
+  $('replay-nitro').hidden=$('replay-rocket').hidden=true;
+  $('theatre-impacts').replaceChildren();selectedImpact='';
   $('replay-camera').value='chase';
   $('replay-rate').value='1';
   $('replay-empty').hidden=true;
@@ -184,7 +210,7 @@ function loadRecordedRace(data,sourceText,fileName){
   dashboard(true);
   const label=candidate.recording.compatibility==='exact'?'exact source':
     'verified compatible race physics at '+candidate.recording.revision;
-  notify('Loaded '+candidate.recording.course+' · '+candidate.totalTicks+
+  notify('Loaded '+(candidate.recording.scenario??candidate.recording.course)+' · '+candidate.totalTicks+
     ' ticks · '+label+'. Press Play or move the timeline.');
   frameTime=null;
 }
@@ -211,12 +237,17 @@ $('replay-restart').addEventListener('click',restart);
 $('replay-back').addEventListener('click',()=>targetTick(session.tick-300));
 $('replay-forward').addEventListener('click',()=>targetTick(session.tick+300));
 $('replay-seek').addEventListener('input',()=>targetTick(Number($('replay-seek').value)));
-$('replay-follow').addEventListener('change',()=>dashboard(true));
+$('replay-follow').addEventListener('change',()=>{selectedImpact='';dashboard(true);});
+$('theatre-impacts').onchange=()=>{selectedImpact=$('theatre-impacts').value;dashboard(true);};
+$('theatre-hit-seek').onclick=()=>{
+  const hit=session?.race.contacts?.find(h=>h.id===$('theatre-impacts').value);
+  if(hit)targetTick(hit.tick);
+};
 $('replay-camera').addEventListener('change',()=>dashboard(true));
 $('replay-environment').addEventListener('change',()=>{
   if(!session)return;
   try{
-    installScene(session.race.course,$('replay-environment').value);
+    installScene(session.race,$('replay-environment').value);
     frameTime=null;
     dashboard(true);
   }catch(error){displayErrors(error);}
@@ -237,7 +268,7 @@ document.addEventListener('keydown',event=>{
   if(event.code==='Home'){targetTick(0);event.preventDefault();}
   if(event.code==='End'){targetTick(session.totalTicks);event.preventDefault();}
   if(event.code==='KeyV'){
-    $('replay-camera').value=$('replay-camera').value==='chase'?'high':'chase';
+    const picker=$('replay-camera');picker.selectedIndex=(picker.selectedIndex+1)%picker.length;
     event.preventDefault();
   }
 });
@@ -252,7 +283,7 @@ window.addEventListener('pagehide',event=>{
 window.addEventListener('pageshow',event=>{
   frameTime=null;
   if(event.persisted && session && !scene) {
-    try{installScene(session.race.course,environment);
+    try{installScene(session.race,environment);
       notify('Replay graphics restored after navigation. Press Play to resume.');}
     catch(error){displayErrors(error);}
   }
@@ -260,7 +291,7 @@ window.addEventListener('pageshow',event=>{
 canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();pause();notify('WebGL context lost. Playback suspended.');});
 canvas.addEventListener('webglcontextrestored',()=>{
   if(!session)return;
-  try{installScene(session.race.course,environment);
+  try{installScene(session.race,environment);
     notify('Graphics restored. Press Play to resume.');}
   catch(error){displayErrors(error);}
 });

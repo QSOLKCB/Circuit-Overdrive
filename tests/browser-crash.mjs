@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Real keyboard events, normal requestAnimationFrame and the shipped FixedClock.
 import assert from 'node:assert/strict';
+import {verifyCrashDownloads} from './crash-browser-replay.mjs';
 import {createHash} from 'node:crypto';
 import {mkdir,writeFile} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
@@ -10,7 +11,8 @@ const native=process.env.NATIVE_GL==='1';
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:native?['--enable-gpu','--use-angle=gl']:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 try{
-  const page=await browser.newPage({viewport:{width:1100,height:760},acceptDownloads:true});
+  const context=await browser.newContext({viewport:{width:1100,height:760},acceptDownloads:true});
+  const page=await context.newPage();
   const errors=[],results=[];
   page.on('pageerror',err=>errors.push(err.message));
   await page.route('**/*',async route=>{
@@ -49,7 +51,8 @@ try{
     const bytes=await page.screenshot(dir?{path:dir+'/'+scenario+'.png'}:{});
     const screenshotSha256=createHash('sha256').update(bytes).digest('hex');
     if(dir)await writeFile(dir+'/'+scenario+'-live.json',JSON.stringify({revision,screenshotSha256,...live}));
-    results.push({scenario,revision,ticks:live.ticks,result:live.result,impactTick:hit.tick,zone:face,
+    const hashes=await verifyCrashDownloads(page,base,live,revision,dir);
+    results.push({scenario,revision,...hashes,ticks:live.ticks,result:live.result,impactTick:hit.tick,zone:face,
       impulse:hit.normalImpulse,screenshotSha256});
     await page.locator('#lab-reset').click();assert.equal(await page.locator('#lab-tick').textContent(),'0');
     assert.equal(await page.locator('#zone-'+face).getAttribute('data-damage'),'0');
