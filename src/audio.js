@@ -221,8 +221,9 @@ export class TouringAudio {
   #musicFree = [];
   #musicNext = 0;
   #levels = {...DEFAULT_VOLUMES};
-  #voice = new TouringVoice();
-  constructor({contextFactory = () => new AudioContext()} = {}) {
+  #voice;
+  constructor({contextFactory = () => new AudioContext(), voice = new TouringVoice()} = {}) {
+    this.#voice = voice;
     this.contextFactory = contextFactory;
   }
   // Music is prepared from owned score data; no AudioContext until the gesture.

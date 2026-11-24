@@ -10,11 +10,11 @@ import vm from 'node:vm';
 
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
-const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'controller-lab', 'controller-menu', 'driver-command', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
+const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'crash-impact', 'crash-damage', 'crash-trial', 'crash-scene', 'crash-audio', 'crash-lab', 'controller-lab', 'controller-menu', 'driver-command', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
   'orbital', 'orbital-scene', 'rocket-contact', 'rocket-dynamics', 'rocket-race', 'rocket-scene', 'scene', 'sim', 'skyway', 'skyway-scene', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
-  'index.html', 'replay-theatre.html', 'src/style.css', 'src/mobile.css', 'src/championship.css', 'src/replay-theatre.css',
+  'index.html', 'crash-lab.html', 'replay-theatre.html', 'src/crash-lab.css', 'src/style.css', 'src/mobile.css', 'src/championship.css', 'src/replay-theatre.css',
   ...code.map(name => 'src/' + name + '.js'),
   'tracks/overdrive-speedway.json', 'tracks/redline-ridge.json',
   vendor + 'demos/horizon-lab/race-audio.js', ...engine.map(name => vendor + 'modules/' + name + '/index.js'),
@@ -27,7 +27,7 @@ function dependencies(name, data) {
     return module.moduleRequests?.map(request => request.specifier) ?? module.dependencySpecifiers;
   }
   const source = data.toString();
-  if (name === 'index.html' || name === 'replay-theatre.html') {
+  if (name.endsWith('.html')) {
     return [...source.matchAll(/\b(?:src|href)\s*=\s*["']([^"']+)["']/gi)]
       .map(match => match[1]).filter(url => url !== 'data:,');
   }
@@ -108,7 +108,7 @@ export async function readSite(source) {
   const revision = matchCommittedFiles(root, files);
   if (revision) {
     const marker='<meta name="game-revision" content="">';
-    for (const name of ['index.html','replay-theatre.html']) {
+    for (const name of siteFiles.filter(name=>name.endsWith('.html'))) {
       const html=files.get(name).toString();
       assert(html.includes(marker), 'missing source revision marker: '+name);
       files.set(name,Buffer.from(html.replace(marker,

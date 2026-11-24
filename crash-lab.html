@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172527"><meta name="game-revision" content="">
+<title>Crash Lab — Circuit Overdrive</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/crash-lab.css">
+</head><body>
+<header><a href="./index.html">← Circuit Overdrive</a><strong>Crash Lab</strong><a href="./replay-theatre.html">Replay Theatre ↗</a></header>
+<main>
+  <section class="stage" aria-label="Test runway">
+    <canvas id="lab-world" tabindex="-1" aria-label="Three-dimensional test runway"></canvas>
+    <div class="station"><span class="signal"></span> Impact facility <b id="station-id">01</b></div>
+    <div class="speed"><strong id="lab-speed">0</strong> km/h</div>
+    <div id="lab-touch" hidden aria-label="Touch driving controls"></div>
+  </section>
+  <aside>
+    <label for="scenario">Experiment</label>
+    <select id="scenario"><option value="wall">01 / The Wall</option><option value="glancing">02 / The Glancing Blow</option><option value="opposing">03 / Two-Car Impact</option></select>
+    <h1 id="lab-heading">The Wall</h1><p id="lab-aim"></p>
+    <div class="actions"><button class="primary" id="lab-arm">Arm controls</button><button id="lab-reset">Reset trial</button></div>
+    <p id="lab-status" role="status">Loading facility…</p>
+    <section class="instrument"><h2>Impact telemetry</h2>
+      <dl><dt>Simulation tick</dt><dd id="lab-tick">0</dd><dt>Contact</dt><dd id="lab-contact">Clear</dd>
+      <dt>Last strike</dt><dd id="lab-strike">—</dd><dt>Approach speed</dt><dd id="lab-relative">—</dd>
+      <dt>Closing speed</dt><dd id="lab-closing">—</dd><dt>Normal impulse</dt><dd id="lab-impulse">—</dd>
+      <dt>Slide impulse</dt><dd id="lab-tangent">—</dd><dt>Energy dissipated</dt><dd id="lab-energy">—</dd>
+      <dt>Contact normal X/Z</dt><dd id="lab-normal">—</dd></dl>
+    </section>
+    <section class="instrument"><h2>Chassis condition</h2>
+      <div class="condition"><div class="diagram" aria-label="Damage per chassis zone"><span id="zone-front">Front</span><span id="zone-left">Left</span><span id="zone-right">Right</span><span id="zone-rear">Rear</span></div>
+      <div id="components"></div></div><p id="lab-operational">Operational</p>
+    </section>
+    <div class="selectors"><label>Camera<select id="lab-camera"><option value="chase">Chase</option><option value="fixture">Impact zone</option><option value="inspect">Inspection</option></select></label>
+      <label>Input<select id="lab-input"><option value="keyboard">Keyboard</option><option value="touch">Touch</option><option value="gamepad">Controller</option></select></label></div>
+    <p class="keys">W / ↑ gas · S / ↓ brake · A / D steer · C view · Esc pause</p>
+    <details><summary>Sound &amp; mixer</summary><button id="lab-sound" aria-pressed="true">Sound on</button><div id="lab-mixer"></div></details>
+  </aside>
+</main><script type="module" src="./src/crash-lab.js"></script>
+</body></html>
