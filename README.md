@@ -112,7 +112,7 @@ The track, game rules, scenery, car modifications, livery and interface are game
 
 ## Verification
 
-The v1.0.0 review candidate adds an independent Rocket Overdrive sprint on Orbital Spine. Drive against five rivals through an ascending wall, inverted straight and open jump. Hold Space to engage flight assistance on the approach to the wall. RASTER VELOCITY plays at 180 BPM. Save the v4 command tape at the flag and load it in Replay Theatre on the same build. [Rocket player guide](docs/rocket.md) · [Physics contract and force receipts](docs/rocket-physics.md) · [Certification record and captures](docs/co-010-acceptance.md)
+The v1.0.0 review candidate adds an independent Rocket Overdrive sprint on Orbital Spine. Drive against five rivals through an ascending wall, inverted straight and open jump. Grip follows the road automatically, even when you brake to a stop on the ceiling. Gravity takes over at the open jump. RASTER VELOCITY plays at 180 BPM. Save the v4 command tape at the flag and load it in Replay Theatre on the same build. [Rocket player guide](docs/rocket.md) · [Physics contract and force receipts](docs/rocket-physics.md) · [Certification record and captures](docs/co-010-acceptance.md)
 
 With Node 22.18 or newer, run
 

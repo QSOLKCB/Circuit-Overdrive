@@ -22,7 +22,8 @@ export function createRecording(course,seed,revision=null) {
       if (typeof recover!=='boolean') throw TypeError('Invalid recovery flag');
       if (ticks===MAX_REPLAY_TICKS) { overflow=true; return; }
       const {throttle,brake,steer,boost}=command;
-      const row=rocket ? [1,throttle,brake,steer,boost,command.assist,command.dodge,recover] :
+      // v4 rules 4 keeps the original row width. The former assist bit is reserved.
+      const row=rocket ? [1,throttle,brake,steer,boost,false,command.dodge,recover] :
         [1,throttle,brake,steer,command.drift,boost,recover];
       const last=runs.at(-1);
       if (last && row.every((value,i)=>i===0 || last[i]===value)) last[0]++;

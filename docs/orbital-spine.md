@@ -2,7 +2,7 @@
 
 Orbital Spine is a 1,218.59 m, six-car Rocket sprint. The starting deck feeds two opposing banked turns. The first magnetic elbow pitches the car onto a 48 m vertical climb, then onto a 182 m inverted return span 162 m above world zero. After the descending wall and banked exit, the impulse lip launches the car over an open 9 m gap onto an 88 m catch deck. The finish has a further 48 m of runoff.
 
-Build speed on the approach and hold assistance through the magnetic elbows, walls and ceiling. Keep steering relative to the car. The launch apron gives room to align with the catch deck and apply boost. A lateral air dodge spends 12 units and changes the actual landing line. Losing the roof releases the car into world gravity. The approved dynamics, numerical bounds and tyre contact contract are documented in the [Rocket physics review](rocket-physics.md).
+Accelerate and steer through the magnetic elbows, walls and ceiling. Grip follows the wheel contacts automatically. Keep steering relative to the car. The launch apron gives room to align with the catch deck and apply boost. A lateral air dodge spends 12 units and changes the actual landing line. Losing the roof releases the car into world gravity. The approved dynamics, numerical bounds and tyre contact contract are documented in the [Rocket physics review](rocket-physics.md).
 
 ## Surface and gates
 

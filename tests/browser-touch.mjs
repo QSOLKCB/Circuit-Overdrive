@@ -96,7 +96,7 @@ try {
     const controls=Array.from(document.querySelectorAll('[data-touch]')).filter(el=>el.getClientRects().length);
     const wanted=['left','right','throttle','brake','camera','recover','pause'];
     if (nitro) wanted.push('boost','drift');
-    if (rocket) wanted.push('assist','boost','dodgeLeft','dodgeRight');
+    if (rocket) wanted.push('boost','dodgeLeft','dodgeRight');
     if (controls.map(el=>el.dataset.touch).sort().join()!==wanted.sort().join()) return 'Incorrect visible touch controls';
     const rects=[...instruments.map(s=>document.querySelector(s)),...controls].map(el=>el.getBoundingClientRect());
     const clipped=rects.some(r=>r.width<1 || r.left<limits.left || r.right>innerWidth-limits.right ||
@@ -279,16 +279,17 @@ try {
   await page.goto(url); await phase('menu');
   await tap('#choose-orbital'); await tap('#start'); await tap('#touch-arm'); await phase('racing');
   assert.equal(await safeLayout(insets.portrait),'clear','Orbital portrait controls and Rocket HUD');
-  const rocketFingers=await Promise.all(['throttle','left','assist','boost','dodgeRight'].map((name,i)=>down(i+1,name)));
-  await send('touchStart',rocketFingers); await held('assist','boost','dodgeRight','left','throttle');
+  assert.equal(await page.locator('[data-touch="assist"]').count(),0);
+  const rocketFingers=await Promise.all(['throttle','left','boost','dodgeRight'].map((name,i)=>down(i+1,name)));
+  await send('touchStart',rocketFingers); await held('boost','dodgeRight','left','throttle');
   await page.waitForFunction(()=>window.observedDrivingCommand?.dodge===1);
-  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:1,brake:0,steer:-1,assist:true,boost:true,dodge:1});
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:1,brake:0,steer:-1,boost:true,dodge:1});
   await send('touchCancel'); await phase('paused'); await held();
   await page.setViewportSize(landscape); await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:insets.landscape});
   await tap('#continue'); await phase('racing');
   assert.equal(await safeLayout(insets.landscape),'clear','Orbital landscape controls and Rocket HUD');
   await page.waitForFunction(()=>!window.observedDrivingCommand?.boost);
-  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:0,brake:0,steer:0,assist:false,boost:false,dodge:0});
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:0,brake:0,steer:0,boost:false,dodge:0});
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({url,browser:browser.version(),landscape,portrait,insets,device:'desktop Chromium touch emulation',...report},null,2));
 } finally { await browser.close(); }

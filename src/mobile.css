@@ -172,14 +172,13 @@ body[data-course=skyway][data-input=touch] #nitro-hud {
   .course-picker button canvas { max-width:36px; }
 }
 
-#touch-controls .touch-dodge, #touch-controls [data-touch=assist],
+#touch-controls .touch-dodge,
 body[data-course=orbital] #touch-controls [data-touch=drift] { display:none; }
 body[data-course=orbital] #touch-controls .touch-nitro,
 body[data-course=orbital] #touch-controls .touch-dodge {
   display:flex; right:var(--safe-right);
   bottom:calc(var(--safe-bottom) + var(--pad-height) + 6px);
 }
-body[data-course=orbital] #touch-controls [data-touch=assist] { display:block; }
 body[data-course=orbital] #touch-controls .touch-dodge { bottom:calc(var(--safe-bottom) + var(--pad-height) + 55px); }
 #touch-controls .touch-dodge button { height:44px; font-size:12px; color:#bbf7ed; }
 body[data-course=orbital][data-input=touch] #rocket-hud {

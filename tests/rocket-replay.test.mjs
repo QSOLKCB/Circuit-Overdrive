@@ -14,17 +14,17 @@ const record=()=>createRecording('orbital',123,revision);
 function controlsTape() {
   const tape=record();
   tape.record(NEUTRAL_ROCKET,false); tape.record(NEUTRAL_ROCKET,false);
-  tape.record({...NEUTRAL_ROCKET,throttle:.5,steer:-.75,assist:true,dodge:-1},false);
+  tape.record({...NEUTRAL_ROCKET,throttle:.5,steer:-.75,dodge:-1},false);
   tape.record({...NEUTRAL_ROCKET,boost:true,dodge:1},true);
   return tape.export();
 }
-test('v4 stores signed dodge, held assistance, boost, analog controls and accepted recovery separately',()=>{
+test('v4 rules 4 records the driver controls and reserves the old assist bit',()=>{
   const data=controlsTape();
-  assert.deepEqual(data,{version:4,discipline:'rocket',rules:3,course:'orbital',revision,seed:123,ticks:4,runs:[
-    [2,0,0,0,false,false,0,false],[1,.5,0,-.75,false,true,-1,false],[1,0,0,0,true,false,1,true]
+  assert.deepEqual(data,{version:4,discipline:'rocket',rules:4,course:'orbital',revision,seed:123,ticks:4,runs:[
+    [2,0,0,0,false,false,0,false],[1,.5,0,-.75,false,false,-1,false],[1,0,0,0,true,false,1,true]
   ]});
   const commands=[...replayCommands(data,revision)];
-  assert.deepEqual(commands[2],{command:{...NEUTRAL_ROCKET,throttle:.5,steer:-.75,assist:true,dodge:-1},recover:false});
+  assert.deepEqual(commands[2],{command:{...NEUTRAL_ROCKET,throttle:.5,steer:-.75,dodge:-1},recover:false});
   assert.deepEqual(commands[3],{command:{...NEUTRAL_ROCKET,boost:true,dodge:1},recover:true});
   const unstamped=createRecording('orbital',123);
   unstamped.record(NEUTRAL_ROCKET,false);
@@ -38,11 +38,11 @@ test('v4 stores signed dodge, held assistance, boost, analog controls and accept
 test('v4 rejects incompatible headers, indefinite numbers, malformed rows and accessor properties',()=>{
   const data=controlsTape(), row=data.runs[0], short=[1,0,0,0,false,false,0,false];
   for (const change of [{version:3},{version:2},{version:5},{course:'skyway'},{discipline:'nitro'},
-    {rules:0},{rules:1},{rules:2},{seed:2**32},{revision:published},{ticks:MAX_REPLAY_TICKS+1},{ticks:5},{extra:0}]) {
+    {rules:0},{rules:1},{rules:2},{rules:3},{seed:2**32},{revision:published},{ticks:MAX_REPLAY_TICKS+1},{ticks:5},{extra:0}]) {
     assert.throws(()=>validateTheatreReplay({...data,...change},revision));
   }
   for (const [i,values] of [[0,[0,1.5,1e20]],[1,[NaN,Infinity,1.01]],[3,[-2]],
-    [4,[1]],[5,[1]],[6,[true,.5,2,-2,NaN]],[7,[0]]]) {
+    [4,[1]],[5,[1,true]],[6,[true,.5,2,-2,NaN]],[7,[0]]]) {
     for (const value of values) {
       const bad=row.slice(); bad[i]=value;
       assert.throws(()=>validateTheatreReplay({...data,runs:[bad,...data.runs.slice(1)]},revision));
@@ -65,7 +65,7 @@ test('bounded v4 seek reproduces every entrant, integrates its quaternion, and i
   const recorder=record(), reference=createRocketRace(123);
   startRocketRace(reference);
   for(let tick=0;tick<592;tick++) {
-    const command={...NEUTRAL_ROCKET,throttle:1,assist:tick>200,boost:tick>250 && tick<320,dodge:tick===310?-1:0};
+    const command={...NEUTRAL_ROCKET,throttle:1,boost:tick>250 && tick<320,dodge:tick===310?-1:0};
     recorder.record(command,false); stepRocketRace(reference,command);
   }
   // A longer tape allows inspection at the 592nd tick while the race is live.

@@ -27,7 +27,7 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
   }
   const steeringPad = group('touch-steering', [['left', '◀', 'Steer left'], ['right', '▶', 'Steer right']]);
   group('touch-pedals', [['brake', 'Brake', 'Brake or reverse'], ['throttle', 'Gas', 'Accelerate']]);
-  group('touch-nitro', [['drift','Drift','Hold drift'],['assist','Assist','Hold rocket assistance'],['boost','Boost','Hold boost']]);
+  group('touch-nitro', [['drift','Drift','Hold drift'],['boost','Boost','Hold boost']]);
   group('touch-dodge', [['dodgeLeft','◀ Dodge','Dodge left'],['dodgeRight','Dodge ▶','Dodge right']]);
   group('touch-actions', [['pause','Pause','Pause race'], ['camera','View','Switch chase camera'],
     ['recover','Recover','Recover car with a three-second penalty']]);

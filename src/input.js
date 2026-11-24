@@ -18,25 +18,29 @@ export function attachRaceInput(target, enabled, onAction = () => false, discipl
   const keyboard = attachKeyboard(target, actions, {bindings, enabled});
   const stuntActions = new Actions();
   const stuntKeys = attachKeyboard(target, stuntActions, {
-    bindings:{Space:'assist',ShiftLeft:'boost',ShiftRight:'boost'},
+    bindings:{ShiftLeft:'boost',ShiftRight:'boost'},
     enabled:() => enabled() && drivingActions(discipline()).includes('boost')
+  });
+  const driftKey = attachKeyboard(target, stuntActions, {
+    bindings:{Space:'drift'}, enabled:() => enabled() && drivingActions(discipline()).includes('drift')
   });
   const dodgeKeys = attachKeyboard(target, stuntActions, {
     bindings:{KeyQ:'dodgeLeft',KeyE:'dodgeRight'}, enabled:() => enabled() && discipline()==='rocket'
   });
   function command() {
     const cmd = {throttle:actions.value('throttle'), brake:actions.value('brake'), steer:actions.axis('left','right')};
-    return drivingCommand(cmd,discipline(),name=>stuntActions.value(name==='drift' ? 'assist' : name));
+    return drivingCommand(cmd,discipline(),name=>stuntActions.value(name));
   }
   const recover = () => actions.consume('recover');
   const camera = () => actions.consume('camera');
   return {
-    clear() { keyboard.clear(); stuntKeys.clear(); dodgeKeys.clear(); }, command, recover, camera,
+    clear() { keyboard.clear(); stuntKeys.clear(); driftKey.clear(); dodgeKeys.clear(); }, command, recover, camera,
     sample:() => ({command:command(), recover:recover(), camera:camera()}),
     dispose() {
       target.removeEventListener('keydown',transition,{capture:true});
       keyboard.dispose();
       stuntKeys.dispose();
+      driftKey.dispose();
       dodgeKeys.dispose();
     }
   };

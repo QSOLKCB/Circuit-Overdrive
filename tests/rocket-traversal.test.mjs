@@ -74,11 +74,15 @@ test('one body drives from rest through both walls and the inverted ceiling on f
   assert.equal(hash.digest('hex'),summary.sha256);
   assert.deepEqual(replay,previous);
 
-  // Fork an actual inverted traversal state. Removing assistance lets gravity
-  // separate the chassis from the ceiling while the longitudinal motion persists.
-  let falling=ceilingBody;
-  const released={throttle:0,brake:0,steer:0,boost:false,assist:false,dodge:0};
-  for(let t=0;t<60;t++) falling=stepRocketBody(falling,released,surface);
+  // Fork the same inverted chassis over the deck and over an open gap.
+  const coast={throttle:0,brake:0,steer:0,boost:false,dodge:0};
+  const gap={probe:()=>null};
+  let supported=ceilingBody,falling=ceilingBody;
+  for(let t=0;t<60;t++) {
+    supported=stepRocketBody(supported,coast,surface);
+    falling=stepRocketBody(falling,coast,gap);
+  }
+  assert(supported.attached && supported.wheels.every(w=>w.contact && w.load>0));
   assert(!falling.attached && falling.wheels.every(w=>!w.contact));
   assert(falling.position[1]<ceilingBody.position[1]-4 && falling.velocity[1]<-8);
   assert(falling.position[2]>ceilingBody.position[2]+12);

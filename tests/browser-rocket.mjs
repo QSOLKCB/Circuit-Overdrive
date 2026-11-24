@@ -134,7 +134,7 @@ try {
         const c=reference.phase==='racing' ? orbitalDrive(reference.player) : NEUTRAL_ROCKET;
         const wasAir=live.player.vehicle.airTicks;
         key('KeyW',!!c.throttle); key('KeyS',!!c.brake); key('KeyA',c.steer<0); key('KeyD',c.steer>0);
-        key('Space',c.assist); key('ShiftLeft',c.boost); key('KeyQ',c.dodge<0); key('KeyE',c.dodge>0);
+        key('ShiftLeft',c.boost); key('KeyQ',c.dodge<0); key('KeyE',c.dodge>0);
         stepRocketRace(reference,c);
         update(h);
         report.ticks++;
@@ -226,7 +226,7 @@ try {
     assert(result.audio.mono>0 && result.audio.stereo>0 && result.audio.audible>0);
     const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#save-drive').click()]);
     const bytes=await readFile(await download.path()), tape=JSON.parse(bytes);
-    assert.equal(tape.revision,revision); assert.equal(tape.version,4); assert.equal(tape.ticks,report.ticks);
+    assert.equal(tape.revision,revision); assert.equal(tape.version,4); assert.equal(tape.rules,4); assert.equal(tape.ticks,report.ticks);
     result.recordingSha256=createHash('sha256').update(bytes).digest('hex');
     if(directory)await writeFile(directory+'/orbital-replay.json',bytes);
     await page.evaluate(async tape=>{

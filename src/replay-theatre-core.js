@@ -95,7 +95,7 @@ export function validateTheatreReplay(recording,siteRevision) {
        typeof steer!=='number'||!Number.isFinite(steer)||steer< -1||steer>1||
        typeof row[4]!=='boolean'||(version>=3 && typeof row[5]!=='boolean')||
        (version===3 && typeof row[6]!=='boolean')||
-       (version===4 && (!Number.isInteger(row[6])||Math.abs(row[6])>1||typeof row[7]!=='boolean')))
+       (version===4 && (row[5]!==false||!Number.isInteger(row[6])||Math.abs(row[6])>1||typeof row[7]!=='boolean')))
       throw RangeError('Invalid replay control data');
     total+=length;
     if(total>ticks)throw RangeError('Replay ticks exceed declared duration');
@@ -109,7 +109,7 @@ export function validateTheatreReplay(recording,siteRevision) {
 export function decodeReplayRun(version,row) {
   const command={throttle:row[1],brake:row[2],steer:row[3]};
   if (version===4) {
-    command.boost=row[4]; command.assist=row[5]; command.dodge=row[6];
+    command.boost=row[4]; command.dodge=row[6];
   } else if (version===3) {
     command.drift=row[4]; command.boost=row[5];
   }
