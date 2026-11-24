@@ -488,8 +488,8 @@ function drawHud(p) {
     const b=player.vehicle, f=b.contactFrame, next=orbital.gates[player.nextGate];
     $('rocket-energy').value=b.energy;
     set('rocket-level',Math.round(b.energy)+'%');
-    set('rocket-surface',f ? f.id.replaceAll('-',' ') : 'Free flight');
-    set('rocket-assist',b.attached ? 'Attached' : b.grounded ? 'On wheels' : 'Airborne');
+    set('rocket-surface',f ? f.id.replaceAll('-',' ') : player.deckContact ? 'On deck' : 'Free flight');
+    set('rocket-assist',b.attached ? 'Attached' : b.grounded ? 'On wheels' : player.deckContact ? 'Chassis contact' : 'Airborne');
     set('rocket-boost',b.boosting ? 'Boost firing' : b.energy>0 ? 'Boost ready' : 'Fuel empty');
     set('rocket-dodge',b.dodgeCooldown ? 'Dodge '+Math.ceil(b.dodgeCooldown/6)/10+' s' : 'Dodge ready');
     set('rocket-nav',next ? 'Gate '+(player.nextGate+1)+' · '+Math.max(0,Math.round(next.s-player.distance))+' m' : 'Finish');
@@ -521,6 +521,8 @@ function drawHud(p) {
   let message = '';
   if (race.course===orbital && player.finishTicks!==null && race.phase==='racing')
     message='Across the line · '+race.entrants.filter(e=>e.finishTicks!==null).length+' of 6 finished';
+  else if (race.course===orbital && player.overturnedTicks>=15)
+    message='Overturned · recovering (+3 s)';
   else if (player.wrongWay) message = 'Wrong way';
   else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
   else if (!race.course.closed && player.splitTicks.length && player.elapsedTicks-player.splitTicks.at(-1)<180) {

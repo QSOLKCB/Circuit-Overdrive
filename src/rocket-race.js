@@ -23,7 +23,7 @@ function entrant(driver,seed) {
   return {...driver,ai,vehicle,previousBody:vehicle,previous:current,current,distance,extraDistance:0,
     elapsedTicks:0,lapStartTick:0,lap:1,lapTicks:[],splitTicks:[],nextGate:0,finishTicks:null,
     missedGate:false,safeDistance:distance,safeLateral:lane,recoveryCooldown:0,recoveries:0,pendingRecovery:false,
-    wrongWay:false,contact:false,pairContact:false,position:driver.id+1};
+    wrongWay:false,contact:false,pairContact:false,deckContact:false,overturnedTicks:0,position:driver.id+1};
 }
 export function createRocketRace(seed=27) {
   if(!Number.isInteger(seed)||seed<0||seed>0xffffffff) throw RangeError('Invalid Rocket race seed');
@@ -104,7 +104,8 @@ function recover(e,active) {
       e.previous=e.current=snapshot(vehicle,road,NEUTRAL_ROCKET);
       e.distance=e.safeDistance=s;e.safeLateral=lane;
       e.elapsedTicks+=PENALTY_TICKS;e.recoveries++;e.recoveryCooldown=120;
-      e.pendingRecovery=e.wrongWay=e.missedGate=e.contact=e.pairContact=false;
+      e.pendingRecovery=e.wrongWay=e.missedGate=e.contact=e.pairContact=e.deckContact=false;
+      e.overturnedTicks=0;
       if(e.ai) e.ai.stalled=0;
       return true;
     }
@@ -159,6 +160,17 @@ function accept(e,input,active) {
   }
   e.current=snapshot(body,road,input,e.previous.wheelSpin);
   e.distance=road.station;e.wrongWay=delta<-.03;
+  // A roof resting on the inverted road is a crash too. Compare chassis up
+  // with this deck's normal so legitimate ceiling driving can continue.
+  const overturned=e.deckContact && length(body.velocity)<3 &&
+    dot(rotate(body.orientation,[0,1,0]),road.normal)<.4 &&
+    body.wheels.filter(w=>w.contact && w.load>0).length<2;
+  e.overturnedTicks=overturned ? Math.min(90,e.overturnedTicks+1) : 0;
+  if(e.overturnedTicks===90) {
+    e.pendingRecovery=true;
+    if(!e.recoveryCooldown) recover(e,active);
+    return;
+  }
   score(e,oldStation,road);
   if(e.finishTicks===null && road.station>orbital.gates[e.nextGate].s+2) e.missedGate=true;
   if(e.ai) {
