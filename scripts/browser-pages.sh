@@ -19,12 +19,12 @@ done
 shard=${shard:-all}
 
 case "$shard" in
-  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge championship night-speedway night-ridge night-smoke headlights night-contact nitro) ;;
+  all) suites=(smoke ridge-smoke gamepad profiles touch lab theatre speedway ridge championship night-speedway night-ridge night-smoke headlights night-contact nitro rocket) ;;
   championship) suites=(championship) ;;
   speedway) suites=(speedway night-speedway) ;;
   ridge) suites=(ridge night-ridge) ;;
   controllers) suites=(gamepad profiles lab) ;;
-  theatre) suites=(theatre) ;;
+  theatre) suites=(theatre rocket) ;;
   lifecycle) suites=(smoke ridge-smoke night-smoke touch) ;;
   effects) suites=(night-contact headlights nitro) ;;
   *) echo "Unknown browser shard: $shard" >&2; exit 2 ;;
@@ -51,7 +51,7 @@ for suite in "${suites[@]}"; do
       if [[ ${NATIVE_GL:-0} != 1 ]]; then args+=(--software-replay); fi
       ;;
     *)
-      if [[ $suite == theatre || $suite == championship || $suite == headlights || $suite == nitro ]]; then
+      if [[ $suite == theatre || $suite == championship || $suite == headlights || $suite == nitro || $suite == rocket ]]; then
         mkdir -p "$evidence/$suite"
         EVIDENCE_DIR="$evidence/$suite" node "tests/browser-${suite}.mjs" "$base" 2>&1 | tee "$evidence/${suite}.log"
       else
