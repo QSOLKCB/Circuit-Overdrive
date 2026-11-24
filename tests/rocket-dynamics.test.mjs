@@ -61,7 +61,7 @@ function speedBounds(state) {
 test('invalid commands, contact normals and handedness fail without advancing the previous body',()=>{
   const surface=plane(floor), body=moving(surface), before=structuredClone(body);
   for (const command of [null,{}, {...NEUTRAL_ROCKET,throttle:NaN}, {...NEUTRAL_ROCKET,brake:-1},
-    {...NEUTRAL_ROCKET,steer:Infinity}, {...NEUTRAL_ROCKET,boost:1}, {...NEUTRAL_ROCKET,assist:1},
+    {...NEUTRAL_ROCKET,steer:Infinity}, {...NEUTRAL_ROCKET,boost:1}, {...NEUTRAL_ROCKET,assist:false},
     {...NEUTRAL_ROCKET,dodge:2}, {...NEUTRAL_ROCKET,dodge:-.5}, {...NEUTRAL_ROCKET,extra:0}]) {
     assert.throws(()=>validateRocketCommand(command));
     assert.throws(()=>stepRocketBody(body,command,surface));
@@ -83,7 +83,7 @@ test('invalid commands, contact normals and handedness fail without advancing th
 });
 
 test('a flat suspension bears weight and steering changes the actual travel direction',()=>{
-  const surface=plane(floor), parked=advance(moving(surface,0),surface,120);
+  const surface=plane(floor,{material:'ordinary'}), parked=advance(moving(surface,0),surface,120);
   assert(!parked.attached);
   assert(parked.grounded && parked.wheels.every(w=>w.contact && w.load>0));
   assert(normalClearance(parked,floor)>.2 && normalClearance(parked,floor)<1.2);
@@ -99,13 +99,13 @@ test('a flat suspension bears weight and steering changes the actual travel dire
   assert(speed(stopped.velocity)<speed(straight.velocity)-1);
 });
 
-test('a full-lock start correction stays on its tyres and settles after release with either assist setting',()=>{
-  const surface=plane(floor);
-  for(const assist of [false,true]) for(const direction of [-1,1]) {
+test('a full-lock start correction stays on its tyres and settles after release on magnetic and ordinary pavement',()=>{
+  for(const material of ['ordinary','magnetic']) for(const direction of [-1,1]) {
+    const surface=plane(floor,{material});
     let body=moving(surface,0);
     for(let tick=1;tick<=150;tick++) {
       const steer=tick>=60 && tick<100 ? direction : 0;
-      body=advance(body,surface,1,{throttle:1,steer,assist});
+      body=advance(body,surface,1,{throttle:1,steer});
       assert(body.wheels.every(w=>w.contact && w.load>0),'inside and outside tyres must stay loaded');
       assert(dot(rotate(body.orientation,[0,1,0]),floor.normal)>.95,'sustained steering must not roll the chassis over');
       if(tick===99) {
@@ -119,9 +119,9 @@ test('a full-lock start correction stays on its tyres and settles after release 
   }
 });
 
-test('wall and ceiling magnetism exert an inward force only while the surface is supported',()=>{
-  for(const frame of [wall,ceiling]) {
-    const surface=plane(frame), start=moving(surface), held={assist:true,throttle:.35};
+test('automatic grip redirects gravity on the floor, wall and ceiling and releases over a gap',()=>{
+  for(const frame of [floor,wall,ceiling]) {
+    const surface=plane(frame), start=moving(surface), held={throttle:.35};
     let body=start;
     for(let i=0;i<60;i++) {
       const previous=body;
@@ -139,24 +139,38 @@ test('wall and ceiling magnetism exert an inward force only while the surface is
       const [x,y,z,w]=body.orientation;
       const bodyUp=[2*(x*y-z*w),1-2*(x*x+z*z),2*(y*z+x*w)];
       assert(dot(bodyUp,frame.normal)>.92);
-      assert(dot(body.adhesionAcceleration,frame.normal)<-gravity);
+      const gravityWithGrip=body.adhesionAcceleration.map((a,i)=>a-(i===1 ? gravity : 0));
+      for(let i=0;i<3;i++) near(gravityWithGrip[i],-ROCKET_LIMITS.trackGravity*frame.normal[i]);
+      assert(speed(body.adhesionAcceleration)<=ROCKET_LIMITS.maxAdhesion+1e-8);
     }
-    const released=advance(body,surface,1);
+    const released=advance(body,emptySpace,1);
     assert(!released.attached);
     near(speed(released.adhesionAcceleration),0);
-    if(frame===ceiling) {
-      const off=advance(body,surface,45), on=advance(body,surface,45,held);
-      assert(!off.grounded && !off.attached);
-      assert(off.position[1]<on.position[1]-1.7 && off.velocity[1]<-4);
-      assert(on.grounded && on.attached);
-      const tooSlow=advance(moving(surface,2),surface,20,{assist:true});
-      assert(!tooSlow.attached);
+    near(released.velocity[1]-body.velocity[1],-gravity*dt);
+  }
+});
+
+test('braking to rest and restarting on a wall or ceiling needs no fuel or minimum speed',()=>{
+  for(const frame of [wall,ceiling]) {
+    const surface=plane(frame), approach=moving(surface,12);
+    approach.energy=0;
+    let body=advance(approach,surface,180,{brake:1});
+    assert(body.attached && speed(body.velocity)<.15);
+    const stopped=body;
+    for(let tick=0;tick<180;tick++) {
+      body=advance(body,surface,1);
+      assert(body.attached && body.wheels.every(w=>w.contact && w.load>0));
     }
+    assert(speed(difference(body.position,stopped.position))<.12);
+    const away=advance(body,surface,60,{throttle:1});
+    assert(away.attached && dot(away.velocity,frame.tangent)>12 && away.energy===0);
+    const reversing=advance(moving(surface,-2),surface,30);
+    assert(reversing.attached && dot(reversing.velocity,frame.tangent)<-1);
   }
 });
 
 test('crossing the end of the ceiling removes support and free flight accelerates downward',()=>{
-  const finite=plane(ceiling,{end:10}), held={assist:true};
+  const finite=plane(ceiling,{end:10}), held=NEUTRAL_ROCKET;
   let body=moving(finite), wasAttached=false, flight=0;
   for(let i=0;i<110;i++) {
     const previous=body;
@@ -175,7 +189,7 @@ test('crossing the end of the ceiling removes support and free flight accelerate
 
 test('distant, ineligible and back-facing deck surfaces cannot provide magnetic support',()=>{
   const ordinary=plane(ceiling,{material:'ordinary'});
-  const held={assist:true};
+  const held=NEUTRAL_ROCKET;
   let body=moving(ordinary), contact=false;
   for(let i=0;i<40;i++) {
     body=advance(body,ordinary,1,held);
@@ -235,10 +249,10 @@ test('dodge applies one signed body-relative velocity impulse per released, elig
   assert.equal(denied.dodgeApplied,0);
 });
 
-test('unsupported steering with assistance changes angular momentum while gravity still governs flight',()=>{
+test('unsupported steering changes angular momentum while gravity still governs flight',()=>{
   const surface=plane(floor), start=advance(moving(surface,0),emptySpace,5);
-  const left=advance(start,emptySpace,20,{assist:true,steer:-1});
-  const right=advance(start,emptySpace,20,{assist:true,steer:1});
+  const left=advance(start,emptySpace,20,{steer:-1});
+  const right=advance(start,emptySpace,20,{steer:1});
   const coast=advance(start,emptySpace,20);
   assert(speed(difference(right.angularVelocity,left.angularVelocity))>.25);
   assert(Math.abs(dot(right.orientation,coast.orientation))<.99999);
@@ -277,38 +291,43 @@ test('a hard landing settles without penetration, unbounded energy or a velocity
 });
 
 test('the Crown exit keeps bounded magnetic pull through unloaded suspension at racing speed',()=>{
-  let station=460, unloadedTicks=0;
-  const opening=orbital.frame(station,4);
   const spine=orbital.sections.find(section=>section.id==='inverted-spine');
-  let body=createRocketBody(opening);
-  body.velocity=opening.tangent.map(component=>component*74);
-  for(let tick=0; tick<170 && station<spine.start+100; tick++) {
-    body=advance(body,orbital.surface,1,{assist:true,throttle:1});
-    const road=orbital.projectNear(body.position,station);
-    station=road.station;
-    speedBounds(body);
-    if(road.id!==spine.id) continue;
-    assert(body.attached, `Assist lost at ${station} m with a continuous deck`);
-    assert(normalClearance(body,road)<.9);
-    if(body.wheels.every(wheel=>wheel.load===0)) {
-      unloadedTicks++;
-      assert(body.wheels.filter(wheel=>wheel.distance!==null).length>=2);
-      near(speed(body.adhesionAcceleration),ROCKET_LIMITS.adhesion);
+  let unloadedTicks=0;
+  // The longer entry reproduces the reported Crown approach. The shorter
+  // approach also unloads all four springs before they settle on the ceiling.
+  for(const entry of [460,490]) {
+    let station=entry;
+    const opening=orbital.frame(station,4);
+    let body=createRocketBody(opening);
+    body.velocity=opening.tangent.map(component=>component*74);
+    for(let tick=0; tick<170 && station<spine.start+100; tick++) {
+      body=advance(body,orbital.surface,1,{throttle:1});
+      const road=orbital.projectNear(body.position,station);
+      station=road.station;
+      speedBounds(body);
+      if(road.id!==spine.id) continue;
+      assert(body.attached, `Automatic grip lost at ${station} m with a continuous deck`);
+      assert(normalClearance(body,road)<.9);
+      if(body.wheels.every(wheel=>wheel.load===0)) {
+        unloadedTicks++;
+        assert(body.wheels.filter(wheel=>wheel.distance!==null).length>=2);
+        near(speed(body.adhesionAcceleration),ROCKET_LIMITS.maxAdhesion);
+      }
     }
+    assert(station>=spine.start+100);
+    assert(body.wheels.every(wheel=>wheel.contact && wheel.load>0));
   }
-  assert(station>=spine.start+100);
   assert(unloadedTicks>=2, 'exercise the spring unload that dropped adhesion');
-  assert(body.wheels.every(wheel=>wheel.contact && wheel.load>0));
 });
 
 test('a short magnetic gap cannot sustain a prior attached state or reacquire a distant face',()=>{
-  const deck=plane(ceiling), attached=advance(moving(deck),deck,12,{assist:true});
+  const deck=plane(ceiling), attached=advance(moving(deck),deck,12);
   assert(attached.attached);
   // A change in the deck level puts every ray just beyond suspension travel,
   // but within the probe band. Wheel frames from the prior tick are still present.
   const away=.68-attached.wheels[0].distance;
   const recessed=plane({...ceiling,point:ceiling.point.map((p,i)=>p-away*ceiling.normal[i])});
-  const released=advance(attached,recessed,1,{assist:true});
+  const released=advance(attached,recessed,1);
   assert(released.wheels.every(w=>!w.contact && w.load===0));
   assert(!released.attached && !released.grounded);
   near(speed(released.adhesionAcceleration),0);
@@ -319,7 +338,7 @@ test('a short magnetic gap cannot sustain a prior attached state or reacquire a 
     const relative=difference(hit.point,attached.position);
     return dot(relative,ceiling.lateral)>0 && dot(relative,ceiling.tangent)>.6 ? hit : null;
   }};
-  const one=advance(attached,narrow,1,{assist:true});
+  const one=advance(attached,narrow,1);
   assert.equal(one.wheels.filter(w=>w.contact).length,1);
   assert(!one.attached);
   near(speed(one.adhesionAcceleration),0);
@@ -330,7 +349,7 @@ test('vacuum gravity is invariant to upside-down orientation and a gap leaves ho
     const start=moving(plane(frame)), initialVelocity=[2,-1,-12];
     start.position=[3,102,5];
     start.velocity=initialVelocity.slice();
-    const t=.5, state=advance(start,emptySpace,30,{assist:true});
+    const t=.5, state=advance(start,emptySpace,30);
     near(state.velocity[0],2); near(state.velocity[1],-1-gravity*t); near(state.velocity[2],-12);
     near(state.position[0],start.position[0]+2*t); near(state.position[2],start.position[2]-12*t);
     near(state.position[1],start.position[1]-t-.5*gravity*t*t,.015);
@@ -359,22 +378,22 @@ test('boost adds finite forward thrust, pays for partial delivery and stops at d
   assert.deepEqual(rejected.velocity,advance(fast,emptySpace,1).velocity);
 });
 
-test('assisted pitch trim and angular damping change physical spin without any translational lift',()=>{
+test('automatic flight damping and pedal pitch trim change physical spin without any translational lift',()=>{
   const start=moving(plane(floor),0);
-  const noseUp=advance(start,emptySpace,24,{assist:true,throttle:1});
-  const noseDown=advance(start,emptySpace,24,{assist:true,brake:1});
+  const noseUp=advance(start,emptySpace,24,{throttle:1});
+  const noseDown=advance(start,emptySpace,24,{brake:1});
   assert(noseUp.angularVelocity[0]>.05 && noseDown.angularVelocity[0]<-.05);
   assert(Math.abs(dot(noseUp.orientation,noseDown.orientation))<.99995);
   assert.deepEqual(noseUp.velocity,noseDown.velocity);
   near(noseUp.velocity[1],-gravity*24*dt);
   const rotating={...start,angularVelocity:[1,-.4,.8]};
-  const damped=advance(rotating,emptySpace,30,{assist:true}), unassisted=advance(rotating,emptySpace,30);
-  assert(speed(damped.angularVelocity)<speed(unassisted.angularVelocity)-.05);
-  assert.deepEqual(damped.velocity,unassisted.velocity);
+  const damped=advance(rotating,emptySpace,30), released=advance(start,emptySpace,30);
+  assert(speed(damped.angularVelocity)<speed(rotating.angularVelocity)*.6);
+  assert.deepEqual(damped.velocity,released.velocity);
 });
 
 test('gravity and commanded torque reach the hard limits without overshoot or orientation drift',()=>{
-  const surface=plane(floor), start=moving(surface), command={assist:true,steer:1};
+  const surface=plane(floor), start=moving(surface), command={steer:1};
   let state={...start,position:[0,250,0],velocity:[0,-74.8,0],angularVelocity:[0,-6,0]};
   let reachedSpeed=false;
   for(let tick=0;tick<120;tick++) {
@@ -400,7 +419,7 @@ test('approach assist levels a tilted vehicle only near a closing surface, throu
   start.orientation=[0,0,Math.sin(roll/2),Math.cos(roll/2)];
   start.position=[0,.82,0];
   start.velocity=[0,-.35,-2];
-  const command={assist:true};
+  const command=NEUTRAL_ROCKET;
   const approach=advance(start,deck,1,command), vacuum=advance(start,emptySpace,1,command);
   const escaping=advance({...start,velocity:[0,1,-2]},deck,1,command);
   assert(!approach.grounded && !approach.attached);

@@ -117,7 +117,7 @@ test('versioned storage requires intentional neutral save, isolates device layou
   press(pad,4,0);
   assert.equal(saveProfile(pad,p,store),true);
   const [key]=records.keys(); const parsed=JSON.parse(records.get(key));
-  assert.equal(parsed.version,3); assert.deepEqual(parsed.devices[0].profile,p);
+  assert.equal(parsed.version,4); assert.deepEqual(parsed.devices[0].profile,p);
   assert.deepEqual(savedProfile({...pad,index:4},store),p);
   assert.equal(savedProfile({...pad,buttons:[...pad.buttons,{value:0}]},store),null);
   const other=device('read from storage');
@@ -161,7 +161,7 @@ test('v1 assignments migrate without guessing and permit explicit independent Ni
   assert.equal(JSON.parse(raw).version,1,'reading an old save does not rewrite storage');
   restored.actions.drift=button(4); restored.actions.boost=button(5);
   assert.equal(saveProfile(pad,restored,store),true);
-  assert.equal(JSON.parse(raw).version,3);
+  assert.equal(JSON.parse(raw).version,4);
   const map=profileMapper(savedProfile(pad,store),pad);
   press(pad,4,1); press(pad,5,1);
   assert.deepEqual(map(pad,true).held,['drift','boost']);
@@ -171,22 +171,40 @@ test('v1 assignments migrate without guessing and permit explicit independent Ni
   assert.match(profileError(restored,pad),/different control/);
 });
 
-test('old Nitro wheel calibration remains usable and newly captured Rocket actions need an explicit v3 save',()=>{
+test('old Nitro wheel calibration remains usable and newly captured Rocket actions need an explicit save',()=>{
   const p=wheel(), pad=device('Orbital calibrated wheel',[.1,1,-.8]);
   p.actions.drift=button(4); p.actions.boost=button(5);
   let raw=JSON.stringify({version:2,devices:[{key:deviceKey(pad),profile:p}]});
   const store={getItem:()=>raw,setItem:(_,v)=>{raw=v;}};
   const restored=savedProfile(pad,store);assert.deepEqual(restored,p);assert.equal(JSON.parse(raw).version,2);
-  const fields={assist:button(4),dodgeLeft:button(8),dodgeRight:button(9)};
+  const fields={dodgeLeft:button(8),dodgeRight:button(9)};
   Object.assign(restored.actions,fields);
   raw=JSON.stringify({version:2,devices:[{key:deviceKey(pad),profile:restored}]});
   assert.equal(savedProfile(pad,store),null,'reject new controls in an old envelope');
-  assert(saveProfile(pad,restored,store)); assert.equal(JSON.parse(raw).version,3);
+  assert(saveProfile(pad,restored,store)); assert.equal(JSON.parse(raw).version,4);
   press(pad,4,1); press(pad,5,1); press(pad,8,1); const map=profileMapper(restored,pad);
-  assert.deepEqual(map(pad,'rocket').held,['boost','assist','dodgeLeft']);
+  assert.deepEqual(map(pad,'rocket').held,['boost','dodgeLeft']);
   assert.deepEqual(map(pad,'nitro').held,['drift','boost']); assert.deepEqual(map(pad,false).held,[]);
   assert.throws(()=>saveProfile(pad,restored,store),/Release/);
   restored.actions.dodgeRight=restored.actions.dodgeLeft; assert(profileError(restored,pad));
+});
+
+test('loading a v3 wheel drops only its retired assist mapping and leaves storage alone until save',()=>{
+  const p=wheel(), pad=device('v3 wheel with independent assist',[.1,1,-.8]);
+  Object.assign(p.actions,{drift:button(4),boost:button(5),dodgeLeft:button(8),dodgeRight:button(9)});
+  const old={...p,actions:{...p.actions,assist:button(10)}};
+  const prior=JSON.stringify({version:3,devices:[{key:deviceKey(pad),profile:old}]});
+  let raw=prior;
+  const store={getItem:()=>raw,setItem:(_,value)=>{raw=value;}};
+  const restored=savedProfile(pad,store);
+  assert.deepEqual(restored,p);
+  assert.equal(raw,prior);
+  press(pad,10,1);
+  const mapped=profileMapper(restored,pad)(pad,'rocket');
+  assert(mapped.neutral && mapped.held.length===0);
+  assert(saveProfile(pad,restored,store));
+  assert.equal(JSON.parse(raw).version,4);
+  assert.deepEqual(JSON.parse(raw).devices[0].profile,p);
 });
 
 test('a Rocket-only hat must return to rest for Rocket arming and has no authority on other grids',()=>{

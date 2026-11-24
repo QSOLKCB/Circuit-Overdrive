@@ -103,7 +103,7 @@ try {
     window.orbitalPilot=(player,canvas)=>{
       const command=orbitalDrive(player), wanted=new Set();
       for(const [active,code] of [[command.throttle,'KeyW'],[command.brake,'KeyS'],[command.steer<0,'KeyA'],
-        [command.steer>0,'KeyD'],[command.assist,'Space'],[command.boost,'ShiftLeft'],[command.dodge<0,'KeyQ'],[command.dodge>0,'KeyE']]) {
+        [command.steer>0,'KeyD'],[command.boost,'ShiftLeft'],[command.dodge<0,'KeyQ'],[command.dodge>0,'KeyE']]) {
         if(active) wanted.add(code);
       }
       const key=(type,code)=>canvas.dispatchEvent(new KeyboardEvent(type,{code,bubbles:true,cancelable:true}));

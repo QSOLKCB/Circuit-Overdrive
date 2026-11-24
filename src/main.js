@@ -85,10 +85,6 @@ document.body.dataset.input = 'keyboard';
 $('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 let stuntPoints=0, lastAward=0, awardUntil=0;
-let rocketAssistHeld=false;
-const magnetApproach=orbital.sections.find(section=>section.id==='magnet-apron').start;
-const magnetExit=orbital.sections.find(section=>section.id==='gravity-well').end;
-const rocketAssistControl=()=>input.source==='keyboard' ? 'Space' : 'Assist';
 const set = (id, value) => {
   const element = $(id), text = String(value);
   if (element.textContent !== text) element.textContent = text;
@@ -118,7 +114,6 @@ function resetClock() {
   lastTime = null;
   clock.reset();
   input.clear();
-  rocketAssistHeld=false;
 }
 function resetPresentation() {
   scene?.resetEffects();
@@ -204,7 +199,7 @@ function updatePanel(screenChanged = false) {
   set('panel-course',championship.active ? championship.roundName : eventTitle(race.course,environment));
   set('courses',championship.active ? 'Leave event' : 'Course select');
   if(mode==='grid' && race.course===orbital) {
-    copy.grid+=' After arming, hold '+rocketAssistControl()+' through the wall and ceiling.';
+    copy.grid+=' Grip is automatic on walls and ceilings.';
   }
   set('panel-copy', copy[mode] || '');
   if (mode === 'finished') {
@@ -454,7 +449,6 @@ function fixedUpdate() {
   if (!focused()) { pause(); return; }
   const {command, camera:switchView, recover} = input.sample();
   if (!driving()) return; // A polled pause or disconnect takes effect on this same tick.
-  rocketAssistHeld=race.course===orbital && command.assist;
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
   const recovered = recover && race.phase === 'racing' && (race.course===orbital ? recoverRocketCar(race) : race.course===skyway ? recoverNitroCar(race) : recoverCar(race));
   recording?.record(command, recovered);
@@ -496,13 +490,14 @@ function timingGateLabel(race) {
 function drawHud(p) {
   const player = race.player;
   if (race.course===orbital) {
-    const b=player.vehicle, f=b.contactFrame, next=orbital.gates[player.nextGate];
+    const b=player.vehicle, next=orbital.gates[player.nextGate];
     $('rocket-energy').value=b.energy;
     set('rocket-level',Math.round(b.energy)+'%');
-    set('rocket-surface',f ? f.id.replaceAll('-',' ') : player.deckContact ? 'On deck' : 'Free flight');
-    const assist=rocketAssistHeld ? 'Assist held' : 'Assist off';
-    const flightStatus=b.grounded ? 'On wheels · '+assist : player.deckContact ? 'Chassis contact' : assist;
-    set('rocket-assist',b.attached ? 'Attached' : flightStatus);
+    const surface=b.contactFrame ?? (b.attached ? b.wheels.find(w=>w.frame?.material==='magnetic')?.frame : null);
+    const location=surface ? surface.id.replaceAll('-',' ') : player.deckContact ? 'On deck' : 'Free flight';
+    const grip=b.attached ? 'Grip active' : b.grounded ? 'On wheels' : player.deckContact ? 'Chassis contact' : 'Airborne';
+    set('rocket-surface',b.tick ? location : 'Starting grid');
+    set('rocket-grip',b.tick ? grip : 'Ready');
     set('rocket-boost',b.boosting ? 'Boost firing' : b.energy>0 ? 'Boost ready' : 'Fuel empty');
     set('rocket-dodge',b.dodgeCooldown ? 'Dodge '+Math.ceil(b.dodgeCooldown/6)/10+' s' : 'Dodge ready');
     const gate=timingGateLabel(race);
@@ -544,9 +539,6 @@ function drawHud(p) {
   }
   else if (player.wrongWay) message = 'Wrong way';
   else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
-  else if (race.course===orbital && race.phase==='racing' && !rocketAssistHeld &&
-      player.distance>=magnetApproach && player.distance<magnetExit)
-    message='Hold '+rocketAssistControl()+' for wall and ceiling grip';
   else if (!race.course.closed && player.splitTicks.length && player.elapsedTicks-player.splitTicks.at(-1)<180) {
     message = 'CP ' + player.splitTicks.length + '  ·  ' + formatTime(player.splitTicks.at(-1));
   }

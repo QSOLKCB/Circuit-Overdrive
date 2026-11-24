@@ -76,17 +76,17 @@ The viewer reconstructs wheel contacts, charge, boost impulses, flight, landings
 
 ## Orbital Spine version 4
 
-Rules 3 retain magnetic grip through brief suspension unloading at supported transitions. To watch a rules 1 or 2 drive, open the archive for its recorded source revision. All three rules versions use the same eight-element command row.
+Rocket rules 4 derive grip and landing assistance from the physical wheels and the road. Rules 1–3 recorded a driver-operated assist control. Use the archive for the recorded SHA to watch those drives with their original physics. All four rules versions use an eight-element row.
 
 Finish Rocket Overdrive and save the replay from the results screen. In Theatre, follow any of the six drivers to see fuel, boost and magnetic contact. The camera follows the interpolated chassis quaternion through walls and ceilings. Seeking and replay speed affect the spectator clock. The Theatre runs each physics tick in order and stays silent during playback.
 
 | Field | Orbital recording |
 | --- | --- |
-| `version`, `discipline`, `rules`, `course` | `4`, `"rocket"`, `3`, `"orbital"` |
+| `version`, `discipline`, `rules`, `course` | `4`, `"rocket"`, `4`, `"orbital"` |
 | `revision` | Exact matching 40-digit lowercase hexadecimal source SHA |
 | `seed`, `ticks` | Unsigned 32-bit race seed, 1–108,000 accepted ticks |
 | `runs` | Dense nonempty rows with exactly eight entries |
 
-A row is `[length, throttle, brake, steer, boost, assist, dodge, recover]`. Each positive integer length repeats the same accepted command. Pedals range from 0 to 1, steering from −1 to 1, boost and assist are booleans, and dodge is a signed integer equal to −1, 0 or +1. Recovery is a boolean for the accepted recovery request. All scalars must be finite. Row lengths must add up to the exact tick count. The file budget is 16 MiB and work per seek batch is at most 240 ticks. World positions, surface IDs, wheel forces, standings, and file-supplied code are never accepted as overrides. The race reconstructs these from the command stream and calibrated course.
+A row is `[length, throttle, brake, steer, boost, false, dodge, recover]`. Each positive integer length repeats the same accepted command. Pedals range from 0 to 1, steering from −1 to 1, boost is boolean, the former assist slot must be the literal `false`, and dodge is a signed integer equal to −1, 0 or +1. Recovery is a boolean for the accepted recovery request. All scalars must be finite. Row lengths must add up to the exact tick count. The file budget is 16 MiB and work per seek batch is at most 240 ticks. World positions, surface IDs, wheel forces, standings, and file-supplied code are never accepted as overrides. The race reconstructs these from the command stream and calibrated course.
 
 The published v0.9.0 SHA `f7f45d1b6c3521dd728945b71cf20ab406603cb4` is an audited touring and Nitro source. The pin test verifies the complete Nitro solver, Skyway, simulation, shared AI, contact code, course data and pinned engine blobs. A separate Node v22.18.0 run of that archived source reproduced the 3,925-tick Skyway drive from seed 27. Its 952 command runs hash to `596ad8d87cc8a1546bd2486a22d6a045be272a7c8d66536350aa56b28a7cf20f` using compact JSON. The final six entrants hash to `5a3295dde8531429690bc46776a5d08efa93961c9c7e784303c3800015da4bad` in that runtime. v4 requires the exact source. A revision stamp identifies the expected implementation and does not authenticate the driver.

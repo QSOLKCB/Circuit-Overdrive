@@ -14,6 +14,6 @@ export function orbitalDrive(e) {
   const boost=!air && s>gap.start-38 && s<gap.start-20;
   const inTransfer=s>gap.start-2 && s<gap.end+38;
   return {throttle:!air && (boost || speed<wanted) ? 1 : 0,brake:!air && !boost && speed>wanted+1 ? 1 : 0,
-    steer:!air && !inTransfer && Math.abs(error)>.028 ? Math.sign(error) : 0,assist:true,boost,
+    steer:!air && !inTransfer && Math.abs(error)>.028 ? Math.sign(error) : 0,boost,
     dodge:air && v.airTicks===8 && s>gap.start-2 && s<gap.end ? -1 : 0};
 }

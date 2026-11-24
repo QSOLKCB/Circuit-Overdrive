@@ -35,7 +35,7 @@ export async function verifyRocketOpening(browser, url) {
       const {FixedClock}=await import('./vendor/vanillajs/modules/time/index.js');
       const advance=FixedClock.prototype.advance;
       const race=window.openingRace();
-      const observations=window.openingTrace={minClearance:Infinity,minUp:1,steerTicks:0,gasTicks:0,assistTicks:0,contacts:0,gates:[]};
+      const observations=window.openingTrace={minClearance:Infinity,minUp:1,steerTicks:0,gasTicks:0,attachedTicks:0,contacts:0,gates:[]};
       FixedClock.prototype.advance=function(dt,update) {
         return advance.call(this,dt,h=>{
           const racing=race.phase==='racing';
@@ -48,7 +48,7 @@ export async function verifyRocketOpening(browser, url) {
           const c=window.observedDrivingCommand;
           observations.steerTicks+=Number(c.steer===1);
           observations.gasTicks+=Number(c.throttle===1);
-          observations.assistTicks+=Number(c.assist);
+          observations.attachedTicks+=Number(b.attached);
           observations.contacts+=Number(p.contact);
           if(p.nextGate>observations.gates.length) observations.gates.push({tick:race.elapsedTicks,
             station:race.course.gates[p.nextGate-1].s,loaded:b.wheels.filter(w=>w.contact && w.load>0).length});
@@ -76,7 +76,7 @@ export async function verifyRocketOpening(browser, url) {
     assert.equal(trace.entrants,6);
     assert.equal(trace.gasTicks,330);
     assert.equal(trace.steerTicks,30);
-    assert.equal(trace.assistTicks,0);
+    assert(trace.attachedTicks>300);
     assert(trace.gate>=2 && trace.recoveries===0 && trace.minClearance>0 && trace.minUp>0,
       'The car must cross the start line and GATE1 upright and above the road after a half-second steering press: '+JSON.stringify(trace));
     assert.deepEqual(trace.gates.slice(0,2).map(g=>g.station),[0,123]);

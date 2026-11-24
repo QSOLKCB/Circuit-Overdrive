@@ -75,7 +75,7 @@ export function planRocketCommand(driver,active) {
   const wanted=['azimuth-bank','counterbank','escape-bank'].includes(target.id) ? Math.min(27,ai.cruise) : ai.cruise;
   const boost=!air && s>gap.start-35 && s<gap.start-12 && speed<39 && v.energy>2;
   const brake=boost || air ? 0 : clamp((speed-wanted-.6)*.19,0,1);
-  return {throttle:air ? 0 : boost ? 1 : clamp((wanted-speed)*.36,0,1),brake,steer:air?0:steer,assist:true,boost,
+  return {throttle:air ? 0 : boost ? 1 : clamp((wanted-speed)*.36,0,1),brake,steer:air?0:steer,boost,
     dodge:avoidanceDodge(driver,active)};
 }
 
@@ -142,8 +142,7 @@ function score(e,oldStation,road) {
   if(e.nextGate===orbital.gates.length-1) e.finishTicks=e.elapsedTicks;
   else if(e.nextGate) e.splitTicks.push(e.elapsedTicks);
   e.nextGate++;e.missedGate=false;
-  // At a reset the motor starts at rest. Reserve a supported upright deck for
-  // that operation; entry to inverted regions needs forward momentum.
+  // Recovery only uses upright, credited decks with room to rejoin the field.
   if(gate.normal[1]>.87) {
     e.safeDistance=gate.s-2;
     e.safeLateral=clamp(road.offset,-9,9);

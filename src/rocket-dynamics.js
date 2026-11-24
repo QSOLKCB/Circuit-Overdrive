@@ -2,17 +2,18 @@
 import {add, clamp, cross, dot, length, normalize, quatConjugate, quatMultiply, quatNormalize,
   rotate, scale, subtract} from '../vendor/vanillajs/modules/math/index.js';
 
-export const ROCKET_RULES = 3;
-export const NEUTRAL_ROCKET = Object.freeze({throttle:0, brake:0, steer:0, boost:false, assist:false, dodge:0});
+export const ROCKET_RULES = 4;
+export const NEUTRAL_ROCKET = Object.freeze({throttle:0, brake:0, steer:0, boost:false, dodge:0});
 export const ROCKET_LIMITS = Object.freeze({
   mass:1100, gravity:9.81, substeps:4, maxSpeed:75, maxAngularSpeed:6,
   mountHeight:-0.14, restLength:0.64, minLength:0.24, probeRange:0.72,
-  enterSpeed:9, releaseSpeed:6, adhesion:32, adhesionSeamTolerance:.06,
+  trackGravity:32, maxAdhesion:41.81, adhesionSeamTolerance:.06,
   spring:480, damper:29, maxSupport:145, tyreRollArm:.26,
   dodgeCooldown:60, dodgeSpeed:4, dodgeCost:12, capacity:100, boostDrain:18, boostAcceleration:13,
   maxAcceleration:352, maxAngularAcceleration:120, maxStopImpulse:1100*85,
 });
 const L = ROCKET_LIMITS, h = 1/(60*L.substeps);
+const worldGravity = Object.freeze([0,-L.gravity,0]);
 const mounts = [[-.79,L.mountHeight,-1.29],[.79,L.mountHeight,-1.29],
   [-.79,L.mountHeight,1.29],[.79,L.mountHeight,1.29]];
 // Principal moments in kg m² about local right, up and rear axes.
@@ -42,7 +43,7 @@ export function validateRocketCommand(command) {
   for (const key of fields) {
     const field=Object.getOwnPropertyDescriptor(command,key);
     if (!field?.enumerable || !Object.hasOwn(field,'value')) throw TypeError('Invalid Rocket '+key);
-    if (key==='boost' || key==='assist') {
+    if (key==='boost') {
       if (typeof field.value!=='boolean') throw TypeError('Invalid Rocket '+key);
     } else if (key==='dodge') integer(field.value,-1,1,key);
     else bound(field.value,key==='steer' ? -1 : 0,1,key);
@@ -109,7 +110,8 @@ function checkBody(body) {
     if (typeof body[key]!=='boolean') throw TypeError('Invalid Rocket '+key);
   }
   vector(body.acceleration,3,L.maxAcceleration+1e-8,'acceleration');
-  vector(body.adhesionAcceleration,3,L.adhesion+1e-8,'adhesion acceleration');
+  vector(body.adhesionAcceleration,3,L.maxAdhesion+1e-8,'adhesion acceleration');
+  bound(length(body.adhesionAcceleration),0,L.maxAdhesion+1e-8,'adhesion magnitude');
   bound(body.endStopImpulse,0,L.maxStopImpulse+1e-6,'end stop');
   if (!Array.isArray(body.wheels) || body.wheels.length!==4) {
     throw TypeError('Invalid Rocket contact state');
@@ -165,10 +167,12 @@ function substep(state,command,surface,dodgeEdge) {
       Math.abs(dot(subtract(wheel.hit.point,previous.point),previous.normal))<=L.adhesionSeamTolerance;
   });
   const forwardSpeed=dot(state.velocity,forward);
-  const attached=command.assist && eligible.length>=2 && forwardSpeed>=(state.attached ? L.releaseSpeed : L.enterSpeed);
+  const attached=eligible.length>=2;
   const normal=attached ? normalize(eligible.reduce((v,w)=>add(v,w.hit.normal),[0,0,0])) : null;
-  const adhesionAcceleration=attached ? scale(normal,-L.adhesion) : [0,0,0];
-  let acceleration=add([0,-L.gravity,0],adhesionAcceleration), torque=[0,0,0];
+  // The track field plus world gravity points into the deck. Suspension
+  // bears that load. Losing the wheel evidence removes the field.
+  const adhesionAcceleration=attached ? subtract(scale(normal,-L.trackGravity),worldGravity) : [0,0,0];
+  let acceleration=add(worldGravity,adhesionAcceleration), torque=[0,0,0];
   const wheels=hits.map((wheel,index)=>{
     if (!wheel) return emptyWheel();
     const {hit,arm,motion,load,compression}=wheel;
@@ -218,11 +222,10 @@ function substep(state,command,surface,dodgeEdge) {
   if (!grounded && !attached) {
     // Pitch trim, yaw and roll are torque couples. Neutral air damping consumes
     // angular momentum without changing the ballistic centre-of-mass trajectory.
-    const damping=command.assist ? 1.35 : .12;
-    const airDemand=command.assist ? [command.throttle-command.brake,-command.steer,1.2*command.steer] : [0,0,0];
-    const jetTorque=airDemand.map((a,i)=>ROCKET_INERTIA[i]*(a-damping*omegaLocal[i]));
+    const airDemand=[command.throttle-command.brake,-command.steer,1.2*command.steer];
+    const jetTorque=airDemand.map((a,i)=>ROCKET_INERTIA[i]*(a-1.35*omegaLocal[i]));
     torque=add(torque,rotate(q,jetTorque));
-    const approach=command.assist && hits.find(w=>w && dot(w.motion,w.hit.normal)<0);
+    const approach=hits.find(w=>w && dot(w.motion,w.hit.normal)<0);
     if (approach) torque=add(torque,scale(cross(up,approach.hit.normal),1600));
   }
 

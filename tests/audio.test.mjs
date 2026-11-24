@@ -244,7 +244,7 @@ test('Rocket sound consumes accepted body events, isolated from the engine bus a
   const noDodge={...eventBody,dodgeApplied:0};
   assert(difference(blocks(floating,eventBody,NEUTRAL_ROCKET,effects),blocks(floating,noDodge,NEUTRAL_ROCKET,effects))>.001);
   assert.deepEqual(blocks(floating,eventBody,NEUTRAL_ROCKET,engine),blocks(floating,noDodge,NEUTRAL_ROCKET,engine));
-  assert.deepEqual(blocks(floating,noDodge,{...NEUTRAL_ROCKET,dodge:1,boost:true,assist:true},effects),
+  assert.deepEqual(blocks(floating,noDodge,{...NEUTRAL_ROCKET,dodge:1,boost:true},effects),
     blocks(floating,noDodge,NEUTRAL_ROCKET,effects));
   assert.deepEqual(blocks(floating,eventBody,NEUTRAL_ROCKET,effects,true),blocks(floating,eventBody,NEUTRAL_ROCKET,effects));
   const flipped={...eventBody,dodgeApplied:-1};

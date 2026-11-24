@@ -13,29 +13,32 @@ function grid(seed=27) {
   startRocketRace(r);
   return r;
 }
-const held={...NEUTRAL_ROCKET,assist:true};
+const held=NEUTRAL_ROCKET;
 
-test('held throttle and boost carry the player through the wall and ceiling timing gates with Assist',()=>{
+test('held throttle and boost carry the player through the wall and ceiling timing gates with automatic grip',()=>{
   const race=grid();
   const player=race.player;
   const roof=orbital.sections.find(section=>section.id==='inverted-spine');
   const crossings=[];
-  let wallTicks=0,ceilingTicks=0,topSpeed=0;
+  const wall=orbital.sections.find(section=>section.id==='antenna-wall');
+  let wallMetres=0,ceilingMetres=0,topSpeed=0;
   for(let tick=0;tick<1600 && player.distance<roof.end && !player.recoveries;tick++) {
-    const previousGate=player.nextGate;
-    stepRocketRace(race,{...orbitalDrive(player),assist:true,throttle:1,brake:0,boost:true});
+    const previousGate=player.nextGate,previousStation=player.distance;
+    stepRocketRace(race,{...orbitalDrive(player),throttle:1,brake:0,boost:true});
     const body=player.vehicle;
     topSpeed=Math.max(topSpeed,length(body.velocity));
     const loaded=body.wheels.filter(wheel=>wheel.contact && wheel.load>0).length;
     if(player.nextGate>previousGate) crossings.push({gate:player.nextGate,loaded});
-    if(body.attached && loaded>=2 && body.contactFrame?.id==='antenna-wall') wallTicks++;
-    if(body.attached && loaded>=2 && body.contactFrame?.id===roof.id) ceilingTicks++;
+    if(player.distance>=wall.start && player.distance<roof.end) assert(body.attached);
+    const travelled=player.distance-previousStation;
+    if(loaded>=2 && body.contactFrame?.id===wall.id) wallMetres+=travelled;
+    if(loaded>=2 && body.contactFrame?.id===roof.id) ceilingMetres+=travelled;
   }
   assert.deepEqual(crossings.map(event=>event.gate),[1,2,3,4,5],'the boosted car must credit the Antenna Wall and Inverted Spine gates');
   assert(crossings.every(event=>event.loaded>=2));
   assert.equal(player.recoveries,0);
   assert(player.distance>=roof.end && topSpeed>64);
-  assert(wallTicks>30 && ceilingTicks>180);
+  assert(wallMetres>wall.end-wall.start-3 && ceilingMetres>roof.end-roof.start-3);
 });
 
 test('six real bodies complete the ordered wall, inverted gate, free transfer and catch under deterministic tick inputs',()=>{

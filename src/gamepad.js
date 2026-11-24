@@ -4,7 +4,7 @@ import {drivingActions,drivingCommand} from './driver-command.js';
 // W3C standard layout. The browser, rather than the product name, selects it.
 export const STANDARD_BUTTONS = Object.freeze({
   throttle:7, brake:6, confirm:0, back:1, pause:9, camera:3, recover:2,
-  up:12, down:13, left:14, right:15, drift:4, boost:5, assist:4, dodgeLeft:14, dodgeRight:15
+  up:12, down:13, left:14, right:15, drift:4, boost:5, dodgeLeft:14, dodgeRight:15
 });
 const actionNames = drivingActions(false);
 const idle = Object.freeze({

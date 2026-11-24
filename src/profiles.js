@@ -6,7 +6,7 @@ import {drivingActions, mappedActions} from './driver-command.js';
 export const ACTION_NAMES = mappedActions;
 export const TUNING = Object.freeze({deadzone:.12, sensitivity:1, curve:1, invertSteer:false,
   throttleRange:1, brakeRange:1});
-const FILE = 'circuit-overdrive.controller-profiles', VERSION = 3, LIMIT = 16;
+const FILE = 'circuit-overdrive.controller-profiles', VERSION = 4, LIMIT = 16;
 const session = new Map();
 const within = (n,min,max) => Number.isFinite(n) && n >= min && n <= max;
 const unit = n => Math.max(0, Math.min(n,1));
@@ -78,7 +78,7 @@ export function profileError(p,pad,{partial=false}={}) {
     for (let j=0;j<i;j++) {
       const [other,c]=actions[j];
       const pair=[name,other].sort().join('/');
-      const contextual=['back/camera','assist/drift','dodgeLeft/left','dodgeRight/right'].includes(pair);
+      const contextual=['back/camera','dodgeLeft/left','dodgeRight/right'].includes(pair);
       if (!contextual && !distinctDirections(c,b)) return 'Choose a different control for '+name+' and '+other+'.';
     }
   }
@@ -168,9 +168,11 @@ function entries(store) {
     const raw=store?.getItem(FILE);
     if (!raw || raw.length>131072) return [];
     const data=JSON.parse(raw);
-    if (![1,2,VERSION].includes(data.version) || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
+    if (![1,2,3,VERSION].includes(data.version) || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
     return data.devices.filter(row=>{
       if (!row || typeof row.key!=='string' || row.key.length>1024) return false;
+      // Only v3 had a user-operated Rocket magnet. Keep every other binding.
+      if (data.version===3 && row.profile?.actions) delete row.profile.actions.assist;
       const supported=data.version===1 ? drivingActions(false) : data.version===2 ? drivingActions('nitro') : ACTION_NAMES;
       return Object.keys(row.profile?.actions ?? {}).every(name=>supported.includes(name));
     });

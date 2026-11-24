@@ -70,7 +70,7 @@
     <div id="rocket-hud" class="instruments" hidden>
       <label for="rocket-energy">Rocket fuel <strong id="rocket-level">100%</strong></label>
       <meter id="rocket-energy" min="0" max="100" value="100"></meter>
-      <div><strong id="rocket-surface">Floor</strong> · <span id="rocket-assist">Assist off</span></div>
+      <div><strong id="rocket-surface">Floor</strong> · <span id="rocket-grip">On grid</span></div>
       <div><span id="rocket-boost">Boost ready</span> · <span id="rocket-dodge">Dodge ready</span></div>
       <div id="rocket-nav"></div><div id="rocket-contact"></div>
     </div>
@@ -90,7 +90,7 @@
 <footer><div><i class="live-dot"></i><span id="status" role="status">Starting renderer</span></div><div id="foot-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <span>Drive</span><kbd>C</kbd> <span>Camera</span><kbd>Esc</kbd> <span>Pause</span></div></footer>
 <dialog id="help" aria-labelledby="help-title">
   <h2 id="help-title">Driving controls</h2>
-  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Skyway drift / boost</dt><dd>Space / Shift</dd><dt>Skyway air attitude</dt><dd>Hold Drift, steer and use pedals in flight</dd><dt>Orbital assist / boost</dt><dd>Space / Shift</dd><dt>Orbital air dodge</dt><dd>Q left / E right; release before the next dodge</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
+  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Skyway drift / boost</dt><dd>Space / Shift</dd><dt>Skyway air attitude</dt><dd>Hold Drift, steer and use pedals in flight</dd><dt>Orbital grip</dt><dd>Automatic on the magnetic track</dd><dt>Orbital boost</dt><dd>Shift</dd><dt>Orbital air dodge</dt><dd>Q left / E right; release before the next dodge</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
   <p>Keyboard is the default. Choose Controller to select a device. Leaving the window or disconnecting the active controller pauses the race.</p>
   <p>On touch, slide one thumb across the steering arrows. Stay near the centre for small corrections or press an arrow for a full turn.</p>
   <button id="close-help" class="primary">Close controls</button>

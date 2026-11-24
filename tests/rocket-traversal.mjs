@@ -12,7 +12,7 @@ import {proofSurface} from './fixtures/rocket-proof-surface.mjs';
 function drive(body,fullThrottle) {
   const error=18-length(body.velocity);
   return {throttle:fullThrottle ? 1 : clamp(error,0,1),
-    brake:fullThrottle ? 0 : clamp(-error,0,1),steer:0,boost:false,assist:true,dodge:0};
+    brake:fullThrottle ? 0 : clamp(-error,0,1),steer:0,boost:false,dodge:0};
 }
 
 export function runRocketTraversal({fullThrottle=false,onTick,onReceipt}={}) {
