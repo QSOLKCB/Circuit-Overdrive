@@ -85,6 +85,10 @@ document.body.dataset.input = 'keyboard';
 $('controllers').onclick = () => { pause(); input.clear(); controller.open(); };
 let announcedPlace, candidatePlace, candidateSince, placeMessage, placeUntil;
 let stuntPoints=0, lastAward=0, awardUntil=0;
+let rocketAssistHeld=false;
+const magnetApproach=orbital.sections.find(section=>section.id==='magnet-apron').start;
+const magnetExit=orbital.sections.find(section=>section.id==='gravity-well').end;
+const rocketAssistControl=()=>input.source==='keyboard' ? 'Space' : 'Assist';
 const set = (id, value) => {
   const element = $(id), text = String(value);
   if (element.textContent !== text) element.textContent = text;
@@ -114,6 +118,7 @@ function resetClock() {
   lastTime = null;
   clock.reset();
   input.clear();
+  rocketAssistHeld=false;
 }
 function resetPresentation() {
   scene?.resetEffects();
@@ -199,8 +204,7 @@ function updatePanel(screenChanged = false) {
   set('panel-course',championship.active ? championship.roundName : eventTitle(race.course,environment));
   set('courses',championship.active ? 'Leave event' : 'Course select');
   if(mode==='grid' && race.course===orbital) {
-    const assist=input.source==='keyboard' ? 'Space' : input.source==='touch' ? 'Assist' : 'your flight assist control';
-    copy.grid+=' Hold '+assist+' through the wall and ceiling to keep the wheels attached.';
+    copy.grid+=' After arming, hold '+rocketAssistControl()+' through the wall and ceiling.';
   }
   set('panel-copy', copy[mode] || '');
   if (mode === 'finished') {
@@ -450,6 +454,7 @@ function fixedUpdate() {
   if (!focused()) { pause(); return; }
   const {command, camera:switchView, recover} = input.sample();
   if (!driving()) return; // A polled pause or disconnect takes effect on this same tick.
+  rocketAssistHeld=race.course===orbital && command.assist;
   if (switchView) camera = camera === 'chase' ? 'high' : 'chase';
   const recovered = recover && race.phase === 'racing' && (race.course===orbital ? recoverRocketCar(race) : race.course===skyway ? recoverNitroCar(race) : recoverCar(race));
   recording?.record(command, recovered);
@@ -482,6 +487,12 @@ function fixedUpdate() {
     placeUntil=race.elapsedTicks+90;
   }
 }
+function timingGateLabel(race) {
+  const index=race.player.nextGate;
+  if(index===0) return 'Start';
+  if(index>=race.course.gates.length-1) return 'Finish';
+  return (race.course===orbital ? 'Gate ' : 'CP ')+index;
+}
 function drawHud(p) {
   const player = race.player;
   if (race.course===orbital) {
@@ -489,10 +500,13 @@ function drawHud(p) {
     $('rocket-energy').value=b.energy;
     set('rocket-level',Math.round(b.energy)+'%');
     set('rocket-surface',f ? f.id.replaceAll('-',' ') : player.deckContact ? 'On deck' : 'Free flight');
-    set('rocket-assist',b.attached ? 'Attached' : b.grounded ? 'On wheels' : player.deckContact ? 'Chassis contact' : 'Airborne');
+    const assist=rocketAssistHeld ? 'Assist held' : 'Assist off';
+    const flightStatus=b.grounded ? 'On wheels · '+assist : player.deckContact ? 'Chassis contact' : assist;
+    set('rocket-assist',b.attached ? 'Attached' : flightStatus);
     set('rocket-boost',b.boosting ? 'Boost firing' : b.energy>0 ? 'Boost ready' : 'Fuel empty');
     set('rocket-dodge',b.dodgeCooldown ? 'Dodge '+Math.ceil(b.dodgeCooldown/6)/10+' s' : 'Dodge ready');
-    set('rocket-nav',next ? 'Gate '+(player.nextGate+1)+' · '+Math.max(0,Math.round(next.s-player.distance))+' m' : 'Finish');
+    const gate=timingGateLabel(race);
+    set('rocket-nav',player.missedGate ? gate+' missed' : next ? gate+' · '+Math.max(0,Math.round(next.s-player.distance))+' m' : gate);
     set('rocket-contact',player.contact ? 'Contact' : b.wheels.filter(w=>w.contact).length+' wheels');
   }
   if (player.nitro) {
@@ -523,13 +537,16 @@ function drawHud(p) {
     message='Across the line · '+race.entrants.filter(e=>e.finishTicks!==null).length+' of 6 finished';
   else if (race.course===orbital && player.overturnedTicks>=15)
     message='Overturned · recovering (+3 s)';
-  else if (race.course===skyway && race.phase==='racing' && player.missedGate) {
-    const gate=player.nextGate===0 ? 'Start' : player.nextGate===skyway.gates.length-1 ? 'Finish' : 'CP '+player.nextGate;
-    const recover=input.source==='keyboard' ? 'Press R' : input.source==='touch' ? 'Tap Recover' : 'Use Recover';
-    message=gate+' missed · '+recover+' to retry (+3 s)';
+  else if ((race.course===orbital || race.course===skyway) && race.phase==='racing' && player.missedGate) {
+    const recover=input.source==='keyboard' ? (race.course===orbital ? 'R' : 'Press R') :
+      input.source==='touch' ? 'Tap Recover' : 'Use Recover';
+    message=timingGateLabel(race)+' missed · '+recover+' to retry (+3 s)';
   }
   else if (player.wrongWay) message = 'Wrong way';
   else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
+  else if (race.course===orbital && race.phase==='racing' && !rocketAssistHeld &&
+      player.distance>=magnetApproach && player.distance<magnetExit)
+    message='Hold '+rocketAssistControl()+' for wall and ceiling grip';
   else if (!race.course.closed && player.splitTicks.length && player.elapsedTicks-player.splitTicks.at(-1)<180) {
     message = 'CP ' + player.splitTicks.length + '  ·  ' + formatTime(player.splitTicks.at(-1));
   }

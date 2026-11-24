@@ -2,12 +2,13 @@
 import {add, clamp, cross, dot, length, normalize, quatConjugate, quatMultiply, quatNormalize,
   rotate, scale, subtract} from '../vendor/vanillajs/modules/math/index.js';
 
-export const ROCKET_RULES = 2;
+export const ROCKET_RULES = 3;
 export const NEUTRAL_ROCKET = Object.freeze({throttle:0, brake:0, steer:0, boost:false, assist:false, dodge:0});
 export const ROCKET_LIMITS = Object.freeze({
   mass:1100, gravity:9.81, substeps:4, maxSpeed:75, maxAngularSpeed:6,
   mountHeight:-0.14, restLength:0.64, minLength:0.24, probeRange:0.72,
-  enterSpeed:9, releaseSpeed:6, adhesion:32, spring:480, damper:29, maxSupport:145, tyreRollArm:.26,
+  enterSpeed:9, releaseSpeed:6, adhesion:32, adhesionSeamTolerance:.06,
+  spring:480, damper:29, maxSupport:145, tyreRollArm:.26,
   dodgeCooldown:60, dodgeSpeed:4, dodgeCost:12, capacity:100, boostDrain:18, boostAcceleration:13,
   maxAcceleration:352, maxAngularAcceleration:120, maxStopImpulse:1100*85,
 });
@@ -154,8 +155,15 @@ function substep(state,command,surface,dodgeEdge) {
   const q=state.orientation, up=rotate(q,[0,1,0]), down=scale(up,-1), forward=rotate(q,[0,0,-1]), right=rotate(q,[1,0,0]);
   const hits=mounts.map((_,i)=>wheelContact(state,surface,q,up,down,i));
   const supports=hits.filter(w=>w && w.hit.distance<=L.restLength);
-  const eligible=supports.filter(w=>w.load>0 && w.hit.material==='magnetic' &&
-    dot(up,w.hit.normal)>=(state.attached ? .55 : .72));
+  const eligible=hits.filter((wheel,i)=>{
+    if (!wheel || wheel.hit.material!=='magnetic' || dot(up,wheel.hit.normal)<(state.attached ? .55 : .72)) return false;
+    if (wheel.load>0) return true;
+    // A spring can unload as a bend flattens. Keep an established magnetic
+    // pull only while this probe still sees a continuation of the previous face.
+    const previous=state.wheels[i].frame;
+    return state.attached && previous?.material==='magnetic' &&
+      Math.abs(dot(subtract(wheel.hit.point,previous.point),previous.normal))<=L.adhesionSeamTolerance;
+  });
   const forwardSpeed=dot(state.velocity,forward);
   const attached=command.assist && eligible.length>=2 && forwardSpeed>=(state.attached ? L.releaseSpeed : L.enterSpeed);
   const normal=attached ? normalize(eligible.reduce((v,w)=>add(v,w.hit.normal),[0,0,0])) : null;
