@@ -2,6 +2,7 @@
 import {createRecording as touringRecording, replayCommands as touringCommands} from './replay-v2.js';
 import {ROCKET_RULES,validateRocketCommand} from './rocket-dynamics.js';
 import {validateNitroCommand} from './nitro-physics.js';
+import {NITRO_RULES} from './nitro-race.js';
 import {MAX_REPLAY_TICKS, decodeReplayRun, validateTheatreReplay} from './replay-theatre-core.js';
 
 export function createRecording(course,seed,revision=null) {
@@ -31,7 +32,8 @@ export function createRecording(course,seed,revision=null) {
     get complete() { return revision!==null && ticks>0 && !overflow; },
     export() {
       if (!this.complete) throw RangeError('A replay requires a stamped build and at most 30 minutes.');
-      return {version:rocket ? 4 : 3,revision,discipline,rules:rocket ? ROCKET_RULES : 1,course,seed,ticks,runs:runs.map(r=>r.slice())};
+      const rules=rocket ? ROCKET_RULES : NITRO_RULES;
+      return {version:rocket ? 4 : 3,revision,discipline,rules,course,seed,ticks,runs:runs.map(r=>r.slice())};
     }
   };
 }

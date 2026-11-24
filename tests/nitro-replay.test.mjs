@@ -15,6 +15,7 @@ function tape() {
 }
 test('Nitro v3 encodes the two independent held controls and accepted recovery',()=>{
   const data=tape();
+  assert.equal(data.rules,2);
   assert.deepEqual(data.runs,[[4,0,0,0,false,false,false],[1,0,0,.4,true,false,false],[1,.75,0,0,false,true,true]]);
   const commands=[...replayCommands(data,revision)];
   assert.equal(commands.length,6);
@@ -30,7 +31,7 @@ test('Nitro v3 encodes the two independent held controls and accepted recovery',
 });
 test('Nitro v3 rejects mixed schemas, invalid bounds, accessors and unverified sources',()=>{
   const good=tape(), valid=good.runs[0];
-  for(const changes of [{revision:older},{version:2},{course:'ridge'},{rules:2},{discipline:'touring'},
+  for(const changes of [{revision:older},{version:2},{course:'ridge'},{rules:1},{rules:3},{discipline:'touring'},
     {seed:-1},{seed:NaN},{ticks:good.ticks+1},{ticks:MAX_REPLAY_TICKS+1},{runs:[[6,1,0,0,false]]},
     {runs:[[6,1,0,Infinity,true,true,false]]},{runs:[[6,1,0,0,1,false,false]]},
     {runs:[[6,1,0,0,false,1,false]]},{runs:[[6,1,0,0,false,false,0]]},{runs:[Array(7)]},
@@ -52,4 +53,20 @@ test('Nitro v3 rejects mixed schemas, invalid bounds, accessors and unverified s
   touring.record({throttle:0,brake:0,steer:0},false);
   assert.equal(validateTheatreReplay(touring.export(),revision).compatibility,'verified-compatible');
   assert.throws(()=>validateTheatreReplay({...touring.export(),course:'skyway'},revision));
+});
+
+test('v3 binds both historical asphalt-only sources to scoring rules 1 and new recordings to rules 2',()=>{
+  const current=tape();
+  assert.equal(createReplaySession(current,revision).race.nitroRules,2);
+  for(const prior of ['f7f45d1b6c3521dd728945b71cf20ab406603cb4','f36377549b2aec82edb150f80e73bc314d91cc30']) {
+    const past={...current,revision:prior,rules:1};
+    const session=createReplaySession(past,revision);
+    assert.equal(session.recording.compatibility,'verified-compatible');
+    assert.equal(session.race.nitroRules,1);
+    session.reset();
+    assert.equal(session.race.nitroRules,1);
+    assert.throws(()=>createReplaySession({...past,rules:2},revision),/rules/);
+  }
+  const unpublished={...current,rules:1,revision:'ff'.repeat(20)};
+  assert.throws(()=>createReplaySession(unpublished,revision),/needs revision/);
 });

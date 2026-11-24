@@ -2,6 +2,8 @@
 
 Select **Nitro Overdrive**, then **Start race**. Take the wheel on the six-car grid and accelerate when the lights go green. Nitro Skyway crosses three launch decks above an industrial basin. Six checkpoints lead to the 1.92 km flag.
 
+Cross each numbered gate in order. The full lane between the guardrails counts, including the paved apron. After all six checkpoints, crossing the chequered line on your wheels settles your result immediately, even when you lead the field. If you fly over a gate or miss it, the HUD names it. Use **Recover** (**R** on keyboard) to return to a credited stretch and retry with the three-second penalty.
+
 | Action | Keyboard | Standard gamepad | Touch |
 | --- | --- | --- | --- |
 | Drift | Hold Space and steer into the bend | Hold left bumper and steer | Hold Drift and steer |

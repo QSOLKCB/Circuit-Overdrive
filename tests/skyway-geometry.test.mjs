@@ -73,16 +73,20 @@ function triangleKey(v,i) {
   return [key(i+6),...[key(i),key(i+11),key(i+22)].sort()].join('|');
 }
 
-test('each timing line carries one complete chequered stripe and its labelled gantry',()=>{
-  const ink=[.075,.11,.16],cream=[.99,.90,.69];
-  for(const [gate,word] of [[skyway.gates[0],'NITRO'],[skyway.gates.at(-1),'FINISH']]) {
+test('every timing line spans the usable deck between both rails and has one labelled gantry',()=>{
+  const ink=[.075,.11,.16],cream=[.99,.90,.69],cyan=[.22,.96,.85];
+  for(const [index,gate] of skyway.gates.entries()) {
     const expected=[];
-    const corner=(column,row)=>{
-      const p=skyway.sample(gate.s+row*.7,-skyway.halfWidth+column*(2*skyway.halfWidth/20));
+    const corner=(column,metres)=>{
+      const p=skyway.sample(gate.s+metres,-skyway.barrierOffset+column*(2*skyway.barrierOffset/20));
       return [p.x,p.y+.024,p.z];
     };
-    for(let c=0;c<20;c++) for(let r=0;r<2;r++)
-      quad(expected,corner(c,r),corner(c+1,r),corner(c+1,r+1),corner(c,r+1),(c+r)%2 ? ink : cream);
+    const bookend=index===0 || index===skyway.gates.length-1;
+    const word=bookend ? (index===0?'NITRO':'FINISH') : 'GATE'+index;
+    if(bookend) {
+      for(let c=0;c<20;c++) for(let r=0;r<2;r++)
+        quad(expected,corner(c,r*.7),corner(c+1,r*.7),corner(c+1,(r+1)*.7),corner(c,(r+1)*.7),(c+r)%2 ? ink : cream);
+    } else quad(expected,corner(0,0),corner(20,0),corner(20,.30),corner(0,.30),cyan);
     const at=(x,y,z)=>local(gate,x,y,z);
     quad(expected,at(-17.7,9.1,-.85),at(17.7,9.1,-.85),at(17.7,11.7,-.85),at(-17.7,11.7,-.85),ink);
     lettering(expected,word,.30,(x,y)=>at(x,9.70+y,-.86),cream);

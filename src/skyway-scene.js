@@ -85,7 +85,6 @@ export function skywayBatches() {
   const ambient=[];
   backdrop(ambient);
   const rows=[{vertices:new Float32Array(ambient),material:{roughness:1}}];
-  const stripeGates=[skyway.gates[0],skyway.gates.at(-1)];
   for(let start=skyway.startS;start<skyway.endS;start+=100) {
     const end=Math.min(start+100,skyway.endS), out=[];
     // Metre stations include the ramp toes and crests. Both edges and all rail
@@ -128,13 +127,19 @@ export function skywayBatches() {
       }
       if(s===170 || s===661 || s===1150 || s===1640) signal(out,p,'DRIFT',cyan);
     }
-    for(const gate of stripeGates) {
+    for(const [index,gate] of skyway.gates.entries()) {
       const s=gate.s;
       if(s<start || s>=end) continue;
-      const w=skyway.halfWidth, tile=2*w/20;
+      const w=skyway.barrierOffset;
+      if(index>0 && index<skyway.gates.length-1) {
+        strip(out,s,s+.30,-w,w,.024,cyan);
+        signal(out,gate,'GATE'+index,cyan);
+        continue;
+      }
+      const tile=2*w/20;
       for(let i=0;i<20;i++) for(let j=0;j<2;j++)
         strip(out,s+j*.7,s+(j+1)*.7,-w+i*tile,-w+(i+1)*tile,.024,(i+j)%2 ? ink : cream);
-      const starting=gate===stripeGates[0];
+      const starting=index===0;
       signal(out,gate,starting?'NITRO':'FINISH',starting?cyan:mustard);
     }
     const p=skyway.sample((start+end)/2);
