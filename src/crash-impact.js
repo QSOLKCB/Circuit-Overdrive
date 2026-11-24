@@ -74,14 +74,26 @@ function sample(pair,i,j,t) {
 function sweep(pair,i,j,duration) {
   const {a,b,wall}=pair;
   const vx=a.vx-(wall ? 0 : b.vx),vz=a.vz-(wall ? 0 : b.vz);
-  const rotation=Math.abs(i*a.spin)+(wall ? 0 : Math.abs(j*b.spin));
+  const acceleration=Math.abs(i)*a.spin**2+(wall ? 0 : Math.abs(j)*b.spin**2);
+  const angularProjection=(car,station,t,nx,nz)=>{
+    const yaw=car.yaw+car.spin*t;
+    return car.spin*station*(Math.cos(yaw)*nx-Math.sin(yaw)*nz);
+  };
   let t=0;
   for (let iteration=0;iteration<MAX_SWEEP;iteration++) {
     const hit=sample(pair,i,j,t);
     if (hit.gap<=tolerance) return {t,hit};
-    const closure=rotation-vx*hit.nx-vz*hit.nz;
-    if (closure<=0 || hit.gap>closure*(duration-t)+tolerance) return null;
-    t+=hit.gap/closure;
+    const closure=-vx*hit.nx-vz*hit.nz-angularProjection(a,i,t,hit.nx,hit.nz)
+      +(wall ? 0 : angularProjection(b,j,t,hit.nx,hit.nz));
+    const left=duration-t;
+    if (hit.gap>closure*left+.5*acceleration*left*left+tolerance) return null;
+    if (acceleration===0) {
+      if (closure<=0) return null;
+      t+=hit.gap/closure;
+    } else {
+      const root=Math.sqrt(closure*closure+2*acceleration*hit.gap);
+      t+=closure>=0 ? 2*hit.gap/(root+closure) : (root-closure)/acceleration;
+    }
     if (t>duration) return null;
   }
   return {t,limited:true};
