@@ -20,7 +20,7 @@ function controlsTape() {
 }
 test('v4 stores signed dodge, held assistance, boost, analog controls and accepted recovery separately',()=>{
   const data=controlsTape();
-  assert.deepEqual(data,{version:4,discipline:'rocket',rules:1,course:'orbital',revision,seed:123,ticks:4,runs:[
+  assert.deepEqual(data,{version:4,discipline:'rocket',rules:2,course:'orbital',revision,seed:123,ticks:4,runs:[
     [2,0,0,0,false,false,0,false],[1,.5,0,-.75,false,true,-1,false],[1,0,0,0,true,false,1,true]
   ]});
   const commands=[...replayCommands(data,revision)];
@@ -38,7 +38,7 @@ test('v4 stores signed dodge, held assistance, boost, analog controls and accept
 test('v4 rejects incompatible headers, indefinite numbers, malformed rows and accessor properties',()=>{
   const data=controlsTape(), row=data.runs[0], short=[1,0,0,0,false,false,0,false];
   for (const change of [{version:3},{version:2},{version:5},{course:'skyway'},{discipline:'nitro'},
-    {rules:0},{seed:2**32},{revision:published},{ticks:MAX_REPLAY_TICKS+1},{ticks:5},{extra:0}]) {
+    {rules:0},{rules:1},{seed:2**32},{revision:published},{ticks:MAX_REPLAY_TICKS+1},{ticks:5},{extra:0}]) {
     assert.throws(()=>validateTheatreReplay({...data,...change},revision));
   }
   for (const [i,values] of [[0,[0,1.5,1e20]],[1,[NaN,Infinity,1.01]],[3,[-2]],

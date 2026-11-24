@@ -74,11 +74,13 @@ The viewer reconstructs wheel contacts, charge, boost impulses, flight, landings
 
 ## Orbital Spine version 4
 
+Rules 2 include updated tyre load transfer and chassis-to-deck contact during a rollover. To watch a rules 1 drive, open the archive for its recorded source revision. Both rules versions use the same eight-element command row.
+
 Finish Rocket Overdrive and save the replay from the results screen. In Theatre, follow any of the six drivers to see fuel, boost and magnetic contact. The camera follows the interpolated chassis quaternion through walls and ceilings. Seeking and replay speed affect the spectator clock. The Theatre runs each physics tick in order and stays silent during playback.
 
 | Field | Orbital recording |
 | --- | --- |
-| `version`, `discipline`, `rules`, `course` | `4`, `"rocket"`, `1`, `"orbital"` |
+| `version`, `discipline`, `rules`, `course` | `4`, `"rocket"`, `2`, `"orbital"` |
 | `revision` | Exact matching 40-digit lowercase hexadecimal source SHA |
 | `seed`, `ticks` | Unsigned 32-bit race seed, 1–108,000 accepted ticks |
 | `runs` | Dense nonempty rows with exactly eight entries |

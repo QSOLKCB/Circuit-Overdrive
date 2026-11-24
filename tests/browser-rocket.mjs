@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {orbitalDrive} from './orbital-driver.mjs';
+import {verifyRocketOpening} from './rocket-opening-touch.mjs';
 import {orbital} from '../src/orbital.js';
 import {createRocketRace,startRocketRace,stepRocketRace} from '../src/rocket-race.js';
 import {NEUTRAL_ROCKET} from '../src/rocket-dynamics.js';
@@ -14,6 +15,7 @@ if (directory) await mkdir(directory,{recursive:true});
 const source=await readFile(new URL('./orbital-driver.mjs',import.meta.url),'utf8');
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 try {
+  const opening=await verifyRocketOpening(browser,base);
   const page=await browser.newPage({viewport:{width:960,height:600},acceptDownloads:true});
   const errors=[], captures=[];
   async function observeRenderer(target) {
@@ -215,7 +217,7 @@ try {
   for(let i=0;i<report.ticks;i++)stepRocketRace(direct,direct.phase==='racing' ? orbitalDrive(direct.player) : NEUTRAL_ROCKET);
   assert.deepEqual(report.result,direct.order.map(e=>({id:e.id,position:e.position,finish:e.finishTicks,recoveries:e.recoveries})));
   assert.deepEqual(report.splits,direct.player.splitTicks);
-  const result={revision,browser:browser.version(),graphics,...report,captures};
+  const result={revision,browser:browser.version(),graphics,opening,...report,captures};
   if(!raceOnly) {
     result.audio=await page.evaluate(()=>window.rocketAudioReceipt);
     assert.equal(result.audio.selected,'rocket'); assert.equal(result.audio.title,'RASTER VELOCITY');
@@ -264,5 +266,5 @@ try {
   }
   assert.deepEqual(errors,[]);
   if(directory)await writeFile(directory+'/orbital.json',JSON.stringify(result,null,2)+'\n');
-  console.log(JSON.stringify({...report,revision,browser:browser.version(),graphics,images:captures.map(e=>e.name)}));
+  console.log(JSON.stringify({...report,revision,browser:browser.version(),graphics,opening,images:captures.map(e=>e.name)}));
 } finally {await browser.close();}

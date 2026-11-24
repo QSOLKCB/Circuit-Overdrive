@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import {createRecording as touringRecording, replayCommands as touringCommands} from './replay-v2.js';
-import {validateRocketCommand} from './rocket-dynamics.js';
+import {ROCKET_RULES,validateRocketCommand} from './rocket-dynamics.js';
 import {validateNitroCommand} from './nitro-physics.js';
 import {MAX_REPLAY_TICKS, decodeReplayRun, validateTheatreReplay} from './replay-theatre-core.js';
 
@@ -31,7 +31,7 @@ export function createRecording(course,seed,revision=null) {
     get complete() { return revision!==null && ticks>0 && !overflow; },
     export() {
       if (!this.complete) throw RangeError('A replay requires a stamped build and at most 30 minutes.');
-      return {version:rocket ? 4 : 3,revision,discipline,rules:1,course,seed,ticks,runs:runs.map(r=>r.slice())};
+      return {version:rocket ? 4 : 3,revision,discipline,rules:rocket ? ROCKET_RULES : 1,course,seed,ticks,runs:runs.map(r=>r.slice())};
     }
   };
 }

@@ -7,6 +7,7 @@ import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {skyway} from './skyway.js';
 import {createRocketRace,startRocketRace,stepRocketRace,recoverRocketCar} from './rocket-race.js';
+import {ROCKET_RULES} from './rocket-dynamics.js';
 import {createNitroRace,startNitroRace,stepNitroRace,recoverNitroCar} from './nitro-race.js';
 
 export const MAX_REPLAY_BYTES=16*1024*1024;
@@ -71,8 +72,9 @@ export function validateTheatreReplay(recording,siteRevision) {
       '. Open an archive with matching physics; this Theatre cannot safely reinterpret it.');
   const course=get('course');
   const discipline=version===4 ? 'rocket' : 'nitro';
+  const rules=version===4 ? ROCKET_RULES : 1;
   if (version===2 ? course!=='ridge' && course!=='speedway' :
-      course!==(version===4 ? 'orbital' : 'skyway') || get('discipline')!==discipline || get('rules')!==1)
+      course!==(version===4 ? 'orbital' : 'skyway') || get('discipline')!==discipline || get('rules')!==rules)
     throw RangeError('Unsupported race course or discipline rules');
   const seed=get('seed');
   if(!Number.isSafeInteger(seed)||seed<0||seed>0xffffffff)throw RangeError('Invalid replay seed');
@@ -98,7 +100,7 @@ export function validateTheatreReplay(recording,siteRevision) {
     runs.push(Object.freeze(Array.from(row)));
   }
   if(total!==ticks)throw RangeError('Truncated replay command stream');
-  return Object.freeze({version,...(version===2 ? {} : {discipline,rules:1}),revision,course,seed,ticks,runs:Object.freeze(runs),
+  return Object.freeze({version,...(version===2 ? {} : {discipline,rules}),revision,course,seed,ticks,runs:Object.freeze(runs),
     compatibility:revision===siteRevision?'exact':'verified-compatible'});
 }
 // The validator has already checked the exact row width and scalar types.

@@ -2,18 +2,20 @@
 import {add, clamp, cross, dot, length, normalize, quatConjugate, quatMultiply, quatNormalize,
   rotate, scale, subtract} from '../vendor/vanillajs/modules/math/index.js';
 
+export const ROCKET_RULES = 2;
 export const NEUTRAL_ROCKET = Object.freeze({throttle:0, brake:0, steer:0, boost:false, assist:false, dodge:0});
 export const ROCKET_LIMITS = Object.freeze({
   mass:1100, gravity:9.81, substeps:4, maxSpeed:75, maxAngularSpeed:6,
   mountHeight:-0.14, restLength:0.64, minLength:0.24, probeRange:0.72,
-  enterSpeed:9, releaseSpeed:6, adhesion:32, spring:480, damper:29, maxSupport:145,
+  enterSpeed:9, releaseSpeed:6, adhesion:32, spring:480, damper:29, maxSupport:145, tyreRollArm:.26,
   dodgeCooldown:60, dodgeSpeed:4, dodgeCost:12, capacity:100, boostDrain:18, boostAcceleration:13,
   maxAcceleration:352, maxAngularAcceleration:120, maxStopImpulse:1100*85,
 });
 const L = ROCKET_LIMITS, h = 1/(60*L.substeps);
 const mounts = [[-.79,L.mountHeight,-1.29],[.79,L.mountHeight,-1.29],
   [-.79,L.mountHeight,1.29],[.79,L.mountHeight,1.29]];
-const inertia = [1780,2050,540]; // kg m² about local right, up and rear axes.
+// Principal moments in kg m² about local right, up and rear axes.
+export const ROCKET_INERTIA = Object.freeze([1780,2050,540]);
 const fields = Object.keys(NEUTRAL_ROCKET);
 const towards = (v, n) => subtract(v, scale(n,dot(v,n)));
 const limited = (v, cap) => { const speed=length(v); return speed>cap ? scale(v,cap/speed) : v; };
@@ -149,7 +151,7 @@ function integrateOrientation(q,worldSpin) {
 }
 
 function substep(state,command,surface,dodgeEdge) {
-  const q=state.orientation, up=rotate(q,[0,1,0]), down=scale(up,-1), forward=rotate(q,[0,0,-1]);
+  const q=state.orientation, up=rotate(q,[0,1,0]), down=scale(up,-1), forward=rotate(q,[0,0,-1]), right=rotate(q,[1,0,0]);
   const hits=mounts.map((_,i)=>wheelContact(state,surface,q,up,down,i));
   const supports=hits.filter(w=>w && w.hit.distance<=L.restLength);
   const eligible=supports.filter(w=>w.load>0 && w.hit.material==='magnetic' &&
@@ -162,17 +164,24 @@ function substep(state,command,surface,dodgeEdge) {
   const wheels=hits.map((wheel,index)=>{
     if (!wheel) return emptyWheel();
     const {hit,arm,motion,load,compression}=wheel;
-    const angle=index<2 ? command.steer*.45/(1+Math.abs(forwardSpeed)*.028) : 0;
+    const angle=index<2 ? command.steer*.45/(1+Math.abs(forwardSpeed)*.085) : 0;
     const heading=rotate(q,[Math.sin(angle),0,-Math.cos(angle)]);
     const along=normalize(towards(heading,hit.normal)), side=cross(along,hit.normal);
     const sideSpeed=dot(motion,side), longSpeed=dot(motion,along);
     // The cap on the combined tire force scales with the measured wheel load.
-    const lateral=-sideSpeed*L.mass*1.8;
+    // Let the front axle run wide first under full lock. With the same
+    // saturated side force front and rear, neutral steering cannot arrest a spin.
+    const lateralLimit=load*(index<2 ? 1.25 : 1.6);
+    const lateral=clamp(-sideSpeed*L.mass*1.8,-lateralLimit,lateralLimit);
     const brake=-Math.sign(longSpeed)*Math.min(Math.abs(longSpeed)/h,command.brake*22)*L.mass/4;
     const tire=limited(add(scale(side,lateral),scale(along,brake)),load*1.6);
     const force=add(scale(hit.normal,load),tire);
     acceleration=add(acceleration,scale(force,1/L.mass));
-    torque=add(torque,cross(arm,force));
+    // The suspension transfers lateral tyre force through an effective roll
+    // arm. This anti-roll couple preserves the full contact force, yaw moment
+    // and brake pitch while keeping normal steering from lifting the inside wheels.
+    const antiRoll=Math.max(0,-dot(arm,up)-L.tyreRollArm)*dot(tire,right);
+    torque=add(torque,add(cross(arm,force),scale(forward,antiRoll)));
     return {frame:hit,contact:hit.distance<=L.restLength,distance:hit.distance,load,compression};
   });
   const grounded=supports.length>0;
@@ -203,16 +212,16 @@ function substep(state,command,surface,dodgeEdge) {
     // angular momentum without changing the ballistic centre-of-mass trajectory.
     const damping=command.assist ? 1.35 : .12;
     const airDemand=command.assist ? [command.throttle-command.brake,-command.steer,1.2*command.steer] : [0,0,0];
-    const jetTorque=airDemand.map((a,i)=>inertia[i]*(a-damping*omegaLocal[i]));
+    const jetTorque=airDemand.map((a,i)=>ROCKET_INERTIA[i]*(a-damping*omegaLocal[i]));
     torque=add(torque,rotate(q,jetTorque));
     const approach=command.assist && hits.find(w=>w && dot(w.motion,w.hit.normal)<0);
     if (approach) torque=add(torque,scale(cross(up,approach.hit.normal),1600));
   }
 
-  const momentum=rotate(q,omegaLocal.map((v,i)=>v*inertia[i]));
+  const momentum=rotate(q,omegaLocal.map((v,i)=>v*ROCKET_INERTIA[i]));
   const effectiveTorque=subtract(torque,cross(state.angularVelocity,momentum));
   function inverseInertia(worldMoment) {
-    return rotate(q,rotate(inverse,worldMoment).map((v,i)=>v/inertia[i]));
+    return rotate(q,rotate(inverse,worldMoment).map((v,i)=>v/ROCKET_INERTIA[i]));
   }
   const alpha=limited(inverseInertia(effectiveTorque),L.maxAngularAcceleration);
   let angularVelocity=limited(add(state.angularVelocity,scale(alpha,h)),L.maxAngularSpeed);

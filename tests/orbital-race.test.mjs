@@ -143,6 +143,31 @@ test('a blocked lost-car recovery waits for a clear slot and cannot re-spend coo
   assert(length(subtract(p.vehicle.position,orbital.frame(s,-8).point))<1);
 });
 
+test('a stranded Rocket resting on its roof returns behind the last credited gate once',()=>{
+  const race=grid();race.phase='racing';
+  const e=race.player,road=orbital.frame(37,4);
+  const body=createRocketBody(road);
+  body.orientation=[0,0,1,0]; // Roof down on the flat opening deck.
+  body.position=add(road.point,scale(road.normal,.90));
+  e.vehicle=e.previousBody=body;
+  e.distance=37;e.nextGate=1;e.safeDistance=-2;
+  let restingTicks=0;
+  for(let i=0;i<360 && !e.recoveries;i++) {
+    stepRocketRace(race,NEUTRAL_ROCKET);
+    if(e.deckContact && e.overturnedTicks) {
+      restingTicks++;
+      assert(e.current.y>=road.point[1]);
+    }
+  }
+  assert(restingTicks>=89);
+  assert.equal(e.recoveries,1);
+  assert.equal(e.elapsedTicks,race.elapsedTicks+180);
+  assert(e.distance<=-2 && !e.deckContact && e.overturnedTicks===0);
+  assert.equal(e.recoveryCooldown,120);
+  assert.equal(e.nextGate,1);
+  assert.deepEqual(e.splitTicks,[]);
+});
+
 test('an airborne rival may spend a directional dodge only into a clear landing lane',()=>{
   const gap=orbital.sections.find(s=>s.kind==='air'),r=grid();
   const ai=r.entrants[0],f=orbital.frame(gap.start-5,-3);

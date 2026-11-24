@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {rotate} from '../vendor/vanillajs/modules/math/index.js';
 import {createRocketBody, stepRocketBody, validateRocketCommand, NEUTRAL_ROCKET, ROCKET_LIMITS} from '../src/rocket-dynamics.js';
 
 const dt = 1 / 60;
@@ -95,6 +96,26 @@ test('a flat suspension bears weight and steering changes the actual travel dire
   assert(right.angularVelocity[1]<0 && left.angularVelocity[1]>0);
   const stopped=advance(before,surface,30,{brake:1});
   assert(speed(stopped.velocity)<speed(straight.velocity)-1);
+});
+
+test('a full-lock start correction stays on its tyres and settles after release with either assist setting',()=>{
+  const surface=plane(floor);
+  for(const assist of [false,true]) for(const direction of [-1,1]) {
+    let body=moving(surface,0);
+    for(let tick=1;tick<=150;tick++) {
+      const steer=tick>=60 && tick<100 ? direction : 0;
+      body=advance(body,surface,1,{throttle:1,steer,assist});
+      assert(body.wheels.every(w=>w.contact && w.load>0),'inside and outside tyres must stay loaded');
+      assert(dot(rotate(body.orientation,[0,1,0]),floor.normal)>.95,'sustained steering must not roll the chassis over');
+      if(tick===99) {
+        assert(body.position[0]*direction>2,'the correction must change lanes under power');
+        assert(body.angularVelocity[1]*direction<-.3,'the car must actually turn');
+      }
+    }
+    assert(Math.abs(body.angularVelocity[1])<.1,'residual yaw must decay when the driver centres steering');
+    assert(dot(rotate(body.orientation,[0,0,-1]),floor.tangent)>.5,'the car still faces down the road');
+    assert(body.velocity[2]<-18);
+  }
 });
 
 test('wall and ceiling magnetism exert an inward force only while the surface is supported',()=>{
