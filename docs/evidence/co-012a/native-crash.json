@@ -1,0 +1,109 @@
+{
+  "browser": "158.0.8127.36",
+  "results": [
+    {
+      "scenario": "wall",
+      "revision": "957ba00f0694fd7f6022e6f8c44cf1f0a28d6767",
+      "inputSha256": "12c08447bc1206a650fc13b49790e68f5466f5b53ead9bc315227dffdc6600d2",
+      "finalStateSha256": "0ad63bb4fdf6a755835a535836c4c5deb9788931bf8d740e8d969fbbefaf6d2f",
+      "contactsSha256": "f9f7104b7830de62346ce684227821ae68559890e5dc7b4aabbbf4254c5166ac",
+      "rawTapeSha256": "dc89d3d9427f2415a85d75c9119d365e804aec558eedcb1726af6a492f27ae38",
+      "ticks": 274,
+      "result": "settled",
+      "impactTick": 221,
+      "zone": "front",
+      "impulse": 55855.65964997852,
+      "firstImpactSites": [
+        {
+          "id": 0,
+          "x": 0,
+          "z": -2.200000000000003,
+          "zone": "front",
+          "damage": {
+            "front": 815,
+            "engine": 733,
+            "steering": 309,
+            "tyres": 187,
+            "suspension": 358
+          }
+        }
+      ],
+      "recording": "crash-wall-replay.json"
+    },
+    {
+      "scenario": "glancing",
+      "revision": "957ba00f0694fd7f6022e6f8c44cf1f0a28d6767",
+      "inputSha256": "e94c27332cb57d6b17415dcda89a5b94f709e377a2264e1dae0ea147ab4150b2",
+      "finalStateSha256": "2550e9d33b3321c40e72b2cf92a47ef64ed52610ae5d58a5009ea735bf432354",
+      "contactsSha256": "01601ca8e4209acfa3b1893a2f2d76c8a3b7f12eeed0b7592146785c48808fb6",
+      "rawTapeSha256": "6219a288e235360ac03f2952fb8f3e92678aff770238f46cdf8699f2cc49da80",
+      "ticks": 325,
+      "result": "impact and run-off",
+      "impactTick": 209,
+      "zone": "right",
+      "impulse": 6262.435749429269,
+      "firstImpactSites": [
+        {
+          "id": 0,
+          "x": 0.9484860593182327,
+          "z": -1.4508300141233903,
+          "zone": "right",
+          "damage": {
+            "right": 19,
+            "steering": 5,
+            "tyres": 13,
+            "suspension": 11
+          }
+        }
+      ],
+      "recording": "crash-glancing-replay.json"
+    },
+    {
+      "scenario": "opposing",
+      "revision": "957ba00f0694fd7f6022e6f8c44cf1f0a28d6767",
+      "inputSha256": "46839ff07f5400db95f186225f5eefdb53f997b0078d3f3026cb685e9048cd54",
+      "finalStateSha256": "3cfe892dd2594a6b02fe6321a5da2f6f65508630adb6caf37d806b1be1859853",
+      "contactsSha256": "8c4e17717dc15e6a11ce0b4107c269f3d9704b919aad0465f99de6e72c5494da",
+      "rawTapeSha256": "d8947319dfb9e3ae560bea61c8afb075734164f1916e972b219365f466d37aec",
+      "ticks": 360,
+      "result": "post-impact run complete",
+      "impactTick": 180,
+      "zone": "front",
+      "impulse": 38620.64547722599,
+      "firstImpactSites": [
+        {
+          "id": 0,
+          "x": 0.09999999999999783,
+          "z": -2.1948582372644267,
+          "zone": "front",
+          "damage": {
+            "front": 401,
+            "engine": 360,
+            "steering": 152,
+            "tyres": 92,
+            "suspension": 176
+          }
+        },
+        {
+          "id": 1,
+          "x": 0.0999999999999977,
+          "z": -2.1948582372644267,
+          "zone": "front",
+          "damage": {
+            "front": 401,
+            "engine": 360,
+            "steering": 152,
+            "tyres": 92,
+            "suspension": 176
+          }
+        }
+      ],
+      "recording": "crash-opposing-replay.json"
+    }
+  ],
+  "gpuAndDriver": "NVIDIA GeForce RTX 5060 Ti, 595.99.02",
+  "angleBackend": "OpenGL",
+  "platform": "Ubuntu 26.04.1 LTS, Linux 7.0.0-43-generic x86_64",
+  "playwright": "1.64.0",
+  "package": "Verified offline ZIP under /Circuit-Overdrive/"
+}

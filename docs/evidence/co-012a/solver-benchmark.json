@@ -1,0 +1,217 @@
+{
+  "node": "v22.18.0",
+  "os": "linux 7.0.0-43-generic",
+  "arch": "x64",
+  "cpu": "AMD Ryzen 9 5950X 16-Core Processor",
+  "sourceSha256": {
+    "src/crash-impact.js": "da416c71695c8414165d2be6f2e0a56c69028745c95dc745939f19b527ba58d4",
+    "src/crash-damage.js": "ee6bf289d3af7ca9ef19bb1db3d2d42c96c49b3830aa197da9161c54c4db5e5e",
+    "tests/derby-impact-bench.mjs": "259e1fd458d78106b95d421f384e61ba6849a77639262a70033260697c9d6fbf"
+  },
+  "seed": 4823921,
+  "warmupWorldsPerSample": 50,
+  "worldsPerSample": 1000,
+  "ticksPerWorld": 20,
+  "fixturesPerWorld": 16,
+  "results": {
+    "sparse": {
+      "solver": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.00131,
+          "p95": 0.0016,
+          "worst": 0.33042
+        },
+        "contactTickMs": {
+          "count": 0
+        },
+        "peak": {
+          "passes": 1,
+          "pairChecks": 111,
+          "rejectedPairs": 111,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "totals": {
+          "pairChecks": 2220000,
+          "rejectedPairs": 2220000,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "limits": {}
+      },
+      "collisionAndDamage": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.00136,
+          "p95": 0.00153,
+          "worst": 0.1169
+        },
+        "contactTickMs": {
+          "count": 0
+        },
+        "peak": {
+          "passes": 1,
+          "pairChecks": 111,
+          "rejectedPairs": 111,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "totals": {
+          "pairChecks": 2220000,
+          "rejectedPairs": 2220000,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "limits": {}
+      },
+      "fullTick": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.01224,
+          "p95": 0.0129,
+          "worst": 0.48663
+        },
+        "contactTickMs": {
+          "count": 0
+        },
+        "peak": {
+          "passes": 1,
+          "pairChecks": 111,
+          "rejectedPairs": 111,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "totals": {
+          "pairChecks": 2220000,
+          "rejectedPairs": 2220000,
+          "candidates": 0,
+          "sweepSamples": 0,
+          "accepted": 0,
+          "impactEvents": 0,
+          "damageEvents": 0
+        },
+        "limits": {}
+      }
+    },
+    "converging": {
+      "solver": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.01086,
+          "p95": 0.36706,
+          "worst": 1.817629
+        },
+        "contactTickMs": {
+          "count": 6006,
+          "median": 0.03348,
+          "p95": 0.80793,
+          "worst": 1.817629
+        },
+        "peak": {
+          "passes": 80,
+          "pairChecks": 8880,
+          "rejectedPairs": 8259,
+          "candidates": 7200,
+          "sweepSamples": 9191,
+          "accepted": 79,
+          "impactEvents": 10,
+          "damageEvents": 0
+        },
+        "totals": {
+          "pairChecks": 9711834,
+          "rejectedPairs": 9016286,
+          "candidates": 6259932,
+          "sweepSamples": 7155587,
+          "accepted": 67452,
+          "impactEvents": 10363,
+          "damageEvents": 0
+        },
+        "limits": {}
+      },
+      "collisionAndDamage": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.01096,
+          "p95": 0.39504,
+          "worst": 1.41749
+        },
+        "contactTickMs": {
+          "count": 6006,
+          "median": 0.03545,
+          "p95": 0.86276,
+          "worst": 1.41749
+        },
+        "peak": {
+          "passes": 80,
+          "pairChecks": 8880,
+          "rejectedPairs": 8259,
+          "candidates": 7200,
+          "sweepSamples": 9191,
+          "accepted": 79,
+          "impactEvents": 10,
+          "damageEvents": 19
+        },
+        "totals": {
+          "pairChecks": 9711834,
+          "rejectedPairs": 9016286,
+          "candidates": 6259932,
+          "sweepSamples": 7155587,
+          "accepted": 67452,
+          "impactEvents": 10363,
+          "damageEvents": 18933
+        },
+        "limits": {}
+      },
+      "fullTick": {
+        "tickMs": {
+          "count": 20000,
+          "median": 0.02241,
+          "p95": 0.4261,
+          "worst": 1.40133
+        },
+        "contactTickMs": {
+          "count": 6092,
+          "median": 0.04793,
+          "p95": 0.88071,
+          "worst": 1.40133
+        },
+        "peak": {
+          "passes": 80,
+          "pairChecks": 8880,
+          "rejectedPairs": 8265,
+          "candidates": 7029,
+          "sweepSamples": 8938,
+          "accepted": 79,
+          "impactEvents": 10,
+          "damageEvents": 20
+        },
+        "totals": {
+          "pairChecks": 9832158,
+          "rejectedPairs": 9123822,
+          "candidates": 6375024,
+          "sweepSamples": 7289981,
+          "accepted": 68526,
+          "impactEvents": 10001,
+          "damageEvents": 18260
+        },
+        "limits": {}
+      }
+    }
+  }
+}
