@@ -28,6 +28,10 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
    on the same browser, address and build after the local save confirmation.
    Save each event replay at the flag before starting the next round.
    Open Controller to select, calibrate or inspect an exposed device.
+   Choose Nitro Overdrive to race Nitro Skyway. Hold Space while steering
+   to drift, and hold Shift with the accelerator to spend earned nitro.
+   A Nitro v3 replay requires this exact source revision.
+
 5. For spectator playback, open http://127.0.0.1:8000/replay-theatre.html
    and import a matching source-stamped JSON replay. Select Nightshift in
    Spectator lighting to watch a night drive under its original lighting.

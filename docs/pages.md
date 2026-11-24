@@ -39,7 +39,7 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 | `controllers` | Standard gamepad, custom profiles, wheel mapping and controller diagnostics |
 | `theatre` | Replay Theatre loading, playback, seeking and follow cameras |
 | `lifecycle` | Speedway and Ridge day smoke tests, Speedway night smoke test and mobile touch |
-| `effects` | Night contact effects and the WebGL headlight pixel comparison |
+| `effects` | Night contact effects, the WebGL headlight pixel comparison, and a complete six-car Skyway race with v3 replay verification |
 
 The championship runner checks all four live flag orders, awards and running totals against a separate field and scoreboard oracle. It exercises boundary saves, an interrupted round, storage failure, trophy countback, four event replays and spectator isolation. The championship artifact retains the four JSON tapes, score report and presentation captures.
 

@@ -1,0 +1,388 @@
+{
+  "system": {
+    "os": "Ubuntu 26.04.1 LTS",
+    "kernel": "7.0.0-43-generic",
+    "cpu": "AMD Ryzen 9 5950X",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "driver": "595.99.02",
+    "playwright": "1.64.0"
+  },
+  "baseline": {
+    "browser": "158.0.8127.36",
+    "environment": "day",
+    "event": "standalone",
+    "course": "speedway",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "source": "8204da56fce6b40ab33cb66c684a2e780f3e3001",
+    "profile": "high",
+    "effects": "full",
+    "width": 1920,
+    "height": 1080,
+    "sections": [
+      {
+        "section": "speedway six-car grid",
+        "samples": 133,
+        "seconds": 2.2166999999999994,
+        "cpuSubmission": {
+          "samples": 152,
+          "medianMs": 0.7000000029802322,
+          "p95Ms": 1.2999999970197678
+        },
+        "gpuDraw": {
+          "samples": 19,
+          "medianMs": 1.415136,
+          "p95Ms": 2.191392
+        },
+        "simulationTicks": 133,
+        "maxTicksPerFrame": 1,
+        "meanFps": 59.99909775792847,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999272,
+        "maxMs": 16.800000000000182
+      },
+      {
+        "section": "six-car close racing",
+        "samples": 155,
+        "seconds": 2.5832999999999995,
+        "cpuSubmission": {
+          "samples": 156,
+          "medianMs": 0.6000000089406967,
+          "p95Ms": 0.9000000059604645
+        },
+        "gpuDraw": {
+          "samples": 20,
+          "medianMs": 1.282624,
+          "p95Ms": 1.5696
+        },
+        "simulationTicks": 155,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.00077420353812,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999272,
+        "maxMs": 16.800000000000182
+      },
+      {
+        "section": "speedway banked turn",
+        "samples": 162,
+        "seconds": 2.6999000000000013,
+        "cpuSubmission": {
+          "samples": 163,
+          "medianMs": 0.6000000089406967,
+          "p95Ms": 0.800000011920929
+        },
+        "gpuDraw": {
+          "samples": 20,
+          "medianMs": 1.2256,
+          "p95Ms": 1.432704
+        },
+        "simulationTicks": 162,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.00222230452977,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.700000000000728,
+        "maxMs": 16.80000000000109
+      }
+    ]
+  },
+  "skyway": {
+    "browser": "158.0.8127.36",
+    "environment": "day",
+    "event": "standalone",
+    "course": "skyway",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "source": "3d0f8b10512fbdae17b5fbe0bcd9f1d6ee11a320",
+    "profile": "high",
+    "effects": "full",
+    "width": 1920,
+    "height": 1080,
+    "fieldSize": 6,
+    "nitro": {
+      "charged": 31320,
+      "spent": 31320,
+      "launches": 3,
+      "landings": 3,
+      "stunts": 3,
+      "recoveries": 0
+    },
+    "sections": [
+      {
+        "section": "six-car grid",
+        "samples": 84,
+        "seconds": 1.4,
+        "cpuSubmission": {
+          "samples": 178,
+          "medianMs": 0.7000000029802322,
+          "p95Ms": 0.9000000059604645
+        },
+        "gpuDraw": {
+          "samples": 22,
+          "medianMs": 1.228128,
+          "p95Ms": 1.716672
+        },
+        "simulationTicks": 84,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.00000000000001,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.800000000000182,
+        "maxMs": 16.800000000000182
+      },
+      {
+        "section": "copper drift bend",
+        "samples": 320,
+        "seconds": 5.333099999999998,
+        "cpuSubmission": {
+          "samples": 321,
+          "medianMs": 0.7999999970197678,
+          "p95Ms": 0.9000000059604645
+        },
+        "gpuDraw": {
+          "samples": 40,
+          "medianMs": 1.300832,
+          "p95Ms": 1.468032
+        },
+        "simulationTicks": 320,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.0026251148488,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.799999999999272,
+        "maxMs": 16.80000000000109
+      },
+      {
+        "section": "boost straight",
+        "samples": 187,
+        "seconds": 3.1165,
+        "cpuSubmission": {
+          "samples": 188,
+          "medianMs": 0.6000000089406967,
+          "p95Ms": 0.7000000029802322
+        },
+        "gpuDraw": {
+          "samples": 24,
+          "medianMs": 1.043904,
+          "p95Ms": 1.190816
+        },
+        "simulationTicks": 187,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.003208727739455,
+        "medianMs": 16.700000000000728,
+        "p95Ms": 16.799999999999272,
+        "maxMs": 16.80000000000291
+      },
+      {
+        "section": "Copper Step launch and catch",
+        "samples": 137,
+        "seconds": 2.283200000000001,
+        "cpuSubmission": {
+          "samples": 138,
+          "medianMs": 0.5999999940395355,
+          "p95Ms": 0.7000000029802322
+        },
+        "gpuDraw": {
+          "samples": 17,
+          "medianMs": 1.010656,
+          "p95Ms": 1.352576
+        },
+        "simulationTicks": 137,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.003503854239646,
+        "medianMs": 16.69999999999709,
+        "p95Ms": 16.700000000000728,
+        "maxMs": 16.799999999999272
+      },
+      {
+        "section": "Signal Crown launch and catch",
+        "samples": 163,
+        "seconds": 2.7165,
+        "cpuSubmission": {
+          "samples": 164,
+          "medianMs": 0.5,
+          "p95Ms": 0.6000000089406967
+        },
+        "gpuDraw": {
+          "samples": 20,
+          "medianMs": 1.033856,
+          "p95Ms": 1.141568
+        },
+        "simulationTicks": 163,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.00368120743604,
+        "medianMs": 16.69999999999709,
+        "p95Ms": 16.700000000004366,
+        "maxMs": 16.80000000000291
+      },
+      {
+        "section": "final ramp approach and landing",
+        "samples": 258,
+        "seconds": 4.299800000000003,
+        "cpuSubmission": {
+          "samples": 259,
+          "medianMs": 0.5,
+          "p95Ms": 0.6000000089406967
+        },
+        "gpuDraw": {
+          "samples": 32,
+          "medianMs": 0.994432,
+          "p95Ms": 1.085472
+        },
+        "simulationTicks": 258,
+        "maxTicksPerFrame": 1,
+        "meanFps": 60.002790827480304,
+        "medianMs": 16.69999999999709,
+        "p95Ms": 16.700000000004366,
+        "maxMs": 16.80000000000291
+      }
+    ]
+  },
+  "endurance": {
+    "browser": "158.0.8127.36",
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "source": "11d8d4759621b542f4692a2d59447fdc8f273cfb",
+    "environment": "day",
+    "samples": [
+      {
+        "cycle": 1,
+        "course": "skyway",
+        "environment": "day",
+        "heapBytes": 5261816,
+        "retainedWebGLBuffers": 39,
+        "retainedPrograms": 2,
+        "uploads": 58,
+        "deletes": 19,
+        "allocatedBytes": 10016604,
+        "retainedBytes": 5285568,
+        "programs": 4,
+        "deletedPrograms": 2,
+        "pcm": 8,
+        "started": 110,
+        "ended": 110,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 2,
+        "course": "ridge",
+        "environment": "night",
+        "heapBytes": 6553972,
+        "retainedWebGLBuffers": 121,
+        "retainedPrograms": 3,
+        "uploads": 255,
+        "deletes": 134,
+        "allocatedBytes": 33483756,
+        "retainedBytes": 14606496,
+        "programs": 9,
+        "deletedPrograms": 6,
+        "pcm": 8,
+        "started": 222,
+        "ended": 222,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 3,
+        "course": "skyway",
+        "environment": "day",
+        "heapBytes": 6209684,
+        "retainedWebGLBuffers": 39,
+        "retainedPrograms": 2,
+        "uploads": 294,
+        "deletes": 255,
+        "allocatedBytes": 38769324,
+        "retainedBytes": 5285568,
+        "programs": 11,
+        "deletedPrograms": 9,
+        "pcm": 8,
+        "started": 334,
+        "ended": 334,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 4,
+        "course": "speedway",
+        "environment": "day",
+        "heapBytes": 6165644,
+        "retainedWebGLBuffers": 19,
+        "retainedPrograms": 2,
+        "uploads": 313,
+        "deletes": 294,
+        "allocatedBytes": 43500360,
+        "retainedBytes": 4731036,
+        "programs": 13,
+        "deletedPrograms": 11,
+        "pcm": 8,
+        "started": 446,
+        "ended": 446,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 5,
+        "course": "skyway",
+        "environment": "day",
+        "heapBytes": 6261228,
+        "retainedWebGLBuffers": 39,
+        "retainedPrograms": 2,
+        "uploads": 352,
+        "deletes": 313,
+        "allocatedBytes": 48785928,
+        "retainedBytes": 5285568,
+        "programs": 15,
+        "deletedPrograms": 13,
+        "pcm": 8,
+        "started": 558,
+        "ended": 558,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 6,
+        "course": "ridge",
+        "environment": "night",
+        "heapBytes": 6672204,
+        "retainedWebGLBuffers": 121,
+        "retainedPrograms": 3,
+        "uploads": 549,
+        "deletes": 428,
+        "allocatedBytes": 72253080,
+        "retainedBytes": 14606496,
+        "programs": 20,
+        "deletedPrograms": 17,
+        "pcm": 8,
+        "started": 670,
+        "ended": 670,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 7,
+        "course": "skyway",
+        "environment": "day",
+        "heapBytes": 6431884,
+        "retainedWebGLBuffers": 39,
+        "retainedPrograms": 2,
+        "uploads": 588,
+        "deletes": 549,
+        "allocatedBytes": 77538648,
+        "retainedBytes": 5285568,
+        "programs": 22,
+        "deletedPrograms": 20,
+        "pcm": 8,
+        "started": 782,
+        "ended": 782,
+        "peakVoices": 6
+      },
+      {
+        "cycle": 8,
+        "course": "speedway",
+        "environment": "day",
+        "heapBytes": 6578904,
+        "retainedWebGLBuffers": 19,
+        "retainedPrograms": 2,
+        "uploads": 607,
+        "deletes": 588,
+        "allocatedBytes": 82269684,
+        "retainedBytes": 4731036,
+        "programs": 24,
+        "deletedPrograms": 22,
+        "pcm": 8,
+        "started": 894,
+        "ended": 894,
+        "peakVoices": 6
+      }
+    ]
+  }
+}

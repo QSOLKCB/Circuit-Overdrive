@@ -109,7 +109,17 @@ try {
       splits:live.player.splitTicks,field:live.entrants});
   });
   let state;
-  do {state=await page.evaluate(()=>window.driveChunk());if (state.mark) await capture('skyway-'+state.mark);} while (!state.finished);
+  do {
+    state=await page.evaluate(()=>window.driveChunk());
+    if (state.mark==='boost') {
+      const streak=()=>page.locator('#hud').evaluate(el=>getComputedStyle(el,'::before').content);
+      assert.equal(await streak(),'""');
+      await page.emulateMedia({reducedMotion:'reduce'});
+      assert.equal(await streak(),'none');
+      await page.emulateMedia({reducedMotion:'no-preference'});
+    }
+    if (state.mark) await capture('skyway-'+state.mark);
+  } while (!state.finished);
   const {field,...report}=await page.evaluate(()=>window.nitroReport());
   await capture('skyway-flag');
   assert.equal(await page.locator('#classification li').count(),6);

@@ -98,6 +98,8 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 **Published in v0.8.0.** Nightshift added car-mounted surface lighting, both night worlds and Midnight Protocol. The inaugural championship retains its four daytime events. CO-009 is in development for owner review. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
 
+**v0.9.0 candidate.** Nitro Skyway introduces its own six-car stunt sprint, three physical launch decks, drift-earned acceleration, the original 160 BPM Nitro Pulse score and source-bound v3 replay. [CO-009 review and driving evidence](docs/co-009-acceptance.md)
+
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 
 ## 6. Post-v1.0.0 — destruction, garage and economy
