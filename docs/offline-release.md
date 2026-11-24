@@ -54,3 +54,8 @@ node tests/browser-frames.mjs "$URL" --ridge
 ```
 
 The endurance check starts, pauses and restarts eight races on one page, alternating courses. It records settling of audio sources, PCM pool size, retained WebGL buffers and JavaScript heap after explicit garbage collection. The frame checks use ordinary browser animation callbacks and report sample durations, median, p95 and worst intervals on a 1920×1080 framebuffer. Record the actual renderer and machine when interpreting these results. Hardware acceptance uses the separate [controller and mobile checklist](hardware-acceptance.md).
+
+
+## Crash Lab evidence from the offline package
+
+The archive includes the facility, original test fixtures, damage and audio observers, and the v5 Theatre reader. The packager stamps every HTML entry from the same committed allowlist. The independent ZIP rebuild checks those stamps and vendor provenance. Serve the extracted directory, select Crash Lab, finish a trial and save both JSON files. From the matching checkout, run `node scripts/replay-drive.mjs FILE.json` and compare the input, contact and final-state digests with the evidence download. An ordinary unstamped checkout supports driving. A verified revision enables export. [Format and precision](replay-theatre.md#crash-lab-version-5)

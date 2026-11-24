@@ -42,6 +42,7 @@ export async function crashReceipt(tape,trial,runtime) {
       tape.scenario!==trial.scenario || tape.seed!==trial.seed || tape.ticks!==world.tick)
     throw Error('Receipt requires matching input and a terminal experiment');
   const final=measurement({tick:world.tick,result:trial.result,cars:world.cars,
+    ...(trial.lastStep.limited?{solverLimit:trial.lastStep}:{}),
     contactLatches:world.pairs.map(p=>[p.a.id,p.b.id,p.active])});
   const contacts=measurement(trial.contacts);
   const [inputSha256,contactsSha256,finalStateSha256]=await Promise.all([digest(tape.runs),digest(contacts),digest(final)]);

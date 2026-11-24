@@ -36,7 +36,7 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 | `championship` | One continuous four-round World Overdrive Championship, including scores, saves, event replays and trophy |
 | `speedway` | Both three-lap Speedway races, finish classifications and byte-for-byte day/night replay comparison |
 | `ridge` | Both Ridge sprints, finish classifications and byte-for-byte day/night replay comparison |
-| `controllers` | Standard gamepad, custom profiles, wheel mapping and controller diagnostics |
+| `controllers` | Standard gamepad, custom profiles, wheel mapping, controller diagnostics and three complete Crash Lab experiments |
 | `theatre` | Replay Theatre loading, playback, seeking and follow cameras |
 | `lifecycle` | Speedway and Ridge day smoke tests, Speedway night smoke test and mobile touch |
 | `effects` | Night contact effects, the WebGL headlight pixel comparison, and a complete six-car Skyway race with v3 replay verification |
@@ -61,3 +61,6 @@ On software WebGL, the finish runner renders the interactive game at 640×360. I
 The packaging job records the source revision and checksum in its summary. The verified ZIP and checksum are retained together for 14 days. The Pages artifact contains the allowlisted runtime files. [Offline release guide](offline-release.md) · [Nightshift acceptance](co-008-acceptance.md)
 
 The theatre worker also drives the complete six-car Orbital Spine event, compares the live field to a second simulator, downloads its v4 command tape and imports it through Replay Theatre. The worker saves screenshots and tick-indexed physical contact receipts with the tested build.
+
+
+The controllers worker also drives the wall, glancing and opposing Crash Lab trials using real keyboard input and the browser clock. It downloads v5 tapes and independent JSON receipts, opens a second Theatre page, compares the full same-runtime contacts and final car states, then verifies the Node receipt digests. It checks reset, focus loss and WebGL restoration. The candidate and production jobs use the same suite. Run `node tests/browser-crash.mjs BASE_URL` with the existing external Playwright driver and set `EVIDENCE_DIR` to retain the downloads and screenshots. The ordinary Node test suite compares six legacy course/environment combinations against a separate checkout at the published v1.0.0 SHA. Full clones use their local Git objects. Shallow checkouts fetch only the pinned public commit into a disposable test directory. Set CO_V100_CHECKOUT to a clean local v1.0.0 checkout to run offline from a shallow clone. Production deployment and its public checks follow owner-approved main integration.

@@ -16,7 +16,7 @@ const limited=(v,limit)=>Number.isFinite(v) && Math.abs(v)<=limit;
 
 export function crashCar(id,{x=0,z=0,yaw=0,vx=0,vz=0,spin=0}={}) {
   if (!validId(id) || ![x,z].every(v=>limited(v,1000)) || !limited(yaw,2*Math.PI) ||
-      !Number.isFinite(Math.hypot(vx,vz)) || Math.hypot(vx,vz)>DRIVE_CAP || !limited(spin,12))
+      ![vx,vz].every(Number.isFinite) || Math.hypot(vx,vz)>DRIVE_CAP || !limited(spin,12))
     throw RangeError('Invalid laboratory car');
   return {id,x,z,yaw,vx,vz,spin};
 }
@@ -30,12 +30,17 @@ export function crashBarrier(id,x1,z1,x2,z2,r,material='concrete') {
 }
 
 export function impactWorld(cars,barriers=[],revision=null) {
-  const ids=[...cars,...barriers].map(o=>o.id);
-  if (cars.length<1 || cars.length>4 || barriers.length>8 || new Set(ids).size!==ids.length ||
+  if (!Array.isArray(cars) || !Array.isArray(barriers) || cars.length<1 || cars.length>4 || barriers.length>8 ||
       (revision!==null && (typeof revision!=='string' || !/^[0-9a-f]{40}$/.test(revision))))
     throw RangeError('Invalid impact world');
+  for (const car of cars) {
+    if (!car || ![car.x,car.z,car.yaw,car.vx,car.vz,car.spin].every(Number.isFinite))throw RangeError('Invalid body state');
+    crashCar(car.id,car); // Check launch limits before admitting the caller-owned body.
+  }
   const sorted=items=>items.slice().sort((a,b)=>a.id-b.id);
-  const bodies=sorted(cars), fixtures=sorted(barriers), pairs=[];
+  const bodies=sorted(cars),fixtures=sorted(Array.from(barriers,b=>crashBarrier(b.id,b.x1,b.z1,b.x2,b.z2,b.r,b.material)));
+  const ids=[...bodies,...fixtures].map(o=>o.id),pairs=[];
+  if(new Set(ids).size!==ids.length)throw RangeError('Duplicate impact participant');
   for (const a of bodies) {
     for (const b of bodies) if (a.id<b.id) pairs.push({a,b,wall:false,active:false});
     for (const b of fixtures) pairs.push({a,b,wall:true,active:false});
@@ -186,5 +191,10 @@ export function stepImpacts(world) {
     if (contact) {contacts.push(contact); stats.accepted++;}
   }
   stats.limited=true;
+  stats.unadvancedSeconds=LAB_STEP-elapsed;
+  stats.residualPenetration=0;
+  for(const pair of world.pairs)for(const i of stations)for(const j of pair.wall?[0]:stations){
+    stats.residualPenetration=Math.max(stats.residualPenetration,-sample(pair,i,j,0).gap);
+  }
   return {contacts,stats};
 }

@@ -51,11 +51,36 @@ try{
     const bytes=await page.screenshot(dir?{path:dir+'/'+scenario+'.png'}:{});
     const screenshotSha256=createHash('sha256').update(bytes).digest('hex');
     if(dir)await writeFile(dir+'/'+scenario+'-live.json',JSON.stringify({revision,screenshotSha256,...live}));
+    if(scenario==='opposing'){
+      await page.locator('#lab-follow').selectOption('1');
+      await page.waitForFunction(()=>document.querySelector('#lab-strike').textContent.startsWith('Player test car'));
+      assert.equal(await page.locator('#zone-front').getAttribute('data-damage'),String(live.cars[1].damage.front));
+    }
     const hashes=await verifyCrashDownloads(page,base,live,revision,dir);
     results.push({scenario,revision,...hashes,ticks:live.ticks,result:live.result,impactTick:hit.tick,zone:face,
       impulse:hit.normalImpulse,screenshotSha256});
     await page.locator('#lab-reset').click();assert.equal(await page.locator('#lab-tick').textContent(),'0');
     assert.equal(await page.locator('#zone-'+face).getAttribute('data-damage'),'0');
   }
+  // Exercise loss/restoration on the same real page, preserving an armed trial.
+  await page.locator('#scenario').selectOption('wall');await page.locator('#lab-arm').click();
+  await page.keyboard.down('ArrowUp');await page.waitForFunction(()=>window.readTrial().world.tick>=6);
+  await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.keyboard.up('ArrowUp');
+  const paused=await page.evaluate(()=>window.readTrial().world.tick);
+  await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>window.readTrial().world.tick),paused);
+  await page.locator('#lab-arm').click();
+  const beforeLoss=await page.evaluate(()=>{
+    const t=window.readTrial();return {speed:Math.hypot(t.world.cars[0].vx,t.world.cars[0].vz),tick:t.world.tick};
+  });
+  await page.waitForFunction(t=>window.readTrial().world.tick>=t+5,beforeLoss.tick);
+  assert(await page.evaluate(s=>{const c=window.readTrial().world.cars[0];return Math.hypot(c.vx,c.vz)<=s;},beforeLoss.speed));
+  await page.evaluate(()=>{const gl=document.querySelector('#lab-world').getContext('webgl');
+    window.loss=gl.getExtension('WEBGL_lose_context');window.loss.loseContext();});
+  await page.waitForFunction(()=>document.querySelector('#lab-status').textContent==='Graphics suspended');
+  const lostTick=await page.evaluate(()=>window.readTrial().world.tick);
+  await page.evaluate(()=>window.loss.restoreContext());
+  await page.waitForFunction(()=>document.querySelector('#lab-status').textContent.startsWith('Graphics restored'));
+  assert.equal(await page.evaluate(()=>window.readTrial().world.tick),lostTick);
+  await page.locator('#lab-arm').click();await page.waitForFunction(t=>window.readTrial().world.tick>t,lostTick);
   assert.deepEqual(errors,[]);console.log(JSON.stringify({browser:browser.version(),results},null,2));
 }finally{await browser.close();}

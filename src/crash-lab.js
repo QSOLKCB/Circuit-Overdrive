@@ -48,10 +48,10 @@ function syncButtons(){
   $('lab-touch').hidden=input.source!=='touch' || !running();
 }
 function dashboard(){
-  const car=trial.world.cars[0],hit=latestImpact(trial);
+  const follow=Number($('lab-follow').value),car=trial.world.cars[follow],hit=latestImpact(trial,follow);
   set('lab-speed',String(Math.round(3.6*Math.hypot(car.vx,car.vz))));set('lab-tick',String(trial.world.tick));
   set('lab-contact',trial.lastContacts.length?'Resolved contact':'Clear');
-  set('lab-strike',hit?scenarios[trial.scenario].target+' · '+hit.sites[0].zone:'—');
+  set('lab-strike',hit?(follow?'Player test car':scenarios[trial.scenario].target)+' · '+hit.sites.find(s=>s.id===follow).zone:'—');
   for(const [id,val,unit,scale,digits] of [
     ['relative','relativeSpeed','km/h',3.6,0],['closing','closing','m/s',1,1],['impulse','normalImpulse','N·s',1,0],
     ['tangent','tangentialImpulse','N·s',1,0],['energy','dissipated','kJ',.001,1]
@@ -69,7 +69,12 @@ function dashboard(){
       el.style.setProperty('--face','rgb('+[52+d*.14,82-d*.027,81-d*.054].map(Math.round).join(' ')+')');
     }
   }
-  set('lab-operational',labCondition(car.damage).disabled?'Drive disabled':hardware.some(k=>car.damage[k])?'Operational · impaired':'Operational');
+  const condition=labCondition(car.damage),site=hit?.sites.find(s=>s.id===follow);
+  set('lab-deltas',hit?'Tick '+hit.tick+' · '+(hit.normalEnergy/1000).toFixed(1)+' kJ normal energy · '+
+    (Object.entries(site.damage).map(([k,v])=>k+' +'+v).join(', ')||'below damage threshold'):'No accepted impact');
+  set('lab-forces','Available drive '+Math.round(condition.drive*100)+'% · steering '+Math.round(condition.steer*100)+
+    '% · lateral grip '+Math.round(condition.grip*100)+'% · yaw damping '+Math.round(condition.damping*100)+'%');
+  set('lab-operational',condition.disabled?'Drive disabled':hardware.some(k=>car.damage[k])?'Operational · impaired':'Operational');
 }
 function reset(){
   const id=$('scenario').value;
@@ -81,6 +86,7 @@ function reset(){
     try{scene=createCrashScene(canvas,id,matchMedia('(pointer: coarse)').matches?.8:1);}
     catch(error){status('Graphics unavailable · '+error.message);}
   }
+  $('lab-follow-control').hidden=id!=='opposing';$('lab-follow').value='0';
   $('lab-camera').value='chase';set('station-id',scenarios[id].number);set('lab-heading',scenarios[id].name);set('lab-aim',scenarios[id].aim);
   if(scene)status('Ready · arm controls to launch');
   syncButtons();dashboard();
@@ -119,7 +125,7 @@ function frame(ms){
   });
   if(tail>0){tail=Math.max(0,tail-dt);if(!muted)audio.update(trial,neutralLab);if(!tail)audio.stop();}
   if(!lost && scene && !document.hidden){
-    scene.draw(trial,{camera:$('lab-camera').value,alpha:running()?alpha:1,reducedMotion:motion.matches});
+    scene.draw(trial,{camera:$('lab-camera').value,follow:Number($('lab-follow').value),alpha:running()?alpha:1,reducedMotion:motion.matches});
     dashboard();
   }
   requestAnimationFrame(frame);
