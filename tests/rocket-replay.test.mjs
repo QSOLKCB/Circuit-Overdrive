@@ -89,7 +89,7 @@ test('bounded v4 seek reproduces every entrant, integrates its quaternion, and i
   finished.finishTicks=521;
   finished.previous={...finished.previous,x:finished.current.x-8,orientation:[0,1,0,0]};
   const entrants=reference.entrants.slice();entrants[2]=finished;
-  const held=interpolateReplayPoses({...reference,entrants},poses,0)[2];
+  const held=interpolateReplayPoses({course:reference.course,entrants},poses,0)[2];
   assert.equal(held.x,finished.current.x);
   const q=finished.current.orientation;
   assert(Math.abs(held.orientation.reduce((sum,v,i)=>sum+v*q[i],0))>1-1e-9);
