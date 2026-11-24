@@ -5,10 +5,10 @@ The candidate adds a separate six-car Rocket discipline to published v0.9.0, `f7
 | Review | Base | Reviewed implementation |
 | --- | --- | --- |
 | [A · Gravity Engine](https://github.com/QSOLKCB/Circuit-Overdrive/pull/34) | Published v0.9.0 | Merged into main at `2031d46a565322f78921f1e620e78fcd3b5fe3b2` |
-| [B · Orbital Spine](https://github.com/QSOLKCB/Circuit-Overdrive/pull/35) | A merge | `20d6d15fd1fe67a05c629f1ce47411a3ef8710ab` |
-| [C · Playable race](https://github.com/QSOLKCB/Circuit-Overdrive/pull/36) | B | `ef7f27d8f1578f9ab5f5872338f6594aa99ead3d` |
-| [D · Sound and v4](https://github.com/QSOLKCB/Circuit-Overdrive/pull/37) | C | `b52e06b54754e1aa82f6ce247138923338f22b29` |
-| E · Certification | D | `6523dd53aceae5206b6b29316bb082105adfae53` supplied the browser captures and recording |
+| [B · Orbital Spine](https://github.com/QSOLKCB/Circuit-Overdrive/pull/35) | A merge | Merged into main at `d121d90f64ffa91b9d5fbcb6bd1303f4a66f9d09` |
+| [C · Playable race](https://github.com/QSOLKCB/Circuit-Overdrive/pull/36) | B merge | Merged into main at `e985ece76643487fa1acf7dc3ddac68a2300a133` |
+| [D · Sound and v4](https://github.com/QSOLKCB/Circuit-Overdrive/pull/37) | C merge | Merged into main at `b6826e5a8e9760aeca2960467a1caad9fd5c45ee` |
+| [E · Certification](https://github.com/QSOLKCB/Circuit-Overdrive/pull/38) | D merge | `6523dd53aceae5206b6b29316bb082105adfae53` supplied the Rocket captures and recording |
 
 ## Wheel support and flight
 
@@ -34,7 +34,7 @@ Each lossless WebP decodes to the same RGB pixels as its original browser PNG. T
 | Transfer and flag | [Boost](evidence/co-010e/orbital-boost.webp) · [Free flight](evidence/co-010e/orbital-flight.webp) · [Dodge](evidence/co-010e/orbital-dodge.webp) · [Catch](evidence/co-010e/orbital-landing.webp) · [Classification](evidence/co-010e/orbital-flag.webp) |
 | Spectator | [Rival high camera](evidence/co-010e/orbital-theatre-ceiling.webp) · [Player at the flag](evidence/co-010e/orbital-theatre-flag.webp) |
 
-The C and D branches subsequently received a test-only change to the software-rendered controller harness. It samples each accepted pad tick and drains the GPU queue between bounded render batches. The heads carrying that change are `586f80bb9a6a5ff768aca61475eb8b6308704940` and `4f73733ddc9fb644acc3dfaffafd410e05a834cc`, respectively.
+The C and D gameplay builds were `ef7f27d8f1578f9ab5f5872338f6594aa99ead3d` and `b52e06b54754e1aa82f6ce247138923338f22b29`, respectively. Both branches subsequently received a test-only change to the software-rendered controller harness. It samples each accepted pad tick and drains the GPU queue between bounded render batches. The heads carrying that change are `586f80bb9a6a5ff768aca61475eb8b6308704940` and `4f73733ddc9fb644acc3dfaffafd410e05a834cc`, respectively.
 
 The exact C gameplay archive also passed a complete gameplay-only run before the v4 recorder entered the stack. Its 71 runtime files matched the C site package. The C archive's SHA-256 is `34d0c5b3f76f297984f476d6d888442f0f76c0d2c54f9ba00bd79744e54af5cd`. [Wall driving from the playable C source](evidence/co-010e/playable-wall.webp)
 
@@ -44,9 +44,15 @@ The E browser exported 623 v4 command runs over 2,780 accepted ticks. Its downlo
 
 ## Native performance and packaging
 
-On the documented Ryzen 9 5950X and RTX 5060 Ti, nine native Chrome windows covered wall, ceiling, boost and flight at 1920 × 1080 with six unfinished entrants. The 2,036 observed frame intervals had a 16.7 ms median and a 16.8 ms worst interval. GPU draw medians varied from 0.74 to 0.83 ms by section. Eight restart and course-switch cycles returned Orbital to 13 buffers and two WebGL programs on each visit. The measured runtime bytes match the certification checkout. [Native timings, hardware, resource counts and published baseline](rocket-performance.md)
+On the documented Ryzen 9 5950X and RTX 5060 Ti, nine native Chrome windows covered wall, ceiling, boost and flight at 1920 × 1080 with six unfinished entrants. The 2,036 observed frame intervals had a 16.7 ms median and a 16.8 ms worst interval. GPU draw medians varied from 0.74 to 0.83 ms by section. Eight restart and course-switch cycles returned Orbital to 13 buffers and two WebGL programs on each visit. These samples predate the touch steering change. [Native timings, hardware, resource counts and published baseline](rocket-performance.md)
 
 The 71 runtime files of the measured site's source-stamped package matched the independently verified archive's extracted files. The ZIP SHA-256 is `cb398345f235016f182fcec0ac7704279127fca2f0c7c3239b1a3110f8894326`. The full race ran against that archive over loopback at the Pages project subpath. The seven CI lanes share the single verified archive. The Theatre lane includes the new Rocket acceptance drive. [Offline reproduction](offline-release.md) · [CI ownership and browser commands](pages.md)
+
+## Touch steering and replay
+
+On touch commit `e6af18f65c58a414ce89d524c42cbadc01ee4ab3`, Chrome 158 mobile emulation delivered four positions from a single steering finger while a second finger held Gas. The old build produced steering values of −1, −1, 0 and 0. The updated pad produced −1, −0.5, 0 and +1 on the first fixed input sample after each event. Lifting the steering finger returned steering to zero and kept throttle at one. Physical handset input-to-display latency remains unmeasured.
+
+Two full touch drives from the verified offline archive reconstructed six official finishes on each course, three lap splits on Speedway and seven splits on Ridge. In a separate Speedway drive, the downloaded v2 replay retained 30 ticks each of +0.5 and −0.5 steering. Independent playback matched all six results and lap times of 55.000, 52.300 and 52.300 seconds. The 9,756-tick tape had SHA-256 `321c4e1eb374bb0cc4b76685e2ef580e1248e834bffbed52da9d9cdbc0caeb1d`. [Touch controls and test commands](controllers.md#touch-driving)
 
 ## Published racing authority
 
