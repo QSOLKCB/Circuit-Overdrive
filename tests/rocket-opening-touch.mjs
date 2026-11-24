@@ -77,6 +77,7 @@ export async function verifyRocketOpening(browser, url) {
     assert.equal(trace.gasTicks,330);
     assert.equal(trace.steerTicks,30);
     assert(trace.attachedTicks>300);
+    assert(trace.contacts<60,'the opening correction must clear traffic and rails within a second of contact');
     assert(trace.gate>=2 && trace.recoveries===0 && trace.minClearance>0 && trace.minUp>0,
       'The car must cross the start line and GATE1 upright and above the road after a half-second steering press: '+JSON.stringify(trace));
     assert.deepEqual(trace.gates.slice(0,2).map(g=>g.station),[0,123]);

@@ -120,8 +120,9 @@ test('a full-lock start correction stays on its tyres and settles after release 
 });
 
 test('automatic grip redirects gravity on the floor, wall and ceiling and releases over a gap',()=>{
-  for(const frame of [floor,wall,ceiling]) {
-    const surface=plane(frame), start=moving(surface), held={throttle:.35};
+  const bank={...floor,id:'bank',normal:[Math.SQRT1_2,Math.SQRT1_2,0],lateral:[Math.SQRT1_2,-Math.SQRT1_2,0]};
+  for(const [frame,load] of [[floor,gravity],[bank,gravity+(32-gravity)*(1-Math.SQRT1_2)],[wall,32],[ceiling,32]]) {
+    const surface=plane(frame), start=moving(surface,12), held={throttle:.35};
     let body=start;
     for(let i=0;i<60;i++) {
       const previous=body;
@@ -140,13 +141,24 @@ test('automatic grip redirects gravity on the floor, wall and ceiling and releas
       const bodyUp=[2*(x*y-z*w),1-2*(x*x+z*z),2*(y*z+x*w)];
       assert(dot(bodyUp,frame.normal)>.92);
       const gravityWithGrip=body.adhesionAcceleration.map((a,i)=>a-(i===1 ? gravity : 0));
-      for(let i=0;i<3;i++) near(gravityWithGrip[i],-ROCKET_LIMITS.trackGravity*frame.normal[i]);
+      for(let i=0;i<3;i++) near(gravityWithGrip[i],-load*frame.normal[i]);
       assert(speed(body.adhesionAcceleration)<=ROCKET_LIMITS.maxAdhesion+1e-8);
     }
     const released=advance(body,emptySpace,1);
     assert(!released.attached);
     near(speed(released.adhesionAcceleration),0);
     near(released.velocity[1]-body.velocity[1],-gravity*dt);
+  }
+});
+
+test('level-deck downforce preserves slow steering and builds to its finite high-speed load',()=>{
+  const surface=plane(floor);
+  for(const [entry,fraction] of [[0,0],[15,0],[20,0],[30,.25],[40,1],[60,1],[-30,.25]]) {
+    const body=advance(moving(surface,entry),surface,1);
+    assert(body.attached && body.wheels.every(wheel=>wheel.contact));
+    // Drag acts during the four substeps, slightly reducing the entry speed.
+    near(-body.adhesionAcceleration[1],(32-gravity)*fraction,.025);
+    near(body.adhesionAcceleration[0],0);near(body.adhesionAcceleration[2],0);
   }
 });
 

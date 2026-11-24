@@ -41,6 +41,29 @@ test('held throttle and boost carry the player through the wall and ceiling timi
   assert(wallMetres>wall.end-wall.start-3 && ceilingMetres>roof.end-roof.start-3);
 });
 
+test('an ordinary throttle-and-steer drive reaches the flag with every unit of boost fuel',()=>{
+  const race=grid(), p=race.player;
+  const wall=orbital.sections.find(section=>section.id==='radial-elbow');
+  const exit=orbital.sections.find(section=>section.id==='gravity-well');
+  const gap=orbital.sections.find(section=>section.kind==='air');
+  const gates=[];
+  let flight=0,landed=false;
+  for(let tick=0;tick<4000 && race.phase!=='finished';tick++) {
+    const before=p.nextGate;
+    stepRocketRace(race,{...NEUTRAL_ROCKET,throttle:1,steer:orbitalDrive(p).steer});
+    const b=p.vehicle;
+    if(p.nextGate!==before) gates.push(p.nextGate);
+    if(p.distance>=wall.start && p.distance<=exit.end) assert(b.attached);
+    if(p.distance>=gap.start && b.airTicks && !b.attached) flight++;
+    if(flight && b.contactFrame?.id==='catch-deck' && b.wheels.every(w=>w.contact && w.load>0)) landed=true;
+  }
+  assert.equal(race.phase,'finished');
+  assert.deepEqual(gates,[1,2,3,4,5,6,7,8,9]);
+  assert.equal(p.recoveries,0);
+  assert.equal(p.vehicle.energy,100);
+  assert(flight>10 && landed);
+});
+
 test('six real bodies complete the ordered wall, inverted gate, free transfer and catch under deterministic tick inputs',()=>{
   const race=grid(),tape=[],flags=race.entrants.map(()=>({wall:0,roof:0,splits:[],air:0,dodge:0,boost:0,landed:false}));
   while(race.phase!=='finished' && tape.length<7000) {

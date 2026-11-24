@@ -7,7 +7,7 @@ export const NEUTRAL_ROCKET = Object.freeze({throttle:0, brake:0, steer:0, boost
 export const ROCKET_LIMITS = Object.freeze({
   mass:1100, gravity:9.81, substeps:4, maxSpeed:75, maxAngularSpeed:6,
   mountHeight:-0.14, restLength:0.64, minLength:0.24, probeRange:0.72,
-  trackGravity:32, maxAdhesion:41.81, adhesionSeamTolerance:.06,
+  trackGravity:32, maxAdhesion:41.81, downforceStart:20, downforceFull:40, adhesionSeamTolerance:.06,
   spring:480, damper:29, maxSupport:145, tyreRollArm:.26,
   dodgeCooldown:60, dodgeSpeed:4, dodgeCost:12, capacity:100, boostDrain:18, boostAcceleration:13,
   maxAcceleration:352, maxAngularAcceleration:120, maxStopImpulse:1100*85,
@@ -168,10 +168,17 @@ function substep(state,command,surface,dodgeEdge) {
   });
   const forwardSpeed=dot(state.velocity,forward);
   const attached=eligible.length>=2;
-  const normal=attached ? normalize(eligible.reduce((v,w)=>add(v,w.hit.normal),[0,0,0])) : null;
-  // The track field plus world gravity points into the deck. Suspension
-  // bears that load. Losing the wheel evidence removes the field.
-  const adhesionAcceleration=attached ? subtract(scale(normal,-L.trackGravity),worldGravity) : [0,0,0];
+  let adhesionAcceleration=[0,0,0];
+  if (attached) {
+    const normal=normalize(eligible.reduce((v,w)=>add(v,w.hit.normal),[0,0,0]));
+    // At low speed on level asphalt the tyres carry ordinary weight. Bank
+    // angle and speed build downforce; walls and ceilings get the full load
+    // even at rest. Neither input nor fuel is needed to stay attached.
+    const speedFraction=clamp((Math.abs(forwardSpeed)-L.downforceStart)/(L.downforceFull-L.downforceStart),0,1);
+    const upright=Math.max(0,normal[1]);
+    const strength=L.trackGravity-(L.trackGravity-L.gravity)*upright*(1-speedFraction**2);
+    adhesionAcceleration=subtract(scale(normal,-strength),worldGravity);
+  }
   let acceleration=add(worldGravity,adhesionAcceleration), torque=[0,0,0];
   const wheels=hits.map((wheel,index)=>{
     if (!wheel) return emptyWheel();
