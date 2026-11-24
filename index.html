@@ -32,6 +32,7 @@
         <button type="button" id="choose-speedway" aria-pressed="true"><canvas id="preview-speedway" width="78" height="48" aria-hidden="true"></canvas>Overdrive Speedway</button>
         <button type="button" id="choose-ridge" aria-pressed="false"><canvas id="preview-ridge" width="78" height="48" aria-hidden="true"></canvas>Redline Ridge</button>
         <button type="button" id="choose-skyway" aria-pressed="false"><canvas id="preview-skyway" width="78" height="48" aria-hidden="true"></canvas>Nitro Overdrive</button>
+        <button type="button" id="choose-orbital" aria-pressed="false"><canvas id="preview-orbital" width="78" height="48" aria-hidden="true"></canvas>Rocket Overdrive</button>
       </div>
       <div id="environments" class="environment-picker" role="group" aria-label="Race environment">
         <button type="button" id="choose-day" aria-pressed="true">Day</button>
@@ -42,7 +43,7 @@
       <button id="enter-woc" type="button" disabled>World Overdrive Championship</button>
     </div>
     <p id="boot-note" role="status">Loading the game. If this message stays visible, use a browser with WebGL and native JSON module support (Safari 17.2 or later).</p>
-    <div class="car-caption"><b>27</b><div><small>Touring class</small><strong>Ignition GT</strong></div></div>
+    <div class="car-caption"><b>27</b><div><small id="car-class">Touring class</small><strong id="car-name">Ignition GT</strong></div></div>
   </section>
   <section id="woc" aria-labelledby="woc-title" hidden>
     <div class="woc-sheet">
@@ -66,6 +67,13 @@
       <meter id="nitro-energy" min="0" max="100000" value="0"></meter>
       <div><span id="nitro-state">Ready</span> · <span id="nitro-points">0 stunt pts</span></div>
     </div>
+    <div id="rocket-hud" class="instruments" hidden>
+      <label for="rocket-energy">Rocket fuel <strong id="rocket-level">100%</strong></label>
+      <meter id="rocket-energy" min="0" max="100" value="100"></meter>
+      <div><strong id="rocket-surface">Floor</strong> · <span id="rocket-assist">Assist off</span></div>
+      <div><span id="rocket-boost">Boost ready</span> · <span id="rocket-dodge">Dodge ready</span></div>
+      <div id="rocket-nav"></div><div id="rocket-contact"></div>
+    </div>
     <div id="feedback" role="status" hidden></div>
   </section>
   <section id="touch-controls" aria-label="Touch driving controls"></section>
@@ -82,7 +90,7 @@
 <footer><div><i class="live-dot"></i><span id="status" role="status">Starting renderer</span></div><div id="foot-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <span>Drive</span><kbd>C</kbd> <span>Camera</span><kbd>Esc</kbd> <span>Pause</span></div></footer>
 <dialog id="help" aria-labelledby="help-title">
   <h2 id="help-title">Driving controls</h2>
-  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Skyway drift / boost</dt><dd>Space / Shift</dd><dt>Air attitude</dt><dd>Hold Drift, steer and use pedals in flight</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
+  <dl><dt>Accelerate / arm grid</dt><dd>W / ↑</dd><dt>Brake, then reverse</dt><dd>S / ↓</dd><dt>Steer</dt><dd>A D / ← →</dd><dt>Skyway drift / boost</dt><dd>Space / Shift</dd><dt>Skyway air attitude</dt><dd>Hold Drift, steer and use pedals in flight</dd><dt>Orbital assist / boost</dt><dd>Space / Shift</dd><dt>Orbital air dodge</dt><dd>Q left / E right; release before the next dodge</dd><dt>Pause or resume</dt><dd>Esc</dd><dt>Recover (+3 seconds)</dt><dd>R</dd><dt>Low / high chase camera</dt><dd>C</dd></dl>
   <p>Keyboard is the default. Choose Controller to select a device. Leaving the window or disconnecting the active controller pauses the race.</p>
   <button id="close-help" class="primary">Close controls</button>
 </dialog>

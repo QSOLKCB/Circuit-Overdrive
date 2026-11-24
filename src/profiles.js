@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import {STANDARD_BUTTONS} from './gamepad.js';
 
-export const ACTION_NAMES = Object.freeze(['confirm','pause','back','camera','recover','up','down','left','right','drift','boost']);
+import {drivingActions, mappedActions} from './driver-command.js';
+
+export const ACTION_NAMES = mappedActions;
 export const TUNING = Object.freeze({deadzone:.12, sensitivity:1, curve:1, invertSteer:false,
   throttleRange:1, brakeRange:1});
-const FILE = 'circuit-overdrive.controller-profiles', VERSION = 2, LIMIT = 16;
+const FILE = 'circuit-overdrive.controller-profiles', VERSION = 3, LIMIT = 16;
 const session = new Map();
 const within = (n,min,max) => Number.isFinite(n) && n >= min && n <= max;
 const unit = n => Math.max(0, Math.min(n,1));
@@ -75,7 +77,8 @@ export function profileError(p,pad,{partial=false}={}) {
     }
     for (let j=0;j<i;j++) {
       const [other,c]=actions[j];
-      const contextual = (name==='back' && other==='camera') || (name==='camera' && other==='back');
+      const pair=[name,other].sort().join('/');
+      const contextual=['back/camera','assist/drift','dodgeLeft/left','dodgeRight/right'].includes(pair);
       if (!contextual && !distinctDirections(c,b)) return 'Choose a different control for '+name+' and '+other+'.';
     }
   }
@@ -100,8 +103,8 @@ export function profileMapper(profile,device) {
   // change driving inputs before another explicit selection and neutral gate.
   const p=JSON.parse(JSON.stringify(profile)), t=p.tuning, actions=Object.entries(p.actions);
   const axes=device.axes.length, buttons=device.buttons.length, id=device.id, mapping=device.mapping;
-  const hats=[p.steering.left,p.steering.right,...Object.values(p.actions)].filter(b=>b.type==='hat');
-  return (pad, nitro=true) => {
+  const steeringHats=[p.steering.left,p.steering.right].filter(b=>b.type==='hat');
+  return (pad, mode='preview') => {
     if (!pad || pad.connected===false || pad.id!==id || pad.mapping!==mapping ||
         pad.axes?.length!==axes || pad.buttons?.length!==buttons) return null;
     const left=travel(pad,p.steering.left), right=travel(pad,p.steering.right);
@@ -109,15 +112,17 @@ export function profileMapper(profile,device) {
     const brake=trim(travel(pad,p.brake)/t.brakeRange,.02);
     const difference=right-left, turn=unit(trim(Math.abs(difference),t.deadzone)**t.curve*t.sensitivity);
     if (![turn,throttle,brake].every(Number.isFinite)) return null;
-    const held=[];
+    const held=[], enabled=drivingActions(mode);
+    let hatsNeutral=steeringHats.every(b=>Math.abs(pad.axes[b.index]-b.rest)<=HAT_TOLERANCE);
     for (const [name,b] of actions) {
-      if (!nitro && (name==='drift' || name==='boost')) continue;
+      if (!enabled.includes(name)) continue;
       const amount=travel(pad,b);
       if (!Number.isFinite(amount)) return null;
       if (amount>=.5) held.push(name);
+      if (b.type==='hat' && Math.abs(pad.axes[b.index]-b.rest)>HAT_TOLERANCE) hatsNeutral=false;
     }
     const steer=turn ? turn*Math.sign(difference)*(t.invertSteer ? -1 : 1) : 0;
-    const centred=left<=t.deadzone && right<=t.deadzone && hats.every(b=>Math.abs(pad.axes[b.index]-b.rest)<=HAT_TOLERANCE);
+    const centred=left<=t.deadzone && right<=t.deadzone && hatsNeutral;
     return {command:{throttle,brake,steer},held,neutral:centred};
   };
 }
@@ -163,11 +168,11 @@ function entries(store) {
     const raw=store?.getItem(FILE);
     if (!raw || raw.length>131072) return [];
     const data=JSON.parse(raw);
-    if (![1,VERSION].includes(data.version) || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
+    if (![1,2,VERSION].includes(data.version) || !Array.isArray(data.devices) || data.devices.length>LIMIT) return [];
     return data.devices.filter(row=>{
       if (!row || typeof row.key!=='string' || row.key.length>1024) return false;
-      // Old calibrations keep their exact assignments. Only v2 can bind the new controls.
-      return data.version===VERSION || !Object.keys(row.profile?.actions ?? {}).some(k=>k==='drift' || k==='boost');
+      const supported=data.version===1 ? drivingActions(false) : data.version===2 ? drivingActions('nitro') : ACTION_NAMES;
+      return Object.keys(row.profile?.actions ?? {}).every(name=>supported.includes(name));
     });
   } catch { return []; }
 }

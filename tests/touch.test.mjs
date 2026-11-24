@@ -124,3 +124,16 @@ test('four fingers can steer, accelerate, drift and boost; cancellation clears e
   nitro=false; assert.equal(t.down('drift',7).defaultPrevented,false);
   assert.deepEqual(t.command(),neutral);
 });
+
+test('independent Rocket touch pointers can steer, accelerate, assist, boost and issue a signed dodge',()=>{
+  let mode='rocket'; const t=fixture(()=>mode);
+  const clear={...neutral,boost:false,assist:false,dodge:0};
+  for(const [i,k] of ['right','throttle','assist','boost','dodgeLeft'].entries()) t.down(k,i+1);
+  assert.deepEqual(t.command(),{throttle:1,brake:0,steer:1,assist:true,boost:true,dodge:-1});
+  t.down('dodgeRight',6); assert.equal(t.command().dodge,0);
+  t.up('dodgeLeft',5); assert.equal(t.command().dodge,1);
+  t.fire('pointercancel','boost',4); assert.equal(t.pauses(),1);assert.deepEqual(t.command(),clear);
+  t.enable(true); assert.deepEqual(t.command(),clear);
+  mode='nitro'; assert(!t.down('dodgeRight',8).defaultPrevented && !t.down('assist',9).defaultPrevented);
+  assert.deepEqual(t.command(),{...neutral,drift:false,boost:false});
+});

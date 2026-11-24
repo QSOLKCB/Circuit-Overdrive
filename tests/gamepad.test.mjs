@@ -187,3 +187,20 @@ test('Nitro bumpers are held tick commands with neutral arming and disconnect cl
   assert.deepEqual(input.poll(true),{command:zero,actions:[]});
   assert.equal(input.index,null);
 });
+
+test('Rocket shoulders and lateral D-pad require a neutral grid, preserve signed dodge and clear on loss',()=>{
+  const p=pad(0), {input,slots}=fixture(p), mode='rocket';
+  const clear={...rest,boost:false,assist:false,dodge:0};
+  press(p,'assist'); press(p,'boost'); press(p,'dodgeLeft');
+  assert(input.select(0)); assert.deepEqual(input.poll(mode).command,clear); assert(!input.ready);
+  for(const name of ['assist','boost','dodgeLeft']) press(p,name,0);
+  input.poll(mode); assert(input.ready);
+  press(p,'assist'); press(p,'boost'); press(p,'dodgeLeft');
+  assert.deepEqual(input.poll(mode).command,{...clear,assist:true,boost:true,dodge:-1});
+  press(p,'dodgeRight'); assert.equal(input.poll(mode).command.dodge,0);
+  press(p,'dodgeLeft',0); assert.equal(input.poll(mode).command.dodge,1);
+  assert.deepEqual(input.poll(true).command,{...rest,drift:true,boost:true});
+  assert.deepEqual(input.poll(false).command,rest);
+  slots[0]=null;
+  assert.deepEqual(input.poll(mode).command,clear); assert(!input.ready);
+});

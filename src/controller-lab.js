@@ -63,7 +63,7 @@ export function controllerLab(input) {
         : disconnected ? 'Disconnected · Select a connected controller'
         : input.pads.available ? `${count} visible · Select a controller to inspect its channels` : 'Gamepad access unavailable';
       set('device', connection);
-      const sample = pad && mapper && readMapping(mapper, pad, true);
+      const sample = pad && mapper && readMapping(mapper, pad, 'preview');
       set('neutral', sample ? (sample.neutral ? 'Yes' : 'No') : 'Unavailable');
       for (const key of ['steer','throttle','brake']) set(key, sample ? sample.command[key].toFixed(2) : '—');
       set('calibration', pad ? calibration : '—');

@@ -7,7 +7,7 @@ export function validateEnvironment(value) {
 
 export function courseEnvironment(course, requested) {
   const environment = validateEnvironment(requested);
-  return course.id === 'skyway' ? 'day' : environment;
+  return course.id === 'skyway' || course.discipline === 'rocket' ? 'day' : environment;
 }
 
 export function eventTitle(course, environment) {

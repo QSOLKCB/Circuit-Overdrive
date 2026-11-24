@@ -2,7 +2,7 @@
 // Host the static package first. Chromium delivers actual multi-pointer browser
 // events from CDP; the Android-sized viewport is desktop emulation.
 import assert from 'node:assert/strict';
-import {installReplayController} from './browser-controller-driver.mjs';
+import {installReplayController,observeDrivingCommands} from './browser-controller-driver.mjs';
 
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const url = new URL(process.argv[2] || 'http://127.0.0.1:8000/').href;
@@ -18,6 +18,7 @@ try {
   const insets = {landscape:{left:32,right:18,top:0,bottom:14},portrait:{left:0,right:0,top:38,bottom:22}};
   await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:insets.landscape});
   await installReplayController(page,'standard');
+  await observeDrivingCommands(page);
   const errors = [];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('requestfailed',r=>errors.push(r.url()+' '+r.failure()?.errorText));
@@ -63,10 +64,13 @@ try {
   const safeLayout = limits => page.evaluate(limits=>{
     const instruments=['.timing','.course','.dash'];
     const nitro=document.body.dataset.course==='skyway';
+    const rocket=document.body.dataset.course==='orbital';
     if (nitro) instruments.push('#nitro-hud');
+    if (rocket) instruments.push('#rocket-hud');
     const controls=Array.from(document.querySelectorAll('[data-touch]')).filter(el=>el.getClientRects().length);
     const wanted=['left','right','throttle','brake','camera','recover','pause'];
     if (nitro) wanted.push('boost','drift');
+    if (rocket) wanted.push('assist','boost','dodgeLeft','dodgeRight');
     if (controls.map(el=>el.dataset.touch).sort().join()!==wanted.sort().join()) return 'Incorrect visible touch controls';
     const rects=[...instruments.map(s=>document.querySelector(s)),...controls].map(el=>el.getBoundingClientRect());
     const clipped=rects.some(r=>r.width<1 || r.left<limits.left || r.right>innerWidth-limits.right ||
@@ -221,6 +225,19 @@ try {
   await tap('#continue'); await phase('racing');
   assert.equal(await safeLayout(insets.portrait),'clear','Skyway portrait controls and Nitro HUD');
   await held();
+  await page.goto(url); await phase('menu');
+  await tap('#choose-orbital'); await tap('#start'); await tap('#touch-arm'); await phase('racing');
+  assert.equal(await safeLayout(insets.portrait),'clear','Orbital portrait controls and Rocket HUD');
+  const rocketFingers=await Promise.all(['throttle','left','assist','boost','dodgeRight'].map((name,i)=>down(i+1,name)));
+  await send('touchStart',rocketFingers); await held('assist','boost','dodgeRight','left','throttle');
+  await page.waitForFunction(()=>window.observedDrivingCommand?.dodge===1);
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:1,brake:0,steer:-1,assist:true,boost:true,dodge:1});
+  await send('touchCancel'); await phase('paused'); await held();
+  await page.setViewportSize(landscape); await cdp.send('Emulation.setSafeAreaInsetsOverride',{insets:insets.landscape});
+  await tap('#continue'); await phase('racing');
+  assert.equal(await safeLayout(insets.landscape),'clear','Orbital landscape controls and Rocket HUD');
+  await page.waitForFunction(()=>!window.observedDrivingCommand?.boost);
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:0,brake:0,steer:0,assist:false,boost:false,dodge:0});
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({url,browser:browser.version(),landscape,portrait,insets,device:'desktop Chromium touch emulation',...report},null,2));
 } finally { await browser.close(); }

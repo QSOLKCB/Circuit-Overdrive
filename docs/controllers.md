@@ -11,6 +11,8 @@ For a standard-layout pad, release the stick, pedals and buttons. Choose **Start
 | Pause/resume | Menu | Options |
 | Camera, recover | Y, X | Triangle, Square |
 | Nitro Skyway drift, boost | LB, RB | L1, R1 |
+| Orbital assist, boost | LB, RB | L1, R1 |
+| Orbital dodge | D-pad left / right | D-pad left / right |
 
 These defaults require the browser's standard mapping. Device names, USB and Bluetooth transport do not select layouts. Use a loopback server or HTTPS for browser device access. A browser, permissions policy or OS can limit which devices it exposes. [W3C Gamepad API](https://www.w3.org/TR/gamepad/)
 
@@ -28,7 +30,13 @@ Profiles are versioned and stored on this browser only. Storage failure keeps a 
 
 On Nitro Skyway the keyboard uses **Space** for drift and either **Shift** for boost while the racing canvas owns focus. The standard gamepad uses its two shoulder buttons. Hold either control for as many physics ticks as intended. Release every mapped control before arming the grid or resuming a paused gamepad race.
 
-For a custom pad or wheel, open **Mapping and calibration → Button assignments**, choose **Nitro drift** or **Nitro boost**, then capture the neutral and pressed endpoints for that assignment. Save the profile and select the device. Version 2 accepts both assignments. Version 1 profiles retain their existing steering, pedals and buttons, with drift and boost initially unassigned. Loading preserves the stored settings. The next explicit save writes version 2.
+For a custom pad or wheel, open **Mapping and calibration → Button assignments**, choose **Nitro drift** or **Nitro / Rocket boost**, then capture the neutral and pressed endpoints for that assignment. Save the profile and select the device.
+
+### Rocket bindings
+
+On Orbital Spine, hold **Space** for magnetic and airborne assistance and **Shift** for boost. Press **Q** to dodge left or **E** to dodge right in flight. Both directions held together produce a neutral dodge command. The selected standard pad uses LB/RB and the horizontal D-pad. The touch layout has separate Assist, Boost and two directional Dodge buttons. Release the dodge before requesting another.
+
+Custom layouts can capture **Rocket assist**, **Rocket dodge left** and **Rocket dodge right**. The boost assignment serves both disciplines. Release the pedals, buttons and steering before saving or arming the grid. Loading a version 1 or 2 profile preserves its saved assignments. Version 1 starts with unassigned boost, and both older formats start with unassigned assist and dodge. The next explicit save writes version 3.
 
 ## Touch driving
 

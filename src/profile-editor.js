@@ -4,7 +4,8 @@ import {ACTION_NAMES,TUNING,captureNeutral,centredSteering,deviceKey,movedContro
 
 const names={left:'Steer left',right:'Steer right',throttle:'Accelerator',brake:'Brake / reverse',
   confirm:'Confirm / grid start',pause:'Pause / resume',back:'Back',camera:'Camera',recover:'Recover',
-  up:'Menu up',down:'Menu down',menuLeft:'Menu left',menuRight:'Menu right',drift:'Nitro drift',boost:'Nitro boost'};
+  up:'Menu up',down:'Menu down',menuLeft:'Menu left',menuRight:'Menu right',drift:'Nitro drift',boost:'Nitro / Rocket boost',
+  assist:'Rocket assist',dodgeLeft:'Rocket dodge left',dodgeRight:'Rocket dodge right'};
 const STEPS=['neutral','left','right','centre','throttle','brake','confirm','pause','back','camera','recover','up','down','menuLeft','menuRight'];
 const optional=new Set(['back','camera','recover','up','down','menuLeft','menuRight']);
 const instructions={neutral:'Release all controls and centre the steering. Capture neutral.',
@@ -201,7 +202,7 @@ export function createProfileEditor(container,{readDevice,onSave}) {
     } catch (e) { notice(e.message); }
   }
   function movements(step) {
-    const directional=['left','right','menuLeft','menuRight','up','down'].includes(step);
+    const directional=['left','right','menuLeft','menuRight','up','down','dodgeLeft','dodgeRight'].includes(step);
     return movedControls(wizard.neutral,pad,{hat:family.value==='generic' && hats.checked && directional});
   }
   function key(b) { return b.type+'-'+b.index; }

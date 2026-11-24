@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
+import {drivingActions,drivingCommand} from './driver-command.js';
+
 // Pointer IDs own individual controls. Only sample() publishes a driving command.
-export function attachTouchInput(container, {enabled, onPause, nitroMode = () => false}) {
+export function attachTouchInput(container, {enabled, onPause, nitroMode = () => false, discipline = nitroMode}) {
   const doc = container.ownerDocument;
   const win = doc.defaultView;
   const held = new Map();
@@ -23,7 +25,8 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
   }
   group('touch-steering', [['left', '◀', 'Steer left'], ['right', '▶', 'Steer right']]);
   group('touch-pedals', [['brake', 'Brake', 'Brake or reverse'], ['throttle', 'Gas', 'Accelerate']]);
-  group('touch-nitro', [['drift','Drift','Hold drift'], ['boost','Nitro','Hold nitro boost']]);
+  group('touch-nitro', [['drift','Drift','Hold drift'],['assist','Assist','Hold rocket assistance'],['boost','Boost','Hold boost']]);
+  group('touch-dodge', [['dodgeLeft','◀ Dodge','Dodge left'],['dodgeRight','Dodge ▶','Dodge right']]);
   group('touch-actions', [['pause','Pause','Pause race'], ['camera','View','Switch chase camera'],
     ['recover','Recover','Recover car with a three-second penalty']]);
 
@@ -53,7 +56,7 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
     const button = event.target;
     const name = button.dataset?.touch;
     if (!enabled() || !counts.has(name) || event.button !== 0 || held.has(event.pointerId)) return;
-    if ((name === 'drift' || name === 'boost') && !nitroMode()) return;
+    if (name!=='throttle' && name!=='brake' && !drivingActions(discipline()).includes(name)) return;
     event.preventDefault();
     if (name === 'pause' || name === 'camera' || name === 'recover') {
       action(name);
@@ -109,12 +112,9 @@ export function attachTouchInput(container, {enabled, onPause, nitroMode = () =>
       if (!enabled()) clear();
       const pressed = key => counts.get(key) > 0;
       const brake = Number(pressed('brake'));
-      const command = {throttle:Number(!brake && pressed('throttle')), brake,
+      const axes = {throttle:Number(!brake && pressed('throttle')), brake,
         steer:Number(pressed('right'))-Number(pressed('left'))};
-      if (nitroMode()) {
-        command.drift = pressed('drift');
-        command.boost = pressed('boost');
-      }
+      const command=drivingCommand(axes,discipline(),pressed);
       const snapshot = {command, camera:pending.has('camera'), recover:pending.has('recover')};
       pending.clear();
       return snapshot;

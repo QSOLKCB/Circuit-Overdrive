@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // Real browser and race lifecycle, synthetic browser Gamepad reports.
 import assert from 'node:assert/strict';
+import {observeDrivingCommands} from './browser-controller-driver.mjs';
 const {chromium} = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch({executablePath:process.env.CHROME_BIN,
   args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 try {
   const page = await browser.newPage({viewport:{width:800,height:550}});
+  await observeDrivingCommands(page);
   const errors = [];
   page.on('pageerror', e=>errors.push(e.message));
   await page.addInitScript(() => {
@@ -125,6 +127,19 @@ try {
   assert.equal(await page.locator('#nitro-level').textContent(),'0%','holding both bumpers on a straight earns no charge');
   await page.evaluate(()=>{reports[1]=null;window.tick();});
   assert.equal(await phase(),'paused','disconnect while drifting and boosting clears owner');
+  await page.reload();
+  await click('choose-orbital'); await click('controllers'); await page.selectOption('#driver-device','pad-1');
+  await press(14,1); await press(4,1); await click('use-device'); await click('start'); await tick(3);
+  await tapPad(1,0); assert.equal(await phase(),'grid','Rocket assist and dodge must release before arming');
+  await press(14,0); await press(4,0); await tick(2); await tapPad(1,0); await advance(183);
+  assert.equal(await phase(),'racing');
+  for (const button of [7,4,5,14]) await press(button,1);
+  await advance(10);
+  assert.deepEqual(await page.evaluate(()=>window.observedDrivingCommand),{throttle:1,brake:0,steer:0,boost:true,assist:true,dodge:-1});
+  assert(await page.locator('#rocket-energy').evaluate(el=>el.value)<100);
+  await press(15,1); await advance(2); assert.equal(await page.evaluate(()=>window.observedDrivingCommand.dodge),0);
+  await press(14,0); await advance(2); assert.equal(await page.evaluate(()=>window.observedDrivingCommand.dodge),1);
+  await page.evaluate(()=>{reports[1]=null;window.tick();}); assert.equal(await phase(),'paused');
   assert.deepEqual(errors,[]);
   // Losing a required track module leaves a readable HTML entry point even
   // on a browser that cannot start the main module graph.
