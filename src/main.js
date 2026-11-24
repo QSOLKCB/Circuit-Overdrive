@@ -523,6 +523,11 @@ function drawHud(p) {
     message='Across the line · '+race.entrants.filter(e=>e.finishTicks!==null).length+' of 6 finished';
   else if (race.course===orbital && player.overturnedTicks>=15)
     message='Overturned · recovering (+3 s)';
+  else if (race.course===skyway && race.phase==='racing' && player.missedGate) {
+    const gate=player.nextGate===0 ? 'Start' : player.nextGate===skyway.gates.length-1 ? 'Finish' : 'CP '+player.nextGate;
+    const recover=input.source==='keyboard' ? 'Press R' : input.source==='touch' ? 'Tap Recover' : 'Use Recover';
+    message=gate+' missed · '+recover+' to retry (+3 s)';
+  }
   else if (player.wrongWay) message = 'Wrong way';
   else if (player.recoveryCooldown > 0) message = 'Recovered  +3 s';
   else if (!race.course.closed && player.splitTicks.length && player.elapsedTicks-player.splitTicks.at(-1)<180) {

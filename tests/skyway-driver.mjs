@@ -13,3 +13,15 @@ export function skywayIntent(entrant,course) {
   return {throttle:p.speed<cruise ? 1 : 0,brake:p.speed>cruise+2 ? 1 : 0,steer,
     drift:bend && !n.airborne,boost:!bend && course.rampAt(p.s)<0 && n.energy>0};
 }
+
+// Lead the race on the main lane, then take the legal outer apron at the finish.
+export function skywayGateIntent(entrant,course,overfly=false) {
+  const p=entrant.current, lane=!overfly && p.s>=1780 ? 13.7 : 2;
+  const cruise=overfly ? 50 : 43;
+  const target=course.sample(p.s+8+p.speed*.46,lane);
+  const heading=Math.atan2(target.x-p.x,p.z-target.z)+p.yaw;
+  const error=Math.atan2(Math.sin(heading),Math.cos(heading));
+  return {throttle:Number(p.speed<cruise),brake:Number(p.speed>cruise+2),
+    steer:Math.abs(error)<.028 ? 0 : Math.sign(error),drift:false,
+    boost:entrant.nitro.energy>0 && p.s>(overfly ? 100 : 1500)};
+}

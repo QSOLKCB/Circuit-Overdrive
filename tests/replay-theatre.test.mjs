@@ -66,6 +66,23 @@ test('source-compatibility pins match the immutable published v0.6.0 through v0.
         '1e2eae60dc7f0ee157cd8a6c006f10b5f67091ae','complete v0.9.0 simulation');
       assert(source.endsWith(trailer));
       current=execFileSync('git',['hash-object','--stdin'],{cwd:root,encoding:'utf8',input:source.slice(0,-trailer.length)}).trim();
+    } else if(path==='src/nitro-race.js') {
+      // Pin the entire shared integrator first. Remove only the reviewed rules
+      // selection and restore its original fixed asphalt predicate below.
+      // The reconstructed source must hash to the published v0.9.0 blob.
+      const source=readFileSync(new URL('../src/nitro-race.js',import.meta.url),'utf8');
+      assert.equal(execFileSync('git',['hash-object',path],{cwd:root,encoding:'utf8'}).trim(),
+        '7ce4197f773aa8bc900301cfac748f5d07788bf8','reviewed v3 scoring dispatch');
+      const historical=source
+        .replace(/export const NITRO_RULES=2;[\s\S]+?(?=function prepare)/,'')
+        .replace('seed,course,rules=NITRO_RULES','seed,course')
+        .replace(/  if\(rules!==1[^\n]+\n/,'')
+        .replace("return Object.defineProperty(prepare(createRace(seed,course)),'nitroRules',{value:rules});",'return prepare(createRace(seed,course));')
+        .replaceAll(',gateSupport,gateWidth)',')')
+        .replaceAll('gateSupport(','asphaltSupport(')
+        .replace('<=gateWidth)', '<=course.halfWidth)')
+        .replace(/  const legacy=race.nitroRules===1;\n[^\n]+\n[^\n]+\n/,'');
+      current=execFileSync('git',['hash-object','--stdin'],{cwd:root,encoding:'utf8',input:historical}).trim();
     } else {
       current=execFileSync('git',['hash-object',path],{cwd:root,encoding:'utf8'}).trim();
     }

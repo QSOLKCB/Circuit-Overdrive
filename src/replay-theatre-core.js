@@ -8,12 +8,13 @@ import {ridge} from './ridge.js';
 import {skyway} from './skyway.js';
 import {createRocketRace,startRocketRace,stepRocketRace,recoverRocketCar} from './rocket-race.js';
 import {ROCKET_RULES} from './rocket-dynamics.js';
-import {createNitroRace,startNitroRace,stepNitroRace,recoverNitroCar} from './nitro-race.js';
+import {createNitroRace,startNitroRace,stepNitroRace,recoverNitroCar,NITRO_RULES} from './nitro-race.js';
 
 export const MAX_REPLAY_BYTES=16*1024*1024;
 export const MAX_REPLAY_TICKS=30*60*60;
 export const MAX_SEEK_STEPS=240;
 const V090='f7f45d1b6c3521dd728945b71cf20ab406603cb4';
+const legacyNitroSources=Object.freeze([V090,'f36377549b2aec82edb150f80e73bc314d91cc30']);
 export const REPLAY_COMPATIBLE_RELEASES=Object.freeze([
   '020e5dc4c7e2485e01f0f47c698f80ee58fe228b', // v0.6.0
   'd81a2d4a09286029b87c2ac201edf8ab6448e023', // v0.6.1
@@ -66,13 +67,14 @@ export function validateTheatreReplay(recording,siteRevision) {
   const get=name=>fields[name].value;
   const revision=get('revision');
   if(typeof revision!=='string'||!SHA.test(revision)) throw RangeError('Malformed source revision');
-  const compatible=version===2 ? REPLAY_COMPATIBLE_RELEASES.includes(revision) : version===3 && revision===V090;
+  const legacyNitro=version===3 && legacyNitroSources.includes(revision);
+  const compatible=version===2 ? REPLAY_COMPATIBLE_RELEASES.includes(revision) : legacyNitro;
   if(revision!==siteRevision && !compatible)
     throw RangeError('This replay needs revision '+revision+
       '. Open an archive with matching physics; this Theatre cannot safely reinterpret it.');
   const course=get('course');
   const discipline=version===4 ? 'rocket' : 'nitro';
-  const rules=version===4 ? ROCKET_RULES : 1;
+  const rules=version===4 ? ROCKET_RULES : legacyNitro ? 1 : NITRO_RULES;
   if (version===2 ? course!=='ridge' && course!=='speedway' :
       course!==(version===4 ? 'orbital' : 'skyway') || get('discipline')!==discipline || get('rules')!==rules)
     throw RangeError('Unsupported race course or discipline rules');
@@ -119,7 +121,7 @@ export function decodeReplayRun(version,row) {
 export function createReplaySession(source,siteRevision) {
   const tape=validateTheatreReplay(source,siteRevision);
   const rules=tape.version===4 ? {create:createRocketRace,start:startRocketRace,step:stepRocketRace,recover:recoverRocketCar} :
-    tape.version===3 ? {create:seed=>createNitroRace(seed,skyway),start:startNitroRace,step:stepNitroRace,recover:recoverNitroCar} :
+    tape.version===3 ? {create:seed=>createNitroRace(seed,skyway,tape.rules),start:startNitroRace,step:stepNitroRace,recover:recoverNitroCar} :
     {create:seed=>createRace(seed,tape.course==='ridge' ? ridge : track),start:startRace,step:stepRace,recover:recoverCar};
   let race,at,runIndex,remaining;
   function reset(){

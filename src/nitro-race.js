@@ -5,15 +5,26 @@ import {resolveCarContacts} from './contact.js';
 import {carRecipe,classify,contactRail,createRace,recoverCar,resetCar,score,snapshot,startRace} from './sim.js';
 import {advanceNitroVehicle,asphaltSupport,NEUTRAL_NITRO,nitroState,observeNitro,resetNitroAfterRecovery,validateNitroCommand} from './nitro-physics.js';
 
+export const NITRO_RULES=2;
+
+function deckSupport(state) {
+  let count=0;
+  for(const wheel of state.wheels) {
+    if(wheel.grounded && wheel.load>150 && (wheel.surfaceId==='asphalt' || wheel.surfaceId==='apron')) count++;
+  }
+  return count;
+}
+
 function prepare(race) {
   race.discipline='nitro';
   for (const entrant of race.entrants) entrant.nitro=nitroState(entrant.distance);
   return race;
 }
 
-export function createNitroRace(seed,course) {
+export function createNitroRace(seed,course,rules=NITRO_RULES) {
   if (course?.discipline!=='nitro' || course.closed) throw RangeError('Expected a Nitro sprint course');
-  return prepare(createRace(seed,course));
+  if(rules!==1 && rules!==NITRO_RULES) throw RangeError('Unsupported Nitro scoring rules');
+  return Object.defineProperty(prepare(createRace(seed,course)),'nitroRules',{value:rules});
 }
 export function startNitroRace(race) {
   startRace(race);
@@ -65,7 +76,7 @@ function drive(entrant,input,requestRecovery,active,course,world) {
   resolveRail(entrant,course,road);
 }
 
-function accept(entrant,input,active,course,supportedAtStart) {
+function accept(entrant,input,active,course,supportedAtStart,gateSupport,gateWidth) {
   const state=entrant.vehicle, road=course.project(state.position[0],state.position[2]);
   if (!state.tick) {
     entrant.previous=entrant.current=snapshot(state,road);
@@ -79,10 +90,10 @@ function accept(entrant,input,active,course,supportedAtStart) {
   entrant.current=snapshot(state,road);
   entrant.distance=road.s;
   entrant.wrongWay=ds<-.035;
-  const supported=asphaltSupport(state)>=2;
+  const supported=gateSupport(state)>=2;
   // A landing just beyond the plane cannot retroactively validate an airborne
   // crossing. Require solved wheel support on both sides of this swept tick.
-  if (supportedAtStart && supported && Math.abs(road.lateral)<=course.halfWidth) score(entrant,ds,course);
+  if (supportedAtStart && supported && Math.abs(road.lateral)<=gateWidth) score(entrant,ds,course);
   if (entrant.finishTicks===null && road.s>course.gates[entrant.nextGate].s+.001) entrant.missedGate=true;
   if (!entrant.missedGate && !entrant.contact && !entrant.wrongWay && Math.abs(road.lateral)<course.halfWidth-1.5 &&
       state.wheels.every(w=>w.grounded && w.surfaceId==='asphalt')) {
@@ -117,10 +128,13 @@ export function stepNitroRace(race,command=NEUTRAL_NITRO) {
   });
   race.elapsedTicks++;
   const world={sampleSurface:course.sampleSurface,barriers:[]};
-  const supportedAtStart=active.map(e=>asphaltSupport(e.vehicle)>=2);
+  const legacy=race.nitroRules===1;
+  const gateSupport=legacy ? asphaltSupport : deckSupport;
+  const gateWidth=legacy ? course.halfWidth : course.barrierOffset;
+  const supportedAtStart=active.map(e=>gateSupport(e.vehicle)>=2);
   active.forEach((e,i)=>drive(e,commands[i],recover[i],active,course,world));
   resolveCarContacts(active,carRecipe.chassis,resolveRail,course);
-  active.forEach((e,i)=>accept(e,commands[i],active,course,supportedAtStart[i]));
+  active.forEach((e,i)=>accept(e,commands[i],active,course,supportedAtStart[i],gateSupport,gateWidth));
   classify(race);
   if (race.player.finishTicks!==null) race.phase='finished';
 }

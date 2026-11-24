@@ -66,7 +66,9 @@ CO-007 also exports an ordinary v2 tape for each completed championship round in
 
 ## Nitro Skyway version 3
 
-Skyway recordings require the exact stamped source or the audited published v0.9.0 source. The JSON object has exactly eight fields. `version` is 3, `discipline` is `nitro`, `rules` is 1, and `course` is `skyway`. The other fields are `revision` (40 lowercase hexadecimal digits), `seed` (unsigned 32-bit integer), `ticks` and `runs`.
+Current Skyway recordings require the exact stamped source. The JSON object has eight fields. `version` is 3, `discipline` is `nitro`, `rules` is 2, and `course` is `skyway`. The other fields are `revision` (40 lowercase hexadecimal digits), `seed` (unsigned 32-bit integer), `ticks` and `runs`.
+
+Rules 2 time the full width of the physical deck between the rails. For rules 1 recordings from published v0.9.0 or the audited `f36377549b2aec82edb150f80e73bc314d91cc30` build, Theatre uses the original asphalt-only gate policy. Other historical recordings use their source-matching archive.
 
 Each run contains `[length, throttle, brake, steer, drift, boost, recover]`. Length is a positive integer. The two pedals range from zero to one and steering from −1 to +1. The final three entries are booleans. All numbers must be finite. Run lengths must sum exactly to the declared 1–108,000 ticks. The viewer admits files up to 16 MiB, advances at most 240 ticks per seek frame and rejects an early or late flag. A recovery is recorded on the tick the race accepts it. Both new held controls are sampled during each 60 Hz update.
 
