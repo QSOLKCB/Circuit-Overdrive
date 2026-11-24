@@ -138,7 +138,7 @@ CO-012A is the six-car authority review gate. The remaining gates cover arenas (
 Review and update this document whenever milestones ship. Move entries into the **Released foundation** section only after the owner publishes that version. A future-roadmap feature must never be presented as a currently playable feature.
 
 ## 8. Longer-term research backlog (not committed to dates)
-
+- Race Track Foundry & Level Editor, Car Creation Forge, Modifiable Cars & Game Modes.
 - More original racing circuits and configurable car classes, gated by simulation and performance tests.
 - Championship ghosts, race comparisons and source-bound musical score receipts.
 - Optional controller hardware acceptance on real Xbox, PlayStation, retro USB, wheels/pedals, Android and iOS.
