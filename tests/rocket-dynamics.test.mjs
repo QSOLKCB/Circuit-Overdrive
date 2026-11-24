@@ -386,3 +386,29 @@ test('wheel contacts own their solver evidence when a surface reuses its result 
   assert.deepEqual(measured,expected);
   assert.equal(new Set(measured.wheels.map(w=>w.frame.point.join(','))).size,4);
 });
+
+test('75 m/s level and rolled flat-plane landings respect the measured end-stop tolerance',()=>{
+  const deck=plane(floor);
+  for(const [degrees,tolerance] of [[0,1e-8],[5,.010]]) {
+    const roll=degrees*Math.PI/180, start=moving(deck,0);
+    start.orientation=[0,0,Math.sin(roll/2),Math.cos(roll/2)];
+    // Start with the lowest mount 0.96 m along its downward ray from the
+    // plane. The roll changes the mount height across the 1.58 m axle.
+    start.position[1]=(.96+.14)*Math.cos(roll)+.79*Math.abs(Math.sin(roll));
+    start.velocity=[0,-75,0];
+    let probes=0, shortestRay=Infinity;
+    const measured={probe(origin,direction,reach,hint){
+      // Observe all four mount positions immediately before each 1/240 s step.
+      assert(-direction[1]>.4 && origin[1]>0,'a mount crossed the plane or left its front face');
+      shortestRay=Math.min(shortestRay,origin[1]/-direction[1]);
+      probes++;
+      return deck.probe(origin,direction,reach,hint);
+    }};
+    const settled=advance(start,measured,120);
+    assert.equal(probes,120*4*4);
+    assert(shortestRay<.25,'the landing must exercise the physical end stop');
+    assert(shortestRay>=.24-tolerance,`${degrees}° landing exceeded its ${tolerance} m tolerance`);
+    assert(settled.wheels.every(w=>w.contact && w.load>0));
+    assert(speed(settled.velocity)<.010);
+  }
+});
