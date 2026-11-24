@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import { createHeadlightPass, selectHeadlights } from './headlights.js';
 import { LitRenderer } from '../vendor/vanillajs/modules/render-lit/index.js';
-import { nightFrame, validateEnvironment } from './environment.js';
+import { nightFrame, courseEnvironment } from './environment.js';
 import { buildNightWorld, nightStars } from './night-fixtures.js';
 import { cross, normalize } from '../vendor/vanillajs/modules/math/index.js';
 import { ridgeBatches } from './ridge-scene.js';
+import { skywayBatches } from './skyway-scene.js';
 import { speedwayBatches } from './speedway.js';
 import { bodyTransform, wheelTransforms, touringMeshes } from './touring-car.js';
 import { track } from './track.js';
@@ -19,6 +20,8 @@ const LIGHT = {
 };
 const RIDGE_LIGHT = {...LIGHT, ambient:.54, skyTop:[.13,.40,.63], skyBottom:[.81,.85,.79],
   sunDirection:[-.55,.83,-.30], fogColor:[.68,.76,.74], fogDensity:.00094};
+const SKYWAY_LIGHT={...LIGHT,ambient:.58,sunDirection:[-.65,.75,-.28],sunColor:[1,.84,.64],
+  skyTop:[.22,.43,.64],skyBottom:[1,.72,.52],fogColor:[.83,.69,.61],fogDensity:.0010};
 const PAINT = {roughness:.32,metalness:.18};
 const shadowMaterial={color:[.025,.037,.045],pattern:'shadow',opacity:.75};
 const shadowVertices=new Float32Array([
@@ -42,12 +45,13 @@ function visible(bounds,eye,forward,horizontalSlope,far) {
 }
 
 export function createScene(canvas,course=track,pixelRatio=1,environment='day') {
-  const night=validateEnvironment(environment)==='night';
-  const light=night ? nightFrame(course) : course.closed ? LIGHT : RIDGE_LIGHT;
+  const night=courseEnvironment(course,environment)==='night';
+  const skyway=course.id==='skyway';
+  const light=skyway ? SKYWAY_LIGHT : night ? nightFrame(course) : course.closed ? LIGHT : RIDGE_LIGHT;
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   let world,car,shadow,effects,headlights,stars;
   try {
-    const base=course.closed ? speedwayBatches() : ridgeBatches(course);
+    const base=skyway ? skywayBatches() : course.closed ? speedwayBatches() : ridgeBatches(course);
     const batches=night ? buildNightWorld(course,base) : base;
     world=batches.map(({vertices,material,bounds})=>({mesh:renderer.mesh(vertices),material,bounds}));
     car=touringMeshes(renderer,night);

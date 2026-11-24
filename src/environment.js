@@ -5,8 +5,13 @@ export function validateEnvironment(value) {
   return value;
 }
 
+export function courseEnvironment(course, requested) {
+  const environment = validateEnvironment(requested);
+  return course.id === 'skyway' ? 'day' : environment;
+}
+
 export function eventTitle(course, environment) {
-  if (validateEnvironment(environment) === 'day') return course.name;
+  if (courseEnvironment(course, environment) === 'day') return course.name;
   return course.closed ? 'Nightshift Speedway' : 'Redline Ridge — Midnight Descent';
 }
 

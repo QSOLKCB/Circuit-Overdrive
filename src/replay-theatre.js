@@ -3,7 +3,7 @@
 // Camera, tempo and seek operations only change presentation or re-simulate ticks.
 import {createReplaySession,MAX_REPLAY_BYTES,MAX_SEEK_STEPS} from './replay-theatre-core.js';
 import {createScene} from './scene.js';
-import {validateEnvironment,eventTitle} from './environment.js';
+import {courseEnvironment,eventTitle} from './environment.js';
 import {FIELD,PLAYER_ID} from './field.js';
 import {interpolateReplayPoses,createReplayPoses} from './replay-presentation.js';
 
@@ -139,7 +139,7 @@ function frame(ms){
   requestAnimationFrame(frame);
 }
 function installScene(course,nextEnvironment) {
-  validateEnvironment(nextEnvironment);
+  nextEnvironment=courseEnvironment(course,nextEnvironment);
   scene?.dispose();
   scene=null;
   scene=createScene(canvas,course,coarse.matches?.75:1,nextEnvironment);

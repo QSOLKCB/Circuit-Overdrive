@@ -3,9 +3,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {track} from '../src/track.js';
 import {ridge} from '../src/ridge.js';
+import {skyway} from '../src/skyway.js';
 import {ridgeBatches} from '../src/ridge-scene.js';
 import {speedwayBatches} from '../src/speedway.js';
-import {nightFrame, eventTitle, validateEnvironment} from '../src/environment.js';
+import {nightFrame, eventTitle, validateEnvironment, courseEnvironment} from '../src/environment.js';
 import {nightStars, buildNightWorld} from '../src/night-fixtures.js';
 import {touringMeshes} from '../src/touring-car.js';
 
@@ -17,6 +18,16 @@ test('environment validation accepts only the two literal values without coercio
   assert.equal(eventTitle(track,'night'),'Nightshift Speedway');
   assert.equal(eventTitle(ridge,'night'),'Redline Ridge — Midnight Descent');
   assert.throws(()=>eventTitle(ridge,'dusk'));
+});
+
+test('Skyway resolves a touring night selection to daylight and keeps its event title',()=>{
+  assert.equal(courseEnvironment(track,'night'),'night');
+  const previous=courseEnvironment(ridge,'night');
+  assert.equal(previous,'night');
+  assert.equal(courseEnvironment(skyway,previous),'day');
+  assert.equal(courseEnvironment(skyway,'day'),'day');
+  assert.equal(eventTitle(skyway,previous),skyway.name);
+  assert.throws(()=>courseEnvironment(skyway,'dusk'),RangeError);
 });
 
 test('night projector lenses share the original front fascia; braking only changes rear lamps',()=>{
