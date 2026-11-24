@@ -221,3 +221,32 @@ test('the landing thump waits for settled wheels and Nitro tones clear on a cour
   accept(null); assert.deepEqual(a,b);
   accept({}); assert.deepEqual(a,b);
 });
+
+test('Rocket sound consumes accepted body events, isolated from the engine bus and silent control requests',async()=>{
+  const {createRocketBody,stepRocketBody,NEUTRAL_ROCKET}=await import('../src/rocket-dynamics.js');
+  const {proofSurface:course}=await import('./fixtures/rocket-proof-surface.mjs');
+  const orbital={id:'orbital'}, voidSurface={probe:()=>null};
+  const start=createRocketBody(course.frame(8));
+  start.position[1]+=4;
+  const floating=stepRocketBody(start,NEUTRAL_ROCKET,voidSurface);
+  const eventBody=stepRocketBody(floating,{...NEUTRAL_ROCKET,dodge:1},voidSurface);
+  assert.equal(eventBody.dodgeApplied,1);
+  function blocks(before,after,command,levels,repeat=false) {
+    const v=new TouringVoice(), out=new Float32Array(3072);
+    const entrant=vehicle=>({vehicle,current:{rpm:3250,gear:3},pairContact:false,contact:false});
+    v.accept(entrant(before),NEUTRAL_ROCKET,orbital); v.write(out,levels);
+    v.accept(entrant(after),command,orbital);
+    if (repeat) v.accept(entrant(after),command,orbital);
+    v.write(out,levels);
+    assert(out.every(Number.isFinite) && peak(out)<1);
+    return out;
+  }
+  const noDodge={...eventBody,dodgeApplied:0};
+  assert(difference(blocks(floating,eventBody,NEUTRAL_ROCKET,effects),blocks(floating,noDodge,NEUTRAL_ROCKET,effects))>.001);
+  assert.deepEqual(blocks(floating,eventBody,NEUTRAL_ROCKET,engine),blocks(floating,noDodge,NEUTRAL_ROCKET,engine));
+  assert.deepEqual(blocks(floating,noDodge,{...NEUTRAL_ROCKET,dodge:1,boost:true,assist:true},effects),
+    blocks(floating,noDodge,NEUTRAL_ROCKET,effects));
+  assert.deepEqual(blocks(floating,eventBody,NEUTRAL_ROCKET,effects,true),blocks(floating,eventBody,NEUTRAL_ROCKET,effects));
+  const flipped={...eventBody,dodgeApplied:-1};
+  assert(difference(blocks(floating,eventBody,NEUTRAL_ROCKET,effects),blocks(floating,flipped,NEUTRAL_ROCKET,effects))>.001);
+});

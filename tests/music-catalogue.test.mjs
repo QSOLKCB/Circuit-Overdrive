@@ -15,13 +15,15 @@ const catalogue=[
   {id:'rocket',title:'RASTER VELOCITY',mode:'demoscene',bpm:180,frames:512000},
   {id:'derby',title:'STEEL RIOT',mode:'industrial',bpm:150,frames:614400}
 ];
-test('two future scores have separate authored material and reproducible PCM, without activating future races',()=>{
-  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge','championship','night','nitro']);
-  assert.deepEqual(Object.keys(FUTURE_MUSIC_TITLES),catalogue.map(c=>c.id));
+test('the activated Rocket score and reserved Derby score retain distinct authored material and PCM',()=>{
+  assert.deepEqual(Object.keys(MUSIC_TITLES),['speedway','ridge','championship','night','nitro','rocket']);
+  assert.deepEqual(Object.keys(FUTURE_MUSIC_TITLES),['derby']);
   const hashes=new Set();
   for(const {id,title,mode,bpm,frames} of catalogue){
-    const source=scoreForFutureMode(id);
-    assert.equal(FUTURE_MUSIC_TITLES[id],title);
+    const playable=id==='rocket';
+    const score=playable ? scoreForCourse : scoreForFutureMode;
+    const source=score(id);
+    assert.equal((playable ? MUSIC_TITLES : FUTURE_MUSIC_TITLES)[id],title);
     assert.equal(source.mode,mode);assert.equal(source.bpm,bpm);
     assert.equal(source.phrases.length,8);
     assert.notDeepEqual(source.phrases[0],source.phrases[1]);
@@ -29,8 +31,8 @@ test('two future scores have separate authored material and reproducible PCM, wi
       for(const key of ['bass','lead','arp','drums'])assert.equal(phrase[key].length,16);
       assert(phrase.lead.some(value=>value!==null));
     }
-    assert.deepEqual(scoreForFutureMode(id),source);
-    const a=createBoundedPhraseSequencer(source),b=createBoundedPhraseSequencer(scoreForFutureMode(id));
+    assert.deepEqual(score(id),source);
+    const a=createBoundedPhraseSequencer(source),b=createBoundedPhraseSequencer(score(id));
     assert.equal(a.loopSamples,frames);
     const pcm=a.renderRange(4000,3072);
     assert.deepEqual(pcm,b.renderRange(4000,3072));
@@ -41,8 +43,15 @@ test('two future scores have separate authored material and reproducible PCM, wi
     assert.deepEqual(a.renderRange(off,4096),Int16Array.from([
       ...a.renderRange(off,173),...a.renderRange(frames,3923)
     ]));
-    assert.throws(()=>scoreForCourse(id),RangeError);
-    assert.throws(()=>musicForCourse(id),RangeError);
+    if (playable) {
+      assert.equal(createHash('sha256').update(JSON.stringify(source)).digest('hex'),
+        'b1330b2375946ed4e0f801f2283ace06865c9f556aa1af8a5d94582018f2760e');
+      assert.equal(createHash('sha256').update(musicForCourse(id).wavLoop()).digest('hex'),
+        '33c1dce3400e537a46736e8ee681fee21cf12770d93d061ec8fe40d8bf979afd');
+    } else {
+      assert.throws(()=>scoreForCourse(id),RangeError);
+      assert.throws(()=>musicForCourse(id),RangeError);
+    }
   }
   for(const bad of ['unknown','__proto__'])assert.throws(()=>scoreForFutureMode(bad),RangeError);
 });

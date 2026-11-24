@@ -6,17 +6,20 @@ import {createRace,startRace,stepRace,recoverCar} from './sim.js';
 import {track} from './track.js';
 import {ridge} from './ridge.js';
 import {skyway} from './skyway.js';
+import {createRocketRace,startRocketRace,stepRocketRace,recoverRocketCar} from './rocket-race.js';
 import {createNitroRace,startNitroRace,stepNitroRace,recoverNitroCar} from './nitro-race.js';
 
 export const MAX_REPLAY_BYTES=16*1024*1024;
 export const MAX_REPLAY_TICKS=30*60*60;
 export const MAX_SEEK_STEPS=240;
+const V090='f7f45d1b6c3521dd728945b71cf20ab406603cb4';
 export const REPLAY_COMPATIBLE_RELEASES=Object.freeze([
   '020e5dc4c7e2485e01f0f47c698f80ee58fe228b', // v0.6.0
   'd81a2d4a09286029b87c2ac201edf8ab6448e023', // v0.6.1
   'c97ee47e7577337032a55eb2e6ae53b855285573', // v0.6.2
   '3295b82004b64328072ac5fa64f8ba2b55394416', // v0.7.0
-  '8204da56fce6b40ab33cb66c684a2e780f3e3001'  // v0.8.0
+  '8204da56fce6b40ab33cb66c684a2e780f3e3001', // v0.8.0
+  V090
 ]);
 const SHA=/^[0-9a-f]{40}$/;
 const headerKeys=['version','revision','course','seed','ticks','runs'];
@@ -56,17 +59,20 @@ export function validateTheatreReplay(recording,siteRevision) {
   if(!Object.hasOwn(info,'version')||!Object.hasOwn(info.version,'value'))throw TypeError('Replay version missing');
   if(info.version.value===1)
     throw RangeError('Legacy v1 replay has no source revision. Re-record it with a source-stamped release.');
-  const nitro=info.version.value===3;
-  const fields=own(recording,nitro ? [...headerKeys,'discipline','rules'] : headerKeys,'Replay');
+  const version=info.version.value;
+  if (version!==2 && version!==3 && version!==4) throw RangeError('Unsupported replay version');
+  const fields=own(recording,version===2 ? headerKeys : [...headerKeys,'discipline','rules'],'Replay');
   const get=name=>fields[name].value;
-  if((!nitro && get('version')!==2)||typeof get('revision')!=='string'||!SHA.test(get('revision')))
-    throw RangeError('Unsupported or malformed replay version');
   const revision=get('revision');
-  if(revision!==siteRevision && (nitro || !REPLAY_COMPATIBLE_RELEASES.includes(revision)))
+  if(typeof revision!=='string'||!SHA.test(revision)) throw RangeError('Malformed source revision');
+  const compatible=version===2 ? REPLAY_COMPATIBLE_RELEASES.includes(revision) : version===3 && revision===V090;
+  if(revision!==siteRevision && !compatible)
     throw RangeError('This replay needs revision '+revision+
       '. Open an archive with matching physics; this Theatre cannot safely reinterpret it.');
   const course=get('course');
-  if(nitro ? course!=='skyway' || get('discipline')!=='nitro' || get('rules')!==1 : course!=='ridge' && course!=='speedway')
+  const discipline=version===4 ? 'rocket' : 'nitro';
+  if (version===2 ? course!=='ridge' && course!=='speedway' :
+      course!==(version===4 ? 'orbital' : 'skyway') || get('discipline')!==discipline || get('rules')!==1)
     throw RangeError('Unsupported race course or discipline rules');
   const seed=get('seed');
   if(!Number.isSafeInteger(seed)||seed<0||seed>0xffffffff)throw RangeError('Invalid replay seed');
@@ -78,31 +84,45 @@ export function validateTheatreReplay(recording,siteRevision) {
   dense(raw,raw.length,'Replay runs');
   const runs=[];let total=0;
   for(const row of raw){
-    dense(row,nitro?7:5,'Replay run');
+    dense(row,version===4 ? 8 : version===3 ? 7 : 5,'Replay run');
     const [length,throttle,brake,steer]=row;
     if(!Number.isSafeInteger(length)||length<1||
        !validUnit(throttle)||!validUnit(brake)||
        typeof steer!=='number'||!Number.isFinite(steer)||steer< -1||steer>1||
-       typeof row[4]!=='boolean'||(nitro && (typeof row[5]!=='boolean'||typeof row[6]!=='boolean')))throw RangeError('Invalid replay control data');
+       typeof row[4]!=='boolean'||(version>=3 && typeof row[5]!=='boolean')||
+       (version===3 && typeof row[6]!=='boolean')||
+       (version===4 && (!Number.isInteger(row[6])||Math.abs(row[6])>1||typeof row[7]!=='boolean')))
+      throw RangeError('Invalid replay control data');
     total+=length;
     if(total>ticks)throw RangeError('Replay ticks exceed declared duration');
     runs.push(Object.freeze(Array.from(row)));
   }
   if(total!==ticks)throw RangeError('Truncated replay command stream');
-  return Object.freeze({version:get('version'),...(nitro ? {discipline:'nitro',rules:1} : {}),revision,course,seed,ticks,runs:Object.freeze(runs),
+  return Object.freeze({version,...(version===2 ? {} : {discipline,rules:1}),revision,course,seed,ticks,runs:Object.freeze(runs),
     compatibility:revision===siteRevision?'exact':'verified-compatible'});
+}
+// The validator has already checked the exact row width and scalar types.
+export function decodeReplayRun(version,row) {
+  const command={throttle:row[1],brake:row[2],steer:row[3]};
+  if (version===4) {
+    command.boost=row[4]; command.assist=row[5]; command.dodge=row[6];
+  } else if (version===3) {
+    command.drift=row[4]; command.boost=row[5];
+  }
+  return {command,recover:row.at(-1)};
 }
 /** Rebuild from the race start on backwards seeks. No unbounded checkpoint
  * snapshots or arbitrary pose assignment. At most MAX_SEEK_STEPS per call.
  */
 export function createReplaySession(source,siteRevision) {
   const tape=validateTheatreReplay(source,siteRevision);
-  const nitro=tape.version===3;
-  const course=nitro ? skyway : tape.course==='ridge'?ridge:track;
+  const rules=tape.version===4 ? {create:createRocketRace,start:startRocketRace,step:stepRocketRace,recover:recoverRocketCar} :
+    tape.version===3 ? {create:seed=>createNitroRace(seed,skyway),start:startNitroRace,step:stepNitroRace,recover:recoverNitroCar} :
+    {create:seed=>createRace(seed,tape.course==='ridge' ? ridge : track),start:startRace,step:stepRace,recover:recoverCar};
   let race,at,runIndex,remaining;
   function reset(){
-    race=nitro ? createNitroRace(tape.seed,course) : createRace(tape.seed,course);
-    if (nitro) startNitroRace(race); else startRace(race);
+    race=rules.create(tape.seed);
+    rules.start(race);
     at=0;runIndex=0;remaining=0;
   }
   function one(){
@@ -112,10 +132,9 @@ export function createReplaySession(source,siteRevision) {
       if(runIndex>=tape.runs.length)throw RangeError('Truncated replay');
       remaining=tape.runs[runIndex][0];
     }
-    const row=tape.runs[runIndex],command={throttle:row[1],brake:row[2],steer:row[3]};
-    if (nitro) { command.drift=row[4]; command.boost=row[5]; }
-    if(row[nitro ? 6 : 4] && !(nitro ? recoverNitroCar(race) : recoverCar(race)))throw RangeError('Replay requests an invalid recovery at tick '+at);
-    if (nitro) stepNitroRace(race,command); else stepRace(race,command);
+    const {command,recover}=decodeReplayRun(tape.version,tape.runs[runIndex]);
+    if(recover && !rules.recover(race)) throw RangeError('Replay requests an invalid recovery at tick '+at);
+    rules.step(race,command);
     at++;remaining--;
     if(remaining===0)runIndex++;
     if(at===tape.ticks && race.phase!=='finished')

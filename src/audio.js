@@ -15,6 +15,12 @@ const nitroCues = {
   launch:[205,940,.18,.12], landing:[132,46,.21,.20]
 };
 
+const rocketCues = {
+  lock:[220,760,.14,.14], release:[650,205,.14,.12], inverted:[410,825,.21,.10],
+  burn:[86,540,.18,.14], left:[910,310,.14,.16], right:[310,910,.14,.16],
+  touchdown:[145,48,.16,.16], collision:[180,42,.11,.14]
+};
+
 // The upstream voice supplies firing order harmonics, exhaust pulses and the
 // gear transient. Everything below reads accepted telemetry without mutating it.
 export class TouringVoice {
@@ -41,7 +47,40 @@ export class TouringVoice {
     this.lastEnergy = this.lastStunts = 0;
   }
 
+  #acceptRocket(player,command) {
+    const body=player.vehicle, speed=Math.hypot(...body.velocity);
+    const loaded=body.wheels.reduce((sum,w)=>sum+w.load,0);
+    const target={
+      rpm:player.current.rpm, throttle:command.throttle, load:unit(loaded/(1100*9.81)),
+      brake:command.brake, speed, gear:player.current.gear, wind:unit((speed-4)/60),
+      squeal:0, hiss:0, tunnel:0, rocket:true,
+      charge:body.attached ? .60 : 0, chargeHz:106+unit(speed/75)*180,
+      air:!body.grounded && body.airTicks>0 ? 1 : 0,
+      inverted:body.attached && body.contactFrame?.normal[1]<-.65,
+      touching:!!(player.contact || player.pairContact),
+      attached:body.attached, grounded:body.grounded, boosting:body.boosting
+    };
+    const prior=this.target;
+    if (prior?.rocket && body.tick>this.previousTick) {
+      let cue;
+      if (prior.attached!==body.attached) cue=body.attached ? rocketCues.lock : rocketCues.release;
+      if (target.inverted && !prior.inverted) cue=rocketCues.inverted;
+      if (body.grounded && !prior.grounded && prior.air) cue=rocketCues.touchdown;
+      if (body.boosting && !prior.boosting) cue=rocketCues.burn;
+      if (target.touching && !prior.touching) cue=rocketCues.collision;
+      if (body.dodgeApplied!==0) cue=body.dodgeApplied<0 ? rocketCues.left : rocketCues.right;
+      if (cue) { this.nitroCue=cue; this.cueAge=this.cuePhase=0; }
+    }
+    this.controls={rpm:target.rpm,throttle:target.throttle,load:target.load,slip:0,
+      brake:target.brake,speed:target.speed,gear:target.gear};
+    this.previousTick=body.tick;
+    this.target=target;
+  }
+
   accept(player, command, course) {
+    const rocket=course.id==='orbital';
+    if (this.target && rocket!==!!this.target.rocket) this.reset();
+    if (rocket) { this.#acceptRocket(player,command); return; }
     const car = player.vehicle;
     const pedal = car.gear < 0 ? command.brake : command.throttle;
     // Actual clutch interruption unloads the exhaust during an automatic shift.
@@ -144,7 +183,7 @@ export class TouringVoice {
       this.engineLevel += (volumes.engine-this.engineLevel)*.002;
       this.effectsLevel += (volumes.effects-this.effectsLevel)*.002;
       let stunt = 0;
-      if (t.nitro) {
+      if (t.nitro || t.rocket) {
         this.chargeLevel += (t.charge-this.chargeLevel)*.0007;
         this.airLevel += (t.air-this.airLevel)*.0008;
         this.chargePhase = (this.chargePhase + t.chargeHz/RATE) % 1;

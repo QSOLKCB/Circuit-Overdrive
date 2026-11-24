@@ -16,7 +16,8 @@ import {createReplaySession,validateTheatreReplay,REPLAY_COMPATIBLE_RELEASES,
 const REV='f1'.repeat(20);
 const RELEASES=['020e5dc4c7e2485e01f0f47c698f80ee58fe228b',
   'd81a2d4a09286029b87c2ac201edf8ab6448e023','c97ee47e7577337032a55eb2e6ae53b855285573',
-  '3295b82004b64328072ac5fa64f8ba2b55394416','8204da56fce6b40ab33cb66c684a2e780f3e3001'];
+  '3295b82004b64328072ac5fa64f8ba2b55394416','8204da56fce6b40ab33cb66c684a2e780f3e3001',
+  'f7f45d1b6c3521dd728945b71cf20ab406603cb4'];
 const blank={throttle:0,brake:0,steer:0};
 function tapeFor(course,ticks=600,revision=RELEASES[0]){
   const recorder=createRecording(course.id,27,revision),reference=createRace(27,course);
@@ -29,12 +30,15 @@ function tapeFor(course,ticks=600,revision=RELEASES[0]){
   return {data:recorder.export(),reference};
 }
 
-test('source-compatibility pins match the immutable v0.6.0 through v0.8.0 legacy race authority',()=>{
+test('source-compatibility pins match the immutable published v0.6.0 through v0.9.0 touring and v0.9.0 Nitro authority',()=>{
   assert.deepEqual(REPLAY_COMPATIBLE_RELEASES,RELEASES);
   const root=fileURLToPath(new URL('../',import.meta.url));
   // GitHub blob hashes were read directly from v0.6.1, and compare(v0.6.0,v0.6.1)
   // returned no authoritative changes. Fail this test if later physics drift.
   const pinned={
+    'src/nitro-physics.js':'a3286edf0b37d2d60388f1e6529a6f003cf2ad6b',
+    'src/nitro-race.js':'182faf8f12e59d0bf3c8e4eb68d5ee3f17399317',
+    'src/skyway.js':'725fc5bfc07fb21bf7e535137f0684faac985c69',
     'src/ai.js':'9d0c560a455bb21eb8e274cfb328f6ad140f1413',
     'src/contact.js':'1c4546c27a4ab938f8eb2491bf38f1e45a854b30',
     'src/field.js':'e3a0ae52d30362dee6874eed4bdb772001b34f8d',
@@ -58,6 +62,8 @@ test('source-compatibility pins match the immutable v0.6.0 through v0.8.0 legacy
     let current;
     if (path === 'src/sim.js') {
       const source=readFileSync(new URL('../src/sim.js',import.meta.url),'utf8');
+      assert.equal(execFileSync('git',['hash-object',path],{cwd:root,encoding:'utf8'}).trim(),
+        '1e2eae60dc7f0ee157cd8a6c006f10b5f67091ae','complete v0.9.0 simulation');
       assert(source.endsWith(trailer));
       current=execFileSync('git',['hash-object','--stdin'],{cwd:root,encoding:'utf8',input:source.slice(0,-trailer.length)}).trim();
     } else {

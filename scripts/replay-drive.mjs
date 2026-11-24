@@ -14,7 +14,7 @@ const data=JSON.parse(await readFile(path,'utf8'));
 const {revision} = await readSite(fileURLToPath(new URL('../',import.meta.url)));
 if (data.version === 1) console.error('Legacy recording without revision metadata. Use the original game checkout.');
 let race;
-if (data.version===3) {
+if (data.version===3 || data.version===4) {
   const session=createReplaySession(data,revision);
   while (!session.finished) session.advance(MAX_SEEK_STEPS);
   race=session.race;
@@ -29,4 +29,5 @@ if (data.version===3) {
 }
 console.log(JSON.stringify({revision:data.revision ?? null,course:data.course,phase:race.phase,ticks:race.elapsedTicks,recordedTicks:data.ticks,
   playerSplits:race.course.closed ? race.player.lapTicks : race.player.splitTicks,
-  classification:race.order.map(e=>({driver:e.name,position:e.position,finishTicks:e.finishTicks,recoveries:e.recoveries,...(e.nitro ? {nitro:e.nitro} : {})}))},null,2));
+  classification:race.order.map(e=>({driver:e.name,position:e.position,finishTicks:e.finishTicks,recoveries:e.recoveries,...(e.nitro ? {nitro:e.nitro} : {}),
+    ...(data.version===4 ? {checkpoints:e.splitTicks,body:e.vehicle} : {})}))},null,2));

@@ -54,6 +54,13 @@ function dashboard(force=false){
   set('replay-title',eventTitle(session.race.course,environment));
   $('replay-nitro').hidden=!driver.nitro;
   if (driver.nitro) set('replay-nitro',Math.round(driver.nitro.energy/1000)+'% nitro · '+driver.nitro.points+' stunt points');
+  const rocket=session.recording.version===4;
+  $('replay-rocket').hidden=!rocket;
+  if (rocket) {
+    const body=driver.vehicle;
+    const support=body.attached ? 'Magnetic adhesion' : body.grounded ? 'Wheel contact' : 'Free flight';
+    set('replay-rocket',support+' · '+Math.round(body.energy)+'% fuel'+(body.boosting ? ' · Boost' : ''));
+  }
   set('replay-driver','#'+driver.number+' '+driver.name);
   set('replay-place','P'+driver.position+' / 6');
   set('replay-speedometer',Math.round(p.speed*3.6)+' km/h');
@@ -118,6 +125,7 @@ function frame(ms){
         session.seekBatch(target);
         if(session.tick>=target) {
           seekTarget=null;
+          if(session.recording.version===4) scene?.resetEffects();
           $('replay-play').disabled=false;
           notify('Position '+shortTime(session.tick)+' · '+session.recording.compatibility+' source.');
         }
@@ -172,7 +180,7 @@ function loadRecordedRace(data,sourceText,fileName){
   $('replay-empty').hidden=true;
   $('replay-telemetry').hidden=false;
   setControls(true);
-  $('replay-environment').disabled=candidate.recording.version===3;
+  $('replay-environment').disabled=candidate.recording.version>=3;
   dashboard(true);
   const label=candidate.recording.compatibility==='exact'?'exact source':
     'verified compatible race physics at '+candidate.recording.revision;

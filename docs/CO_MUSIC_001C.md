@@ -1,12 +1,12 @@
 # CO-MUSIC-001C — Original Future-Mode Chiptune Collection
 
-The original six-score catalogue shipped in v0.6.1. CO-007 activated Digital Dominion for championship rounds and CO-008 activated Midnight Protocol for night racing. The CO-009 review candidate adds a seventh score, **NITRO PULSE**, for Nitro Skyway. The catalogue is authored in `src/music-scores.js` and rendered through BPS-001.
+The original six-score catalogue shipped in v0.6.1. CO-007 activated Digital Dominion for championship rounds and CO-008 activated Midnight Protocol for night racing. CO-009 added a seventh score, **NITRO PULSE**, for Nitro Skyway. CO-010 activates the original **RASTER VELOCITY** score for Rocket Overdrive. The catalogue is authored in `src/music-scores.js` and rendered through BPS-001.
 
 | Title | Assignment | Character | BPM | Loop |
 | --- | --- | --- | ---: | ---: |
 | NEON HORIZON | Speedway — **live** | Synthwave/chiptune | 120 | 16.00 s |
 | IRON HORSEPOWER | Redline Ridge — **live** | Guitar-like industrial chiptune | 150 | 12.80 s |
-| RASTER VELOCITY | CO-010 Rocket Racing — **future** | Fast demoscene arpeggios, syncopated breaks | 180 | 10.67 s |
+| RASTER VELOCITY | CO-010 Rocket Overdrive — Orbital Spine | Fast demoscene arpeggios, syncopated breaks | 180 | 10.67 s |
 | MIDNIGHT PROTOCOL | CO-008 After Dark — **live** | Sparse minor-key cyberpunk synth | 144 | 13.33 s |
 | DIGITAL DOMINION | CO-007 W.O.C. — **live** | Major-key arcade championship anthem | 120 | 16.00 s |
 | STEEL RIOT | CO-012 Total Destruction — **future** | Industrial power riffs and mechanical percussion | 150 | 12.80 s |
@@ -39,8 +39,10 @@ The owner should listen to all seven exported WAVs on real speakers or headphone
 
 ## Separation from gameplay
 
-The runtime selects Speedway, Ridge, championship, night and Nitro scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
+The runtime selects Speedway, Ridge, championship, night, Nitro and Rocket scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
 
 ## Verification
 
 Run `node --test tests/music-catalogue.test.mjs tests/music.test.mjs tests/bps.test.mjs`, the full Node suite, the Python offline-release regression, and the packaged browser/Pages workflow. Record real execution outcomes and exact source SHAs. Owner listening review covers the mix on speakers and headphones.
+
+The eight-phrase RASTER VELOCITY arrangement at 180 BPM uses 4,000 samples per sixteenth and loops after 512,000 stereo frames. Its canonical score JSON has SHA-256 `b1330b2375946ed4e0f801f2283ace06865c9f556aa1af8a5d94582018f2760e`. Its WAV has SHA-256 `33c1dce3400e537a46736e8ee681fee21cf12770d93d061ec8fe40d8bf979afd`. Both digests match the reserved v0.9.0 arrangement. Thrust, magnetic lock/release, ceiling, flight, landing, impact and dodge effects share the existing bounded mono effects stream. The soundtrack uses the separate stereo music bus and its original volume setting.
