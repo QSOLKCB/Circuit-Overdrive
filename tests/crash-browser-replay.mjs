@@ -16,13 +16,24 @@ export async function verifyCrashDownloads(page,base,live,revision,dir){
   const tape=await save('#lab-save','crash-'+live.scenario+'-replay.json');
   const receipt=await save('#lab-receipt','crash-'+live.scenario+'-receipt.json');
   assert.equal(tape.revision,revision);assert.equal(tape.ticks,live.ticks);
-  assert.deepEqual(receipt.contacts,live.contacts);assert.deepEqual(receipt.final.cars,live.cars);
+  function compareMeasurement(value,actual){
+    if(typeof value==='number'){assert(Number.isFinite(actual) && Math.abs(value-actual)<=.50001e-6);return;}
+    if(value && typeof value==='object'){
+      assert.deepEqual(Object.keys(value),Object.keys(actual));
+      for(const key of Object.keys(value))compareMeasurement(value[key],actual[key]);
+    }else assert.equal(value,actual);
+  }
+  compareMeasurement(receipt.contacts,live.contacts);compareMeasurement(receipt.final.cars,live.cars);
   const node=createReplaySession(tape,revision);while(!node.finished)node.advance(61);
   const rebuilt=await crashReceipt(tape,node.race,'Node '+process.version);
   for(const key of ['inputSha256','contactsSha256','finalStateSha256'])assert.equal(rebuilt[key],receipt[key],live.scenario+' '+key);
   assert.equal(rebuilt.final.result,live.result);
   const theatre=await page.context().newPage();
   try{
+    await theatre.route(new URL('src/replay-theatre.js',base).href,async route=>{
+      const response=await route.fetch();
+      return route.fulfill({response,body:await response.text()+'\nwindow.readReconstruction=()=>session.race;'});
+    });
     await theatre.goto(new URL('replay-theatre.html',base).href);
     await theatre.locator('#replay-file').setInputFiles({name:'drive.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(tape))});
     await theatre.waitForFunction(()=>document.querySelector('#replay-status').textContent.startsWith('Loaded'));
@@ -38,6 +49,10 @@ export async function verifyCrashDownloads(page,base,live,revision,dir){
     await theatre.waitForFunction(t=>document.querySelector('#theatre-lab-state').textContent.includes('tick '+t+' ·'),live.firstImpact);
     await seek(live.firstImpact-1);assert.equal(await theatre.locator('#theatre-impacts option').count(),0);
     await seek(live.ticks);
+    const rebuiltLive=await theatre.evaluate(()=>{
+      const t=window.readReconstruction();return JSON.stringify([t.contacts,t.world.cars,t.result]);
+    });
+    assert.equal(rebuiltLive,JSON.stringify([live.contacts,live.cars,live.result]),'raw same-browser reconstruction');
   }finally{await theatre.close();await page.bringToFront();}
   return {inputSha256:receipt.inputSha256,finalStateSha256:receipt.finalStateSha256,
     contactsSha256:receipt.contactsSha256,rawTapeSha256:createHash('sha256').update(JSON.stringify(tape)).digest('hex')};

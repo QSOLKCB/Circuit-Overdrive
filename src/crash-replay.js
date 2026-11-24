@@ -27,16 +27,25 @@ async function digest(data) {
   const hash=await crypto.subtle.digest('SHA-256',bytes);
   return Array.from(new Uint8Array(hash),v=>v.toString(16).padStart(2,'0')).join('');
 }
+// Receipt precision is one millionth of the stated SI unit. Keep RLE axes
+// untouched. No rounding takes place in collision response or damage allocation.
+function measurement(value) {
+  return JSON.parse(JSON.stringify(value,(_key,n)=>{
+    if(typeof n!=='number')return n;
+    if(!Number.isFinite(n))throw RangeError('Non-finite measurement');
+    return Number(n.toFixed(6));
+  }));
+}
 export async function crashReceipt(tape,trial,runtime) {
   const {world}=trial;
   if(trial.phase!=='finished' || tape.version!==5 || tape.revision!==world.revision ||
       tape.scenario!==trial.scenario || tape.seed!==trial.seed || tape.ticks!==world.tick)
     throw Error('Receipt requires matching input and a terminal experiment');
-  const final={tick:world.tick,result:trial.result,cars:structuredClone(world.cars),
-    contactLatches:world.pairs.map(p=>[p.a.id,p.b.id,p.active])};
-  const contacts=structuredClone(trial.contacts);
+  const final=measurement({tick:world.tick,result:trial.result,cars:world.cars,
+    contactLatches:world.pairs.map(p=>[p.a.id,p.b.id,p.active])});
+  const contacts=measurement(trial.contacts);
   const [inputSha256,contactsSha256,finalStateSha256]=await Promise.all([digest(tape.runs),digest(contacts),digest(final)]);
   return {format:'circuit-overdrive.crash-receipt.1',revision:tape.revision,discipline:'crash-lab',rules:LAB_RULES,
-    scenario:trial.scenario,seed:trial.seed,ticks:world.tick,runtime,inputSha256,contactsSha256,finalStateSha256,
+    scenario:trial.scenario,seed:trial.seed,ticks:world.tick,runtime,measurementDecimals:6,inputSha256,contactsSha256,finalStateSha256,
     impactIds:contacts.filter(c=>c.newImpact).map(c=>c.id),contacts,final};
 }
