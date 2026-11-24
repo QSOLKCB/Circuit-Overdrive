@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-This is the forward development programme, not a claim that proposed features already exist. The release table is historical through v0.8.0; later entries are owner-approved goals, each subject to tests, review and owner sign-off. See [AGENTS.md](AGENTS.md) for engineering policy, [README.md](README.md) for implemented gameplay, and [offline release](docs/offline-release.md) for source-bound packaging.
+The release table records the published game through v0.9.0. Later milestones require testing, review and owner sign-off. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
 
 ## 1. Non-negotiable project contracts
 
@@ -31,8 +31,9 @@ This is the forward development programme, not a claim that proposed features al
 | **v0.6.2** | CO-REPLAY-001 — Replay Theatre | Source-stamped offline six-car playback, bounded seek, camera selection and verified revision compatibility |
 | **v0.7.0** | CO-007 — World Overdrive Championship | Four seeded events, persistent standings, exactly-once settlement, trophy and single-event replays |
 | **v0.8.0** | CO-008 — After Dark: Nightshift | Two night environments, car-mounted surface lighting, Midnight Protocol and seven browser verification jobs |
+| **v0.9.0** | CO-009 — Nitro Overdrive | Nitro Skyway, three physical ramps, six-car stunt racing, measured drift charge, Nitro Pulse and v3 replay |
 
-**Published baseline** [v0.8.0](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.8.0) is at `8204da56fce6b40ab33cb66c684a2e780f3e3001`.
+**Published baseline.** v0.9.0 is at `f7f45d1b6c3521dd728945b71cf20ab406603cb4`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v0.9.0)
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -96,9 +97,11 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | **v0.9.0** | **CO-009 — NITRO OVERDRIVE** | Separate arcade stunt/boost discipline: drift charging, bounded nitro, ramps, jumping, air manoeuvres and original stunt track | Physically driven command path, genuine airborne states, no scoring by shortcut, finite energy/cooldowns and replay integrity |
 | **v1.0.0** | **CO-010 — ROCKET OVERDRIVE / DEFY GRAVITY** | Dedicated rocket-racing mode with flight assistance, 3D traversable routes, wall/ceiling adhesion and transitions, air dodges and six-car AI | No car teleportation or fake wall riding; explicit surface-relative collision/gravity, 3D checkpoints, bounded contact and real-browser complete races |
 
-**Published in v0.8.0.** Nightshift added car-mounted surface lighting, both night worlds and Midnight Protocol. The inaugural championship retains its four daytime events. CO-009 is in development for owner review. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
+**Published in v0.8.0.** Nightshift added car-mounted surface lighting, both night worlds and Midnight Protocol. The inaugural championship retains its four daytime events. [Nightshift acceptance and PRs](docs/co-008-acceptance.md)
 
-**v0.9.0 candidate.** Nitro Skyway introduces its own six-car stunt sprint, three physical launch decks, drift-earned acceleration, the original 160 BPM Nitro Pulse score and source-bound v3 replay. [CO-009 review and driving evidence](docs/co-009-acceptance.md)
+**Published in v0.9.0.** Nitro Skyway introduced its own six-car stunt sprint, three physical launch decks, drift-earned acceleration, the original 160 BPM Nitro Pulse score and source-bound v3 replay. [CO-009 review and driving evidence](docs/co-009-acceptance.md)
+
+**CO-010A is the first v1.0.0 review gate.** The physics lab evaluates wheel-supported wall and ceiling driving before work on Orbital Spine. [Architecture and feasibility proof](docs/rocket-physics.md)
 
 **Game influence policy:** broad arcade mechanics may evoke classic racing, stunt or rocket-racing genres, but all tracks, vehicles, music, art, brands and code must be original or independently licensed. Do not reproduce proprietary game assets or tracks. Rocket motion must be a separate mode, never overwrite grounded Speedway/Ridge physics.
 

@@ -1,0 +1,1378 @@
+{
+  "source": "eb82dbdc277bae7a277dd6a4d08fd19fd58ea9f7",
+  "runtime": "v22.18.0",
+  "platform": "linux",
+  "arch": "x64",
+  "governed": {
+    "ticks": 1548,
+    "station": 462.3035377732914,
+    "sections": [
+      {
+        "id": "entry-floor",
+        "firstTick": 1,
+        "lastTick": 167,
+        "longestFourWheelAttachment": 133
+      },
+      {
+        "id": "upturn",
+        "firstTick": 168,
+        "lastTick": 356,
+        "longestFourWheelAttachment": 181
+      },
+      {
+        "id": "ascending-wall",
+        "firstTick": 357,
+        "lastTick": 439,
+        "longestFourWheelAttachment": 73
+      },
+      {
+        "id": "invert",
+        "firstTick": 440,
+        "lastTick": 628,
+        "longestFourWheelAttachment": 181
+      },
+      {
+        "id": "ceiling",
+        "firstTick": 629,
+        "lastTick": 1001,
+        "longestFourWheelAttachment": 365
+      },
+      {
+        "id": "downturn",
+        "firstTick": 1002,
+        "lastTick": 1184,
+        "longestFourWheelAttachment": 174
+      },
+      {
+        "id": "descending-wall",
+        "firstTick": 1185,
+        "lastTick": 1262,
+        "longestFourWheelAttachment": 70
+      },
+      {
+        "id": "level",
+        "firstTick": 1263,
+        "lastTick": 1444,
+        "longestFourWheelAttachment": 174
+      },
+      {
+        "id": "exit-floor",
+        "firstTick": 1445,
+        "lastTick": 1548,
+        "longestFourWheelAttachment": 100
+      }
+    ],
+    "minLoadedWheels": 4,
+    "minClearance": 0.6839092431453241,
+    "maxClearance": 0.7595625,
+    "minAlignment": 0.9998628536320492,
+    "maxSpeed": 18.431084562806966,
+    "sha256": "dbe530b979899d6d7cbbe1f13bcf01f401b8434e1e2e865ad4a8d5d0c6c4857c"
+  },
+  "fullThrottle": {
+    "ticks": 704,
+    "station": 462.54707169041626,
+    "sections": [
+      {
+        "id": "entry-floor",
+        "firstTick": 1,
+        "lastTick": 134,
+        "longestFourWheelAttachment": 101
+      },
+      {
+        "id": "upturn",
+        "firstTick": 135,
+        "lastTick": 227,
+        "longestFourWheelAttachment": 89
+      },
+      {
+        "id": "ascending-wall",
+        "firstTick": 228,
+        "lastTick": 268,
+        "longestFourWheelAttachment": 37
+      },
+      {
+        "id": "invert",
+        "firstTick": 269,
+        "lastTick": 363,
+        "longestFourWheelAttachment": 91
+      },
+      {
+        "id": "ceiling",
+        "firstTick": 364,
+        "lastTick": 520,
+        "longestFourWheelAttachment": 153
+      },
+      {
+        "id": "downturn",
+        "firstTick": 521,
+        "lastTick": 589,
+        "longestFourWheelAttachment": 66
+      },
+      {
+        "id": "descending-wall",
+        "firstTick": 590,
+        "lastTick": 616,
+        "longestFourWheelAttachment": 24
+      },
+      {
+        "id": "level",
+        "firstTick": 617,
+        "lastTick": 672,
+        "longestFourWheelAttachment": 54
+      },
+      {
+        "id": "exit-floor",
+        "firstTick": 673,
+        "lastTick": 704,
+        "longestFourWheelAttachment": 30
+      }
+    ],
+    "minLoadedWheels": 4,
+    "minClearance": 0.5000481687551377,
+    "maxClearance": 0.7595625,
+    "minAlignment": 0.9993192754203176,
+    "maxSpeed": 60.724389722071145,
+    "sha256": "4866b9548fed18f01549786b9d24f5c4e3185d34c1e6f5bf71231d2424207a19"
+  },
+  "samples": [
+    {
+      "stage": "entry-floor",
+      "command": {
+        "throttle": 0.019844832712724525,
+        "brake": 0,
+        "steer": 0,
+        "boost": false,
+        "assist": true,
+        "dodge": 0
+      },
+      "state": {
+        "position": [
+          0,
+          0.692895822154643,
+          -22.38799781207348
+        ],
+        "orientation": [
+          -1.9338116903332845e-18,
+          0,
+          0,
+          1
+        ],
+        "velocity": [
+          0,
+          2.63531356430112e-07,
+          -17.9801635488062
+        ],
+        "angularVelocity": [
+          9.860761315262648e-32,
+          0,
+          0
+        ],
+        "tick": 92,
+        "energy": 100,
+        "airTicks": 0,
+        "dodgeHeld": 0,
+        "dodgeApplied": 0,
+        "dodgeCooldown": 0,
+        "boosting": false,
+        "attached": true,
+        "grounded": true,
+        "contactFrame": {
+          "point": [
+            -0.79,
+            0,
+            -23.603080463953454
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "tangent": [
+            0,
+            0,
+            -1
+          ],
+          "lateral": [
+            1,
+            0,
+            0
+          ],
+          "station": 23.603080463953454,
+          "offset": -0.79,
+          "id": "entry-floor",
+          "material": "magnetic",
+          "distance": 0.5528958210565956
+        },
+        "wheels": [
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                0,
+                -23.603080463953454
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 23.603080463953454,
+              "offset": -0.79,
+              "id": "entry-floor",
+              "material": "magnetic",
+              "distance": 0.5528958210565956
+            },
+            "contact": true,
+            "distance": 0.5528958210565956,
+            "load": 11497.749452554555,
+            "compression": 0.08710417894340439
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                0,
+                -23.603080463953454
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 23.603080463953454,
+              "offset": 0.79,
+              "id": "entry-floor",
+              "material": "magnetic",
+              "distance": 0.5528958210565956
+            },
+            "contact": true,
+            "distance": 0.5528958210565956,
+            "load": 11497.749452554555,
+            "compression": 0.08710417894340439
+          },
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                0,
+                -21.023080463953455
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 21.023080463953455,
+              "offset": -0.79,
+              "id": "entry-floor",
+              "material": "magnetic",
+              "distance": 0.5528958210565956
+            },
+            "contact": true,
+            "distance": 0.5528958210565956,
+            "load": 11497.749452554555,
+            "compression": 0.08710417894340439
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                0,
+                -21.023080463953455
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 21.023080463953455,
+              "offset": 0.79,
+              "id": "entry-floor",
+              "material": "magnetic",
+              "distance": 0.5528958210565956
+            },
+            "contact": true,
+            "distance": 0.5528958210565956,
+            "load": 11497.749452554555,
+            "compression": 0.08710417894340439
+          }
+        ],
+        "endStopImpulse": 0,
+        "acceleration": [
+          0,
+          -1.995603938547518e-06,
+          -0.000502816062446898
+        ],
+        "adhesionAcceleration": [
+          0,
+          -32,
+          0
+        ]
+      },
+      "independentChassisRay": {
+        "point": [
+          0,
+          0,
+          -22.38799781207348
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "tangent": [
+          0,
+          0,
+          -1
+        ],
+        "lateral": [
+          1,
+          0,
+          0
+        ],
+        "station": 22.38799781207348,
+        "offset": 0,
+        "id": "entry-floor",
+        "material": "magnetic",
+        "distance": 0.692895822154643
+      }
+    },
+    {
+      "stage": "ascending-wall",
+      "command": {
+        "throttle": 0.6132495852954598,
+        "brake": 0,
+        "steer": 0,
+        "boost": false,
+        "assist": true,
+        "dodge": 0
+      },
+      "state": {
+        "position": [
+          0,
+          48.066307472825486,
+          -80.28666592133098
+        ],
+        "orientation": [
+          0.707106602532423,
+          0,
+          0,
+          0.707106959840627
+        ],
+        "velocity": [
+          0,
+          17.3867504110357,
+          -1.3848600694599719e-05
+        ],
+        "angularVelocity": [
+          5.5860023456196104e-06,
+          0,
+          0
+        ],
+        "tick": 398,
+        "energy": 100,
+        "airTicks": 0,
+        "dodgeHeld": 0,
+        "dodgeApplied": 0,
+        "dodgeCooldown": 0,
+        "boosting": false,
+        "attached": true,
+        "grounded": true,
+        "contactFrame": {
+          "point": [
+            -0.79,
+            49.28386230238854,
+            -81
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "tangent": [
+            0,
+            1,
+            0
+          ],
+          "lateral": [
+            1,
+            0,
+            0
+          ],
+          "station": 114.83253006700483,
+          "offset": -0.79,
+          "id": "ascending-wall",
+          "material": "magnetic",
+          "distance": 0.5733334544968278
+        },
+        "wheels": [
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                49.28386230238854,
+                -81
+              ],
+              "normal": [
+                0,
+                0,
+                1
+              ],
+              "tangent": [
+                0,
+                1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 114.83253006700483,
+              "offset": -0.79,
+              "id": "ascending-wall",
+              "material": "magnetic",
+              "distance": 0.5733334544968278
+            },
+            "contact": true,
+            "distance": 0.5733334544968278,
+            "load": 8800.041853825895,
+            "compression": 0.06666654550317219
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                49.28386230238854,
+                -81
+              ],
+              "normal": [
+                0,
+                0,
+                1
+              ],
+              "tangent": [
+                0,
+                1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 114.83253006700483,
+              "offset": 0.79,
+              "id": "ascending-wall",
+              "material": "magnetic",
+              "distance": 0.5733334544968278
+            },
+            "contact": true,
+            "distance": 0.5733334544968278,
+            "load": 8800.041853825895,
+            "compression": 0.06666654550317219
+          },
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                46.703862302388174,
+                -81
+              ],
+              "normal": [
+                0,
+                0,
+                1
+              ],
+              "tangent": [
+                0,
+                1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 112.25253006700446,
+              "offset": -0.79,
+              "id": "ascending-wall",
+              "material": "magnetic",
+              "distance": 0.5733348182464317
+            },
+            "contact": true,
+            "distance": 0.5733348182464317,
+            "load": 8799.968269125353,
+            "compression": 0.06666518175356828
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                46.703862302388174,
+                -81
+              ],
+              "normal": [
+                0,
+                0,
+                1
+              ],
+              "tangent": [
+                0,
+                1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 112.25253006700446,
+              "offset": 0.79,
+              "id": "ascending-wall",
+              "material": "magnetic",
+              "distance": 0.5733348182464317
+            },
+            "contact": true,
+            "distance": 0.5733348182464317,
+            "load": 8799.968269125353,
+            "compression": 0.06666518175356828
+          }
+        ],
+        "endStopImpulse": 0,
+        "acceleration": [
+          0,
+          -2.1955611612112236e-07,
+          1.865603991885899e-05
+        ],
+        "adhesionAcceleration": [
+          0,
+          0,
+          -32
+        ]
+      },
+      "independentChassisRay": {
+        "point": [
+          0,
+          48.066307112370566,
+          -81
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "tangent": [
+          0,
+          1,
+          0
+        ],
+        "lateral": [
+          1,
+          0,
+          0
+        ],
+        "station": 113.61497487698685,
+        "offset": 0,
+        "id": "ascending-wall",
+        "material": "magnetic",
+        "distance": 0.7133340786691122
+      }
+    },
+    {
+      "stage": "ceiling",
+      "command": {
+        "throttle": 0.019814085089162603,
+        "brake": 0,
+        "steer": 0,
+        "boost": false,
+        "assist": true,
+        "dodge": 0
+      },
+      "state": {
+        "position": [
+          0,
+          95.26622916666666,
+          10.991998306945074
+        ],
+        "orientation": [
+          1,
+          0,
+          0,
+          1.3556364694894273e-15
+        ],
+        "velocity": [
+          0,
+          6.991059558368942e-14,
+          17.980185914910837
+        ],
+        "angularVelocity": [
+          -2.386588574921069e-16,
+          0,
+          0
+        ],
+        "tick": 815,
+        "energy": 100,
+        "airTicks": 0,
+        "dodgeHeld": 0,
+        "dodgeApplied": 0,
+        "dodgeCooldown": 0,
+        "boosting": false,
+        "attached": true,
+        "grounded": true,
+        "contactFrame": {
+          "point": [
+            -0.79,
+            96,
+            12.207080865632946
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "tangent": [
+            0,
+            0,
+            1
+          ],
+          "lateral": [
+            1,
+            0,
+            0
+          ],
+          "station": 239.3044163948655,
+          "offset": -0.79,
+          "id": "ceiling",
+          "material": "magnetic",
+          "distance": 0.5937708333333376
+        },
+        "wheels": [
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                96,
+                12.207080865632946
+              ],
+              "normal": [
+                0,
+                -1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 239.3044163948655,
+              "offset": -0.79,
+              "id": "ceiling",
+              "material": "magnetic",
+              "distance": 0.5937708333333376
+            },
+            "contact": true,
+            "distance": 0.5937708333333376,
+            "load": 6102.250000000004,
+            "compression": 0.046229166666662436
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                96,
+                12.207080865632946
+              ],
+              "normal": [
+                0,
+                -1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 239.3044163948655,
+              "offset": 0.79,
+              "id": "ceiling",
+              "material": "magnetic",
+              "distance": 0.5937708333333376
+            },
+            "contact": true,
+            "distance": 0.5937708333333376,
+            "load": 6102.250000000004,
+            "compression": 0.046229166666662436
+          },
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                96,
+                9.627080865632948
+              ],
+              "normal": [
+                0,
+                -1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 236.7244163948655,
+              "offset": -0.79,
+              "id": "ceiling",
+              "material": "magnetic",
+              "distance": 0.5937708333333376
+            },
+            "contact": true,
+            "distance": 0.5937708333333376,
+            "load": 6102.249999999995,
+            "compression": 0.046229166666662436
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                96,
+                9.627080865632948
+              ],
+              "normal": [
+                0,
+                -1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 236.7244163948655,
+              "offset": 0.79,
+              "id": "ceiling",
+              "material": "magnetic",
+              "distance": 0.5937708333333376
+            },
+            "contact": true,
+            "distance": 0.5937708333333376,
+            "load": 6102.249999999995,
+            "compression": 0.046229166666662436
+          }
+        ],
+        "endStopImpulse": 0,
+        "acceleration": [
+          0,
+          -1.2584851068894262e-15,
+          3.2612801348363973e-13
+        ],
+        "adhesionAcceleration": [
+          0,
+          32,
+          0
+        ]
+      },
+      "independentChassisRay": {
+        "point": [
+          0,
+          96,
+          10.991998306945078
+        ],
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "tangent": [
+          0,
+          0,
+          1
+        ],
+        "lateral": [
+          1,
+          0,
+          0
+        ],
+        "station": 238.08933383617764,
+        "offset": 0,
+        "id": "ceiling",
+        "material": "magnetic",
+        "distance": 0.7337708333333381
+      }
+    },
+    {
+      "stage": "descending-wall",
+      "command": {
+        "throttle": 0,
+        "brake": 0.43082931989576423,
+        "steer": 0,
+        "boost": false,
+        "assist": true,
+        "dodge": 0
+      },
+      "state": {
+        "position": [
+          0,
+          48.01035566842241,
+          102.28669250010591
+        ],
+        "orientation": [
+          0.7101806079238666,
+          0,
+          0,
+          -0.7040195339114442
+        ],
+        "velocity": [
+          0,
+          -18.43082932047119,
+          7.559011695752621e-06
+        ],
+        "angularVelocity": [
+          -8.337303108767816e-06,
+          0,
+          0
+        ],
+        "tick": 1223,
+        "energy": 100,
+        "airTicks": 0,
+        "dodgeHeld": 0,
+        "dodgeApplied": 0,
+        "dodgeCooldown": 0,
+        "boosting": false,
+        "attached": true,
+        "grounded": true,
+        "contactFrame": {
+          "point": [
+            -0.79,
+            46.803317076002266,
+            103
+          ],
+          "normal": [
+            0,
+            0,
+            -1
+          ],
+          "tangent": [
+            0,
+            -1,
+            0
+          ],
+          "lateral": [
+            1,
+            0,
+            0
+          ],
+          "station": 363.84268621784656,
+          "offset": -0.79,
+          "id": "descending-wall",
+          "material": "magnetic",
+          "distance": 0.5620944673279266
+        },
+        "wheels": [
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                46.803317076002266,
+                103
+              ],
+              "normal": [
+                0,
+                0,
+                -1
+              ],
+              "tangent": [
+                0,
+                -1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 363.84268621784656,
+              "offset": -0.79,
+              "id": "descending-wall",
+              "material": "magnetic",
+              "distance": 0.5620944673279266
+            },
+            "contact": true,
+            "distance": 0.5620944673279266,
+            "load": 10283.684314103588,
+            "compression": 0.07790553267207345
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                46.803317076002266,
+                103
+              ],
+              "normal": [
+                0,
+                0,
+                -1
+              ],
+              "tangent": [
+                0,
+                -1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 363.84268621784656,
+              "offset": 0.79,
+              "id": "descending-wall",
+              "material": "magnetic",
+              "distance": 0.5620944673279266
+            },
+            "contact": true,
+            "distance": 0.5620944673279266,
+            "load": 10283.684314103588,
+            "compression": 0.07790553267207345
+          },
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                49.383415012727994,
+                103
+              ],
+              "normal": [
+                0,
+                0,
+                -1
+              ],
+              "tangent": [
+                0,
+                -1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 361.2625882811208,
+              "offset": -0.79,
+              "id": "descending-wall",
+              "material": "magnetic",
+              "distance": 0.5845747497187409
+            },
+            "contact": true,
+            "distance": 0.5845747497187409,
+            "load": 7316.0687145568345,
+            "compression": 0.05542525028125911
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                49.383415012727994,
+                103
+              ],
+              "normal": [
+                0,
+                0,
+                -1
+              ],
+              "tangent": [
+                0,
+                -1,
+                0
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 361.2625882811208,
+              "offset": 0.79,
+              "id": "descending-wall",
+              "material": "magnetic",
+              "distance": 0.5845747497187409
+            },
+            "contact": true,
+            "distance": 0.5845747497187409,
+            "load": 7316.0687145568345,
+            "compression": 0.05542525028125911
+          }
+        ],
+        "endStopImpulse": 0,
+        "acceleration": [
+          0,
+          -3.452729652186903e-08,
+          0.00044893640725199145
+        ],
+        "adhesionAcceleration": [
+          0,
+          0,
+          32
+        ]
+      },
+      "independentChassisRay": {
+        "point": [
+          0,
+          48.01657094670337,
+          103
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "tangent": [
+          0,
+          -1,
+          0
+        ],
+        "lateral": [
+          1,
+          0,
+          0
+        ],
+        "station": 362.62943234714544,
+        "offset": 0,
+        "id": "descending-wall",
+        "material": "magnetic",
+        "distance": 0.7133345772421668
+      }
+    },
+    {
+      "stage": "exit-floor",
+      "command": {
+        "throttle": 0.019814084695674694,
+        "brake": 0,
+        "steer": 0,
+        "boost": false,
+        "assist": true,
+        "dodge": 0
+      },
+      "state": {
+        "position": [
+          0,
+          0.6928958352179279,
+          49.376272721371535
+        ],
+        "orientation": [
+          -1.3318763477393622e-09,
+          0,
+          0,
+          -1
+        ],
+        "velocity": [
+          0,
+          1.2554745641798052e-07,
+          -17.98018591519707
+        ],
+        "angularVelocity": [
+          -1.2963612764180914e-07,
+          0,
+          0
+        ],
+        "tick": 1503,
+        "energy": 100,
+        "airTicks": 0,
+        "dodgeHeld": 0,
+        "dodgeApplied": 0,
+        "dodgeCooldown": 0,
+        "boosting": false,
+        "attached": true,
+        "grounded": true,
+        "contactFrame": {
+          "point": [
+            -0.79,
+            0,
+            48.16119016046489
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "tangent": [
+            0,
+            0,
+            -1
+          ],
+          "lateral": [
+            1,
+            0,
+            0
+          ],
+          "station": 450.03348089800016,
+          "offset": -0.79,
+          "id": "exit-floor",
+          "material": "magnetic",
+          "distance": 0.5528958388278485
+        },
+        "wheels": [
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                0,
+                48.16119016046489
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 450.03348089800016,
+              "offset": -0.79,
+              "id": "exit-floor",
+              "material": "magnetic",
+              "distance": 0.5528958388278485
+            },
+            "contact": true,
+            "distance": 0.5528958388278485,
+            "load": 11497.74955937123,
+            "compression": 0.08710416117215147
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                0,
+                48.16119016046489
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 450.03348089800016,
+              "offset": 0.79,
+              "id": "exit-floor",
+              "material": "magnetic",
+              "distance": 0.5528958388278485
+            },
+            "contact": true,
+            "distance": 0.5528958388278485,
+            "load": 11497.74955937123,
+            "compression": 0.08710416117215147
+          },
+          {
+            "frame": {
+              "point": [
+                -0.79,
+                0,
+                50.74119016046489
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 447.4534808980002,
+              "offset": -0.79,
+              "id": "exit-floor",
+              "material": "magnetic",
+              "distance": 0.5528958305617783
+            },
+            "contact": true,
+            "distance": 0.5528958305617783,
+            "load": 11497.747753894506,
+            "compression": 0.08710416943822175
+          },
+          {
+            "frame": {
+              "point": [
+                0.79,
+                0,
+                50.74119016046489
+              ],
+              "normal": [
+                0,
+                1,
+                0
+              ],
+              "tangent": [
+                0,
+                0,
+                -1
+              ],
+              "lateral": [
+                1,
+                0,
+                0
+              ],
+              "station": 447.4534808980002,
+              "offset": 0.79,
+              "id": "exit-floor",
+              "material": "magnetic",
+              "distance": 0.5528958305617783
+            },
+            "contact": true,
+            "distance": 0.5528958305617783,
+            "load": 11497.747753894506,
+            "compression": 0.08710416943822175
+          }
+        ],
+        "endStopImpulse": 0,
+        "acceleration": [
+          0,
+          -4.887597813225613e-06,
+          6.434381083497698e-09
+        ],
+        "adhesionAcceleration": [
+          0,
+          -32,
+          0
+        ]
+      },
+      "independentChassisRay": {
+        "point": [
+          0,
+          0,
+          49.37627271952583
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "tangent": [
+          0,
+          0,
+          -1
+        ],
+        "lateral": [
+          1,
+          0,
+          0
+        ],
+        "station": 448.81839833893923,
+        "offset": 0,
+        "id": "exit-floor",
+        "material": "magnetic",
+        "distance": 0.6928958352179279
+      }
+    }
+  ],
+  "chromium": {
+    "browser": "158.0.8127.36",
+    "ticks": 1548,
+    "station": 462.30353777329134,
+    "stages": [
+      "entry-floor",
+      "upturn",
+      "ascending-wall",
+      "invert",
+      "ceiling",
+      "downturn",
+      "descending-wall",
+      "level",
+      "exit-floor"
+    ],
+    "fourSupport": {
+      "entry-floor": 133,
+      "upturn": 181,
+      "ascending-wall": 73,
+      "invert": 181,
+      "ceiling": 365,
+      "downturn": 174,
+      "descending-wall": 70,
+      "level": 174,
+      "exit-floor": 100
+    },
+    "sha256": "d51de69cc1ad08f3d008a3b303977585dcba1410e43e39747fc451532300fae2"
+  }
+}

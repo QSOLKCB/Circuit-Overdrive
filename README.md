@@ -112,6 +112,8 @@ The track, game rules, scenery, car modifications, livery and interface are game
 
 ## Verification
 
+The CO-010A development checkout includes a single-car Rocket physics proof. Run `node tests/rocket-traversal.mjs` to drive the floor, both walls and ceiling and print the measured contact intervals. The player course and six-car Rocket event belong to later review gates. [Physics contract and force receipts](docs/rocket-physics.md)
+
 With Node 22.18 or newer, run
 
 ```sh
