@@ -28,6 +28,7 @@ try{
     const revision=await page.locator('meta[name=game-revision]').getAttribute('content');
     assert.match(revision,/^[a-f0-9]{40}$/);if(process.env.REPLAY_REVISION)assert.equal(revision,process.env.REPLAY_REVISION);
     assert.equal(await page.locator('#lab-tick').textContent(),'0');
+    assert(await page.locator('#lab-arm').isEnabled(),await page.locator('#lab-status').textContent());
     await page.locator('#lab-arm').click();await page.keyboard.down('ArrowUp');
     await page.waitForFunction(()=>window.readTrial().firstImpact!==null,null,{timeout:60000});
     await page.waitForFunction(()=>window.readTrial().phase==='finished',null,{timeout:60000});
