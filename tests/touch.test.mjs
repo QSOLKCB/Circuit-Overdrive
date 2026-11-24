@@ -11,15 +11,23 @@ function fixture(nitroMode=()=>false) {
   function element() {
     const node = new EventTarget(), classes = new Set(), captured = new Set();
     return Object.assign(node, {
+      children:[], style:{setProperty() {}},
       ownerDocument:doc, dataset:{}, classList:{
         toggle(name, value) { if (value) classes.add(name); else classes.delete(name); },
         contains:name=>classes.has(name)
       },
       setAttribute() {}, replaceChildren() {},
-      append(child) { if (child.dataset.touch) buttons[child.dataset.touch] = child; },
+      append(child) {
+        this.children.push(child);
+        if (child.dataset.touch) buttons[child.dataset.touch] = child;
+        if (child.className==='touch-steering') buttons.pad=child;
+      },
       setPointerCapture:id=>captured.add(id), hasPointerCapture:id=>captured.has(id),
       releasePointerCapture:id=>captured.delete(id),
-      getBoundingClientRect:()=>({left:0,top:0,right:60,bottom:60})
+      getBoundingClientRect() {
+        const left=this.dataset.touch==='right' ? 64 : 0;
+        return {left,top:0,right:this.className==='touch-steering' ? 124 : left+60,bottom:60};
+      }
     });
   }
   Object.assign(doc,{defaultView:win,createElement:element});
@@ -30,7 +38,7 @@ function fixture(nitroMode=()=>false) {
   function fire(type, control, pointerId = 1, extras = {}) {
     const event = new Event(type,{cancelable:true});
     Object.defineProperty(event,'target',{value:buttons[control]});
-    Object.assign(event,{pointerId, button:0, clientX:30, clientY:30, ...extras});
+    Object.assign(event,{pointerId, button:0, clientX:control==='right' ? 94 : 30, clientY:30, ...extras});
     container.dispatchEvent(event);
     return event;
   }
@@ -57,7 +65,39 @@ test('each pointer owns one control; release order, opposite steering and pedal 
   assert.equal(t.pauses(),0);
 });
 
-test('leaving a captured control releases that finger only, new targets need fresh contact',()=>{
+test('a captured thumb steers proportionally through neutral and reverses on the next sample',()=>{
+  const t=fixture();
+  t.down('throttle',1); t.down('left',2);
+  assert.deepEqual(t.command(),{throttle:1,brake:0,steer:-1});
+  for(const [clientX,expected] of [[46,-.484375],[61,0],[62,0],[78,.484375],[94,1]]) {
+    t.fire('pointermove','left',2,{clientX});
+    assert.deepEqual(t.command(),{throttle:1,brake:0,steer:expected});
+    assert.equal(t.buttons.left.hasPointerCapture(2),true);
+    assert.equal(t.buttons.right.classList.contains('held'),expected>0);
+  }
+  t.up('left',2);
+  assert.deepEqual(t.command(),{throttle:1,brake:0,steer:0});
+  t.fire('pointerdown','pad',3,{clientX:62});
+  assert.equal(t.command().steer,0);
+  t.fire('pointermove','pad',3,{clientX:30});
+  assert.equal(t.command().steer,-1);
+});
+
+test('the strongest touch on each side owns the demand and independent releases restore the others',()=>{
+  const t=fixture();
+  t.down('left',3); t.fire('pointerdown','left',5,{clientX:46});
+  t.down('right',6);
+  assert.equal(t.command().steer,0);
+  t.up('left',3);
+  assert.equal(t.command().steer,.515625);
+  t.up('right',6);
+  assert.equal(t.command().steer,-.484375);
+  t.fire('lostpointercapture','left',5);
+  assert.deepEqual(t.command(),neutral);
+  assert.equal(t.pauses(),1);
+});
+
+test('leaving the entire steering pad or a pedal releases that finger only, new targets need fresh contact',()=>{
   const t=fixture();
   t.down('throttle',3); t.down('throttle',5); t.down('right',6);
   t.fire('pointermove','throttle',5,{clientX:-1});

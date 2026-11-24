@@ -40,7 +40,9 @@ Custom layouts can capture **Rocket assist**, **Rocket dodge left** and **Rocket
 
 ## Touch driving
 
-On a touch-capable screen select either course, tap **Start race**, then **Drive with touch** on the grid. The same source is available in the controller picker. Hold Gas or Brake with one finger and a steering arrow with another. Lift or move a finger off a control to release it. On Nitro Skyway, separate Drift and Nitro buttons sit above the pedals. Each finger holds its own control, including when steering and accelerating together. Use View, Recover and Pause beside the steering arrows. A cancelled gesture, lost capture, app switch or orientation change clears the controls and pauses active racing. Tap **Resume race**, then make fresh presses.
+On a touch-capable screen select a course, tap **Start race**, then **Drive with touch** on the grid. You can also select touch in the controller picker. Hold **Gas** or **Brake** with one thumb and slide the other across the steering arrows. The centre mark gives neutral steering. Move a little to either side for a gentle correction or press an arrow centre for full steering. Slide straight across to change direction. Lifting your steering thumb or sliding it off the pad centres the steering and lets you keep the pedal held.
+
+On Nitro Skyway, **Drift** and **Boost** sit above the pedals. Use **View**, **Recover** and **Pause** beside the steering arrows. A cancelled gesture, lost capture, app switch or orientation change clears the controls and pauses active racing. Tap **Resume race**, then make fresh presses.
 
 Landscape offers the widest road view. Portrait keeps the instrument panel and controls accessible. **Settings → Driving effects → Mobile** limits the drawing buffer to 75% in each dimension and selects reduced effects. Automatic quality selects this mode when the browser reports a coarse primary pointer. Physics and timing always use the same fixed-step update.
 
