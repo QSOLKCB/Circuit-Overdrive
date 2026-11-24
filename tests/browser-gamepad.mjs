@@ -14,11 +14,23 @@ try {
     const pad = index => ({index, mapping:'standard', id:'Test pad '+index, connected:true,
       axes:[0,0,0,0], buttons:Array.from({length:17},()=>({value:0,pressed:false}))});
     window.reports = [null,pad(1),pad(2)];
-    Object.defineProperty(navigator,'getGamepads',{value:()=>window.reports});
+    window.padReads=0;
+    Object.defineProperty(navigator,'getGamepads',{value:()=>{ window.padReads++; return window.reports; }});
     window.press = (index,value) => { window.reports[1].buttons[index]={value,pressed:value>.5}; };
     let frame, time = 0;
     window.requestAnimationFrame = cb => { frame = cb; return 1; };
-    window.tick = (n=1) => { for(let i=0;i<n;i++) frame(time+=1000/60); };
+    const pixel=new Uint8Array(4);
+    let draws=0;
+    window.advanceFrame = ticks => {
+      frame(time+=ticks*1000/60);
+      // Synthetic RAF has no compositor backpressure. Complete the WebGL
+      // commands at least once every four frames, including menu navigation.
+      if (++draws%4===0) {
+        const gl=document.querySelector('#world').getContext('webgl');
+        gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+      }
+    };
+    window.tick = (n=1) => { for(let i=0;i<n;i++) window.advanceFrame(1); };
   });
   await page.goto(process.argv[2]);
   const tick = n => page.evaluate(n=>window.tick(n),n);
@@ -68,10 +80,19 @@ try {
   await press(0,1); await tick(2);
   assert.equal(await phase(),'countdown');
   await press(0,0); await tick(2);
-  const advance = async steps => page.evaluate(steps=>{
-    // Keep the accelerator within the ordinary bounded catch-up loop.
-    for (let i=0; i<steps; i++) window.tick(1);
-  },steps);
+  const advance = async steps => {
+    const reads=await page.evaluate(async steps=>{
+      const before=window.padReads;
+      // The selected pad holds the same report throughout this interval.
+      // The game's 60 Hz clock polls it once per tick, including countdown.
+      for(let left=steps;left>0;left-=12) {
+        window.advanceFrame(Math.min(left,12)); // 0.20 s, below the clock's 0.25 s clamp.
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+      return window.padReads-before;
+    },steps);
+    assert.equal(reads,steps,'one live pad reading for every requested simulation tick');
+  };
   await advance(183);
   assert.equal(await phase(),'racing');
   await press(7,.73); await page.evaluate(()=>{reports[1].axes[0]=.32;}); await advance(60);
