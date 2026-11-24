@@ -57,7 +57,8 @@ function crashDashboard(id){
   const hit=hits.find(h=>h.id===selectedImpact)??hits.at(-1);
   picker.disabled=!hit;$('theatre-hit-seek').disabled=!hit;
   if(hit)picker.value=hit.id;
-  set('theatre-hit',hit ? scenarios[t.scenario].target+' · '+hit.closing.toFixed(1)+' m/s closing · '+
+  const partner=id?'Player test car':scenarios[t.scenario].target;
+  set('theatre-hit',hit ? partner+' · '+hit.closing.toFixed(1)+' m/s closing · '+
     hit.normalImpulse.toFixed(0)+' N·s normal · '+hit.tangentialImpulse.toFixed(0)+' N·s slide · '+
     (hit.dissipated/1000).toFixed(1)+' kJ lost · normal '+hit.normal.map(v=>v.toFixed(2)).join(' / ') : 'No accepted impact at this tick');
 }

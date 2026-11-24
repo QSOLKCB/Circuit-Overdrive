@@ -43,6 +43,7 @@ export async function verifyCrashDownloads(page,base,live,revision,dir){
       await theatre.waitForFunction(t=>document.querySelector('#theatre-lab-state').textContent.includes('tick '+t+' ·'),tick);
     }
     await seek(live.ticks);assert.match(await theatre.locator('#theatre-lab-state').textContent(),new RegExp(live.result));
+    if(live.scenario==='opposing')assert.match(await theatre.locator('#theatre-hit').textContent(),/^Player test car/);
     assert.equal(await theatre.locator('#theatre-impacts option').count(),receipt.impactIds.length);
     await theatre.locator('#theatre-impacts').selectOption(receipt.impactIds[0]);
     await theatre.locator('#theatre-hit-seek').click();
