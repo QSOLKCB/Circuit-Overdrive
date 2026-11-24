@@ -11,3 +11,5 @@ The contact receipt identifies the source stamp (null in an unstamped checkout),
 Every applied impulse has a receipt. Only the first impulse in a contact episode qualifies as a new impact. The latch releases when the entire pair has more than 35 mm clearance at a solver observation. Repeated support impulses retain their measurements and cannot award another impact. Local X points right and local −Z points forward. The larger fraction of chassis half-width or half-length at the surface witness selects the struck face. Exact diagonal ties use the longitudinal face. Reproduction comparisons use exact JSON data in the same JS runtime and numerical tolerances for analytic tests.
 
 Touring and Nitro retain the horizontal swept-footprint solver in `src/contact.js`. Rocket retains its 3D chassis, rail and deck constraints in `src/rocket-contact.js`. Neither imports the laboratory authority.
+
+CO-012A adds a derby profile that shares the planar contact and damage law. Crash Lab continues to create a rules-1 laboratory world with its original limits. [Six-car impact contract and parity checks](derby-impact.md)
