@@ -1,6 +1,6 @@
 # CO-013A — The Vehicle Registry
 
-After Hours Motor Works begins with an original catalogue and a pure ownership schema. v1.3.0 remains a candidate. This PR contains no purchase/sale authority, storage writes or playable showroom. Those are owner-reviewed stages B, C and D. Stage E certifies the complete experience.
+After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55. [CO-013B](garage-transactions.md) now supplies pure purchase/sale/selection authority against this unchanged schema. Storage and the playable showroom remain owner-reviewed stages C and D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
 
 ## Original catalogue, revision 1
 
@@ -19,7 +19,7 @@ These are original cosmetic designs. Prices do not measure horsepower, grip, acc
 
 Authored catalogue admission allows 6–24 models and requires at least one affordable starter. Passing `validateGarageCatalogue` does not register arbitrary user models. `garageModel` and ownership admission resolve only the built-in revision. Adding models or changing accepted prices requires a catalogue revision and explicit compatibility review. Future Forge definitions need a separately reviewed format.
 
-The planned `stock-60-v1` resale contract is `floor(purchasePrice * 3 / 5)` from the immutable catalogue, using integer operands within the safe range. It is recorded as a policy identity here; B implements and tests sales. No resale claim is read from an owned-car record. A 600-credit starter allows four legitimate purchases from the 2,400-credit initial balance. Every catalogue model is individually affordable from that balance. Actual earning, repairs and upgrades belong to later milestones.
+The `stock-60-v1` resale contract is `floor(purchasePrice * 3 / 5)` from the immutable catalogue, using integer operands within the safe range. B implements and tests sales. No resale claim is read from an owned-car record. A 600-credit starter allows four legitimate purchases from the 2,400-credit initial balance. Every catalogue model is individually affordable from that balance. Actual earning, repairs and upgrades belong to later milestones.
 
 ## Ownership schema, version 1
 
@@ -66,4 +66,4 @@ The static package requires all allowlisted files to be reachable from `index.ht
 
 ## Review
 
-Run `node --test tests/garage-registry.test.mjs` and inspect the catalogue and canonical JSON above. The [acceptance record](co-013a-acceptance.md) lists executed checks. Browser purchases, stale-tab safety, showroom rendering and native performance are later acceptance gates, not demonstrated by this data-only PR. Owner review of A precedes implementing B.
+Run `node --test tests/garage-registry.test.mjs` and inspect the catalogue and canonical JSON above. The [A acceptance record](co-013a-acceptance.md) lists its executed checks. The [B contract](garage-transactions.md) defines the reviewed transition and retry boundary. Browser purchases, stale-tab safety, showroom rendering and native performance remain later acceptance gates.
