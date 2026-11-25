@@ -1,0 +1,45 @@
+{
+  "source": "75e2ba4645e728ffe107e246942d3fb60d08d638",
+  "node": "v22.18.0",
+  "checks": [
+    {
+      "command": "node --test tests/*.test.mjs",
+      "exitCode": 0,
+      "passed": 360,
+      "failed": 0,
+      "durationMs": 281145.226549,
+      "historicalMatchingTicks": 45225
+    },
+    {
+      "command": "python3 tests/test_offline_release.py",
+      "exitCode": 0,
+      "passed": 1
+    },
+    {
+      "command": "bash tests/browser-pages-shards.sh",
+      "exitCode": 0,
+      "scope": "orchestration and failure propagation; full seven-lane matrix not rerun locally"
+    },
+    {
+      "command": "node tests/browser-garage.mjs http://127.0.0.1:8158/Circuit-Overdrive/",
+      "exitCode": 0,
+      "scenarios": 22,
+      "invalidImportCases": 17,
+      "layouts": 4,
+      "requests": 1701,
+      "browserErrors": 0,
+      "externalRequests": 0
+    },
+    {
+      "command": "GARAGE_PERF_SOFTWARE=1 node tests/browser-garage-performance.mjs http://127.0.0.1:8158/Circuit-Overdrive/",
+      "exitCode": 0,
+      "scope": "bounded software resource/lifecycle regression, not native GPU performance"
+    },
+    {
+      "command": "node --experimental-vm-modules scripts/package-site.mjs NEW_SITE; python3 scripts/offline-release.py build NEW_ARCHIVE; python3 scripts/offline-release.py verify NEW_ARCHIVE",
+      "exitCode": 0,
+      "runtimeEquality": true,
+      "runtimeFiles": 103
+    }
+  ]
+}

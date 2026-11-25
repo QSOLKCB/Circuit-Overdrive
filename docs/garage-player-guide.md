@@ -73,4 +73,4 @@ CO-013E scenarios and adds first-visit visibility, setup cancellation, committed
 creation, focused first purchase, four desktop/responsive widths, stale scroll
 reopening, busy setup and failed creation/read-back recovery. It observes real
 storage and accepted UI actions; injected storage/lock faults are labelled.
-Source-bound screenshots and executed results accompany the correction PR.
+[Source-bound screenshots and executed results](evidence/co-013-ux-001/README.md) accompany the correction PR.
