@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 import {garageModel, MAX_CREDITS} from './garage-catalog.js';
 import {garageInteger, garageRecord} from './garage-data.js';
-import {MAX_REVISION, MAX_VEHICLE_ID, validateGarage, vehicleId} from './garage.js';
+import {MAX_REVISION, MAX_VEHICLE_ID, validateGarage, vehicleId, pristineVehicleCondition} from './garage.js';
+import {stockVehicleBuild} from './vehicle-builds.js';
 
 const reject = reason => Object.freeze({accepted:false, reason});
 const ownedId = id => /^car-[0-9]{6}$/.test(id) && id !== 'car-000000';
@@ -52,7 +53,8 @@ export function transactGarage(state, action) {
     if (bayIndex === -1) return reject('garage-full');
     if (credits < model.purchasePrice) return reject('insufficient-credits');
     if (nextVehicleId > MAX_VEHICLE_ID) return reject('vehicle-id-exhausted');
-    car = {ownedVehicleId:vehicleId(nextVehicleId), modelId:model.modelId};
+    car = {ownedVehicleId:vehicleId(nextVehicleId), modelId:model.modelId,
+      build:stockVehicleBuild(model.modelId), condition:pristineVehicleCondition()};
     bays[bayIndex] = car;
     credits -= model.purchasePrice;
     nextVehicleId++;

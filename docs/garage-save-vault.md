@@ -1,5 +1,7 @@
 # CO-013C — Save Vault
 
+This document retains the published v1.3.0 contract. CO-014B extends current ownership and the same-slot vault through the [explicit build-registry migration](garage-build-registry.md); its versioned schema and recovery rules supersede the current-runtime details below.
+
 The vault commits the accepted B transactions to browser-native local storage. It is implemented in `src/garage-vault.js`, with strict storage-envelope admission in `src/garage-vault-format.js`. The development fixture exercises it through actual browser buttons, downloads and file inputs. CO-013D connects it to the [production garage menu, file controls and showroom](garage-player-guide.md). v1.3.0 remains a candidate.
 
 ## Storage and coordination

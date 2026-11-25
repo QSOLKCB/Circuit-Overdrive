@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/QSOLKCB/Circuit-Overdrive",
+  "commit": "1c745a90258d0f6cb968935f773354cff702b276",
+  "sourceDirectory": "src/",
+  "localChanges": [],
+  "sha256": {
+    "garage.js": "f43baf8f34337226daa0a86a4cf8833ea8814f6bb37fe968f923ed5cc5939bae",
+    "garage-data.js": "f4b8b34ec48d14bd0134b872310e6fbaac452baa1a22081c0f974154a670d679",
+    "garage-catalog.js": "12b8a864680f765962559d9a22a3b0597d8c9bc0c69159ddae1f0b10d63f9500",
+    "garage-transactions.js": "f7d6b31664c38ee82579a4841433d39a33af1d504a1f37dc1cd700d90d00257b",
+    "garage-vault-format.js": "900c44fb7a55332eadd8aa16d3ac113b4b1281d28c506991b3dc99073f37c4bb",
+    "garage-vault.js": "586204951ee00fd2c515c0be9b045284039b2808c572ce42b0b9922acc9daeaa"
+  },
+  "fixturesSha256": {
+    "states.json": "1e89fef9d2c1a6aa7dd3948512f9b8ece8b18314e7663c2ebc67cf6d676d4b6f"
+  }
+}

@@ -2,6 +2,7 @@
 // Optional CO-013C development test. This uses the real vault module through a
 // plainly labelled fixture, not the future production garage showroom.
 import assert from 'node:assert/strict';
+import {stockVehicleBuild} from '../src/vehicle-builds.js';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 
@@ -133,7 +134,7 @@ try {
   await commit(a,'buy');
   const first=await state(a), firstRaw=await raw(a);
   assert.equal(first.credits,1800);
-  assert.deepEqual(first.bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two'},null,null,null]);
+  assert.deepEqual(first.bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two',build:stockVehicleBuild('cinder-two'),condition:{version:1,status:'pristine'}},null,null,null]);
   await waitStatus(b,'CONFLICT');
   assert.deepEqual(await state(b),bBefore);
   assert(['confirmation-required','conflict'].includes((await confirm(b,false)).reason));
@@ -177,7 +178,7 @@ try {
     ['version',JSON.stringify({...owned,version:99})],
     ['duplicate-ID',JSON.stringify({...owned,bays:[owned.bays[0],owned.bays[0],null,null]})],
     ['extra-field',JSON.stringify({...owned,resale:999999})],
-    ['prototype-field',exported.replace('"version":1','"version":1,"__proto__":{"polluted":true}')]];
+    ['prototype-field',exported.replace('"version":2','"version":2,"__proto__":{"polluted":true}')]];
   for (const [name,file] of invalidFiles) {
     const priorRaw=await raw(a), priorState=await state(a);
     assert.deepEqual(await importText(a,file),{accepted:false,reason:'invalid-import'},name);

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {stockVehicleBuild} from '../src/vehicle-builds.js';
 import {createGarageVault, GARAGE_SLOT} from '../src/garage-vault.js';
 import {parseVault, serializeVault} from '../src/garage-vault-format.js';
 
@@ -80,7 +81,8 @@ test('the final storage sequence commits once and exhaustion preserves exportabl
   assert.equal(parseVault(shared.raw).sequence,99999999);
   assert.equal(result.state.credits,1800);
   assert.equal(result.state.nextVehicleId,2);
-  assert.deepEqual(result.state.bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two'},null,null,null]);
+  assert.deepEqual(result.state.bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two',build:stockVehicleBuild('cinder-two'),
+    condition:{version:1,status:'pristine'}},null,null,null]);
   const committed=shared.raw,writes=shared.writes,exported=vault.exportSave().text;
   assert.deepEqual(await vault.confirm(pending.ticket),{accepted:false,reason:'confirmation-required'});
   for(const prepare of [()=>buy(vault),()=>vault.prepareReset(),()=>vault.prepareImport(exported)]) {

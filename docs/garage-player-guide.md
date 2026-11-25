@@ -2,6 +2,12 @@
 
 Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any racing mode. Tuning, repairs and race rewards are future milestones.
 
+## Keep an existing garage
+
+A v1.3.0 save opens with **MIGRATION REQUIRED** and its actual cars still visible. Choose **Review garage upgrade**, export the original save if desired, then confirm. Every owned ID, bay, credit, selection and serial counter is preserved; each car receives its own validated stock build and pristine condition. Cancel leaves the save untouched. The new game blocks purchases, sales, reset and imports until this conversion is confirmed and saved.
+
+Afterward, **Export garage JSON** downloads the current build-aware save. **Export original legacy backup** downloads the retained original ownership separately. Both current and published legacy JSON files can be imported through explicit whole-state replacement. Close obsolete game tabs before conversion: their pending confirmations fail, but a freshly reviewed reset in an old game can deliberately replace unsupported data. Keep an exported backup. [Exact migration and recovery contract](garage-build-registry.md)
+
 ## Your first car
 
 1. On a first visit, **Create Your Garage** appears near the top of the garage controls and focuses **Create garage**. Choose it, review the four empty bays and 2,400-credit starting balance, then choose **Confirm new garage**. Opening the menu alone never creates credits or replaces a save.
@@ -28,6 +34,7 @@ Invalid, corrupt, oversized or unsupported files show **IMPORT REJECTED** and pr
 
 | Status | What to do |
 | --- | --- |
+| MIGRATION REQUIRED | Review the garage upgrade; export the original first if desired. No cars or credits change on load. |
 | SAVED | The browser confirmed the saved snapshot. Export a backup for safekeeping. |
 | UNSAVED | Read the message: this may be an empty/corrupt slot, a save in progress or a rejected attempt. |
 | STORAGE UNAVAILABLE | Restore browser storage/coordination support, then use Reload saved garage. Inspection remains available. |
