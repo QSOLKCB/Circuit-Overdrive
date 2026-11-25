@@ -37,7 +37,13 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
 5. For spectator playback, open http://127.0.0.1:8000/replay-theatre.html
    and import a matching source-stamped JSON replay. Select Nightshift in
    Spectator lighting to watch a night drive under its original lighting.
-6. Press Ctrl+C in the terminal when you are done.
+6. The Garage opens from the main menu. Inspect six original cosmetic models,
+   confirm a new garage, then buy, select or sell cars in four bays. Transactions
+   show SAVED after local commitment. Keep the same browser, address and port
+   to return to your save. Export garage JSON backups; importing replaces the
+   whole garage after confirmation. Web Locks and browser storage are required
+   for purchases. Ownership does not change race vehicles or performance.
+7. Press Ctrl+C in the terminal when you are done.
 
 The server reads this folder on your computer. Both courses, the six-car field,
 controls and audio work without internet access. Controller exposure depends on

@@ -20,7 +20,7 @@ Choose **Total Destruction** from the main menu, select **The Crucible** or **Ir
 
 ## Street Rod — The Garage, v1.3.0 candidate
 
-CO-013A–B establish the original six-model catalogue, four-bay ownership and pure purchase/sale/selection transactions for **After Hours Motor Works**. CO-013C adds the Save Vault with coordinated local persistence, stale-tab rejection, confirmed replacement and canonical JSON import/export. Its development fixture exercises the real browser storage protocol; the production garage menu and WebGL showroom follow in PR D. Catalogue styling is cosmetic, and ownership does not change racing physics or event damage. [Registry](docs/garage-registry.md) · [Transactions](docs/garage-transactions.md) · [Save Vault and browser reproduction](docs/garage-save-vault.md)
+**The Garage — After Hours Motor Works** is available from the main menu on the v1.3.0 candidate. Inspect six original stock finishes in the WebGL workshop, confirm purchases with fictional credits, park up to four uniquely identified cars, select an active car and confirm sales. The Save Vault preserves ownership across reloads, rejects stale-tab changes and supports validated JSON export/import. Catalogue styling is cosmetic; ownership does not change racing physics or event damage. [Player guide](docs/garage-player-guide.md) · [Registry](docs/garage-registry.md) · [Transactions](docs/garage-transactions.md) · [Save Vault](docs/garage-save-vault.md) · [Showroom geometry](docs/garage-showroom.md)
 
 ## Crash Lab — The Impact Facility
 
