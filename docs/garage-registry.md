@@ -1,6 +1,6 @@
 # CO-013A — The Vehicle Registry
 
-After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55. [CO-013B](garage-transactions.md) now supplies pure purchase/sale/selection authority against this unchanged schema. Storage and the playable showroom remain owner-reviewed stages C and D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
+After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55 and [CO-013B](garage-transactions.md) as PR #56. The [Save Vault](garage-save-vault.md) adds coordinated persistence around this unchanged schema in C. The playable showroom remains stage D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
 
 ## Original catalogue, revision 1
 

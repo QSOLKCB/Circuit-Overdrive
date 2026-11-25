@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CO-013C Save Vault development fixture</title>
+  <link rel="icon" href="data:,">
+  <style>
+    body { max-width: 60rem; margin: 2rem auto; padding: 0 1rem; font: 16px system-ui; background: #182128; color: #eef3ed; }
+    button, input { font: inherit; margin: .25rem; padding: .5rem; }
+    button:focus-visible, input:focus-visible { outline: 3px solid #f3cf57; outline-offset: 2px; }
+    pre { padding: 1rem; background: #26343c; white-space: pre-wrap; overflow-wrap: anywhere; }
+    output { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Save Vault development fixture</h1>
+  <p>This test page exercises the actual CO-013C storage module. It is not the production garage showroom and is excluded from the offline runtime package.</p>
+  <p>Status <output id="status" aria-live="polite">LOADING</output> <span id="reason"></span></p>
+  <nav aria-label="Vault actions">
+    <button id="load" type="button">Load saved garage</button>
+    <button id="new" type="button">New garage</button>
+    <button id="buy" type="button">Buy Cinder Two for 600</button>
+    <button id="sell" type="button">Sell active vehicle</button>
+    <button id="export" type="button">Export saved garage</button>
+    <label>Import JSON <input id="import" type="file" accept=".json,application/json"></label>
+  </nav>
+  <section aria-label="Confirmation">
+    <p>Prepared changes require explicit confirmation. The saved state below changes only after commitment succeeds.</p>
+    <button id="backup" type="button" disabled>Export current garage before replacement</button>
+    <button id="confirm" type="button" disabled>Confirm prepared action</button>
+    <button id="cancel" type="button">Cancel prepared action</button>
+    <pre id="preview">null</pre>
+  </section>
+  <p id="result" aria-live="polite"></p>
+  <h2>Last accepted state</h2>
+  <pre id="state">null</pre>
+  <script type="module" src="./garage-vault.js"></script>
+</body>
+</html>
