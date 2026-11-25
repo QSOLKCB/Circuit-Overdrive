@@ -1,0 +1,51 @@
+HTTP contents and MIME types verified at http://127.0.0.1:8157/Circuit-Overdrive/ (103 files).
+Chromium 158.0.8127.36 · synthetic standard pad · owner-only picker navigation, Back and Cancel, held grid buttons, analog drive, disconnect under load, neutral reacquisition, gamepad pause/resume and keyboard handoff passed.
+{"browser":"158.0.8127.36","url":"http://127.0.0.1:8157/Circuit-Overdrive/","syntheticReports":["12-button digital","asymmetric wheel with shared pedal axis","standard owner"],"checks":["ambiguous capture","overlapping pedal rejection","live normalized preview","neutral save gate","remap","reload","restore defaults","brake range","invert steering","explicit use","fresh report between frames","same-slot replacement while editing","expanded editor pad navigation","owner capture isolation","second-device calibration"]}
+{"browser":"158.0.8127.36","url":"http://127.0.0.1:8157/Circuit-Overdrive/","syntheticReports":["standard pad","calibrated combined-pedal wheel","unmapped replacement"],"checks":["owner / preview separation","raw and normalized channels","neutral and held actions","paused clock","invalid sample","slot replacement","disconnect","explicit pad exit"]}
+{
+  "browser": "158.0.8127.36",
+  "results": [
+    {
+      "scenario": "wall",
+      "revision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+      "inputSha256": "baf35d935311f69a3ad8a5183ecab3b8416303cae87dfab0a8af7f674de8e701",
+      "finalStateSha256": "a2ede31edd7233fcc3b7a75588bd634bd989e0d812e895191820390d8fb1b69d",
+      "contactsSha256": "3de873a561384017baa496d9ce18226a1a9ca9753781679aaeb40dfba75909b7",
+      "rawTapeSha256": "5b775336a7723d02a5d890bbc13504233911c0f01b9f2a50abed143c87e50900",
+      "ticks": 273,
+      "result": "settled",
+      "impactTick": 220,
+      "zone": "front",
+      "impulse": 55855.65964997852,
+      "screenshotSha256": "19ccc8cacf7b1b4450aa9519b550a1a4dec48692b8dba4f7ced0a31971999bc1"
+    },
+    {
+      "scenario": "glancing",
+      "revision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+      "inputSha256": "e94c27332cb57d6b17415dcda89a5b94f709e377a2264e1dae0ea147ab4150b2",
+      "finalStateSha256": "2550e9d33b3321c40e72b2cf92a47ef64ed52610ae5d58a5009ea735bf432354",
+      "contactsSha256": "34e06ab07d53f7c7edc9af75a83ae161ea83e004d90998eba1d3e3b3b174b524",
+      "rawTapeSha256": "8cce2b61b3db4d196a0aa8d1cc4d6b67fc911ef7fdce8637491aeb32a9facb01",
+      "ticks": 325,
+      "result": "impact and run-off",
+      "impactTick": 209,
+      "zone": "right",
+      "impulse": 6262.435749429269,
+      "screenshotSha256": "f3ee9aacc68387cdd36ca4d389a25f99e817d5a8aec2868a68e70ca1579456e0"
+    },
+    {
+      "scenario": "opposing",
+      "revision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+      "inputSha256": "46839ff07f5400db95f186225f5eefdb53f997b0078d3f3026cb685e9048cd54",
+      "finalStateSha256": "3cfe892dd2594a6b02fe6321a5da2f6f65508630adb6caf37d806b1be1859853",
+      "contactsSha256": "a60aaa4bade1caa35781ed0e4f4755b4a90bd06cfd6479a4a6d455d65ec1396e",
+      "rawTapeSha256": "22ba231db7a9543d0e193aee2f040c523611fb8d96cfcb11d35092d599b49b30",
+      "ticks": 360,
+      "result": "post-impact run complete",
+      "impactTick": 180,
+      "zone": "front",
+      "impulse": 38620.64547722599,
+      "screenshotSha256": "967c6b51ef16deccca2be60fef2325fe9a1eb4de4efcf07b041f0cd1461d6603"
+    }
+  ]
+}

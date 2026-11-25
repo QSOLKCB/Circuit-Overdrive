@@ -1,0 +1,351 @@
+{
+  "baseline": "e12665b04609f40d452084a37264756a23d730da",
+  "candidate": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+  "changedExistingSource": [
+    "src/main.js"
+  ],
+  "identicalCount": 85,
+  "identical": [
+    {
+      "path": "src/ai.js",
+      "sha256": "287cc768c7c8ae3f3395b41ac321f674cf04a1d7dbced0fc0c72c05afa42ab76"
+    },
+    {
+      "path": "src/audio.js",
+      "sha256": "c11b62bea7c2335dcb55e15e07028ec0deb7f5306b8a36390ebf713ba95a1b9a"
+    },
+    {
+      "path": "src/bps.js",
+      "sha256": "7d514165d4e0324ca0fd4536a4cd1ba582ce95a78f33677fcf0c8956d57077fa"
+    },
+    {
+      "path": "src/camera.js",
+      "sha256": "cb12870bd4578cd31bb47084dbd4fa6de173e165148ba76a65638b97bc4755e7"
+    },
+    {
+      "path": "src/championship-storage.js",
+      "sha256": "f96d7e27908a1ca9fe33bd78efb614179de8d532a2e7e5e06b05e59f6974efae"
+    },
+    {
+      "path": "src/championship-ui.js",
+      "sha256": "031d3bfcd6a162c9e1dda0228f4815a0e9e207dc34dfdd5ccf008f7cf40d815e"
+    },
+    {
+      "path": "src/championship.css",
+      "sha256": "d88ed68cccfa84440a9ff966d6a0117a89752fd8d046c88b5b890d918c9abb30"
+    },
+    {
+      "path": "src/championship.js",
+      "sha256": "19fa85d43100f73d4d15a91aeecec7fdc274ef8d7169afae3c9f53e6d73b60db"
+    },
+    {
+      "path": "src/contact.js",
+      "sha256": "2e0fb63ec8eb9e19dc1a1b2af56fadb37dc0fbd1f2d3b144a9c95cd370c9bde6"
+    },
+    {
+      "path": "src/controller-lab.js",
+      "sha256": "3e4b92dc2a746be3f9f48c23f19cf7a47306bfeb0e8a0437be5a3d4e0d5e7be6"
+    },
+    {
+      "path": "src/controller-menu.js",
+      "sha256": "c6a06d08ac4587acf8fa8d59d720789a808596f917e91a173e31f6122e20dc77"
+    },
+    {
+      "path": "src/crash-audio.js",
+      "sha256": "1fed6d6351f2c2e1ad36b6e1c01b3f9f93cd700394a001575f908c1c6cdf073e"
+    },
+    {
+      "path": "src/crash-damage.js",
+      "sha256": "7f527d7e736ccf2adc28ec4356cb5775a1d6953a6bd3fa776d790533907f506e"
+    },
+    {
+      "path": "src/crash-impact.js",
+      "sha256": "da416c71695c8414165d2be6f2e0a56c69028745c95dc745939f19b527ba58d4"
+    },
+    {
+      "path": "src/crash-lab.css",
+      "sha256": "78426cfe4791877214cf16a9ad3015d58b257de6c9e9188c229dffe67f884696"
+    },
+    {
+      "path": "src/crash-lab.js",
+      "sha256": "2079d1bf2c034785776058bf9a89f14c2d49f67503d5464d432db98dbe39211a"
+    },
+    {
+      "path": "src/crash-replay.js",
+      "sha256": "74a7f374188faf17718f6e4ed799dcc2bb57354c8bda4b6d0b4e5f3ea7d69491"
+    },
+    {
+      "path": "src/crash-scene.js",
+      "sha256": "be3a1ae26cd8fcba54d2a294e224ddc68f1a6d849591f302bff7ea14155a3063"
+    },
+    {
+      "path": "src/crash-trial.js",
+      "sha256": "e768b9734b5d6007ae301fa2a424d60db0b86b4896b07fc3ff65098881e7b342"
+    },
+    {
+      "path": "src/derby-ai.js",
+      "sha256": "25c2cfe208e1a58f25f1c21473901231569471ac744e32561d43ba56354a7d0d"
+    },
+    {
+      "path": "src/derby-arena-preview.js",
+      "sha256": "a93d87d1f90c431640748b0976bdda56626426bc4259a6099af60de59a8a700d"
+    },
+    {
+      "path": "src/derby-arena-scene.js",
+      "sha256": "b620ce7d53bf894c4f2a6448814be736362c117b2e13213b707a8ab3a2603c05"
+    },
+    {
+      "path": "src/derby-arenas.js",
+      "sha256": "5cc3b3482b812123e952d1e35a8c7b3f19612301cafc7336621d9ae86b44f483"
+    },
+    {
+      "path": "src/derby-audio.js",
+      "sha256": "8e4fab89f35988bb9af54be4cd23c1fd1294c5dd70ecc2ebe343656f8c9a89e1"
+    },
+    {
+      "path": "src/derby-replay.js",
+      "sha256": "56ed2ece6f656d7217cba2070e94ade2865c1e82c18cd3486073550267435ae9"
+    },
+    {
+      "path": "src/derby.js",
+      "sha256": "c41ee232778f128cd645abf276076a5669d12328b42c4717e3742cb65358584f"
+    },
+    {
+      "path": "src/driver-command.js",
+      "sha256": "3abf3dab8fd1c6efca2b42c15812d93c952c39d03e6fb889a718b4ab1adae292"
+    },
+    {
+      "path": "src/driver-input.js",
+      "sha256": "9c7aff20a34a52ff85696b568758cb7709090e525dccf99bf8b8ea4a03a303aa"
+    },
+    {
+      "path": "src/effects.js",
+      "sha256": "0fc00160560ed4bc06b07e114549fbcca1d70ab55a5bb2fb5af8424a2726c9c4"
+    },
+    {
+      "path": "src/environment.js",
+      "sha256": "c9e53acfce7c4ba4e2f7ed853bee54181f05c624df1ed4d2981fd403770d5510"
+    },
+    {
+      "path": "src/field.js",
+      "sha256": "2fd8817920fc0349ada856ca6f4a9931f36bae0cc5064be52090e23ccc7a2e8a"
+    },
+    {
+      "path": "src/gamepad.js",
+      "sha256": "639629c5303f0718db7640bedf8e78442093a1dd28c27c3a046202ab8982d9d3"
+    },
+    {
+      "path": "src/geometry.js",
+      "sha256": "ffea518eb5f0bd166cbb7a62d74aa1ecdd18734be482721f84d9b63c3d4baa81"
+    },
+    {
+      "path": "src/headlights.js",
+      "sha256": "57ec545b990ccdade851343e86fce00bad2f252a3c3b34a644a67012a7844beb"
+    },
+    {
+      "path": "src/impact-panels.js",
+      "sha256": "6cf58410a9947fb89a71b581a80441c338c1add3e4c1fe7ff0786f934b76ff52"
+    },
+    {
+      "path": "src/input.js",
+      "sha256": "23cddba3059abedfb90bb174a7ead449e9862b138f98a941c93d734a983f1d56"
+    },
+    {
+      "path": "src/map.js",
+      "sha256": "886ea1abefdfe17b343cfe7f227a87e02301c0c4ffd493cca452afeb1b426a53"
+    },
+    {
+      "path": "src/mobile.css",
+      "sha256": "4354535cd21058f056782788e4bac2513d45081267c42aa0ff3a7905e0f55cdd"
+    },
+    {
+      "path": "src/music-scores.js",
+      "sha256": "a5eae9a14ffa697fd07a92bae194ee9f6fc5f4125f1dbeb733bd5f197a8cdae0"
+    },
+    {
+      "path": "src/music.js",
+      "sha256": "3c5713dd6d07648f8035d263eef9552ad21a8e5f3dd3ce6acb7aaf94c9978efa"
+    },
+    {
+      "path": "src/night-fixtures.js",
+      "sha256": "941270950e33d9f14b3c5033b6510ef15257cecd2a3dd06d27a94bbfade00cca"
+    },
+    {
+      "path": "src/nitro-physics.js",
+      "sha256": "b9b9724075e11dec6cd234c19ada8d60425d3aa219991422e1ff2762a33ebc7c"
+    },
+    {
+      "path": "src/nitro-race.js",
+      "sha256": "6ecfd798f3dc403b12d60d353248edb7ad3a77a0e78c28139bfb395f8dcd01d6"
+    },
+    {
+      "path": "src/orbital-scene.js",
+      "sha256": "0105165eec87546f246700dd617658e5e1da1643216ebfc7d378f69ab09186dd"
+    },
+    {
+      "path": "src/orbital.js",
+      "sha256": "9f42bcbf731349df24f0d5a16c43f1611dce579e34924ab4bb140d6ba59c6282"
+    },
+    {
+      "path": "src/profile-editor.js",
+      "sha256": "978edae31bd54fb1561a3274851100e740334f84197fbaac70a07a3aa3fb85e8"
+    },
+    {
+      "path": "src/profiles.js",
+      "sha256": "f854ba3650a9f66b46e3687eb1689605a4802363ce806d24782254f863f0d97e"
+    },
+    {
+      "path": "src/replay-presentation.js",
+      "sha256": "d1482256f36742fffbebf8b3c341e85737d2b704903a21eaeecce0cd7a20d4ca"
+    },
+    {
+      "path": "src/replay-theatre-core.js",
+      "sha256": "a8f58cb63f6353ff7b8f71e1d5dc74f0eb56a13fbddfcf36b8ea8ca22696a35e"
+    },
+    {
+      "path": "src/replay-theatre.css",
+      "sha256": "9f6ba5b8c1ad604e5bb5c70963f7758064b19a5068aa84262bbefb88075b13a6"
+    },
+    {
+      "path": "src/replay-theatre.js",
+      "sha256": "a67fbe2e5e0d9af3c6dda743d2e2f01d600e760c0158ab811e30cbb9b6f9296b"
+    },
+    {
+      "path": "src/replay-v2.js",
+      "sha256": "541e0668cead1ed08a5bc8e8f8c958e07c7dd7395de20f254082f05a3708c090"
+    },
+    {
+      "path": "src/replay.js",
+      "sha256": "c4c9fda7a87b117d48273989b92ed21762269e56a6181261d015b3f522617e11"
+    },
+    {
+      "path": "src/ridge-scene.js",
+      "sha256": "3fd0ace9c121d3c16eebafd9f7fb644985c0e3e53de5f95a341db49dc31e9d93"
+    },
+    {
+      "path": "src/ridge.js",
+      "sha256": "05c2b16b2590f7ba7c73a5f33e52e37ca6b0194e768c6d694be2c9ed5bf7810b"
+    },
+    {
+      "path": "src/rocket-contact.js",
+      "sha256": "8fe7073eefe83496bb58ec8164b17a37a9896f15d8d33670e74d8cceda6c7a7f"
+    },
+    {
+      "path": "src/rocket-dynamics.js",
+      "sha256": "3c7eb4490b1514eed7f82f556947952bcc25c0a28c35d101ffb2f21d2f23d8dd"
+    },
+    {
+      "path": "src/rocket-race.js",
+      "sha256": "374f8f46876e1f8a57452af19c294d905736623947d18826f12a1759d2b90c79"
+    },
+    {
+      "path": "src/rocket-scene.js",
+      "sha256": "ecc5b29653aaf838f8801f4454aaa5196f4e7fa04c9ca5dcd43f1d944b98dd93"
+    },
+    {
+      "path": "src/scene.js",
+      "sha256": "718d58ae897749ec4ca3288a7bcaf60f53c89c719c325adb73616c0dbbdc1ecf"
+    },
+    {
+      "path": "src/sim.js",
+      "sha256": "3b910d91ea328b4f89e5a454199aa11af901d0e08981b885bc1399b20cba5f68"
+    },
+    {
+      "path": "src/skyway-scene.js",
+      "sha256": "9b6eec0b0744cc8e91bb447191acccffb1c5ec2458e8b0ad717b4c6ed9a96b36"
+    },
+    {
+      "path": "src/skyway.js",
+      "sha256": "09f863769cc710683e297f4fb5d0b5864e187e6c4fb06faeab965f34e2871c8b"
+    },
+    {
+      "path": "src/speedway.js",
+      "sha256": "79628857d962c91688b419d90f09db027fe3b8bed27cf1029c4e189a5171c68e"
+    },
+    {
+      "path": "src/style.css",
+      "sha256": "0f3a5d267f685a76f8a7d09e9486bc8b579b44a770c035d49ad7f8e8ebd51ef2"
+    },
+    {
+      "path": "src/total-destruction.css",
+      "sha256": "b8c5c2c7b775273114f8c16d7343a5d7cfde3b9855a8d09a3c1bee31742608b0"
+    },
+    {
+      "path": "src/total-destruction.js",
+      "sha256": "c1dd95e5c53b9a166797fd49060be86eaac812f5c74c530bacb596f6def3afca"
+    },
+    {
+      "path": "src/touch.js",
+      "sha256": "486cb32f56ca5c3feed01512e60185183af596febc99bf2d23d52c8dc668ca8d"
+    },
+    {
+      "path": "src/touring-car.js",
+      "sha256": "fbd83d37722125b34cb185f633aae71a4d388deb8975c4afc0a4a2fc824871fa"
+    },
+    {
+      "path": "src/track.js",
+      "sha256": "5cd9eb761b2c74f0eb313b719e7e6b850e901b2b970fd6a07437010ed9cc02fb"
+    },
+    {
+      "path": "tracks/overdrive-speedway.json",
+      "sha256": "5168f9b201854fffd37b4eae6348abc2c860ae95ed650ca7a15001c1bd2c9c4e"
+    },
+    {
+      "path": "tracks/redline-ridge.json",
+      "sha256": "6b5bb51d706053206e04060576bb75ba2d27cbde213c09c4caf3e3107b8fee3e"
+    },
+    {
+      "path": "vendor/vanillajs/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "vendor/vanillajs/NOTICE",
+      "sha256": "3e00b198d9b7e8cf9aba1b6095caf815dd276bd7cff6c3e517927bf690c2c302"
+    },
+    {
+      "path": "vendor/vanillajs/demos/horizon-lab/race-audio.js",
+      "sha256": "39badae195e22e68580f65e2e47da72ad4cef5c21e9b613b54b12b2c64d2b122"
+    },
+    {
+      "path": "vendor/vanillajs/modules/collision/index.js",
+      "sha256": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1"
+    },
+    {
+      "path": "vendor/vanillajs/modules/input/index.js",
+      "sha256": "e157c0eaee89ea240fa0abe43ca24d02620c917f3188f75dcc4d765392eca025"
+    },
+    {
+      "path": "vendor/vanillajs/modules/math/index.js",
+      "sha256": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7"
+    },
+    {
+      "path": "vendor/vanillajs/modules/render-lit/index.js",
+      "sha256": "6f1fd13f577b41ada51242591661e80d55707b5152888655a25e79e0ea4b2a47"
+    },
+    {
+      "path": "vendor/vanillajs/modules/scenic3d/index.js",
+      "sha256": "dfed00913da27f97806c39ddc5d472de1d9382994fed51101048b24d0775a30e"
+    },
+    {
+      "path": "vendor/vanillajs/modules/terrain/index.js",
+      "sha256": "500756acf093f44e2e6c7e993a4b8f3f6f720abaf32db99fe0189d9b65fdc186"
+    },
+    {
+      "path": "vendor/vanillajs/modules/time/index.js",
+      "sha256": "de94c0bc04e6a269504c5742455ce114f824c2c0d9d59a2fd94555df5d9bb4a2"
+    },
+    {
+      "path": "vendor/vanillajs/modules/vehicle-audio/index.js",
+      "sha256": "fae1d9d8a9c68cffc02deb5233baf66e8ce94085d813c6e71111f8c456e0b283"
+    },
+    {
+      "path": "vendor/vanillajs/modules/vehicle3d/index.js",
+      "sha256": "60e0bc1e11d44773af302ab8e76e8076aacd7b324461d2ea1f08ea86297797ad"
+    },
+    {
+      "path": "vendor/vanillajs/provenance.json",
+      "sha256": "9dfc42591a5c087aba7ee7a8bad591f9e1167d459b3cb9bc1e615ddaf3e2f31d"
+    }
+  ],
+  "runtimeChangedSinceAcceptedD": []
+}

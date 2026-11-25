@@ -1,0 +1,31 @@
+{
+  "source": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+  "node": "v22.18.0",
+  "checks": [
+    {
+      "command": "node --test tests/*.test.mjs",
+      "exitCode": 0,
+      "passed": 360,
+      "failed": 0,
+      "durationMs": 509926.517883,
+      "v100MatchingTicks": 45225
+    },
+    {
+      "command": "node tests/compare-v100.mjs CLEAN_PUBLISHED_V120_CHECKOUT",
+      "exitCode": 0,
+      "baseline": "e12665b04609f40d452084a37264756a23d730da",
+      "matchingTicks": 45225,
+      "fullStateComparisons": 6
+    },
+    {
+      "command": "python3 tests/test_offline_release.py",
+      "exitCode": 0,
+      "passed": 1
+    },
+    {
+      "command": "bash tests/browser-pages-shards.sh",
+      "exitCode": 0,
+      "scope": "orchestration only; actual browser-lane results recorded separately"
+    }
+  ]
+}

@@ -73,3 +73,9 @@ Serve the verified archive over loopback. Complete a Total Destruction round, sa
 The packaged main menu includes **The Garage — After Hours Motor Works**. Its catalogue, six original procedural previews, workshop, transaction authority and Save Vault are local modules. Serve the extracted ZIP over loopback as above; no asset or ownership service is required. Native modules still require HTTP rather than double-clicking `index.html`.
 
 Keep using the same browser, host and port for the same local save. An empty vault requires an explicit **New garage** confirmation before creating 2,400 fictional credits. Successful transactions show **SAVED**. A storage conflict requires **Reload saved garage**; it does not replay the pending action. Storage or Web Locks unavailability blocks persistent mutations while catalogue inspection remains available. Export JSON backups before changing origin, clearing browser storage or replacing a garage. Import replaces the complete validated save after confirmation; it does not combine credits. [Player workflow and recovery](garage-player-guide.md) · [Storage guarantees and limits](garage-save-vault.md)
+
+### Garage release review
+
+The [v1.3.0 candidate acceptance record](co-013-acceptance.md) identifies the tested source, independent ZIP receipt, complete browser workflows and native resource/performance evidence. A local export contains garage data only; it is not a race replay and does not claim human authentication. Garage saves remain separate from championship saves and controller settings.
+
+The owner must merge the certification PR, identify final main, verify protected CI and public Pages on that exact commit, play through the garage, then manually tag and publish. Candidate evidence does not automatically certify a different post-merge commit or satisfy owner acceptance. Rebuild the offline ZIP from final main with the existing commands before publication.

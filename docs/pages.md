@@ -68,3 +68,19 @@ The controllers worker also drives the wall, glancing and opposing Crash Lab tri
 The lifecycle worker also plays Total Destruction through the ordinary keyboard controls. It covers both arenas, an eliminated player who spectates to the end, a player victory fixture, and replay export and Theatre reconstruction. Results, screenshots and physical receipts are retained with the tested revision. The native 1080p profiler runs separately on the documented GPU. [Derby acceptance and reproduction](co-012-acceptance.md)
 
 The lifecycle worker also opens **The Garage** through the packaged menu and completes confirmed purchases, four occupied bays, selection, sale, reload, JSON downloads/imports and rejected files. It exercises stale tabs, storage failure, controller neutral arming, touch, repeated showroom selection and WebGL restoration. `node tests/browser-garage.mjs BASE_URL` runs the same suite; `EVIDENCE_DIR` retains source-stamped captures and JSON observations. Its default software WebGL run verifies functionality and resource ownership, not native GPU performance.
+
+CO-013E extends that same suite with premium and mixed-model purchases, inactive
+and final-car sales, duplicate confirmations, stale imports, actual Web Lock
+contention, storage-denied/uncertain-write recovery and preservation of an
+existing championship save. Its JSON downloads and screenshots are retained
+with source identifiers. No additional workflow lane or runtime dependency is
+introduced.
+
+Native garage profiling is separate from CI's software renderer. On the
+documented machine, run `node tests/browser-garage-performance.mjs BASE_URL`
+with the same external `PLAYWRIGHT_MODULE`, `CHROME_BIN`, a fresh `EVIDENCE_DIR`
+and `SOURCE_SHA` matching the package. It requires native Chrome by default and
+reports the actual renderer, 1920×1080 browser viewport, smaller showroom
+drawing buffer, frame intervals, CPU/GPU observations and resource/GC lifecycle.
+The stationary showroom draws on demand; idle animation callbacks are not
+claimed as full-scene redraws. [Measurement method and results](garage-performance.md)

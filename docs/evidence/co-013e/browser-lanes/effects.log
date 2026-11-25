@@ -1,0 +1,158 @@
+HTTP contents and MIME types verified at http://127.0.0.1:8157/Circuit-Overdrive/ (103 files).
+{
+  "browser": "158.0.8127.36",
+  "url": "http://127.0.0.1:8157/Circuit-Overdrive/",
+  "full": {
+    "peak": {
+      "mark": 26,
+      "smoke": 22,
+      "dust": 6,
+      "spark": 4
+    },
+    "pixels": {
+      "mark": 4584,
+      "smoke": 22,
+      "dust": 88,
+      "spark": 112
+    },
+    "phase": "racing",
+    "hud": [
+      "3",
+      "1",
+      "0:09.667",
+      "1",
+      "5"
+    ]
+  },
+  "reduced": {
+    "peak": {
+      "mark": 12,
+      "smoke": 0,
+      "dust": 0,
+      "spark": 0
+    },
+    "pixels": {
+      "mark": 0,
+      "smoke": 0,
+      "dust": 0,
+      "spark": 0
+    },
+    "phase": "racing",
+    "hud": [
+      "3",
+      "1",
+      "0:09.667",
+      "1",
+      "5"
+    ]
+  }
+}
+{
+  "stats": [
+    {
+      "station": 0,
+      "bank": 0,
+      "left": {
+        "lit": 23323,
+        "centre": 265.71338786257246,
+        "peak": 125
+      },
+      "right": {
+        "lit": 23352,
+        "centre": 373.2834166950704,
+        "peak": 125
+      },
+      "translated": {
+        "lit": 25514,
+        "centre": 320.37365512371764,
+        "peak": 125
+      },
+      "reversed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      },
+      "removed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      }
+    },
+    {
+      "station": 210,
+      "bank": -0.29670597283903605,
+      "left": {
+        "lit": 23663,
+        "centre": 251.88392742912552,
+        "peak": 136
+      },
+      "right": {
+        "lit": 27670,
+        "centre": 357.4945975411768,
+        "peak": 117
+      },
+      "translated": {
+        "lit": 25138,
+        "centre": 308.33453698262343,
+        "peak": 136
+      },
+      "reversed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      },
+      "removed": {
+        "lit": 0,
+        "centre": null,
+        "peak": 0
+      }
+    }
+  ],
+  "calibration": {
+    "distance": [
+      86,
+      53,
+      34,
+      8.000000000000002,
+      0
+    ],
+    "angle": [
+      61,
+      61,
+      39.11111111111111,
+      4.666666666666666,
+      0
+    ],
+    "barrier": 232
+  },
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "browser": "158.0.8127.36",
+  "modules": {
+    "src/ai.js": "287cc768c7c8ae3f3395b41ac321f674cf04a1d7dbced0fc0c72c05afa42ab76",
+    "src/camera.js": "cb12870bd4578cd31bb47084dbd4fa6de173e165148ba76a65638b97bc4755e7",
+    "src/contact.js": "2e0fb63ec8eb9e19dc1a1b2af56fadb37dc0fbd1f2d3b144a9c95cd370c9bde6",
+    "src/field.js": "2fd8817920fc0349ada856ca6f4a9931f36bae0cc5064be52090e23ccc7a2e8a",
+    "src/geometry.js": "ffea518eb5f0bd166cbb7a62d74aa1ecdd18734be482721f84d9b63c3d4baa81",
+    "src/headlights.js": "57ec545b990ccdade851343e86fce00bad2f252a3c3b34a644a67012a7844beb",
+    "src/sim.js": "3b910d91ea328b4f89e5a454199aa11af901d0e08981b885bc1399b20cba5f68",
+    "src/speedway.js": "79628857d962c91688b419d90f09db027fe3b8bed27cf1029c4e189a5171c68e",
+    "src/touring-car.js": "fbd83d37722125b34cb185f633aae71a4d388deb8975c4afc0a4a2fc824871fa",
+    "src/track.js": "5cd9eb761b2c74f0eb313b719e7e6b850e901b2b970fd6a07437010ed9cc02fb",
+    "tracks/overdrive-speedway.json": "5168f9b201854fffd37b4eae6348abc2c860ae95ed650ca7a15001c1bd2c9c4e",
+    "vendor/vanillajs/modules/collision/index.js": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1",
+    "vendor/vanillajs/modules/math/index.js": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7",
+    "vendor/vanillajs/modules/render-lit/index.js": "6f1fd13f577b41ada51242591661e80d55707b5152888655a25e79e0ea4b2a47",
+    "vendor/vanillajs/modules/scenic3d/index.js": "dfed00913da27f97806c39ddc5d472de1d9382994fed51101048b24d0775a30e",
+    "vendor/vanillajs/modules/terrain/index.js": "500756acf093f44e2e6c7e993a4b8f3f6f720abaf32db99fe0189d9b65fdc186",
+    "vendor/vanillajs/modules/vehicle3d/index.js": "60e0bc1e11d44773af302ab8e76e8076aacd7b324461d2ea1f08ea86297797ad"
+  },
+  "sourceRevision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+  "images": {
+    "bank-off.webp": "7b9a44ccbd0c5242e76ea0f47393b94abcbe69407eb096fabfd9fe927421afee",
+    "bank-left.webp": "c0f2a4b4b6b15ecb4f4f4e7069d89992e08140bd4991f6aa9b46cabd8769a6b0",
+    "bank-right.webp": "b5c3c63869d04448861a33b108820e5d839107c797f8023ebd2778a07de1c92f"
+  }
+}
+{"revision":"66db7fee84d389f152ef53b6801e4b51031fd0ef","browser":"158.0.8127.36","seed":27,"ticks":3925,"frames":414,"samples":50,"peakEnergy":31320,"boostTicks":73,"airborneTicks":353,"maxAirTicks":146,"positiveBoostAcceleration":73,"chargingTicks":99,"landings":3,"positions":[6,5],"gates":[0,1,2,3,4,5,6,7,8],"stunts":3,"points":913,"standings":[{"id":1,"position":1,"finishTicks":3177,"recoveries":0},{"id":2,"position":2,"finishTicks":3251,"recoveries":0},{"id":3,"position":3,"finishTicks":3274,"recoveries":0},{"id":0,"position":4,"finishTicks":3290,"recoveries":0},{"id":4,"position":5,"finishTicks":3694,"recoveries":0},{"id":5,"position":6,"finishTicks":3745,"recoveries":0}],"splits":[728,1305,1634,2175,2657,3068]}
+{"revision":"66db7fee84d389f152ef53b6801e4b51031fd0ef","browser":"158.0.8127.36","seed":27,"ticks":3084,"frames":325,"samples":41,"peakEnergy":0,"boostTicks":0,"airborneTicks":399,"maxAirTicks":163,"positiveBoostAcceleration":0,"chargingTicks":0,"landings":3,"positions":[6,5,4,3,2,1],"gates":[0,1,2,3,4,5,6,7,8],"gateCrossing":{"lateral":13.918718678435704,"previousTyres":["apron","apron","apron","apron"],"tyres":["apron","apron","apron","apron"],"positionBefore":1,"positionAfter":1},"stunts":3,"points":1081,"standings":[{"id":5,"position":1,"finishTicks":2904,"recoveries":0},{"id":1,"position":2,"finishTicks":null,"recoveries":0},{"id":2,"position":3,"finishTicks":null,"recoveries":0},{"id":3,"position":4,"finishTicks":null,"recoveries":0},{"id":0,"position":5,"finishTicks":null,"recoveries":0},{"id":4,"position":6,"finishTicks":null,"recoveries":0}],"splits":[623,1084,1328,1775,2134,2474]}
+{"scenario":"overfly","revision":"66db7fee84d389f152ef53b6801e4b51031fd0ef","gate":4,"crossing":{"lateral":2.8362239922996717,"previousTyres":[],"tyres":[],"positionBefore":1,"positionAfter":5},"recoveredAt":803,"ticks":1812}
