@@ -46,4 +46,4 @@ The workshop and vehicle silhouettes are original procedural WebGL geometry. Veh
 
 Camera changes are immediate and there is no automatic showroom motion. A lost graphics context rebuilds the showroom while keeping the vault independent. If WebGL is unavailable, the textual catalogue, confirmations and save controls remain usable; reopen the garage after restoring graphics support to retry the view.
 
-CO-013D delivers the usable garage experience. v1.3.0 remains a candidate pending the separate certification PR and owner acceptance.
+CO-013D delivers the usable garage experience. [CO-013E acceptance](co-013-acceptance.md) records the executed certification and remaining owner release gates. v1.3.0 remains a candidate until owner sign-off.

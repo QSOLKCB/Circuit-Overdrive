@@ -16,7 +16,7 @@ const browser=await chromium.launch({executablePath:process.env.CHROME_BIN || un
   args:process.env.GARAGE_NATIVE==='1'?[]:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const slot='circuit-overdrive.garage.v1';
 const models=['cinder-two','lilt','evening-line','rivet-eight','yardhand','glass-comet'];
-const errors=[],requests=[],scenarios=[],captures=[],resources={};
+const errors=[],requests=[],scenarios=[],captures=[],resources={},exports=[];
 let revision,runtime;
 
 async function makeContext(options={}){
@@ -59,14 +59,21 @@ async function makeContext(options={}){
       }
     }
     window.garageStorageFault='none';
+    let uncertainRead=false;
     const get=Storage.prototype.getItem,set=Storage.prototype.setItem;
     Storage.prototype.getItem=function(key){
-      if(key===slot&&window.garageStorageFault==='read-denied')throw new DOMException('Denied by acceptance fixture','SecurityError');
+      if(key===slot){
+        if(window.garageStorageFault==='read-denied')throw new DOMException('Denied by acceptance fixture','SecurityError');
+        if(uncertainRead){uncertainRead=false;throw new DOMException('Interrupted readback by acceptance fixture','SecurityError');}
+      }
       return get.call(this,key);
     };
     Storage.prototype.setItem=function(key,value){
       if(key===slot&&window.garageStorageFault==='quota')throw new DOMException('Full by acceptance fixture','QuotaExceededError');
-      return set.call(this,key,value);
+      if(key===slot&&window.garageStorageFault==='write-denied')throw new DOMException('Denied by acceptance fixture','SecurityError');
+      const result=set.call(this,key,value);
+      if(key===slot&&window.garageStorageFault==='readback-denied')uncertainRead=true;
+      return result;
     };
   },slot);
   return context;
@@ -96,7 +103,12 @@ async function commit(page,id){await prepare(page,id);await confirm(page);await 
 async function buy(page,id='cinder-two'){await selected(page,id);await commit(page,'garage-buy');}
 async function download(page,id='garage-export'){
   const pending=page.waitForEvent('download');await el(page,id).click();const item=await pending;
-  assert.equal(await item.failure(),null);return readFile(await item.path(),'utf8');
+  assert.equal(await item.failure(),null);
+  const text=await readFile(await item.path(),'utf8');
+  const name='download-'+String(exports.length+1).padStart(2,'0')+'.json';
+  exports.push({file:name,suggestedName:item.suggestedFilename(),bytes:Buffer.byteLength(text),sha256:createHash('sha256').update(text).digest('hex')});
+  if(evidence)await writeFile(join(evidence,name),text);
+  return text;
 }
 async function importText(page,text){
   await el(page,'garage-import').setInputFiles({name:'garage.json',mimeType:'application/json',buffer:Buffer.from(text)});
@@ -122,6 +134,11 @@ try{
   });
   assert(runtime.webLocks&&runtime.secureContext,'real supported vault APIs');
   assert.equal(await saved(a),null,'opening never fabricates starting funds');
+  // Create an actual independent championship through its normal UI before
+  // garage transactions; preserving an empty key would not prove save isolation.
+  await el(a,'garage-close').click();await el(a,'enter-woc').click();await el(a,'woc-new').click();
+  await a.waitForFunction(()=>localStorage.getItem('circuit-overdrive.woc.v1')!==null);
+  await el(a,'woc-back').click();await el(a,'woc-leave').click();await el(a,'enter-garage').click();
   const otherKeys=await a.evaluate(()=>Object.fromEntries(Object.keys(localStorage).filter(key=>key!=='circuit-overdrive.garage.v1').map(key=>[key,localStorage.getItem(key)])));
   await prepare(a,'garage-new');await el(a,'garage-cancel').click();assert.equal(await saved(a),null);
   await commit(a,'garage-new');assert.deepEqual(await saved(a),{version:1,edition:'after-hours-v1',catalogRevision:1,credits:2400,nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
@@ -143,15 +160,28 @@ try{
   await commit(a,'garage-sell');const sold=await saved(a);
   assert.equal(sold.credits,360);assert.equal(sold.bays[1],null);assert.equal(sold.activeVehicleId,'car-000001');assert.equal(sold.nextVehicleId,5);
   await capture(a,'successful-sale');
-  const exported=await download(a);assert.deepEqual(JSON.parse(exported),sold);
+  const exported=await download(a);assert.deepEqual(JSON.parse(exported),sold);await capture(a,'save-export');
   await prepare(a,'garage-new');assert.equal(await download(a,'garage-backup'),exported);await confirm(a);
   await importText(a,exported);await el(a,'garage-confirmation').waitFor({state:'visible'});assert.equal((await saved(a)).credits,2400,'file preview does not replace state');
   await confirm(a);assert.equal(await download(a),exported,'canonical export/import round-trip');await capture(a,'recovered-save');
   const prior=await raw(a);
-  for(const text of ['{',' '.repeat(65537),JSON.stringify({...sold,version:99}),JSON.stringify({...sold,bays:[sold.bays[0],sold.bays[0],null,null]})]){
-    await importText(a,text);await waitStatus(a,'IMPORT REJECTED');await expectUnchanged(a,prior,'invalid import preserves accepted save');
+  const invalidFiles=[['malformed','{'],['oversized',' '.repeat(65537)],
+    ['schema',JSON.stringify({...sold,version:99})],['catalogue',JSON.stringify({...sold,catalogRevision:99})],
+    ['edition',JSON.stringify({...sold,edition:'unknown'})],['extra-field',JSON.stringify({...sold,resale:999999})],
+    ['missing-field',JSON.stringify({...sold,revision:undefined})],['negative-credit',JSON.stringify({...sold,credits:-1})],
+    ['fractional-credit',JSON.stringify({...sold,credits:.5})],['unsafe-credit',JSON.stringify({...sold,credits:Number.MAX_SAFE_INTEGER+1})],
+    ['unsafe-allocator',JSON.stringify({...sold,nextVehicleId:Number.MAX_SAFE_INTEGER+1})],
+    ['active-ID',JSON.stringify({...sold,activeVehicleId:'car-999999'})],
+    ['duplicate-ID',JSON.stringify({...sold,bays:[sold.bays[0],sold.bays[0],null,null]})],
+    ['extra-bay',JSON.stringify({...sold,bays:[...sold.bays,null]})],
+    ['unknown-model',JSON.stringify({...sold,bays:[{...sold.bays[0],modelId:'not-catalogued'},...sold.bays.slice(1)]})],
+    ['nested-field',JSON.stringify({...sold,bays:[{...sold.bays[0],data:{script:'ignored'}},...sold.bays.slice(1)]})],
+    ['prototype-key',exported.replace('"version":1','"version":1,"__proto__":{"garagePollution":true}')]];
+  for(const [name,text] of invalidFiles){
+    await importText(a,text);await waitStatus(a,'IMPORT REJECTED');await expectUnchanged(a,prior,name+' import preserves accepted save');
     assert(!(await el(a,'garage-confirmation').isVisible()));
   }
+  assert.equal(await a.evaluate(()=>({}).garagePollution),undefined,'inert import cannot alter object prototypes');
   await capture(a,'invalid-import');await el(a,'garage-reload').click();await waitStatus(a,'SAVED');
   scenarios.push('actual catalogue, confirmed purchases, four bays, selection, sale, reload, export, backup, valid import and rejected files');
 
@@ -180,8 +210,11 @@ try{
   // idle frames, and explicit close/open/context lifecycle with unchanged save.
   await settleDraw(a);const initialGL=await glStats(a);assert(initialGL.created>0&&initialGL.draws>0,'actual WebGL showroom rendered');
   for(let cycle=0;cycle<8;cycle++)for(const model of models){
-    await selected(a,model);for(const camera of ['front','side','rear','bays'])await el(a,'garage-camera-'+camera).click();
-    if(cycle===0&&['yardhand','glass-comet'].includes(model))await capture(a,'showroom-'+model);
+    await selected(a,model);
+    for(const camera of ['front','side','rear','bays']){
+      await el(a,'garage-camera-'+camera).click();
+      if(cycle===0&&camera==='front')await capture(a,'showroom-'+model);
+    }
   }
   await settleDraw(a);const afterSwitch=await glStats(a);
   assert.equal(afterSwitch.created,initialGL.created,'48 catalogue selections allocate no new retained buffers');
@@ -257,6 +290,113 @@ try{
   assert.equal((await saved(alias)).credits,1200);await alias.close();
   scenarios.push('whole-save replacement with a reused serial reconciles displayed model and valuation from accepted ownership');
 
+  // A fresh actual garage buys the premium model, then exercises independent
+  // models, inactive/last sales and two clicks against one pending confirmation.
+  const economyContext=await makeContext(),economy=await openPage(economyContext);
+  await commit(economy,'garage-new');await selected(economy,'glass-comet');await prepare(economy,'garage-buy');
+  async function duplicateConfirm(page){
+    await el(page,'garage-confirm').evaluate(button=>{button.click();button.click();});
+    await page.waitForFunction(()=>document.querySelector('#garage').dataset.busy==='false');
+    await el(page,'garage-confirmation').waitFor({state:'hidden'});await waitStatus(page,'SAVED');
+  }
+  await duplicateConfirm(economy);let actual=await saved(economy);
+  assert.equal(actual.credits,0);assert.equal(actual.nextVehicleId,2);assert.equal(actual.revision,1);
+  assert.deepEqual(actual.bays,[{ownedVehicleId:'car-000001',modelId:'glass-comet'},null,null,null]);
+  await capture(economy,'premium-owned-car');await prepare(economy,'garage-sell');await duplicateConfirm(economy);
+  actual=await saved(economy);assert.equal(actual.credits,1440);assert.equal(actual.revision,2);
+  assert.equal(actual.activeVehicleId,null);assert.deepEqual(actual.bays,[null,null,null,null]);
+  const afterPremiumSale=await raw(economy);await el(economy,'garage-confirm').evaluate(button=>button.click());
+  await expectUnchanged(economy,afterPremiumSale,'repeated confirmation cannot pay a second sale');
+  assert.equal(actual.nextVehicleId,2,'selling last vehicle retains allocation history');
+  await commit(economy,'garage-new');await buy(economy,'cinder-two');await buy(economy,'lilt');
+  await capture(economy,'multiple-owned-models');actual=await saved(economy);
+  assert.equal(actual.credits,900);assert.equal(actual.activeVehicleId,'car-000001');
+  assert.deepEqual(actual.bays.map(car=>car?.modelId??null),['cinder-two','lilt',null,null]);
+  await el(economy,'garage-bay-1').click();await prepare(economy,'garage-sell');await duplicateConfirm(economy);
+  actual=await saved(economy);assert.equal(actual.credits,1440);assert.equal(actual.activeVehicleId,'car-000001');
+  assert.equal(actual.bays[1],null,'inactive sale clears only its own bay');
+  await el(economy,'garage-bay-0').click();await commit(economy,'garage-sell');actual=await saved(economy);
+  assert.equal(actual.credits,1800);assert.equal(actual.activeVehicleId,null);assert.equal(actual.nextVehicleId,3);
+  await capture(economy,'last-car-sold');await buy(economy);actual=await saved(economy);
+  assert.equal(actual.bays[0].ownedVehicleId,'car-000003','sold serials are not reused');assert.equal(actual.credits,1200);
+  await economyContext.close();scenarios.push('premium and mixed-model purchases, inactive and last-car sales, duplicate confirmation and monotonic identities');
+
+  // The replacement UI must reject stale imports as firmly as stale purchases.
+  const importer=await openPage(context);await importText(importer,exported);
+  await el(importer,'garage-confirmation').waitFor({state:'visible'});await buy(a);
+  const afterNewPurchase=await raw(a);await waitStatus(importer,'CONFLICT');
+  assert(!(await el(importer,'garage-confirmation').isVisible()),'conflict invalidates replacement confirmation');
+  await expectUnchanged(importer,afterNewPurchase,'stale import cannot restore earlier money or ownership');
+  await el(importer,'garage-reload').click();await waitStatus(importer,'SAVED');
+  await selected(importer,'cinder-two');await prepare(importer,'garage-buy');
+  const identical=await download(a),beforeIdentical=JSON.parse(await raw(a));
+  await importText(a,identical);await confirm(a);await waitStatus(importer,'CONFLICT');
+  const afterIdentical=JSON.parse(await raw(a));
+  assert.deepEqual(afterIdentical.garage,beforeIdentical.garage);assert.equal(afterIdentical.sequence,beforeIdentical.sequence+1);
+  assert.equal(afterIdentical.generation,beforeIdentical.generation);
+  await expectUnchanged(importer,await raw(a),'identical replacement cannot revive an old purchase');
+  await importer.close();scenarios.push('stale whole-state imports and identical-data replacements invalidate old confirmations');
+
+  // A genuine exclusive lock in this browser makes the UI fail promptly rather
+  // than queue a purchase to execute after its original confirmation has aged.
+  await a.evaluate(key=>{
+    window.garageLockHeld=false;
+    window.garageHoldingLock=navigator.locks.request(key,{mode:'exclusive'},()=>new Promise(resolve=>{
+      window.garageLockHeld=true;window.releaseGarageLock=resolve;
+    }));
+  },slot);
+  await a.waitForFunction(()=>window.garageLockHeld);await selected(a,'cinder-two');
+  const beforeBusy=await raw(a);await prepare(a,'garage-buy');await confirm(a);await waitStatus(a,'UNSAVED');
+  assert.match(await el(a,'garage-status-copy').textContent(),/saving|retry|review/i);
+  await expectUnchanged(a,beforeBusy,'busy Web Lock cannot commit or queue a later purchase');
+  await a.evaluate(async()=>{window.releaseGarageLock();await window.garageHoldingLock;});
+  await settleDraw(a);await expectUnchanged(a,beforeBusy,'releasing lock cannot execute an unaccepted queued action');
+  await el(a,'garage-reload').click();await waitStatus(a,'SAVED');
+  scenarios.push('actual exclusive Web Lock contention fails closed without deferred or duplicate purchases');
+
+  const faultContext=await makeContext(),fault=await openPage(faultContext);await commit(fault,'garage-new');
+  const beforeFault=await raw(fault);await fault.evaluate(()=>{window.garageStorageFault='write-denied';});
+  await prepare(fault,'garage-buy');await confirm(fault);await waitStatus(fault,'STORAGE UNAVAILABLE');
+  await expectUnchanged(fault,beforeFault,'SecurityError cannot award an unsaved car');
+  assert(await el(fault,'garage-buy').isDisabled());await fault.evaluate(()=>{window.garageStorageFault='none';});
+  await el(fault,'garage-reload').click();await waitStatus(fault,'SAVED');
+  await fault.evaluate(()=>{window.garageStorageFault='readback-denied';});
+  await prepare(fault,'garage-buy');await confirm(fault);await waitStatus(fault,'STORAGE UNAVAILABLE');
+  assert.equal(await el(fault,'garage-balance').textContent(),'2,400 credits','unverified write is not optimistically displayed');
+  assert.equal(await el(fault,'garage').getAttribute('data-owned-count'),'0');assert(await el(fault,'garage-buy').isDisabled());
+  await fault.evaluate(()=>{window.garageStorageFault='none';});
+  assert.equal((await saved(fault)).credits,1800,'real write may have completed before readback failed');
+  await el(fault,'garage-reload').click();await waitStatus(fault,'SAVED');
+  assert.equal(await el(fault,'garage-balance').textContent(),'1,800 credits');
+  assert.equal((await saved(fault)).nextVehicleId,2);assert.equal((await saved(fault)).revision,1);
+  const recoveredFault=await download(fault);
+  await fault.evaluate(()=>{window.garageStorageFault='read-denied';});await el(fault,'garage-reload').click();
+  await waitStatus(fault,'STORAGE UNAVAILABLE');assert(await el(fault,'garage-buy').isDisabled());
+  await fault.evaluate(()=>{window.garageStorageFault='none';});await el(fault,'garage-reload').click();await waitStatus(fault,'SAVED');
+  assert.equal(await download(fault),recoveredFault,'restoring read access changes no ownership');
+  scenarios.push('SecurityError reads/writes and uncertain readback preserve displayed state and require explicit reconciliation');
+
+  for(const broken of ['{broken',JSON.stringify({version:99,garage:{}})]){
+    // Deliberately corrupt browser storage; never inject an accepted garage.
+    await fault.evaluate(({key,broken})=>localStorage.setItem(key,broken),{key:slot,broken});
+    await el(fault,'garage-reload').click();await waitStatus(fault,'UNSAVED');
+    assert.equal(await raw(fault),broken,'corrupt storage cannot silently reset to free funds');
+    assert.equal(await el(fault,'garage-balance').textContent(),'No saved garage');
+    await importText(fault,recoveredFault);await el(fault,'garage-confirmation').waitFor({state:'visible'});
+    assert.equal(await raw(fault),broken,'admitted backup still requires replacement confirmation');
+    await confirm(fault);await waitStatus(fault,'SAVED');assert.equal(await download(fault),recoveredFault);
+  }
+  await capture(fault,'corrupt-save-recovered');await faultContext.close();
+  scenarios.push('corrupt and unsupported stored saves recover through confirmed actual exported backup without free cash');
+
+  // The existing championship was created by its own UI, and remains resumable
+  // after every garage reset, sale, import and cross-tab mutation.
+  assert.deepEqual(await a.evaluate(()=>Object.fromEntries(Object.keys(localStorage).filter(key=>key!=='circuit-overdrive.garage.v1').map(key=>[key,localStorage.getItem(key)]))),otherKeys);
+  await el(a,'garage-close').click();await el(a,'enter-woc').click();await el(a,'woc-continue').click();
+  assert(await el(a,'woc-grid').isVisible(),'existing championship save still resumes its accepted briefing');
+  await el(a,'woc-back').click();await el(a,'woc-leave').click();await el(a,'enter-garage').click();
+  scenarios.push('real previously created championship save remains unchanged and resumable after garage transactions');
+
   const padContext=await makeContext();await padContext.addInitScript(()=>{
     window.garagePad={index:0,id:'Garage acceptance pad',mapping:'standard',connected:true,
       axes:[0,0,0,0],buttons:Array.from({length:17},()=>({value:0,pressed:false}))};
@@ -315,7 +455,7 @@ try{
   assert.deepEqual(errors,[]);
   const report={version:1,source:revision,browser:browser.version(),runtime,url:base.href,scenarios,resources,captures,
     requests:requests.length,externalRequests:requests.filter(url=>!url.startsWith(base.href)&&!url.startsWith('blob:')&&!url.startsWith('data:')),errors,
-    finalGarage:await saved(a),limitations:['Synthetic standard gamepad reports and storage service faults are explicitly identified.','Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification.']};
+    exports,invalidImportCases:invalidFiles.map(([name])=>name),finalGarage:await saved(a),limitations:['Synthetic standard gamepad reports and storage service faults are explicitly identified.','Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification.']};
   if(evidence)await writeFile(join(evidence,'garage-browser.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report,null,2));await context.close();
 }finally{await browser.close();}

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// node tests/compare-v100.mjs /path/to/a/clean/v1.0.0-or-v1.1.1/checkout
+// node tests/compare-v100.mjs /path/to/a/clean/published-reference/checkout
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -7,7 +7,8 @@ import {realpathSync} from 'node:fs';
 import {join} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
-const releases=['47b1a5c1562136bfd6b98ca9d4ef2ce07282200b','541ba6ca27dabe644ab23fe9a061c91dda8794a6'];
+const releases=['47b1a5c1562136bfd6b98ca9d4ef2ce07282200b','541ba6ca27dabe644ab23fe9a061c91dda8794a6',
+  'e12665b04609f40d452084a37264756a23d730da'];
 const reference=realpathSync(process.argv[2]),candidate=realpathSync(fileURLToPath(new URL('../',import.meta.url)));
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
 const sha=git(reference,'rev-parse','HEAD');
