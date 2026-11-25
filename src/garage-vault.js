@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {garageRecord} from './garage-data.js';
-import {createGarage, parseGarage, serializeGarage} from './garage.js';
+import {createGarage, migrateLegacyGarage, parseGarageImport, serializeGarage} from './garage.js';
+import {parseLegacyGarage, serializeLegacyGarage} from './garage-legacy.js';
 import {transactGarage} from './garage-transactions.js';
 import {MAX_VAULT_SEQUENCE, parseVault, serializeVault} from './garage-vault-format.js';
 
@@ -21,8 +22,12 @@ export function createGarageVault({
   onChange = () => {}
 } = {}) {
   let state = null, raw = null, ready = false, busy = false, disposed = false;
+  let legacyBackup = null;
   let status = 'UNSAVED', reason = 'not-loaded', epoch = 0, pending = null;
-  const view = () => Object.freeze({status, reason, state, busy});
+  const needsMigration = () => state?.version === 1;
+  const stateText = () => needsMigration() ? serializeLegacyGarage(state) : serializeGarage(state);
+  const view = () => Object.freeze({status, reason, state, busy,
+    migrationRequired:needsMigration(), hasLegacyBackup:needsMigration() || legacyBackup !== null});
   function publish() {
     if (!disposed) { try { onChange(view()); } catch { /* Observers cannot undo a commit. */ } }
   }
@@ -63,26 +68,41 @@ export function createGarageVault({
     raw = text;
     ready = true;
     if (text === null) {
-      state = null;
+      state = null; legacyBackup = null;
       status = 'UNSAVED'; reason = 'empty';
     } else {
-      try { state = parseVault(text).garage; status = 'SAVED'; reason = null; }
-      catch { state = null; status = 'UNSAVED'; reason = 'invalid-save'; }
+      try {
+        const accepted = parseVault(text);
+        state = accepted.garage;
+        legacyBackup = accepted.version === 2 ? accepted.legacyBackup : null;
+        status = needsMigration() ? 'MIGRATION REQUIRED' : 'SAVED';
+        reason = needsMigration() ? 'migration-required' : null;
+      }
+      catch { state = null; legacyBackup = null; status = 'UNSAVED'; reason = 'invalid-save'; }
     }
     if (!locksAvailable()) { status = 'STORAGE UNAVAILABLE'; reason = 'locks-unavailable'; }
     publish();
     return view();
   }
-  function prepared(type, next, receipt, action = null) {
+  function prepared(type, next, receipt, action = null, importedLegacy = null) {
     const ticket = Object.freeze({});
     const preview = Object.freeze({type, state:next, receipt});
-    pending = {ticket, preview, action, raw, epoch};
-    return Object.freeze({accepted:true, ticket, preview, backup:state ? serializeGarage(state) : null});
+    pending = {ticket, preview, action, raw, epoch, importedLegacy};
+    return Object.freeze({accepted:true, ticket, preview, backup:state ? stateText() : null});
+  }
+  function prepareMigration() {
+    const error = accessible();
+    if (error) return error;
+    pending = null;
+    if (!needsMigration()) return reject('migration-not-required');
+    return prepared('migrate', migrateLegacyGarage(state),
+      Object.freeze({type:'migrate',fromVersion:1,toVersion:2,revision:state.revision}));
   }
   function prepareTransaction(action) {
     const error = accessible();
     if (error) return error;
     pending = null;
+    if (needsMigration()) return reject('migration-required');
     if (!state) return reject('no-garage');
     const result = transactGarage(state, action);
     if (!result.accepted) return result;
@@ -93,16 +113,22 @@ export function createGarageVault({
     const error = accessible();
     if (error) return error;
     pending = null;
+    if (needsMigration()) return reject('migration-required');
     return prepared('reset', createGarage(), Object.freeze({type:'reset'}));
   }
   function prepareImport(text) {
     const error = accessible();
     if (error) return error;
     pending = null;
-    let next;
-    try { next = parseGarage(text); }
+    if (needsMigration()) return reject('migration-required');
+    let next, importedLegacy = null;
+    try {
+      const admitted = parseGarageImport(text);
+      next = admitted.state;
+      if (admitted.legacy) importedLegacy = parseLegacyGarage(text);
+    }
     catch { mark('IMPORT REJECTED', 'invalid-import'); return reject('invalid-import'); }
-    return prepared('import', next, Object.freeze({type:'import'}));
+    return prepared('import', next, Object.freeze({type:'import',legacy:importedLegacy !== null}), null, importedLegacy);
   }
   function cancel() {
     pending = null;
@@ -135,16 +161,23 @@ export function createGarageVault({
         }
         if (current?.sequence === MAX_VAULT_SEQUENCE) return reject('sequence-exhausted');
         let next = intent.preview.state, receipt = intent.preview.receipt;
+        let nextBackup = current?.version === 2 ? current.legacyBackup : null;
+        if (intent.preview.type === 'migrate') {
+          if (!current || current.version !== 1) return reject('migration-not-required');
+          next = migrateLegacyGarage(current.garage);
+          nextBackup = current.garage;
+        } else if (current?.version === 1) return reject('migration-required');
+        if (nextBackup === null && intent.importedLegacy) nextBackup = intent.importedLegacy;
         if (intent.action) {
-          if (!current) return reject('invalid-save');
+          if (!current || current.version !== 2) return reject('invalid-save');
           const transition = transactGarage(current.garage, intent.action);
           if (!transition.accepted) return transition;
           next = transition.state; receipt = transition.receipt;
         }
         let nextRaw;
         try {
-          nextRaw = serializeVault({version:1, generation:current?.generation ?? makeGeneration(),
-            sequence:current ? current.sequence + 1 : 0, garage:next});
+          nextRaw = serializeVault({version:2, generation:current?.generation ?? makeGeneration(),
+            sequence:current ? current.sequence + 1 : 0, garage:next, legacyBackup:nextBackup});
         } catch { return reject('generation-unavailable'); }
         try { storage.setItem(GARAGE_SLOT, nextRaw); }
         catch { return reject('write-failed'); }
@@ -152,13 +185,14 @@ export function createGarageVault({
         // write. Unknown completion requires an explicit reload, never rollback.
         try { if (storage.getItem(GARAGE_SLOT) !== nextRaw) return reject('verification-failed'); }
         catch { return reject('verification-failed'); }
-        return {accepted:true, state:next, receipt, raw:nextRaw};
+        return {accepted:true, state:next, receipt, raw:nextRaw, legacyBackup:nextBackup};
       });
     } catch { result = reject('locks-unavailable'); }
     busy = false;
     if (result.accepted) {
       state = result.state;
       raw = result.raw;
+      legacyBackup = result.legacyBackup;
       ready = !disposed;
       invalidate();
       mark('SAVED', null);
@@ -174,7 +208,13 @@ export function createGarageVault({
   function exportSave() {
     if (disposed) return reject('disposed');
     if (!state) return reject('no-garage');
-    return Object.freeze({accepted:true, text:serializeGarage(state)});
+    return Object.freeze({accepted:true, text:stateText()});
+  }
+  function exportLegacySave() {
+    if (disposed) return reject('disposed');
+    const backup = needsMigration() ? state : legacyBackup;
+    if (!backup) return reject('no-legacy-backup');
+    return Object.freeze({accepted:true,text:serializeLegacyGarage(backup)});
   }
   function storageChanged(event) {
     if (disposed || !ready || (event.key !== GARAGE_SLOT && event.key !== null)) return;
@@ -189,7 +229,7 @@ export function createGarageVault({
   eventTarget?.addEventListener('storage', storageChanged);
   return Object.freeze({
     get view() { return view(); },
-    load, prepareTransaction, prepareReset, prepareImport, confirm, cancel, exportSave,
+    load, prepareMigration, prepareTransaction, prepareReset, prepareImport, confirm, cancel, exportSave, exportLegacySave,
     dispose() {
       disposed = true;
       ready = false;

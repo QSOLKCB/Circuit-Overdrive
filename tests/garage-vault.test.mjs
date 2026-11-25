@@ -7,7 +7,7 @@ import {VAULT_BYTES, MAX_VAULT_SEQUENCE, parseVault, serializeVault} from '../sr
 
 const generation = '0123456789abcdef'.repeat(2);
 const clone = value => structuredClone(value);
-const envelope = (garage=createGarage(), sequence=0) => ({version:1,generation,sequence,garage});
+const envelope = (garage=createGarage(), sequence=0) => ({version:2,generation,sequence,garage,legacyBackup:null});
 function events() {
   const listeners = new Set();
   return {
@@ -88,7 +88,7 @@ test('vault envelopes have a strict bounded format independent of exported garag
   frozenTree(accepted);
   assert.equal(serializeVault(Object.fromEntries(Object.entries(input).reverse())),text);
   for (const change of [
-    d=>{d.version=2;}, d=>{d.generation='bad';}, d=>{d.generation=generation.toUpperCase();},
+    d=>{d.version=99;}, d=>{d.generation='bad';}, d=>{d.generation=generation.toUpperCase();},
     d=>{d.sequence=-1;}, d=>{d.sequence=-0;}, d=>{d.sequence=0.5;},
     d=>{d.sequence=100000000;}, d=>{d.extra=true;}, d=>{delete d.generation;},
     d=>{d.garage.credits=-1;}, d=>{d.garage.bays.push(null);}
@@ -264,7 +264,7 @@ test('whole-state import keeps identities, allocator and revision without mergin
 test('invalid imports preserve accepted ownership and invalidate any prior confirmation', async () => {
   const {vault,store}=session(); await initialize(vault); await transact(vault);
   const before=store.getItem(GARAGE_SLOT), state=vault.view.state;
-  const texts=['{','null',' '.repeat(65537),serializeGarage(state).replace('"version":1','"version":2'),
+  const texts=['{','null',' '.repeat(65537),serializeGarage(state).replace('"version":2','"version":99'),
     serializeGarage(state).replace('"credits":1800','"credits":-1'),
     serializeGarage(state).replace('"revision":1','"revision":1,"__proto__":{"bad":true}')];
   for (const alter of [

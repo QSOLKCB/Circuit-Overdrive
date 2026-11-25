@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {stockVehicleBuild} from '../src/vehicle-builds.js';
 import {createGarage, parseGarage, serializeGarage} from '../src/garage.js';
 import {transactGarage, garageBalance, garageResaleValue} from '../src/garage-transactions.js';
 
 const clone = value => structuredClone(value);
-const owned = (id, modelId='cinder-two') => ({ownedVehicleId:id, modelId});
+const owned = (id, modelId='cinder-two') => ({ownedVehicleId:id, modelId,
+  build:stockVehicleBuild(modelId), condition:{version:1,status:'pristine'}});
 const request = (state, type, targetId) => ({type, targetId, expectedRevision:state.revision});
 function frozenTree(value) {
   if (value && typeof value === 'object') {
@@ -41,7 +43,7 @@ test('a real starter purchase changes credits, one bay, the allocator and revisi
   const state=clone(createGarage());
   const result=accepted(state,'buy','cinder-two');
   assert.deepEqual(result.state,{
-    version:1, edition:'after-hours-v1', catalogRevision:1, credits:1800,
+    version:2, edition:'machine-shop-v1', catalogRevision:1, credits:1800,
     nextVehicleId:2, activeVehicleId:'car-000001',
     bays:[owned('car-000001'),null,null,null], revision:1
   });
@@ -233,9 +235,9 @@ test('invalid states reject before requests and query helpers validate the compl
   const fresh=createGarage(), valid=request(fresh,'buy','cinder-two');
   const invalid=[null,[],{},
     ...[-1,-0,NaN,Infinity,1.5,100000000,'2400'].map(credits=>({...fresh,credits})),
-    {...fresh,version:2},{...fresh,bays:[null,null,null]},
+    {...fresh,version:99},{...fresh,bays:[null,null,null]},
     {...fresh,nextVehicleId:2,activeVehicleId:'car-000001',bays:[owned('car-000001'),owned('car-000001'),null,null]},
-    {...fresh,nextVehicleId:2,activeVehicleId:'car-000001',bays:[owned('car-000001','missing'),null,null,null]},
+    {...fresh,nextVehicleId:2,activeVehicleId:'car-000001',bays:[{...owned('car-000001'),modelId:'missing'},null,null,null]},
     {...fresh,activeVehicleId:'car-000001'}
   ];
   for (const state of invalid) {

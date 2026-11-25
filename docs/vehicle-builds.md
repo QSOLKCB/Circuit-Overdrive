@@ -1,11 +1,12 @@
 # CO-014A — Build Forge contract
 
 The Build Forge defines six original stock machines and a strict, pure compiler
-in `src/vehicle-builds.js`. This is the first owner-review slice of v1.4.0.
-It supplies development/test authority; production integration belongs to D/E.
-The compiler is deliberately outside the shipped asset allowlist until then,
-as the garage authorities were before CO-013D. No published racing recipe,
-owned record, save slot, transaction, replay format or vendor file changes.
+in `src/vehicle-builds.js`, introduced by PR A. A initially kept the compiler
+outside the shipped asset allowlist. B now packages it for owned-build admission;
+physical driving integration still belongs to D/E. A changed no published
+racing recipe, owned record, save slot, transaction, replay format or vendor file.
+B's separate [registry contract](garage-build-registry.md) defines its owned-save
+transition while preserving established racing authority.
 The stock test tools are not the playable Proving Grounds.
 
 ## Admission and identity

@@ -1,5 +1,7 @@
 # CO-013A — The Vehicle Registry
 
+This document retains the published v1.3.0 contract. CO-014B extends current ownership and the same-slot vault through the [explicit build-registry migration](garage-build-registry.md); its versioned schema and recovery rules supersede the current-runtime details below.
+
 After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55 and [CO-013B](garage-transactions.md) as PR #56. The [Save Vault](garage-save-vault.md) adds coordinated persistence around this unchanged schema in C. The [playable showroom](garage-player-guide.md) is implemented in stage D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
 
 ## Original catalogue, revision 1

@@ -7,6 +7,8 @@ import {createGarageVault} from './garage-vault.js';
 const credits = value => value.toLocaleString('en-US') + ' credits';
 const reasons = Object.freeze({
   empty:'Create a garage to receive your one-time starting balance, or import a saved garage.',
+  'migration-required':'Your saved cars are ready for individual stock builds. Review the garage upgrade to keep every car, bay and credit. You can export the original save first.',
+  'migration-not-required':'This garage already supports individual builds. No conversion is needed.',
   'invalid-save':'The stored garage could not be loaded. It has not been changed. Import a valid backup or confirm a new garage.',
   'locks-unavailable':'This browser cannot coordinate safe garage saves. Use a browser with Web Locks on HTTPS or the offline loopback server.',
   'read-failed':'The browser denied access to the save. Restore storage access, then reload the saved garage.',
@@ -76,10 +78,13 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   const introTitle = element('h3'); introTitle.id = 'garage-intro-title'; introTitle.tabIndex = -1;
   const introCopy = element('p'); introCopy.id = 'garage-intro-copy';
   const create = button('create','Create garage',reviewNewGarage,'primary');
+  const migrate = button('migrate','Review garage upgrade',() => {
+    cancelPending(); proposal(vault.prepareMigration());
+  },'primary');
   const introImport = button('intro-import','Import a backup',() => reveal(importInput));
   const introReload = button('intro-reload','Reload saved garage',reloadGarage);
   const introActions = element('div',undefined,'garage-actions');
-  introActions.append(create,introImport,introReload);
+  introActions.append(create,migrate,introImport,introReload);
   introduction.append(introTitle,introCopy,introActions);
   const cameraControls = element('div',undefined,'garage-cameras');
   cameraControls.setAttribute('aria-label','Showroom camera');
@@ -139,6 +144,14 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     } else message = explanation(result.reason);
     render(vault.view);
   });
+  const exportLegacy = button('legacy-export','Export original legacy backup',() => {
+    const result = vault.exportLegacySave();
+    if (result.accepted) {
+      download(result.text,'circuit-overdrive-garage-v1-backup.json');
+      message = 'Original legacy ownership exported. Importing it later replaces the whole garage after confirmation.';
+    } else message = explanation(result.reason);
+    render(vault.view);
+  });
   const importLabel = element('label','Import garage JSON');
   importLabel.htmlFor = 'garage-import';
   const importInput = element('input');
@@ -150,7 +163,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   });
   const reset = button('new','Create garage',reviewNewGarage);
   const vaultActions = element('div',undefined,'garage-actions');
-  vaultActions.append(reload,exportButton,reset);
+  vaultActions.append(reload,exportButton,exportLegacy,reset);
   tools.append(vaultActions,importLabel,importInput,cancelRead,
     element('p','Local fictional credits. No race rewards or purchases with real money. Export a backup before replacing a garage.','garage-save-note'));
 
@@ -250,12 +263,13 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     statusCopy.textContent = view.reason ? explanation(view.reason) : 'Saved locally in this browser. Export a backup for safekeeping.';
     liveMessage.textContent = message;
     const blockedWrite = view.busy || reading || ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status);
+    const needsMigration = view.migrationRequired;
     const introMode = view.status === 'CONFLICT' ? 'conflict' :
-      view.status === 'STORAGE UNAVAILABLE' ? 'unavailable' : !state ? slotReason : null;
-    introduction.hidden = !['empty','invalid-save','conflict','unavailable'].includes(introMode);
+      view.status === 'STORAGE UNAVAILABLE' ? 'unavailable' : needsMigration ? 'migration' : !state ? slotReason : null;
+    introduction.hidden = !['empty','invalid-save','conflict','unavailable','migration'].includes(introMode);
     introduction.dataset.mode = introMode ?? '';
     introTitle.textContent = introMode === 'empty' ? 'Create Your Garage' :
-      introMode === 'invalid-save' ? 'Recover your garage' :
+      introMode === 'migration' ? 'Keep your cars. Add stock builds.' : introMode === 'invalid-save' ? 'Recover your garage' :
       introMode === 'conflict' ? 'Reload to continue' : 'Garage saving unavailable';
     introCopy.textContent = introMode === 'empty' ?
       'Four available bays. '+credits(INITIAL_CREDITS)+' to start. Six original vehicles to inspect. Confirm creation to unlock purchases.' :
@@ -263,6 +277,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     create.hidden = !['empty','invalid-save'].includes(introMode);
     create.textContent = introMode === 'invalid-save' ? 'Review new garage' : 'Create garage';
     create.disabled = blockedWrite;
+    migrate.hidden = introMode !== 'migration'; migrate.disabled = blockedWrite;
     introImport.hidden = introMode !== 'invalid-save'; introImport.disabled = blockedWrite;
     introReload.hidden = !['conflict','unavailable'].includes(introMode); introReload.disabled = view.busy;
     const full = state && state.bays.every(Boolean), poor = state && state.credits < model.purchasePrice;
@@ -271,12 +286,12 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     modelFinish.textContent = model.finish.name + ' · ' + model.bodyStyle.replaceAll('-',' ') + ' · Stock finish';
     ownership.textContent = car ? car.ownedVehicleId + (state.activeVehicleId === car.ownedVehicleId ? ' · Active vehicle' : ' · Owned vehicle') : 'Catalogue preview · Not an owned vehicle';
     price.textContent = 'Purchase ' + credits(model.purchasePrice) + ' · Resale ' + credits(garageResaleValue(modelId));
-    availability.textContent = ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status) ? explanation(view.reason) :
+    availability.textContent = needsMigration ? reasons['migration-required'] : ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status) ? explanation(view.reason) :
       !state ? slotReason === 'invalid-save' ? reasons['invalid-save'] : reasons['no-garage'] : full ? reasons['garage-full'] : poor ? reasons['insufficient-credits'] : 'Purchase uses the first empty bay. You may own more than one of this model.';
-    buy.disabled = blockedWrite || !state || full || poor;
+    buy.disabled = blockedWrite || needsMigration || !state || full || poor;
     select.hidden = sell.hidden = !car;
-    select.disabled = blockedWrite || !car || state?.activeVehicleId === car?.ownedVehicleId;
-    sell.disabled = blockedWrite || !car;
+    select.disabled = blockedWrite || needsMigration || !car || state?.activeVehicleId === car?.ownedVehicleId;
+    sell.disabled = blockedWrite || needsMigration || !car;
     buy.textContent = 'Buy · ' + credits(model.purchasePrice);
     sell.textContent = 'Sell · ' + credits(garageResaleValue(modelId));
     for (const [id,control] of modelButtons) {
@@ -295,9 +310,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     }
     reload.disabled = view.busy;
     exportButton.disabled = !state || view.busy;
-    reset.disabled = blockedWrite;
+    exportLegacy.hidden = !view.hasLegacyBackup; exportLegacy.disabled = view.busy;
+    reset.disabled = blockedWrite || needsMigration;
     reset.textContent = state ? 'Reset garage' : 'Create garage';
-    importInput.disabled = blockedWrite;
+    importInput.disabled = blockedWrite || needsMigration;
     cancelRead.hidden = !reading;
     closeButton.disabled = view.busy;
     cancelButton.disabled = view.busy;
@@ -329,17 +345,21 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       confirmTitle.textContent = 'Make '+garageModel(receipt.modelId).displayName+' active?';
       confirmCopy.textContent = 'Select '+receipt.ownedVehicleId+' as your active garage vehicle. This changes your collection selection only; racing vehicles and performance stay unchanged.';
       confirmButton.textContent = 'Confirm selection';
+    } else if (type === 'migrate') {
+      confirmTitle.textContent = 'Keep this garage and add individual builds?';
+      confirmCopy.textContent = 'Keep every owned ID, bay, credit and selection. Each car receives its own stock build and pristine condition. The original legacy save is retained as an exportable backup. Existing racing vehicles stay unchanged.';
+      confirmButton.textContent = 'Confirm garage upgrade';
     } else {
       const importing = type === 'import';
       confirmTitle.textContent = importing ? 'Replace garage with this save?' : vault.view.state ? 'Start a new garage?' : 'Create your garage?';
-      confirmCopy.textContent = importing ? 'The validated file will replace the entire saved garage. Credits and vehicles are never merged. Export your current garage first if you want to keep it.' :
+      confirmCopy.textContent = importing ? 'The validated file will replace the entire saved garage. Credits and vehicles are never merged. Legacy files receive independent stock builds while preserving their ownership and money. Export your current garage first if you want to keep it.' :
         'Create four empty bays with '+credits(INITIAL_CREDITS)+'. This replaces the current garage, if one exists. Existing vehicles and credits will not be carried over.';
       confirmButton.textContent = importing ? 'Confirm replacement' : 'Confirm new garage';
     }
     const vehicles = state.bays.filter(Boolean);
     confirmInventory.textContent = 'After confirmation: '+credits(state.credits)+' · '+vehicles.length+' / 4 bays occupied'+
       (vehicles.length ? ' · '+vehicles.map(car => garageModel(car.modelId).displayName+' ('+car.ownedVehicleId+')').join(', ') : '')+'.';
-    backup.hidden = !['reset','import'].includes(type) || !result.backup;
+    backup.hidden = !['reset','import','migrate'].includes(type) || !result.backup;
     message = 'Review this action before confirming.';
     render(vault.view); boundary(); dialog.showModal(); cancelButton.focus();
   }
@@ -356,7 +376,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       const receipt = result.receipt;
       if (receipt.type === 'buy' || receipt.type === 'select') {
         modelId = receipt.modelId; ownedVehicleId = receipt.ownedVehicleId;
-      } else if (receipt.type === 'import' || receipt.type === 'reset') {
+      } else if (['import','reset','migrate'].includes(receipt.type)) {
         const active = result.state.bays.find(car => car?.ownedVehicleId === result.state.activeVehicleId);
         ownedVehicleId = active?.ownedVehicleId ?? null;
         if (active) modelId = active.modelId;
@@ -364,6 +384,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       message = receipt.type === 'buy' ? 'Purchase saved. Your vehicle is in bay '+(receipt.bayIndex+1)+'.' :
         receipt.type === 'sell' ? 'Sale saved. '+credits(receipt.creditDelta)+' received once.' :
         receipt.type === 'select' ? 'Active vehicle selection saved.' :
+        receipt.type === 'migrate' ? 'Garage upgraded and saved. Every owned vehicle kept its identity and received an independent stock build.' :
         receipt.type === 'import' ? 'Imported garage saved. The previous garage was replaced.' : creating ? 'Garage created. You have '+credits(result.state.credits)+'. Choose your first car.' : 'New garage saved. Your starting balance is ready.';
     } else message = explanation(result.reason);
     render(vault.view); present();
@@ -424,7 +445,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       render(vault.load()); present();
       if (!introduction.hidden) {
         if (introduction.dataset.mode === 'empty') host.scrollTop = 0;
-        reveal(create.hidden || create.disabled ? introTitle : create);
+        reveal(!migrate.hidden && !migrate.disabled ? migrate : create.hidden || create.disabled ? introTitle : create);
       } else closeButton.focus({preventScroll:true});
     },
     close,back,

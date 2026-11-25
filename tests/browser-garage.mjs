@@ -3,6 +3,7 @@
 // WebGL. Gamepad reports and storage service faults are explicitly synthetic;
 // inventory, balances and transaction outcomes are never injected.
 import assert from 'node:assert/strict';
+import {stockVehicleBuild} from '../src/vehicle-builds.js';
 import {createHash} from 'node:crypto';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
@@ -168,11 +169,11 @@ try{
   await prepare(a,'garage-create');await capture(a,'create-confirmation');
   await el(a,'garage-cancel').click();await firstVisit(a);
   await selected(a,'cinder-two');
-  await commit(a,'garage-create');await created(a);await capture(a,'created-buy-enabled');assert.deepEqual(await saved(a),{version:1,edition:'after-hours-v1',catalogRevision:1,credits:2400,nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
+  await commit(a,'garage-create');await created(a);await capture(a,'created-buy-enabled');assert.deepEqual(await saved(a),{version:2,edition:'machine-shop-v1',catalogRevision:1,credits:2400,nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
   await capture(a,'empty-garage');
   await selected(a,'cinder-two');await capture(a,'catalogue-starter');
   await prepare(a,'garage-buy');await capture(a,'purchase-confirmation');await confirm(a);await waitStatus(a,'SAVED');
-  assert.deepEqual((await saved(a)).bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two'},null,null,null]);
+  assert.deepEqual((await saved(a)).bays,[{ownedVehicleId:'car-000001',modelId:'cinder-two',build:stockVehicleBuild('cinder-two'),condition:{version:1,status:'pristine'}},null,null,null]);
   assert.equal((await saved(a)).credits,1800);await capture(a,'first-owned-bay');
   const owned=await saved(a);await a.reload();await el(a,'enter-garage').click();await waitStatus(a,'SAVED');
   assert.deepEqual(await saved(a),owned,'saved purchase survives real reload');
@@ -205,7 +206,7 @@ try{
     ['extra-bay',JSON.stringify({...sold,bays:[...sold.bays,null]})],
     ['unknown-model',JSON.stringify({...sold,bays:[{...sold.bays[0],modelId:'not-catalogued'},...sold.bays.slice(1)]})],
     ['nested-field',JSON.stringify({...sold,bays:[{...sold.bays[0],data:{script:'ignored'}},...sold.bays.slice(1)]})],
-    ['prototype-key',exported.replace('"version":1','"version":1,"__proto__":{"garagePollution":true}')]];
+    ['prototype-key',exported.replace('"version":2','"version":2,"__proto__":{"garagePollution":true}')]];
   for(const [name,text] of invalidFiles){
     await importText(a,text);await waitStatus(a,'IMPORT REJECTED');await expectUnchanged(a,prior,name+' import preserves accepted save');
     assert(!(await el(a,'garage-confirmation').isVisible()));
@@ -331,7 +332,7 @@ try{
   }
   await duplicateConfirm(economy);let actual=await saved(economy);
   assert.equal(actual.credits,0);assert.equal(actual.nextVehicleId,2);assert.equal(actual.revision,1);
-  assert.deepEqual(actual.bays,[{ownedVehicleId:'car-000001',modelId:'glass-comet'},null,null,null]);
+  assert.deepEqual(actual.bays,[{ownedVehicleId:'car-000001',modelId:'glass-comet',build:stockVehicleBuild('glass-comet'),condition:{version:1,status:'pristine'}},null,null,null]);
   await capture(economy,'premium-owned-car');await prepare(economy,'garage-sell');await duplicateConfirm(economy);
   actual=await saved(economy);assert.equal(actual.credits,1440);assert.equal(actual.revision,2);
   assert.equal(actual.activeVehicleId,null);assert.deepEqual(actual.bays,[null,null,null,null]);
@@ -349,6 +350,22 @@ try{
   assert.equal(actual.credits,1800);assert.equal(actual.activeVehicleId,null);assert.equal(actual.nextVehicleId,3);
   await capture(economy,'last-car-sold');await buy(economy);actual=await saved(economy);
   assert.equal(actual.bays[0].ownedVehicleId,'car-000003','sold serials are not reused');assert.equal(actual.credits,1200);
+  // An explicitly selected legacy file contains the ownership just acquired
+  // above through real controls, projected to the published v1 format. It is
+  // imported as a whole replacement; no balance or build is injected into UI.
+  const legacyFile={...actual,version:1,edition:'after-hours-v1',
+    bays:actual.bays.map(car=>car&&({ownedVehicleId:car.ownedVehicleId,modelId:car.modelId}))};
+  const beforeLegacy=await raw(economy);
+  await importText(economy,JSON.stringify(legacyFile));
+  await el(economy,'garage-confirmation').waitFor({state:'visible'});
+  await expectUnchanged(economy,beforeLegacy,'legacy file is a proposal until confirmed');
+  await confirm(economy);await waitStatus(economy,'SAVED');
+  assert.deepEqual(await saved(economy),actual,'legacy import preserves money, allocation and owned identities with stock builds');
+  assert.deepEqual(JSON.parse(await raw(economy)).legacyBackup,legacyFile);
+  assert.deepEqual(JSON.parse(await download(economy,'garage-legacy-export')),legacyFile);
+  await economy.reload();await el(economy,'enter-garage').click();await waitStatus(economy,'SAVED');
+  assert.deepEqual(await saved(economy),actual);
+  scenarios.push('explicit legacy file import assigns stock builds, preserves ownership and exports its retained backup after reload');
   await economyContext.close();scenarios.push('premium and mixed-model purchases, inactive and last-car sales, duplicate confirmation and monotonic identities');
 
   // The replacement UI must reject stale imports as firmly as stale purchases.

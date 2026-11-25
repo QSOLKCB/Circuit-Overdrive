@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {stockVehicleBuild} from '../src/vehicle-builds.js';
 import {CATALOG_REVISION, INITIAL_CREDITS, MAX_CREDITS, GARAGE_CATALOG,
   garageModel, validateGarageCatalogue} from '../src/garage-catalog.js';
 import {GARAGE_VERSION, GARAGE_EDITION, BAY_COUNT, MAX_VEHICLE_ID, MAX_REVISION,
@@ -10,11 +11,12 @@ import {GARAGE_VERSION, GARAGE_EDITION, BAY_COUNT, MAX_VEHICLE_ID, MAX_REVISION,
 const clone = value => structuredClone(value);
 const modelId = GARAGE_CATALOG[0].modelId;
 const owned = (serial, model = modelId) => ({
-  ownedVehicleId:'car-'+String(serial).padStart(6,'0'), modelId:model
+  ownedVehicleId:'car-'+String(serial).padStart(6,'0'), modelId:model,
+  build:stockVehicleBuild(model), condition:{version:1,status:'pristine'}
 });
 function fixture() {
   return {
-    version:1, edition:'after-hours-v1', catalogRevision:1, credits:600,
+    version:2, edition:'machine-shop-v1', catalogRevision:1, credits:600,
     nextVehicleId:8, activeVehicleId:'car-000007',
     bays:[owned(2),null,owned(7),null], revision:5
   };
@@ -120,14 +122,14 @@ test('validating authored catalogue data cannot install a user-supplied ownershi
 });
 
 test('new garages have four empty bays, no active vehicle and exactly the starting fictional credits', () => {
-  assert.equal(GARAGE_VERSION,1);
-  assert.equal(GARAGE_EDITION,'after-hours-v1');
+  assert.equal(GARAGE_VERSION,2);
+  assert.equal(GARAGE_EDITION,'machine-shop-v1');
   assert.equal(BAY_COUNT,4);
   assert.equal(MAX_VEHICLE_ID,999999);
   assert.equal(MAX_REVISION,99999999);
   assert.equal(GARAGE_SAVE_BYTES,65536);
   const expected={
-    version:1, edition:'after-hours-v1', catalogRevision:1, credits:2400,
+    version:2, edition:'machine-shop-v1', catalogRevision:1, credits:2400,
     nextVehicleId:1, activeVehicleId:null, bays:[null,null,null,null], revision:0
   };
   const first=createGarage(), second=createGarage();
@@ -178,7 +180,7 @@ test('canonical serialization preserves bay positions and owns a deeply frozen c
 
 test('registry rejects missing and extra save fields, broken ownership, capacity and active selection', () => {
   const invalid=[
-    d=>{d.version=2;}, d=>{d.edition='other-garage';}, d=>{d.catalogRevision=2;},
+    d=>{d.version=99;}, d=>{d.edition='other-garage';}, d=>{d.catalogRevision=2;},
     d=>{delete d.credits;}, d=>{d.money=999;}, d=>{d.inventory=[];},
     d=>{d.bays.push(null);}, d=>{d.bays.pop();}, d=>{delete d.bays[1];},
     d=>{d.bays[1]=undefined;}, d=>{d.bays[0]='car-000002';}, d=>{d.bays[0]=[];},
@@ -269,7 +271,7 @@ test('text admission is bounded in UTF-8 bytes and rejects malformed or unsuppor
   // Fewer than 64 KiB UTF-16 code units, but more than 64 KiB encoded bytes.
   assert.throws(()=>parseGarage('"'+'é'.repeat(32768)+'"'),RangeError);
   for (const raw of [undefined,null,{},new String(text),'','{','null','[]','false','42',
-    text.replace('"version":1','"version":99'),
+    text.replace('"version":2','"version":99'),
     text.replace('"credits":600','"credits":-1'),
     text.replace('"revision":5','"revision":5,"__proto__":{"polluted":true}'),
     text.replace('"revision":5','"revision":5,"constructor":{"prototype":{"polluted":true}}')]) {
@@ -285,7 +287,7 @@ test('1,024 deterministic inventory states preserve independently specified IDs,
       owned(sequence*4+bay+1,GARAGE_CATALOG[(sequence+bay)%6].modelId) : null);
     const cars=bays.filter(Boolean);
     const expected={
-      version:1, edition:'after-hours-v1', catalogRevision:1,
+      version:2, edition:'machine-shop-v1', catalogRevision:1,
       credits:(sequence*104729)%99999999,
       nextVehicleId:sequence*4+5,
       activeVehicleId:cars.length ? cars[sequence%cars.length].ownedVehicleId : null,

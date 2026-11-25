@@ -12,7 +12,13 @@ const models = new Map([
 ]);
 const modelIds = [...models.keys()];
 const id = serial => 'car-'+String(serial).padStart(6,'0');
-const fresh = () => ({version:1,edition:'after-hours-v1',catalogRevision:1,credits:2400,
+// Independently specified stock schema, separate from compiler/transaction admission.
+const stockBuild = () => ({format:'circuit-overdrive.vehicle-build',version:1,rulesVersion:1,
+  parts:{engine:'stock',intake:'stock',exhaust:'stock',gearbox:'stock',finalDrive:'stock',
+    tyres:'stock',suspension:'stock',steering:'stock',paint:'factory'}});
+const owned = (ownedVehicleId,modelId) => ({ownedVehicleId,modelId,build:stockBuild(),
+  condition:{version:1,status:'pristine'}});
+const fresh = () => ({version:2,edition:'machine-shop-v1',catalogRevision:1,credits:2400,
   nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
 const clone = value => structuredClone(value);
 
@@ -24,9 +30,9 @@ function ledger(state) {
     cars:new Map(state.bays.filter(Boolean).map(car=>[car.ownedVehicleId,car.modelId]))};
 }
 function snapshot(book) {
-  return {version:1,edition:'after-hours-v1',catalogRevision:1,credits:book.money,
+  return {version:2,edition:'machine-shop-v1',catalogRevision:1,credits:book.money,
     nextVehicleId:book.serial,activeVehicleId:book.active,
-    bays:book.slots.map(key=>key===null?null:{ownedVehicleId:key,modelId:book.cars.get(key)}),
+    bays:book.slots.map(key=>key===null?null:owned(key,book.cars.get(key))),
     revision:book.revision};
 }
 function oracle(book, request) {
@@ -101,12 +107,12 @@ function initialFixture(sequence) {
     state.credits=99999999-sequence%5;
     state.nextVehicleId=2;
     state.activeVehicleId=id(1);
-    state.bays[sequence%4]={ownedVehicleId:id(1),modelId:modelIds[sequence%6]};
+    state.bays[sequence%4]=owned(id(1),modelIds[sequence%6]);
   } else if (sequence<896) state.credits=100000;
   else if (sequence<960) {
     state.nextVehicleId=1000000;
     state.activeVehicleId=id(999999);
-    state.bays[sequence%4]={ownedVehicleId:id(999999),modelId:modelIds[sequence%6]};
+    state.bays[sequence%4]=owned(id(999999),modelIds[sequence%6]);
   } else state.revision=99999998;
   return state;
 }

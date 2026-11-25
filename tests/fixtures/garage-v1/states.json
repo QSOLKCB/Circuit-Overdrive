@@ -1,0 +1,488 @@
+{
+  "source": "1c745a90258d0f6cb968935f773354cff702b276",
+  "fixtures": [
+    {
+      "name": "empty",
+      "synthetic": false,
+      "construction": "Published createGarage()",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 2400,
+        "nextVehicleId": 1,
+        "activeVehicleId": null,
+        "bays": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "revision": 0
+      }
+    },
+    {
+      "name": "one-cinder-two",
+      "synthetic": false,
+      "construction": "Published starting garage then buy cinder-two",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1800,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "one-lilt",
+      "synthetic": false,
+      "construction": "Published starting garage then buy lilt",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1500,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "lilt"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "one-evening-line",
+      "synthetic": false,
+      "construction": "Published starting garage then buy evening-line",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1000,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "evening-line"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "one-rivet-eight",
+      "synthetic": false,
+      "construction": "Published starting garage then buy rivet-eight",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 600,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "rivet-eight"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "one-yardhand",
+      "synthetic": false,
+      "construction": "Published starting garage then buy yardhand",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1200,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "yardhand"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "one-glass-comet",
+      "synthetic": false,
+      "construction": "Published starting garage then buy glass-comet",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "glass-comet"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "four-full-bays",
+      "synthetic": false,
+      "construction": "Four actual 600-credit Cinder Two purchases from published 2400-credit start",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 4
+      }
+    },
+    {
+      "name": "two-duplicate-models",
+      "synthetic": false,
+      "construction": "Two actual Cinder Two purchases with separate owned IDs",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1200,
+        "nextVehicleId": 3,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          null,
+          null
+        ],
+        "revision": 2
+      }
+    },
+    {
+      "name": "sold-id-gap",
+      "synthetic": false,
+      "construction": "Three Cinder purchases, sell car-000001, buy Lilt: car-000004 occupies first bay and sold ID is never reused",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 60,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000002",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "lilt"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          null
+        ],
+        "revision": 5
+      }
+    },
+    {
+      "name": "active-bay-1",
+      "synthetic": false,
+      "construction": "Published full garage plus explicit selection of bay 1",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 5
+      }
+    },
+    {
+      "name": "active-bay-2",
+      "synthetic": false,
+      "construction": "Published full garage plus explicit selection of bay 2",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000002",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 5
+      }
+    },
+    {
+      "name": "active-bay-3",
+      "synthetic": false,
+      "construction": "Published full garage plus explicit selection of bay 3",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000003",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 5
+      }
+    },
+    {
+      "name": "active-bay-4",
+      "synthetic": false,
+      "construction": "Published full garage plus explicit selection of bay 4",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000004",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 5
+      }
+    },
+    {
+      "name": "revision-exhausted",
+      "synthetic": true,
+      "construction": "Synthetic boundary admitted by exact published validator",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 0,
+        "nextVehicleId": 5,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000002",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000003",
+            "modelId": "cinder-two"
+          },
+          {
+            "ownedVehicleId": "car-000004",
+            "modelId": "cinder-two"
+          }
+        ],
+        "revision": 99999999
+      }
+    },
+    {
+      "name": "serial-exhausted",
+      "synthetic": true,
+      "construction": "Synthetic exhausted allocator sentinel admitted by exact published validator",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1800,
+        "nextVehicleId": 1000000,
+        "activeVehicleId": "car-999999",
+        "bays": [
+          {
+            "ownedVehicleId": "car-999999",
+            "modelId": "cinder-two"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 1
+      }
+    },
+    {
+      "name": "revision-and-serial-exhausted",
+      "synthetic": true,
+      "construction": "Synthetic combined counter boundary admitted by exact published validator",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 1800,
+        "nextVehicleId": 1000000,
+        "activeVehicleId": "car-999999",
+        "bays": [
+          {
+            "ownedVehicleId": "car-999999",
+            "modelId": "cinder-two"
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 99999999
+      }
+    },
+    {
+      "name": "worst-case-valid-fields",
+      "synthetic": true,
+      "construction": "Synthetic maximum scalar counters, credits and four long model IDs admitted by exact published validator",
+      "garage": {
+        "version": 1,
+        "edition": "after-hours-v1",
+        "catalogRevision": 1,
+        "credits": 99999999,
+        "nextVehicleId": 1000000,
+        "activeVehicleId": "car-999999",
+        "bays": [
+          {
+            "ownedVehicleId": "car-999996",
+            "modelId": "evening-line"
+          },
+          {
+            "ownedVehicleId": "car-999997",
+            "modelId": "evening-line"
+          },
+          {
+            "ownedVehicleId": "car-999998",
+            "modelId": "evening-line"
+          },
+          {
+            "ownedVehicleId": "car-999999",
+            "modelId": "evening-line"
+          }
+        ],
+        "revision": 99999999
+      }
+    }
+  ]
+}

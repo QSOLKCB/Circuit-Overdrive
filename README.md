@@ -111,6 +111,10 @@ The HUD shows your live position, the closest rival within 60 m, a full-course m
 
 Each finisher records a time in ticks including three seconds per recovery. Finished competitors leave the active course. The field freezes when you finish. The results list finishers by penalty-adjusted time, then cars still racing in their on-track order. Grid ID breaks exact ties. Your lap splits include any penalties for that lap.
 
+## Owned vehicle builds
+
+The Garage now stores an independent validated stock build for each owned car. Existing v1.3.0 garages require a reviewed conversion that preserves all cars, IDs, bays and credits and retains an exportable original backup. Mechanical upgrades and the playable test facility remain later CO-014 work. [Migration and recovery guide](docs/garage-player-guide.md#keep-an-existing-garage) · [Build Registry contract](docs/garage-build-registry.md)
+
 ## Engine source
 
 VANILLAJS is pinned at [9d95d74b355ec17add32db0b55f0f71130f9c004](https://github.com/QSOLKCB/VANILLAJS/tree/9d95d74b355ec17add32db0b55f0f71130f9c004). The [manifest](vendor/vanillajs/provenance.json) lists every adopted source path and SHA-256 digest. The vendored [licence](vendor/vanillajs/LICENSE) and [notice](vendor/vanillajs/NOTICE) accompany those files.
