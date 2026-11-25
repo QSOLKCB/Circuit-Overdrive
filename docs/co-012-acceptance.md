@@ -39,6 +39,14 @@ The isolated panel endurance fixture drew all six car bodies at damage levels 0,
 
 The native samples cover the opening 15 seconds at the measured machine and quality. Full match evidence covers later heavy damage and all elimination outcomes with bounded test-clock callbacks. Owner controller hardware use and soundtrack listening are separate acceptance items.
 
+## Legacy and offline verification
+
+All 309 Node tests passed at certification code revision `8c58590d2e9e71e888047b0046fc1009fa7f57c4`. The suite included the historical 45,225-tick v1.0.0 racing comparison and unrounded v1.1.1 Crash Lab traces. A separate comparison against published v1.1.1 matched all 45,225 racing ticks across four touring environments, Nitro Skyway and Rocket Overdrive. The seeded endurance test ran 12 full derby rounds twice. The first pass covered 125,852 accepted ticks, 78,518 contact receipts and 34 credited knockouts. Each repeat matched its original authority and contact digest. [Direct v1.1.1 racing receipt](evidence/co-012f/v111-race-parity.json)
+
+All seven existing real-browser shards passed on Chrome 158 with SwiftShader from the extracted gameplay revision ZIP. That run covered the four championship rounds, both touring courses by day and night, controller and focus ownership, touch, replay, effects, Nitro Skyway, Rocket Overdrive and Crash Lab. The derby runner joins lifecycle in the existing seven-worker matrix. A short derby input check accepted analog throttle and steering from standard-pad and saved-wheel reports, paused on each disconnect, and accepted and released a trusted Chromium touch pedal press. Those reports are synthetic. Owner hardware play remains a release acceptance item. [Browser verification instructions](pages.md#reproduce-browser-verification)
+
+The independently built and verified archive at `4c8d0bb5760ca7e657f3fb2e40cd6a9d89677d64` had SHA-256 `fc53fdb760b94b29986ea4bc8f25351c4b8664e45ada98ebbe15fb90f25fbba6`. Its 92 shipped files matched the standalone static package byte for byte. The ZIP also held its standard archive metadata and start guide. The Python offline release test and seven-worker shell contract passed. The public site verified separately against all 85 HTTP files and MIME types in merged CO-012B at `7b60153def1e62b9a8dded7c5e6eee45fa0c0ab7`. [Current public site](https://qsolkcb.github.io/Circuit-Overdrive/) · [Merged baseline Pages checks](https://github.com/QSOLKCB/Circuit-Overdrive/actions/runs/45435619343)
+
 ## Reproduce and review
 
 Check out the tested runtime revision. Build the static site and a separate ZIP from the same committed tree. Run browser acceptance against the source-stamped site under `/Circuit-Overdrive/`. Run the native comparison against a separate v1.1.1 package with the same Chrome and GPU.

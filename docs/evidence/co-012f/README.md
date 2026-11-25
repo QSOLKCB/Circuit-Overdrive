@@ -37,3 +37,7 @@ The live and Theatre receipts are identical except for the runtime label identif
 | Iron Pit, simultaneous elimination | [v6 replay](node-iron-pit-replay.json) | [Receipt](node-iron-pit-receipt.json) | [Receipt](node-iron-pit-reconstructed.json) |
 
 The Node v22.18.0 receipts reproduce in the Node runtime and the Chrome 158 receipts reproduce in Chrome. A replay's exact source stamp and declared runtime identify the tested reconstruction. Accepted collisions can lead to different trajectories after floating-point differences between runtimes. [Replay precision and terminal admission](../../replay-theatre.md#total-destruction-version-6)
+
+## Legacy racing
+
+The same-runtime comparison against published v1.1.1 matches all 45,225 accepted touring, Nitro Skyway and Rocket Overdrive ticks across the six environments. It includes per-course state and command digests. [Racing parity receipt](v111-race-parity.json)
