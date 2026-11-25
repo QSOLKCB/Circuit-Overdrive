@@ -7,6 +7,61 @@ occupy part of that viewport; the report separately identifies the real showroom
 canvas and drawing-buffer dimensions. This is not a claim that the canvas itself
 fills a 1920×1080 framebuffer.
 
+## Executed native measurements
+
+Two sequential quiet runs completed with exit 0 against the independently
+verified offline ZIP at source **`66db7fee84d389f152ef53b6801e4b51031fd0ef`**.
+The source and all measured values are retained in [run 1](evidence/co-013e/native-performance-run1.json)
+and [run 2](evidence/co-013e/native-performance-run2.json). Chrome was
+**158.0.8127.36**, on Ubuntu 26.04.1 / Linux 7.0.0-43-generic, AMD Ryzen 9 5950X
+and NVIDIA RTX 5060 Ti (driver 595.99.02). The actual renderer reported
+**ANGLE NVIDIA OpenGL ES 3.2**. Each run made 81 same-origin requests with no
+external requests or browser errors. Source and modules were not transformed.
+
+Both measured the actual **1920×1080 viewport** and **1400×989 showroom drawing
+buffer**, with the remaining space occupied by the production UI. The viewport
+used a browser-reported device scale of approximately 1.0.
+
+| Observation | Run 1 | Run 2 |
+| --- | ---: | ---: |
+| Stationary callback samples | 360 | 360 |
+| Stationary interval median / p95 / worst | 16.7 / 16.7 / 16.8 ms | 16.7 / 16.7 / 16.8 ms |
+| Stationary mean callbacks per second | 60.001 | 60.002 |
+| Switching callback samples / actual drawn frames | 720 / 240 | 720 / 240 |
+| Switching interval median / p95 / worst | 16.7 / 22.6 / 24.9 ms | 16.7 / 22.2 / 25.0 ms |
+| Switching mean callbacks per second | 60.851 | 59.089 |
+| Draw-frame JavaScript callback median / p95 / worst | 0.4 / 0.6 / 0.9 ms | 0.4 / 0.5 / 0.7 ms |
+| Summed GL draw-call submission p95 | 0.1 ms | 0.1 ms |
+| GPU elapsed median / p95 / worst | 1.083 / 2.267 / 5.991 ms | 1.098 / 2.333 / 2.825 ms |
+| Valid asynchronous GPU samples / discarded | 240 / 0 | 240 / 0 |
+| Click to JavaScript draw completion median / p95 / worst | 14.9 / 15.6 / 21.3 ms | 15.1 / 15.6 / 16.2 ms |
+| Isolated geometry generation median / p95 | 4.9 / 7.4 ms | 4.8 / 7.6 ms |
+| Eight reopen observations, median / worst | 121.4 / 123.1 ms | 114.7 / 122.5 ms |
+| Context restoration wall time, including deliberate loss delay | 345 ms | 394 ms |
+| Post-GC closed heap before cycles | 6,175,724 bytes | 6,174,168 bytes |
+| Post-GC closed heap after restoration | 6,155,836 bytes | 6,156,904 bytes |
+
+The target's approximately 60 Hz median cadence was observed. **The interactive
+p95 intervals were 22.2–22.6 ms, so these samples do not establish a locked 60 FPS
+frame-tail guarantee.** No interval exceeded 25 ms in these bounded runs. The
+reported GPU and callback costs are distinct from compositor/presentation
+cadence; the test does not attribute the longer intervals to a particular
+subsystem without further evidence. Owner play-through remains part of release
+acceptance.
+
+Both runs retained exactly 42 buffers, 788,592 uploaded bytes and two programs
+through all 48 model/192 camera changes. The idle period submitted zero draws
+and uploads. At the end, 462 buffers had been created across the complete
+lifecycle, 420 explicitly deleted and 42 invalidated by context loss, leaving
+**zero live showroom buffers or retained bytes**. Twenty of 22 programs were
+explicitly deleted and two invalidated, leaving **zero live programs**. All
+inspection/lifecycle actions preserved the complete accepted garage save.
+
+The final closed heap was 19,888 bytes lower than its initial sample in run 1
+and 17,264 bytes lower in run 2. This bounded series shows no retained heap
+increase over the complete run; it does not establish unlimited-session leak
+freedom. Raw per-cycle open/closed heap readings are included in each receipt.
+
 ## Reproduce the measurement
 
 Package the committed source and serve the complete site under

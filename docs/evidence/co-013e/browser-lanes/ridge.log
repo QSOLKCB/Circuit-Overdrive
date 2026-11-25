@@ -1,0 +1,302 @@
+HTTP contents and MIME types verified at http://127.0.0.1:8157/Circuit-Overdrive/ (103 files).
+[Ridge] Loading http://127.0.0.1:8157/Circuit-Overdrive/
+[Ridge] Race 0:00.000, checkpoint 0, P6/6, 0 frames
+[Ridge] Capturing ridge-start
+[Ridge] Race 0:09.850, checkpoint 0, P6/6, 40 frames
+[Ridge] Capturing ridge-open
+[Ridge] Race 0:20.000, checkpoint 0, P6/6, 81 frames
+[Ridge] Race 0:30.000, checkpoint 1, P6/6, 121 frames
+[Ridge] Capturing ridge-forest
+[Ridge] Race 0:39.867, checkpoint 1, P6/6, 161 frames
+[Ridge] Race 0:49.867, checkpoint 2, P6/6, 201 frames
+[Ridge] Race 0:59.867, checkpoint 2, P6/6, 241 frames
+[Ridge] Capturing ridge-bridge
+[Ridge] Race 1:09.967, checkpoint 3, P6/6, 282 frames
+[Ridge] Race 1:19.967, checkpoint 4, P6/6, 322 frames
+[Ridge] Race 1:29.967, checkpoint 4, P6/6, 362 frames
+[Ridge] Race 1:39.883, checkpoint 5, P6/6, 402 frames
+[Ridge] Capturing ridge-tunnel
+[Ridge] Race 1:49.850, checkpoint 5, P6/6, 442 frames
+[Ridge] Race 1:59.917, checkpoint 6, P6/6, 483 frames
+[Ridge] Race 2:09.917, checkpoint 6, P6/6, 523 frames
+[Ridge] Race 2:19.917, checkpoint 7, P6/6, 563 frames
+[Ridge] Race 2:29.917, checkpoint 7, P6/6, 603 frames
+[Ridge] Race complete, checked six classifications and 7 splits at 2:32.300
+[Ridge] Capturing ridge-finished
+{
+  "browser": "158.0.8127.36",
+  "url": "http://127.0.0.1:8157/Circuit-Overdrive/",
+  "input": "keyboard",
+  "environment": "day",
+  "phase": "finished",
+  "countdown": [
+    "3",
+    "2",
+    "1"
+  ],
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "frames": 613,
+  "places": [
+    6
+  ],
+  "lap": "7",
+  "time": "2:32.300",
+  "splits": [
+    "0:20.667",
+    "0:41.133",
+    "1:00.733",
+    "1:17.667",
+    "1:36.217",
+    "1:55.150",
+    "2:13.683"
+  ],
+  "classification": [
+    {
+      "id": 1,
+      "driver": "1.  Kit Vega  #83",
+      "time": "1:53.333"
+    },
+    {
+      "id": 0,
+      "driver": "2.  Mara Vale  #14",
+      "time": "1:59.733"
+    },
+    {
+      "id": 2,
+      "driver": "3.  Emi Park  #46",
+      "time": "2:00.600"
+    },
+    {
+      "id": 3,
+      "driver": "4.  Rory Flint  #59",
+      "time": "2:00.883"
+    },
+    {
+      "id": 4,
+      "driver": "5.  Luca Reed  #32",
+      "time": "2:18.617"
+    },
+    {
+      "id": 5,
+      "driver": "6.  Player  #27",
+      "time": "2:32.300"
+    }
+  ],
+  "expected": [
+    {
+      "id": 1,
+      "name": "Kit Vega",
+      "number": 83,
+      "ticks": 6800,
+      "recoveries": 0
+    },
+    {
+      "id": 0,
+      "name": "Mara Vale",
+      "number": 14,
+      "ticks": 7184,
+      "recoveries": 0
+    },
+    {
+      "id": 2,
+      "name": "Emi Park",
+      "number": 46,
+      "ticks": 7236,
+      "recoveries": 0
+    },
+    {
+      "id": 3,
+      "name": "Rory Flint",
+      "number": 59,
+      "ticks": 7253,
+      "recoveries": 0
+    },
+    {
+      "id": 4,
+      "name": "Luca Reed",
+      "number": 32,
+      "ticks": 8317,
+      "recoveries": 0
+    },
+    {
+      "id": 5,
+      "name": "Player",
+      "number": 27,
+      "ticks": 9138,
+      "recoveries": 0
+    }
+  ],
+  "remaining": "0 m",
+  "expectedSplits": [
+    1240,
+    2468,
+    3644,
+    4660,
+    5773,
+    6909,
+    8021
+  ],
+  "expectedSplitCount": 7,
+  "expectedTicks": 9138,
+  "recoveries": 0,
+  "savedReplay": {
+    "revision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+    "ticks": 9318,
+    "runs": 2501,
+    "analogTicks": 0,
+    "finishers": 6
+  }
+}
+[Ridge] Loading http://127.0.0.1:8157/Circuit-Overdrive/
+[Ridge] Capturing starting-grid
+[Ridge] Race 0:00.000, checkpoint 0, P6/6, 0 frames
+[Ridge] Capturing ridge-start
+[Ridge] Race 0:09.850, checkpoint 0, P6/6, 40 frames
+[Ridge] Capturing ridge-open
+[Ridge] Race 0:20.000, checkpoint 0, P6/6, 81 frames
+[Ridge] Race 0:30.000, checkpoint 1, P6/6, 121 frames
+[Ridge] Capturing ridge-forest
+[Ridge] Race 0:39.867, checkpoint 1, P6/6, 161 frames
+[Ridge] Race 0:49.867, checkpoint 2, P6/6, 201 frames
+[Ridge] Race 0:59.867, checkpoint 2, P6/6, 241 frames
+[Ridge] Capturing ridge-bridge-entrance
+[Ridge] Capturing ridge-bridge
+[Ridge] Race 1:09.967, checkpoint 3, P6/6, 283 frames
+[Ridge] Capturing ridge-bridge-exit
+[Ridge] Race 1:19.850, checkpoint 4, P6/6, 323 frames
+[Ridge] Race 1:29.850, checkpoint 4, P6/6, 363 frames
+[Ridge] Race 1:39.883, checkpoint 5, P6/6, 404 frames
+[Ridge] Capturing ridge-tunnel-entrance
+[Ridge] Capturing ridge-tunnel
+[Ridge] Capturing ridge-tunnel-exit
+[Ridge] Race 1:49.883, checkpoint 5, P6/6, 446 frames
+[Ridge] Race 1:59.917, checkpoint 6, P6/6, 487 frames
+[Ridge] Race 2:09.917, checkpoint 6, P6/6, 527 frames
+[Ridge] Race 2:19.917, checkpoint 7, P6/6, 567 frames
+[Ridge] Race 2:29.917, checkpoint 7, P6/6, 607 frames
+[Ridge] Race complete, checked six classifications and 7 splits at 2:32.300
+[Ridge] Capturing ridge-finished
+{
+  "browser": "158.0.8127.36",
+  "url": "http://127.0.0.1:8157/Circuit-Overdrive/",
+  "input": "keyboard",
+  "environment": "night",
+  "phase": "finished",
+  "countdown": [
+    "3",
+    "2",
+    "1"
+  ],
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "frames": 617,
+  "places": [
+    6
+  ],
+  "lap": "7",
+  "time": "2:32.300",
+  "splits": [
+    "0:20.667",
+    "0:41.133",
+    "1:00.733",
+    "1:17.667",
+    "1:36.217",
+    "1:55.150",
+    "2:13.683"
+  ],
+  "classification": [
+    {
+      "id": 1,
+      "driver": "1.  Kit Vega  #83",
+      "time": "1:53.333"
+    },
+    {
+      "id": 0,
+      "driver": "2.  Mara Vale  #14",
+      "time": "1:59.733"
+    },
+    {
+      "id": 2,
+      "driver": "3.  Emi Park  #46",
+      "time": "2:00.600"
+    },
+    {
+      "id": 3,
+      "driver": "4.  Rory Flint  #59",
+      "time": "2:00.883"
+    },
+    {
+      "id": 4,
+      "driver": "5.  Luca Reed  #32",
+      "time": "2:18.617"
+    },
+    {
+      "id": 5,
+      "driver": "6.  Player  #27",
+      "time": "2:32.300"
+    }
+  ],
+  "expected": [
+    {
+      "id": 1,
+      "name": "Kit Vega",
+      "number": 83,
+      "ticks": 6800,
+      "recoveries": 0
+    },
+    {
+      "id": 0,
+      "name": "Mara Vale",
+      "number": 14,
+      "ticks": 7184,
+      "recoveries": 0
+    },
+    {
+      "id": 2,
+      "name": "Emi Park",
+      "number": 46,
+      "ticks": 7236,
+      "recoveries": 0
+    },
+    {
+      "id": 3,
+      "name": "Rory Flint",
+      "number": 59,
+      "ticks": 7253,
+      "recoveries": 0
+    },
+    {
+      "id": 4,
+      "name": "Luca Reed",
+      "number": 32,
+      "ticks": 8317,
+      "recoveries": 0
+    },
+    {
+      "id": 5,
+      "name": "Player",
+      "number": 27,
+      "ticks": 9138,
+      "recoveries": 0
+    }
+  ],
+  "remaining": "0 m",
+  "expectedSplits": [
+    1240,
+    2468,
+    3644,
+    4660,
+    5773,
+    6909,
+    8021
+  ],
+  "expectedSplitCount": 7,
+  "expectedTicks": 9138,
+  "recoveries": 0,
+  "savedReplay": {
+    "revision": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+    "ticks": 9318,
+    "runs": 2501,
+    "analogTicks": 0,
+    "finishers": 6
+  }
+}

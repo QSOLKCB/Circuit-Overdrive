@@ -1,0 +1,58 @@
+{
+  "source": "66db7fee84d389f152ef53b6801e4b51031fd0ef",
+  "url": "http://127.0.0.1:8157/Circuit-Overdrive/",
+  "delivery": "independently verified extracted offline ZIP",
+  "parallelLanes": 7,
+  "executedSuites": 20,
+  "lanes": [
+    {
+      "shard": "championship",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=championship",
+      "exitCode": 0,
+      "log": "browser-lanes/championship.log",
+      "sha256": "1e6a90a16e91440cf042e53a57b5b0a9455e3b564266769d0cb69b1fff1dc4b2"
+    },
+    {
+      "shard": "speedway",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=speedway",
+      "exitCode": 0,
+      "log": "browser-lanes/speedway.log",
+      "sha256": "ad4ef8e7e7b495026d0053474c932859cd13d698624d2661e3ab5be41c65126d"
+    },
+    {
+      "shard": "ridge",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=ridge",
+      "exitCode": 0,
+      "log": "browser-lanes/ridge.log",
+      "sha256": "f3dcfadbed40c1ba11876b0bc062c0193b3a6f69c49db0be463f4d1213797040"
+    },
+    {
+      "shard": "controllers",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=controllers",
+      "exitCode": 0,
+      "log": "browser-lanes/controllers.log",
+      "sha256": "3a8bc0a0d80ce50e9eaa71181e0f82a8fe183c9e6e2638ad1b8d9a4150eee62d"
+    },
+    {
+      "shard": "theatre",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=theatre",
+      "exitCode": 0,
+      "log": "browser-lanes/theatre.log",
+      "sha256": "525f572bb0f281d1f1052094a67308f419d4303c94cfbb8753a15376e857abe8"
+    },
+    {
+      "shard": "lifecycle",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=lifecycle",
+      "exitCode": 0,
+      "log": "browser-lanes/lifecycle.log",
+      "sha256": "45b6907967118c961a9bb73d88ec8f12afcfb75ddafe1783711433b1997de33e"
+    },
+    {
+      "shard": "effects",
+      "command": "bash scripts/browser-pages.sh http://127.0.0.1:8157/Circuit-Overdrive/ EVIDENCE --shard=effects",
+      "exitCode": 0,
+      "log": "browser-lanes/effects.log",
+      "sha256": "5c8789a361da816d0731f8e49750b7f43db18cf1fabd719bb01d2c99b01b93ce"
+    }
+  ]
+}
