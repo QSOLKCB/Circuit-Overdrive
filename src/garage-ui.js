@@ -164,7 +164,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     if (prepared?.backup) download(prepared.backup,'circuit-overdrive-garage-before-replacement.json');
   });
   const cancelButton = button('cancel','Cancel',() => {
+    const origin = returnFocus;
     cancelPending(); message = 'Cancelled. Your saved garage has not changed.'; render(vault.view);
+    // The cancellation announcement can change panel height on narrow screens.
+    if (origin && introduction.contains(origin) && !origin.hidden && !origin.disabled) reveal(origin);
   },'primary');
   const confirmButton = button('confirm','Confirm',commit);
   const confirmActions = element('div',undefined,'garage-actions');
