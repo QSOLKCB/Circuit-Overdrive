@@ -84,9 +84,9 @@ evidence. They award no inventory or money.
 ## Economy and browser purchase evidence
 
 The independent ledger executes 1,024 sequences / **32,768 operations** from
-real 2,400-credit starting states: 16,414 accepted, 16,354 rejected, including
-**8,471 installations**, 3,364 owned-part refits, 1,056 setup-only changes and
-8,471 rejected stale retries. All nine slots have accepted coverage. It tracks
+real 2,400-credit starting states: 16,414 accepted and 16,354 rejected, with
+**8,471 installations**, 3,364 owned-part refits and 1,056 setup-only changes.
+An additional 8,471 stale-retry checks reject. All nine slots have accepted coverage. It tracks
 money, acquired inventory, stable IDs, bay order, selection and revision using
 independent price/transition expectations. The older 65,536-operation ledger
 is also retained. No race winnings or refunds are introduced.
