@@ -1,0 +1,230 @@
+{
+  "format": "circuit-overdrive.derby-receipt.1",
+  "revision": "493f2c35295c23c1b857dcdbb165a7f05b6eb8b4",
+  "discipline": "derby",
+  "arena": "crucible",
+  "rules": 1,
+  "seed": 27,
+  "ticks": 10800,
+  "terminal": "time-limit",
+  "attempts": 10800,
+  "runtime": "Node v22.18.0 linux x64",
+  "contactBatchSize": 120,
+  "inputSha256": "1c018686cd6e04973ef74e72a80974ae66e941aaf3cf61bc60866b1f50e9bf71",
+  "contactCount": 4662,
+  "contactsSha256": "3c4b59b84f1a9a29e7e4c04fea339a4fcb320a75ddd0c8f50686bc00c94cd91f",
+  "eliminations": [
+    {
+      "id": 5,
+      "tick": 2274,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 52,
+        "right": 0,
+        "engine": 1000,
+        "steering": 447,
+        "tyres": 295,
+        "suspension": 533
+      },
+      "impactId": "2274/5/86/0",
+      "attackerId": null,
+      "sequence": 1
+    },
+    {
+      "id": 2,
+      "tick": 6056,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 475,
+        "right": 0,
+        "engine": 1000,
+        "steering": 552,
+        "tyres": 592,
+        "suspension": 763
+      },
+      "impactId": "6056/2/4/0",
+      "attackerId": 4,
+      "sequence": 2
+    },
+    {
+      "id": 4,
+      "tick": 6056,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 5,
+        "right": 394,
+        "engine": 1000,
+        "steering": 539,
+        "tyres": 544,
+        "suspension": 727
+      },
+      "impactId": "6056/2/4/0",
+      "attackerId": 2,
+      "sequence": 3
+    },
+    {
+      "id": 3,
+      "tick": 7659,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 26,
+        "right": 157,
+        "engine": 1000,
+        "steering": 556,
+        "tyres": 434,
+        "suspension": 691
+      },
+      "impactId": "7659/0/3/0",
+      "attackerId": 0,
+      "sequence": 4
+    }
+  ],
+  "finalDamage": [
+    {
+      "id": 0,
+      "damage": {
+        "front": 880,
+        "rear": 371,
+        "left": 0,
+        "right": 99,
+        "engine": 816,
+        "steering": 357,
+        "tyres": 348,
+        "suspension": 572
+      }
+    },
+    {
+      "id": 1,
+      "damage": {
+        "front": 739,
+        "rear": 312,
+        "left": 303,
+        "right": 91,
+        "engine": 685,
+        "steering": 385,
+        "tyres": 515,
+        "suspension": 659
+      }
+    },
+    {
+      "id": 2,
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 475,
+        "right": 0,
+        "engine": 1000,
+        "steering": 552,
+        "tyres": 592,
+        "suspension": 763
+      }
+    },
+    {
+      "id": 3,
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 26,
+        "right": 157,
+        "engine": 1000,
+        "steering": 556,
+        "tyres": 434,
+        "suspension": 691
+      }
+    },
+    {
+      "id": 4,
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 5,
+        "right": 394,
+        "engine": 1000,
+        "steering": 539,
+        "tyres": 544,
+        "suspension": 727
+      }
+    },
+    {
+      "id": 5,
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 52,
+        "right": 0,
+        "engine": 1000,
+        "steering": 447,
+        "tyres": 295,
+        "suspension": 533
+      }
+    }
+  ],
+  "classification": [
+    {
+      "id": 0,
+      "active": true,
+      "knockouts": 1,
+      "inflicted": 3180,
+      "condition": 1907,
+      "eliminatedTick": null,
+      "rank": 1
+    },
+    {
+      "id": 1,
+      "active": true,
+      "knockouts": 0,
+      "inflicted": 4149,
+      "condition": 1756,
+      "eliminatedTick": null,
+      "rank": 2
+    },
+    {
+      "id": 3,
+      "active": false,
+      "knockouts": 0,
+      "inflicted": 3420,
+      "condition": 1319,
+      "eliminatedTick": 7659,
+      "rank": 3
+    },
+    {
+      "id": 2,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 4478,
+      "condition": 1093,
+      "eliminatedTick": 6056,
+      "rank": 4
+    },
+    {
+      "id": 4,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 4343,
+      "condition": 1190,
+      "eliminatedTick": 6056,
+      "rank": 5
+    },
+    {
+      "id": 5,
+      "active": false,
+      "knockouts": 0,
+      "inflicted": 198,
+      "condition": 1725,
+      "eliminatedTick": 2274,
+      "rank": 6
+    }
+  ],
+  "classificationSha256": "8a99e0cf3639453ab78dcb50d0a5c019dc8072c0173940252198ac70161906f0",
+  "finalStateSha256": "5956d1d2455509ba00a4969064591cc72901ec1fac373ea5acc63e6c59fda6ec",
+  "winnerId": 0,
+  "technicalStop": null
+}

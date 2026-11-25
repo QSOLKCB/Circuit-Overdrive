@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// node tests/compare-v100.mjs /path/to/a/clean/v1.0.0/checkout
+// node tests/compare-v100.mjs /path/to/a/clean/v1.0.0-or-v1.1.1/checkout
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -7,10 +7,11 @@ import {realpathSync} from 'node:fs';
 import {join} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
-const sha='47b1a5c1562136bfd6b98ca9d4ef2ce07282200b';
+const releases=['47b1a5c1562136bfd6b98ca9d4ef2ce07282200b','541ba6ca27dabe644ab23fe9a061c91dda8794a6'];
 const reference=realpathSync(process.argv[2]),candidate=realpathSync(fileURLToPath(new URL('../',import.meta.url)));
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
-assert.notEqual(reference,candidate);assert.equal(git(reference,'rev-parse','HEAD'),sha);
+const sha=git(reference,'rev-parse','HEAD');
+assert.notEqual(reference,candidate);assert(releases.includes(sha),'Use an exact published reference');
 const head=git(candidate,'rev-parse','HEAD');
 for(const dir of [reference,candidate])assert.equal(git(dir,'status','--porcelain','--','src','vendor','tracks','tests/driver.mjs','tests/orbital-driver.mjs','tests/skyway-driver.mjs'),'');
 const unchanged=['src/sim.js','src/contact.js','src/ai.js','src/field.js','src/nitro-race.js','src/nitro-physics.js',

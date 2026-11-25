@@ -1,0 +1,24 @@
+{
+  "version": 6,
+  "discipline": "derby",
+  "rules": 1,
+  "revision": "493f2c35295c23c1b857dcdbb165a7f05b6eb8b4",
+  "arena": "crucible",
+  "seed": 27,
+  "ticks": 9540,
+  "terminal": "last-car-standing",
+  "runs": [
+    [
+      2274,
+      1,
+      0,
+      0
+    ],
+    [
+      7266,
+      0,
+      0,
+      0
+    ]
+  ]
+}

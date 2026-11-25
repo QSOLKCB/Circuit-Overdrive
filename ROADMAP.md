@@ -57,7 +57,7 @@ The release table records the published game through v1.1.1. Total Destruction t
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive · Orbital Spine review candidate |
 | **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in v0.8.0 |
 | **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
-| **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — soundtrack catalogue only until mode exists |
+| **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — v1.2.0 candidate |
 
 Create distinct original melodies, bass figures, drums, harmonies and timbres. Industrial guitar-like tones may use bounded Karplus–Strong pluck, distortion and filtered power-chord synthesis. No sampled commercial recordings, existing copyrighted songs, music-generation service or runtime downloads.
 
@@ -117,7 +117,7 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | **v1.4.0** | **CO-014 — BUILT NOT BOUGHT** | Real vehicle-build variations: engine, intake, exhaust, gearing, tyres, suspension, paint, repairs, tuning and benchmark comparisons | Every fitted upgrade has a documented physical effect; no visual-only stats marketed as physical; race/replay revision tracks vehicle build |
 | **v1.5.0** | **CO-015 — STREET ROD: THE UNDERGROUND** | Earnable cash/reputation, rival challenges, garages and upgrades connected to championship, racing and derby modes | Results settle once against originating career revision; abandoned practice is non-paying; no real-money economy, microtransactions or monetization |
 
-CO-012A and B merged the six-car authority and both arenas. CO-012C adds the match rules and deterministic rival drivers. The following gates cover the playable experience (D), v6 replay (E) and certification (F). [Six-car impact contract](docs/derby-impact.md) · [Arena contract and preview](docs/derby-arenas.md) · [Match rules](docs/derby-rules.md) · [Reusable panels](docs/computational-impact-panels.md)
+CO-012A and B merged the six-car authority and both arenas. The candidate stack adds the match rules and rival drivers (C), the playable mode (D), source-bound v6 replay (E), and browser, native and offline acceptance evidence (F). v1.2.0 awaits owner review and the final main integration checks. [Six-car impact contract](docs/derby-impact.md) · [Arena contract and preview](docs/derby-arenas.md) · [Match rules](docs/derby-rules.md) · [Reusable panels](docs/computational-impact-panels.md) · [Candidate acceptance](docs/co-012-acceptance.md)
 
 **Relevant internal donor:** [STREET-RACER](https://github.com/QSOLKCB/STREET-RACER) already implements original garage purchases, upgrades, a four-bay career, recovery jobs, validated save transactions, and a separate *Impact Arena* demonstration. Reuse **reviewed contracts**, not its distinct driving authority: preserve Circuit Overdrive's VANILLAJS simulation and exact import provenance. Cash means local fictional credits only. Car damage and repairs must be causally linked to actual vehicle state. A player must have a fair recoverable path after losing a car or funds.
 

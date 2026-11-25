@@ -69,6 +69,7 @@ night-contact|tests/browser-effects.mjs $url --night
 nitro|tests/browser-nitro.mjs $url
 rocket|tests/browser-rocket.mjs $url
 crash|tests/browser-crash.mjs $url
+derby|tests/browser-derby.mjs $url
 EOF
 diff -u "$test_dir/expected" "$test_dir/serial.calls"
 # Every shard starts by validating its own HTTP endpoint. Assert suite membership
@@ -89,7 +90,7 @@ check_lane speedway speedway night-speedway
 check_lane ridge ridge night-ridge
 check_lane controllers gamepad profiles lab crash
 check_lane theatre theatre rocket
-check_lane lifecycle smoke ridge-smoke night-smoke touch
+check_lane lifecycle smoke ridge-smoke night-smoke touch derby
 check_lane effects night-contact headlights nitro
 diff -u <(tail -n +2 "$test_dir/serial.calls" | sort) \
   <(for shard in "${shards[@]}"; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
