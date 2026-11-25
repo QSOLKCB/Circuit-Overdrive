@@ -239,7 +239,7 @@ function handleAction(action){
     return true;
   }
   if(input.source==='gamepad'&&!active()){
-    if(action==='confirm'&&(phase==='grid'||phase==='paused')){
+    if(action==='confirm'&&document.activeElement===canvas&&(phase==='grid'||phase==='paused')){
       arm();
       return true;
     }
@@ -279,6 +279,10 @@ function settle(){
 }
 function advance(){
   if(!active())return;
+  if(!focused()){
+    pause('Focus left the driving controls');
+    return;
+  }
   const sample=input.sample();
   if(!active())return;
   if(sample.camera)cycleCamera();
@@ -342,7 +346,13 @@ function frame(time){
 
 arenaChoice.onchange=()=>{if(phase==='menu')reset();};
 $('derby-arm').onclick=arm;
-$('derby-pause').onclick=togglePause;
+const pauseButton=$('derby-pause');
+pauseButton.onclick=togglePause;
+pauseButton.addEventListener('mousedown',event=>{
+  // Keep canvas focus until the click pauses, even if the mouse is held across frames.
+  if(event.button===0&&active()&&input.source==='keyboard'&&document.activeElement===canvas)
+    event.preventDefault();
+});
 $('derby-restart').onclick=()=>reset('grid');
 $('derby-select').onclick=()=>{reset();arenaChoice.focus();};
 camera.onchange=()=>{
@@ -369,8 +379,8 @@ function suspend(reason){
   tail=0;
   lastTime=null;
 }
-canvas.addEventListener('blur',event=>{
-  if(input.source==='keyboard'&&event.relatedTarget!==$('derby-pause'))pause('Focus left the driving controls');
+canvas.addEventListener('blur',()=>{
+  if(input.source==='keyboard')pause('Focus left the driving controls');
 });
 window.addEventListener('blur',()=>suspend('Window inactive'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend('Tab hidden');});

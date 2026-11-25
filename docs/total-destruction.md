@@ -17,7 +17,7 @@ Total Destruction is the v1.2.0 candidate's six-car derby. Each car uses the sam
 | Cycle camera | C |
 | Pause or resume | Esc |
 
-Use **Controller** to select touch controls, a standard gamepad or a saved profile. Release steering, pedals and buttons before arming a controller. Changing input, leaving the window or losing graphics pauses a live match. Resume with fresh inputs once focus and the selected device are ready.
+Use **Controller** to select touch controls, a standard gamepad or a saved profile. Release steering, pedals and buttons before arming a controller. Gamepad confirm activates the focused control. Confirming on the arena canvas starts an armed round or resumes a paused one. Tabbing out of the arena while driving with the keyboard pauses the round and clears held keys. Changing input, leaving the window or losing graphics also pauses a live match. Resume with fresh inputs once focus and the selected device are ready.
 
 ## Read the arena
 
