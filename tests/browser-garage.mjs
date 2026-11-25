@@ -16,7 +16,7 @@ const browser=await chromium.launch({executablePath:process.env.CHROME_BIN || un
   args:process.env.GARAGE_NATIVE==='1'?[]:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const slot='circuit-overdrive.garage.v1';
 const models=['cinder-two','lilt','evening-line','rivet-eight','yardhand','glass-comet'];
-const errors=[],requests=[],scenarios=[],captures=[],resources={},exports=[];
+const errors=[],requests=[],scenarios=[],captures=[],resources={},exports=[],onboardingLayouts=[];
 let revision,runtime;
 
 async function makeContext(options={}){
@@ -122,6 +122,30 @@ async function capture(page,name){
 const glStats=page=>page.evaluate(()=>structuredClone(window.garageGL['garage-canvas']));
 async function settleDraw(page){await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));}
 async function expectUnchanged(page,before,label){assert.equal(await raw(page),before,label);}
+async function inView(page,id){
+  assert(await el(page,id).isVisible(),id+' is displayed');
+  assert(await el(page,id).evaluate(node=>{
+    const r=node.getBoundingClientRect(),panel=document.querySelector('#garage').getBoundingClientRect();
+    const main=document.querySelector('main').getBoundingClientRect();
+    return r.width>0&&r.top>=Math.max(0,main.top,panel.top)-1&&r.bottom<=Math.min(innerHeight,main.bottom,panel.bottom)+1&&r.left>=0&&r.right<=innerWidth;
+  }),id+' is in the visible scrollport without test scrolling');
+}
+async function firstVisit(page){
+  assert.equal(await raw(page),null,'first visit does not allocate funds or inventory');
+  assert.equal(await el(page,'garage-introduction').getAttribute('data-mode'),'empty');
+  assert.match(await el(page,'garage-intro-copy').textContent(),/Four available bays.*2,400 credits/);
+  await inView(page,'garage-create');assert(await el(page,'garage-create').isEnabled());
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'garage-create');
+  assert(await el(page,'garage-buy').isDisabled());
+}
+async function created(page){
+  await waitStatus(page,'SAVED');assert.equal(await el(page,'garage-balance').textContent(),'2,400 credits');
+  assert.deepEqual((await saved(page)).bays,[null,null,null,null]);
+  assert(await el(page,'garage-introduction').isHidden());
+  assert(await el(page,'garage-buy').isEnabled());await inView(page,'garage-buy');
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'garage-buy');
+  assert.match(await el(page,'garage-message').textContent(),/Garage created.*2,400 credits.*first car/);
+}
 
 try{
   const context=await makeContext(),a=await openPage(context);
@@ -133,15 +157,18 @@ try{
       renderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)};
   });
   assert(runtime.webLocks&&runtime.secureContext,'real supported vault APIs');
-  assert.equal(await saved(a),null,'opening never fabricates starting funds');
+  await firstVisit(a);await capture(a,'first-visit-cta');
   // Create an actual independent championship through its normal UI before
   // garage transactions; preserving an empty key would not prove save isolation.
   await el(a,'garage-close').click();await el(a,'enter-woc').click();await el(a,'woc-new').click();
   await a.waitForFunction(()=>localStorage.getItem('circuit-overdrive.woc.v1')!==null);
   await el(a,'woc-back').click();await el(a,'woc-leave').click();await el(a,'enter-garage').click();
   const otherKeys=await a.evaluate(()=>Object.fromEntries(Object.keys(localStorage).filter(key=>key!=='circuit-overdrive.garage.v1').map(key=>[key,localStorage.getItem(key)])));
-  await prepare(a,'garage-new');await el(a,'garage-cancel').click();assert.equal(await saved(a),null);
-  await commit(a,'garage-new');assert.deepEqual(await saved(a),{version:1,edition:'after-hours-v1',catalogRevision:1,credits:2400,nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
+  await firstVisit(a);
+  await prepare(a,'garage-create');await capture(a,'create-confirmation');
+  await el(a,'garage-cancel').click();await firstVisit(a);
+  await selected(a,'cinder-two');
+  await commit(a,'garage-create');await created(a);await capture(a,'created-buy-enabled');assert.deepEqual(await saved(a),{version:1,edition:'after-hours-v1',catalogRevision:1,credits:2400,nextVehicleId:1,activeVehicleId:null,bays:[null,null,null,null],revision:0});
   await capture(a,'empty-garage');
   await selected(a,'cinder-two');await capture(a,'catalogue-starter');
   await prepare(a,'garage-buy');await capture(a,'purchase-confirmation');await confirm(a);await waitStatus(a,'SAVED');
@@ -149,6 +176,8 @@ try{
   assert.equal((await saved(a)).credits,1800);await capture(a,'first-owned-bay');
   const owned=await saved(a);await a.reload();await el(a,'enter-garage').click();await waitStatus(a,'SAVED');
   assert.deepEqual(await saved(a),owned,'saved purchase survives real reload');
+  assert(await el(a,'garage-introduction').isHidden());await capture(a,'reloaded-first-car');
+  scenarios.push('first visit, cancelled creation, saved setup with focus on enabled Buy, first Cinder Two purchase and reload');
   await selected(a,'glass-comet');assert(await el(a,'garage-buy').isDisabled(),'unaffordable purchase not offered');
   assert.match(await el(a,'garage-availability').textContent(),/credit|afford|fund/i);await capture(a,'insufficient-credits');
   for(let i=0;i<3;i++)await buy(a);
@@ -246,6 +275,7 @@ try{
     if(await el(b,'garage-confirm').isEnabled())await confirm(b);else await el(b,'garage-cancel').click();
   }
   await expectUnchanged(b,purchased,'stale confirmation must not overwrite purchase');
+  assert.equal(await el(b,'garage-introduction').getAttribute('data-mode'),'conflict');assert(await el(b,'garage-create').isHidden());
   await capture(b,'stale-tab-conflict');await el(b,'garage-reload').click();await waitStatus(b,'SAVED');
   assert.equal(await el(b,'garage-balance').textContent(),await el(a,'garage-balance').textContent());
   await el(b,'garage-bay-0').click();await commit(b,'garage-sell');await waitStatus(a,'CONFLICT');
@@ -354,6 +384,50 @@ try{
   await el(a,'garage-reload').click();await waitStatus(a,'SAVED');
   scenarios.push('actual exclusive Web Lock contention fails closed without deferred or duplicate purchases');
 
+  // Test delayed acquisition on first creation: busy controls cannot confirm
+  // twice, and the preview never becomes accepted ownership while waiting.
+  const setupContext=await makeContext(),setup=await openPage(setupContext);
+  await firstVisit(setup);await selected(setup,'lilt');await prepare(setup,'garage-create');
+  await setup.evaluate(()=>{
+    window.originalSetupRequest=navigator.locks.request.bind(navigator.locks);
+    navigator.locks.request=(...args)=>new Promise(resolve=>{window.finishSetup=()=>resolve(window.originalSetupRequest(...args));});
+  });
+  await el(setup,'garage-confirm').click();
+  assert.equal(await el(setup,'garage').getAttribute('data-busy'),'true');
+  assert(await el(setup,'garage-create').isDisabled());assert(await el(setup,'garage-confirm').isDisabled());
+  assert(await el(setup,'garage-new').isDisabled());assert(await el(setup,'garage-buy').isDisabled());
+  await el(setup,'garage-confirm').evaluate(button=>button.click());assert.equal(await raw(setup),null);
+  await setup.evaluate(()=>{window.finishSetup();navigator.locks.request=window.originalSetupRequest;});
+  await el(setup,'garage-confirmation').waitFor({state:'hidden'});await created(setup);
+  assert.equal(JSON.parse(await raw(setup)).sequence,0,'one creation committed');
+  assert.equal(await el(setup,'garage').getAttribute('data-model-id'),'lilt','creation preserves the inspected model');
+  await setupContext.close();scenarios.push('busy first creation disables both creation actions and duplicate confirmation until verified commitment');
+
+  for(const failure of ['quota','write-denied','readback-denied']){
+    const failedContext=await makeContext(),failed=await openPage(failedContext);
+    await firstVisit(failed);await failed.evaluate(failure=>{window.garageStorageFault=failure;},failure);
+    await prepare(failed,'garage-create');await confirm(failed);await waitStatus(failed,'STORAGE UNAVAILABLE');
+    assert.equal(await el(failed,'garage-balance').textContent(),'No saved garage');
+    assert.equal(await el(failed,'garage-introduction').getAttribute('data-mode'),'unavailable');
+    assert(await el(failed,'garage-create').isHidden());assert(await el(failed,'garage-buy').isDisabled());
+    assert(await el(failed,'garage-new').isDisabled());
+    await failed.evaluate(()=>{window.garageStorageFault='none';});
+    if(failure==='readback-denied'){
+      assert.equal((await saved(failed)).credits,2400);
+      await el(failed,'garage-intro-reload').click();await waitStatus(failed,'SAVED');
+      assert.equal(JSON.parse(await raw(failed)).sequence,0,'reconciliation never duplicates initial balance');
+    }else assert.equal(await raw(failed),null,'failed creation does not fund a garage');
+    await failedContext.close();
+  }
+  const unreadableContext=await makeContext();
+  await unreadableContext.addInitScript(()=>{window.garageStorageFault='read-denied';});
+  const unreadable=await openPage(unreadableContext);await waitStatus(unreadable,'STORAGE UNAVAILABLE');
+  assert.equal(await el(unreadable,'garage-introduction').getAttribute('data-mode'),'unavailable');
+  assert(await el(unreadable,'garage-create').isHidden());assert(await el(unreadable,'garage-buy').isDisabled());
+  await unreadable.evaluate(()=>{window.garageStorageFault='none';});assert.equal(await raw(unreadable),null);
+  await unreadableContext.close();
+  scenarios.push('initial quota, denied write and failed save verification never enable purchases from an unconfirmed setup');
+
   const faultContext=await makeContext(),fault=await openPage(faultContext);await commit(fault,'garage-new');
   const beforeFault=await raw(fault);await fault.evaluate(()=>{window.garageStorageFault='write-denied';});
   await prepare(fault,'garage-buy');await confirm(fault);await waitStatus(fault,'STORAGE UNAVAILABLE');
@@ -382,6 +456,13 @@ try{
     await el(fault,'garage-reload').click();await waitStatus(fault,'UNSAVED');
     assert.equal(await raw(fault),broken,'corrupt storage cannot silently reset to free funds');
     assert.equal(await el(fault,'garage-balance').textContent(),'No saved garage');
+    assert.equal(await el(fault,'garage-introduction').getAttribute('data-mode'),'invalid-save');
+    assert.match(await el(fault,'garage-intro-title').textContent(),/Recover/);
+    await capture(fault,'corrupt-save-recovery');
+    await prepare(fault,'garage-create');await el(fault,'garage-cancel').click();
+    await expectUnchanged(fault,broken,'review/cancel replacement preserves corrupt bytes');
+    await el(fault,'garage-intro-import').click();
+    assert.equal(await fault.evaluate(()=>document.activeElement.id),'garage-import');
     await importText(fault,recoveredFault);await el(fault,'garage-confirmation').waitFor({state:'visible'});
     assert.equal(await raw(fault),broken,'admitted backup still requires replacement confirmation');
     await confirm(fault);await waitStatus(fault,'SAVED');assert.equal(await download(fault),recoveredFault);
@@ -420,6 +501,32 @@ try{
   await el(pad,'garage-confirm').focus();await pad.waitForTimeout(150);await expectUnchanged(pad,beforeDisconnect,'reconnected held controller cannot regain ownership or buy');
   await padContext.close();scenarios.push('synthetic standard gamepad with real menu polling: held confirmation, neutral rearming and disconnect protection');
 
+  for(const [width,height] of [[1920,1080],[1440,900],[720,900],[390,844]]){
+    const responsive=await makeContext({viewport:{width,height},hasTouch:width<=720,isMobile:width<720});
+    const page=await openPage(responsive);await page.emulateMedia({reducedMotion:'reduce'});
+    await firstVisit(page);await capture(page,'onboarding-'+width);
+    // Reopen after deliberately scrolling away; first setup remains discoverable.
+    await el(page,'garage-new').scrollIntoViewIfNeeded();await el(page,'garage-close').click();
+    await el(page,'enter-garage').click();await firstVisit(page);
+    await page.keyboard.press('Enter');await el(page,'garage-confirmation').waitFor({state:'visible'});
+    await inView(page,'garage-cancel');await inView(page,'garage-confirm');
+    await page.keyboard.press('Escape');await firstVisit(page);
+    await page.keyboard.press('Enter');await el(page,'garage-confirmation').waitFor({state:'visible'});
+    // Safe Cancel is first focus; a fresh Tab and Enter confirms setup.
+    await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'garage-confirm');
+    await page.keyboard.press('Enter');await el(page,'garage-confirmation').waitFor({state:'hidden'});await created(page);
+    await page.keyboard.press('Enter');await el(page,'garage-confirmation').waitFor({state:'visible'});
+    await confirm(page);await waitStatus(page,'SAVED');assert.equal((await saved(page)).credits,1800);
+    const before=await raw(page);await el(page,'garage-close').click();await el(page,'enter-garage').click();
+    assert(await el(page,'garage-introduction').isHidden());await expectUnchanged(page,before,'reopening never tops up credits');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'garage-close');
+    const scroll=await page.evaluate(()=>[document.querySelector('#garage').scrollTop,document.querySelector('main').scrollTop]);
+    await settleDraw(page);assert.deepEqual(await page.evaluate(()=>[document.querySelector('#garage').scrollTop,document.querySelector('main').scrollTop]),scroll,'idle frames do not force scrolling');
+    onboardingLayouts.push({width,height,firstActionVisible:true,cancellation:true,keyboardPurchase:true,savedBalance:1800});
+    await responsive.close();
+  }
+  scenarios.push('1920x1080, 1440x900, 720px and mobile first-run visibility, stale scroll, keyboard cancellation/setup/purchase and stable reopen focus');
+
   const mobileContext=await makeContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
   const mobile=await openPage(mobileContext);await commit(mobile,'garage-new');
   await selected(mobile,'cinder-two');await prepare(mobile,'garage-buy');await el(mobile,'garage-confirm').tap();await waitStatus(mobile,'SAVED');
@@ -431,7 +538,7 @@ try{
 
   const deniedContext=await makeContext();await deniedContext.addInitScript(()=>Object.defineProperty(navigator,'locks',{configurable:true,value:undefined}));
   const denied=await openPage(deniedContext);await waitStatus(denied,'STORAGE UNAVAILABLE');assert.equal(await saved(denied),null);
-  assert(await el(denied,'garage-new').isDisabled());await deniedContext.close();
+  assert(await el(denied,'garage-new').isDisabled());assert(await el(denied,'garage-create').isHidden());assert.equal(await el(denied,'garage-introduction').getAttribute('data-mode'),'unavailable');await deniedContext.close();
   scenarios.push('missing Web Locks fails closed with explicit storage status');
 
   const noGLContext=await makeContext();await noGLContext.addInitScript(()=>{
@@ -455,7 +562,7 @@ try{
   assert.deepEqual(errors,[]);
   const report={version:1,source:revision,browser:browser.version(),runtime,url:base.href,scenarios,resources,captures,
     requests:requests.length,externalRequests:requests.filter(url=>!url.startsWith(base.href)&&!url.startsWith('blob:')&&!url.startsWith('data:')),errors,
-    exports,invalidImportCases:invalidFiles.map(([name])=>name),finalGarage:await saved(a),limitations:['Synthetic standard gamepad reports and storage service faults are explicitly identified.','Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification.']};
+    exports,onboardingLayouts,invalidImportCases:invalidFiles.map(([name])=>name),finalGarage:await saved(a),limitations:['Synthetic standard gamepad reports and storage service faults are explicitly identified.','Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification.']};
   if(evidence)await writeFile(join(evidence,'garage-browser.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report,null,2));await context.close();
 }finally{await browser.close();}
