@@ -63,7 +63,10 @@ try {
       [/scene.draw\(round.world,\{[^;]+\}\);/,
         'window.derbyProbe.draw(canvas,time,round,phase,effects,()=>{$&});']],
       append:'\nwindow.inspectDerby=()=>({round,scene,phase,effects});'},
-    'src/replay-theatre.js':{append:'\nwindow.inspectDerbyReplay=()=>({session,scene});'}
+    'src/replay-theatre.js':{changes:[
+      [/scene.draw\(world,\{[^;]+\}\);/,
+        'window.derbyProbe.draw(canvas,0,session.race,\'theatre\',[],()=>{$&});']],
+      append:'\nwindow.inspectDerbyReplay=()=>({session,scene});'}
   };
   const errors=[];
   await context.route('**/*',async route=>{
@@ -96,9 +99,19 @@ try {
   const advance=async(ticks=0)=>{if(!profile)await page.evaluate(ticks=>window.advanceDerbyFrame(ticks),ticks);};
   async function capture(name,target=page,tick=null,event=null){
     if(!dir || profile)return;
+    const expanded=name.endsWith('-result') || name.endsWith('-final-survivor') || name.endsWith('-grid');
+    const viewport=target.viewportSize();
+    if(expanded){
+      await target.setViewportSize({width:1280,height:900});
+      await target.evaluate(async()=>{await window.presentDerbyFrame();window.advanceDerbyFrame(0);});
+    }
     await target.evaluate(()=>window.presentDerbyFrame());
     const bytes=await target.screenshot({path:dir+'/'+name+'.png',timeout:60000});
     captures[name]={revision,tick,sha256:sha256(bytes),event};
+    if(expanded){
+      await target.setViewportSize(viewport);
+      await target.evaluate(async()=>{await window.presentDerbyFrame();window.advanceDerbyFrame(0);});
+    }
   }
   async function download(target,id,fallback){
     const [file]=await Promise.all([target.waitForEvent('download'),target.locator('#'+id).click()]);
@@ -190,7 +203,7 @@ try {
       await theatre.evaluate(()=>window.advanceDerbyFrame(1));
     assert.equal(await observed(),tick,'Replay seek endpoint');
   }
-  async function reconstruct(arena,tape,live){
+  async function reconstruct(arena,tape,live,panels){
     const theatre=await open();
     try {
       await theatre.goto(new URL('replay-theatre.html',base).href);
@@ -212,6 +225,8 @@ try {
       });
       for(const key of ['cars','standings','eliminations','result'])assert.deepEqual(reconstructed[key],live.state[key]);
       checkBudget(reconstructed,arena+' Theatre');
+      assert.deepEqual(canonicalPanels(await theatre.evaluate(()=>window.derbyProbe.panels())),canonicalPanels(panels),
+        'Theatre must reproduce all six mutable panel meshes');
       await capture(arena+'-theatre-result',theatre,tape.data.ticks);
       return (await download(theatre,'replay-evidence',arena+'-theatre-receipt.json')).data;
     } finally{await theatre.close();}
@@ -355,6 +370,11 @@ try {
     assert(probe.steps[0].player.throttle>0,'Keyboard must be accepted from the beginning of the fixture');
     assert.equal(probe.steps.length,live.state.ticks);
     assert(probe.events['first-contact'].hits[0].normalImpulse>0);
+    assert(probe.maxEffectCount<=8);
+    assert.equal((await page.locator('#derby-survivors').textContent()),
+      String(live.state.standings.filter(row=>row.active).length));
+    assert.equal((await page.locator('#derby-knockouts').textContent()),
+      String(live.state.standings.find(row=>row.id===5).knockouts));
     assert(live.state.cars.every(car=>Object.values(car.damage).some(value=>value>0)),arena+' all six take accepted damage');
     assert(live.state.eliminations.some(event=>event.attackerId!==null),arena+' credited knockout');
     const player=live.state.eliminations.find(event=>event.id===5);
@@ -380,7 +400,7 @@ try {
     assert.equal(tape.data.revision,revision);assert.equal(tape.data.version,6);
     assert.equal(tape.data.ticks,live.state.ticks);
     const receipt=(await download(page,'save-derby-evidence',name+'-live-receipt.json')).data;
-    const theatre=await reconstruct(name,tape,live);
+    const theatre=await reconstruct(name,tape,live,panels);
     assert.deepEqual(withoutRuntime(theatre),withoutRuntime(receipt),'Same-runtime Theatre and live digests agree');
     assert.deepEqual(receipt.eliminations,live.state.eliminations);
     assert.deepEqual(receipt.classification,live.state.standings);

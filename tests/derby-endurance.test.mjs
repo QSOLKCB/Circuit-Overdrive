@@ -88,3 +88,19 @@ test('rules and raw contact receipts repeat through twelve seeded full rounds',t
   assert(aggregate.contacts>100 && aggregate.knockouts>10);
   t.diagnostic(JSON.stringify(aggregate));
 });
+
+test('a zero-damage final tick settles tied scores by stable driver ID',()=>{
+  const round=createDerbyRound({arena:'iron-pit',seed:27});
+  // Isolate the accepted time-limit boundary; the last tick uses real commands
+  // and the legal untouched grid so it cannot fabricate damage or a knockout.
+  round.ticks=round.world.tick=DERBY_TICK_LIMIT-1;
+  const command={throttle:0,brake:0,steer:0};
+  const {result,contacts,eliminations}=stepDerbyRound(round,command);
+  assert.equal(result.reason,'time-limit');
+  assert.equal(result.winnerId,0);
+  assert.deepEqual(contacts,[]);
+  assert.deepEqual(eliminations,[]);
+  assert.deepEqual(result.standings.map(row=>[row.id,row.active,row.knockouts,row.condition]),
+    Array.from({length:6},(_,i)=>[i,true,0,4000]));
+  assert.throws(()=>stepDerbyRound(round,command),/Derby settled/);
+});
