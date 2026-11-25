@@ -2,15 +2,17 @@
 // Game-owned build authority. No garage storage, DOM, or racing recipe imports.
 import {validateVehicle, VEHICLE_FORMAT} from '../vendor/vanillajs/modules/vehicle3d/index.js';
 import {garageModel} from './garage-catalog.js';
-import {garageRecord} from './garage-data.js';
+import {garageArray, garageInteger, garageRecord} from './garage-data.js';
+import {PART_SLOTS, PART_TUNING_LIMITS, vehiclePart, vehicleParts} from './vehicle-parts.js';
 
 export const BUILD_FORMAT = 'circuit-overdrive.vehicle-build';
 export const BUILD_VERSION = 1;
 export const BUILD_RULES = 1;
+export const BUILD_PART_RULES = 2;
+export const SUPPORTED_BUILD_RULES = Object.freeze([BUILD_RULES,BUILD_PART_RULES]);
 export const BUILD_BYTES = 2048;
 export const BUILD_ENGINE_REVISION = '9d95d74b355ec17add32db0b55f0f71130f9c004';
-const slots = Object.freeze(['engine', 'intake', 'exhaust', 'gearbox', 'finalDrive',
-  'tyres', 'suspension', 'steering', 'paint']);
+const slots = PART_SLOTS;
 const freeze = value => {
   if (value && typeof value === 'object') {
     for (const child of Object.values(value)) freeze(child);
@@ -74,31 +76,109 @@ export function stockVehicleBuild(modelId) {
 
 export function validateVehicleBuild(modelId, value) {
   garageModel(modelId);
-  const build = garageRecord(value, ['format','version','rulesVersion','parts'], 'Vehicle build');
-  if (build.format !== BUILD_FORMAT || build.version !== BUILD_VERSION || build.rulesVersion !== BUILD_RULES) {
+  // Read the discriminant through its descriptor, never through an accessor.
+  const descriptor = value && typeof value === 'object' ? Object.getOwnPropertyDescriptor(value,'rulesVersion') : null;
+  const rules = descriptor && Object.hasOwn(descriptor,'value') ? descriptor.value : null;
+  const build = garageRecord(value, rules===BUILD_PART_RULES ?
+    ['format','version','rulesVersion','parts','tuning','inventory'] :
+    ['format','version','rulesVersion','parts'], 'Vehicle build');
+  if (build.format !== BUILD_FORMAT || build.version !== BUILD_VERSION || !SUPPORTED_BUILD_RULES.includes(build.rulesVersion)) {
     throw TypeError('Unsupported vehicle build format/version/rules');
   }
   const parts = garageRecord(build.parts, slots, 'Installed parts');
-  for (const slot of slots) {
-    if (parts[slot] !== (slot === 'paint' ? 'factory' : 'stock')) {
-      throw RangeError('Unsupported '+slot+' part for build rules 1');
+  let accepted;
+  if (rules===BUILD_RULES) {
+    for (const slot of slots) {
+      if (parts[slot] !== (slot === 'paint' ? 'factory' : 'stock')) {
+        throw RangeError('Unsupported '+slot+' part for build rules 1');
+      }
     }
+    accepted = {format:BUILD_FORMAT, version:BUILD_VERSION, rulesVersion:BUILD_RULES, parts};
+  } else {
+    const tuning = garageRecord(build.tuning,Object.keys(PART_TUNING_LIMITS),'Vehicle tuning');
+    for (const [key,[min,max]] of Object.entries(PART_TUNING_LIMITS)) {
+      tuning[key] = garageInteger(tuning[key],min,max,'Tuning '+key);
+    }
+    const inventory = garageRecord(build.inventory,slots,'Per-car parts inventory');
+    for (const slot of slots) {
+      vehiclePart(slot,parts[slot]);
+      const base = slot==='paint'?'factory':'stock';
+      const ids = garageArray(inventory[slot],1,vehicleParts(slot).length,'Inventory '+slot);
+      for (const id of ids)vehiclePart(slot,id);
+      if (new Set(ids).size!==ids.length || !ids.includes(base) || !ids.includes(parts[slot])) {
+        throw RangeError('Inventory '+slot+' must contain unique owned IDs including stock and fitted part');
+      }
+      inventory[slot] = ids.slice().sort();
+    }
+    if (parts.finalDrive!=='adjustable' && tuning.finalDrive!==0)throw RangeError('Final-drive tuning requires the adjustable final drive');
+    if (parts.suspension!=='adjustable' && ['spring','damper','travel'].some(key=>tuning[key]!==0)) {
+      throw RangeError('Suspension tuning requires adjustable suspension');
+    }
+    if (parts.steering!=='quick' && tuning.steering!==0)throw RangeError('Steering tuning requires quick steering');
+    accepted = {format:BUILD_FORMAT,version:BUILD_VERSION,rulesVersion:BUILD_PART_RULES,parts,tuning,inventory};
   }
-  const accepted = {format:BUILD_FORMAT, version:BUILD_VERSION, rulesVersion:BUILD_RULES, parts};
   if (new TextEncoder().encode(JSON.stringify(accepted)).length > BUILD_BYTES) {
     throw RangeError('Vehicle build exceeds 2 KiB');
   }
   return freeze(accepted);
 }
 
+/** Explicit inert upgrade of legacy installed data; no payment or fitting. */
+export function stockUpgradeBuild(modelId,value) {
+  const accepted=validateVehicleBuild(modelId,value);
+  if(accepted.rulesVersion===BUILD_PART_RULES)return accepted;
+  return validateVehicleBuild(modelId,{...accepted,rulesVersion:BUILD_PART_RULES,
+    tuning:Object.fromEntries(Object.keys(PART_TUNING_LIMITS).map(key=>[key,0])),
+    inventory:Object.fromEntries(slots.map(slot=>[slot,[accepted.parts[slot]]]))});
+}
+
+const torqueChanges=freeze({
+  engine:{stock:[0,0,0,0,0],street:[18,28,32,28,18],performance:[35,60,70,60,35],competition:[50,80,90,90,55]},
+  intake:{stock:[0,0,0,0,0],duct:[2,6,9,12,7]},
+  exhaust:{stock:[0,0,0,0,0],flow:[3,5,10,13,8]}
+});
+function applyParts(recipe,build,modelId) {
+  if(build.rulesVersion===BUILD_RULES)return recipe;
+  const {parts,tuning}=build;
+  if(slots.some(slot=>slot!=='paint' && parts[slot]!=='stock') || Object.values(tuning).some(value=>value!==0)) {
+    recipe.name=garageModel(modelId).displayName+' / workshop rules 2';
+  }
+  recipe.engine.torqueCurve=recipe.engine.torqueCurve.map(([rpm,torque],index)=>[
+    rpm,torque+torqueChanges.engine[parts.engine][index]+torqueChanges.intake[parts.intake][index]+torqueChanges.exhaust[parts.exhaust][index]]);
+  if(recipe.engine.torqueCurve.some(([,torque])=>torque>550))throw RangeError('Combined engine/intake/exhaust torque exceeds 550 Nm');
+  if(parts.gearbox==='short')recipe.gearbox.ratios=[3.45,2.3,1.65,1.25,1];
+  if(parts.gearbox==='long')recipe.gearbox.ratios=[2.8,1.8,1.3,1,.75];
+  if(parts.finalDrive==='adjustable')recipe.gearbox.finalDrive=Number((recipe.gearbox.finalDrive+.2+tuning.finalDrive*.1).toFixed(6));
+  const tyreChanges={stock:[0,0,0],touring:[.04,250,-.002],performance:[.18,850,.001],economy:[-.12,-400,-.003]};
+  const [grip,stiffness,rolling]=tyreChanges[parts.tyres];
+  recipe.tyres.grip=Number((recipe.tyres.grip+grip).toFixed(6));
+  recipe.tyres.corneringStiffness+=stiffness;
+  recipe.tyres.rollingResistance=Number((recipe.tyres.rollingResistance+rolling).toFixed(6));
+  if(parts.suspension==='adjustable'){
+    recipe.suspension.spring=Math.round(recipe.suspension.spring*1.10*(1+.1*tuning.spring));
+    recipe.suspension.damper=Math.round(recipe.suspension.damper*1.05*(1+.1*tuning.damper));
+    const extension=.01+.01*tuning.travel;
+    recipe.suspension.restLength=Number((recipe.suspension.restLength+extension).toFixed(6));
+    recipe.suspension.travel=Number((recipe.suspension.travel+extension).toFixed(6));
+  }
+  if(parts.steering==='quick'){
+    recipe.steering.maxAngle=Number((recipe.steering.maxAngle+.02+.02*tuning.steering).toFixed(6));
+    recipe.steering.rate=Number((recipe.steering.rate+.4+.1*tuning.steering).toFixed(6));
+  }
+  if(recipe.mass*9.81/(4*recipe.suspension.spring)>recipe.suspension.travel*.75) {
+    throw RangeError('Combined suspension setup must support static weight within 75% of travel');
+  }
+  return recipe;
+}
+
 /** Pure bounded compiler. Admission completes before an immutable result exists.
- * Rules 1 resolves only stock parts. Upgrades require the separately reviewed C.
+ * Rules 1 retains the exact published stock mapping; rules 2 adds owned parts.
  */
 export function compileVehicleBuild(modelId, value) {
   const build = validateVehicleBuild(modelId, value);
-  const recipe = validateVehicle(stockRecipe(modelId));
+  const recipe = validateVehicle(applyParts(stockRecipe(modelId),build,modelId));
   return freeze({modelId, build, recipe, canonicalBuild:JSON.stringify(build),
-    canonicalRecipe:JSON.stringify(recipe), rulesVersion:BUILD_RULES,
+    canonicalRecipe:JSON.stringify(recipe), rulesVersion:build.rulesVersion,
     engineRevision:BUILD_ENGINE_REVISION});
 }
 
@@ -113,9 +193,12 @@ export async function identifyVehicleBuild(modelId, build, sourceRevision) {
   const accepted = compileVehicleBuild(modelId, build);
   const hash = async value => Array.from(new Uint8Array(await globalThis.crypto.subtle.digest(
     'SHA-256', new TextEncoder().encode(value))), byte => byte.toString(16).padStart(2,'0')).join('');
+  const installed = accepted.rulesVersion===BUILD_RULES ? accepted.build :
+    {format:accepted.build.format,version:accepted.build.version,rulesVersion:accepted.rulesVersion,
+      parts:accepted.build.parts,tuning:accepted.build.tuning};
   const buildDigest = await hash(JSON.stringify({domain:'co.vehicle-build.v1', modelId,
-    rulesVersion:BUILD_RULES, build:accepted.build}));
+    rulesVersion:accepted.rulesVersion, build:installed}));
   const recipeDigest = await hash(JSON.stringify({domain:'co.vehicle-recipe.v1', sourceRevision,
-    engineRevision:BUILD_ENGINE_REVISION, modelId, rulesVersion:BUILD_RULES, recipe:accepted.recipe}));
+    engineRevision:BUILD_ENGINE_REVISION, modelId, rulesVersion:accepted.rulesVersion, recipe:accepted.recipe}));
   return freeze({...accepted, sourceRevision, buildDigest, recipeDigest});
 }

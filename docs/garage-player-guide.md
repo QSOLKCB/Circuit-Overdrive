@@ -1,6 +1,6 @@
 # Street Rod — After Hours Motor Works
 
-Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any racing mode. Tuning, repairs and race rewards are future milestones.
+Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any racing mode. The Parts Counter offers bounded mechanical fitting and setup for a selected owned car. Repairs, race rewards and a playable owned-car facility remain later milestones.
 
 ## Keep an existing garage
 
@@ -17,6 +17,12 @@ Afterward, **Export garage JSON** downloads the current build-aware save. **Expo
 5. Reload the page and reopen The Garage. With the same browser profile and site address, the saved balance, cars, bay positions and active vehicle remain unchanged.
 
 The Cinder Two costs 600 credits. Confirming its purchase leaves 1,800 credits and puts `car-000001` in Bay 1; a browser reload retains both. Four can fill all four bays using the initial balance. A full garage cannot buy a fifth vehicle. A model that costs more than the remaining balance cannot be bought. Catalogue inspection remains available without ownership or usable storage.
+
+## Fit parts to an owned car
+
+Select an occupied bay. The **Parts Counter** identifies that owned car and its installed parts. Choose a slot and part, then any supported setup steps. Review the acquisition/fitting cost and select **Review fitting**. The confirmation names the exact car, part, setup and resulting balance. Confirm fitting to save; Cancel leaves the build and balance unchanged.
+
+Acquired parts belong to that car. Refitting an owned mechanical part costs 20 credits; new parts also cost their catalogue price. Setup changes cost 10 credits. Paint fitting costs 10 plus acquisition if needed. An unchanged part/setup cannot charge again. Parts/labor receive no sale refund. Paint changes original panel colours and adds no horsepower or grip. Saved builds and inventories survive reload and validated export/import. They do not replace established racing vehicles. [Physical effects and exact prices](vehicle-parts.md)
 
 ## Sales and recovery
 

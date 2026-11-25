@@ -1,5 +1,7 @@
 # CO-014B — Owned builds and save migration
 
+This records the B migration contract. C adds [parts rules 2](vehicle-parts.md) alongside unchanged rules-1 admission, without changing the garage/Vault schema or migration protocol.
+
 Each accepted owned car now has exactly `ownedVehicleId`, `modelId`, `build`
 and `condition`. The ID remains the same when a build is assigned. Current
 garage schema is **version 2 / machine-shop-v1 / catalogue revision 1**; all

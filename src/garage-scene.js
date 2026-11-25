@@ -2,7 +2,7 @@
 import {LitRenderer} from '../vendor/vanillajs/modules/render-lit/index.js';
 import {lookAt} from './camera.js';
 import {GARAGE_CATALOG, garageModel} from './garage-catalog.js';
-import {GARAGE_BAY_POSITIONS, GARAGE_PREVIEW_POSITION, garageGeometry} from './garage-geometry.js';
+import {GARAGE_BAY_POSITIONS, GARAGE_PREVIEW_POSITION, garageGeometry, garageVehicleGeometry} from './garage-geometry.js';
 
 const material={
   floor:{roughness:.94,pattern:'asphalt',patternScale:.6},
@@ -34,11 +34,18 @@ export function createGarageScene(canvas,pixelRatio=1) {
   try {
     const geometry=garageGeometry();
     const upload=parts=>Object.entries(parts).map(([name,vertices])=>({name,mesh:renderer.mesh(vertices)}));
-    const workshop=upload(geometry.workshop),vehicles=new Map(geometry.vehicles.map(({modelId,parts})=>[modelId,upload(parts)]));
+    const workshop=upload(geometry.workshop),vehicles=new Map(geometry.vehicles.map(({modelId,parts})=>[modelId+':factory',upload(parts)]));
+    // At most six original models × four finite finishes. Cache each accepted
+    // variant once; selection never allocates an unbounded stream of meshes.
+    function vehicleMeshes(modelId,paintId) {
+      const key=modelId+':'+paintId;
+      if(!vehicles.has(key))vehicles.set(key,upload(garageVehicleGeometry(modelId,paintId)));
+      return vehicles.get(key);
+    }
     const shadow=renderer.mesh(shadowVertices);
     return {
       stats:()=>renderer.stats(),dispose:()=>renderer.dispose(),
-      draw({garage=null,modelId=GARAGE_CATALOG[0].modelId,camera='front'}={}) {
+      draw({garage=null,modelId=GARAGE_CATALOG[0].modelId,ownedVehicleId=null,camera='front'}={}) {
         if(renderer.lost)return;
         garageModel(modelId);
         if(!GARAGE_CAMERAS.includes(camera))throw RangeError('Unknown garage camera');
@@ -50,10 +57,12 @@ export function createGarageScene(canvas,pixelRatio=1) {
         renderer.begin(eye,lookAt(eye,preset.target),LIGHT);
         for(const {name,mesh} of workshop)renderer.draw(mesh,{material:material[name]});
         const ids=[modelId,...GARAGE_BAY_POSITIONS.map((_,i)=>garage?.bays[i]?.modelId??null)];
+        const inspected=garage?.bays.find(car=>car?.ownedVehicleId===ownedVehicleId&&car.modelId===modelId);
+        const paints=[inspected?.build?.parts.paint??'factory',...GARAGE_BAY_POSITIONS.map((_,i)=>garage?.bays[i]?.build?.parts.paint??'factory')];
         for(let i=0;i<ids.length;i++)if(ids[i])renderer.draw(shadow,{matrix:matrices[i],material:shadowMaterial});
         for(let i=0;i<ids.length;i++) {
           if(!ids[i])continue;
-          const parts=vehicles.get(ids[i]);
+          const parts=vehicleMeshes(ids[i],paints[i]);
           if(!parts)throw RangeError('Unknown owned garage model');
           for(const {name,mesh} of parts)renderer.draw(mesh,{matrix:matrices[i],material:material[name]});
         }

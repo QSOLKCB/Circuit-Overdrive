@@ -65,8 +65,8 @@ export function createGarageExperience({host, viewport, canvas, status, boundary
       if (!dirty) return;
       try {
         scene ??= createGarageScene(canvas,pixelRatio);
-        const {state,modelId,camera} = ui.presentation;
-        scene.draw({garage:state,modelId,camera});
+        const {state,modelId,ownedVehicleId,camera} = ui.presentation;
+        scene.draw({garage:state,modelId,ownedVehicleId,camera});
         dirty = false;
         graphicsMessage('');
       } catch {

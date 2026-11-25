@@ -2,6 +2,7 @@
 // Original, cosmetic showroom geometry. None of these dimensions is a vehicle recipe.
 import {box, lettering, quad, triangle} from './geometry.js';
 import {GARAGE_CATALOG, garageModel} from './garage-catalog.js';
+import {vehiclePaint} from './vehicle-parts.js';
 
 const at=(x,y,z)=>[x,y,z], white=[1,1,1], ink=[.055,.075,.083], steel=[.38,.46,.48];
 const cream=[.91,.86,.70], amber=[.97,.57,.15], teal=[.15,.49,.49];
@@ -33,8 +34,8 @@ function wheel(tyres,rims,x,z,radius,side) {
   block(rims,outer+side*.016,cy,z,.018,radius*.27,radius*.27,steel);
 }
 
-export function garageVehicleGeometry(modelId) {
-  const model=garageModel(modelId),s=shapes[modelId],paint=rgb(model.finish.body),accent=rgb(model.finish.accent);
+export function garageVehicleGeometry(modelId,paintId='factory') {
+  const model=garageModel(modelId),finish=vehiclePaint(paintId,modelId),s=shapes[modelId],paint=rgb(finish.body),accent=rgb(finish.accent);
   const shell=[],trim=[],glass=[],lamps=[],tyres=[],rims=[];
   const front=-s.length/2,rear=s.length/2,half=s.width/2;
   // Six-ring chamfered lower body, with a distinct nose height and rear profile.

@@ -8,6 +8,8 @@ import {createGarage} from '../src/garage.js';
 import {transactGarage} from '../src/garage-transactions.js';
 import {garageGeometry,garageVehicleGeometry,GARAGE_BAY_POSITIONS} from '../src/garage-geometry.js';
 import {createGarageScene,GARAGE_CAMERAS} from '../src/garage-scene.js';
+import {vehicleParts,vehiclePaint} from '../src/vehicle-parts.js';
+import {transactGarageInstallation} from '../src/garage-transactions.js';
 
 function inspect(vertices) {
   assert(vertices instanceof Float32Array);
@@ -80,6 +82,47 @@ function fullGarage() {
   }
   return state;
 }
+
+test('original paint changes authored panel colours while preserving every silhouette and non-paint batch',()=>{
+  for(const {modelId} of GARAGE_CATALOG)for(const {id} of vehicleParts('paint')) {
+    const stock=garageVehicleGeometry(modelId),painted=garageVehicleGeometry(modelId,id);
+    for(const batch of Object.keys(stock)) {
+      assert.equal(painted[batch].length,stock[batch].length);
+      for(let i=0;i<stock[batch].length;i++)if(i%11<6||i%11>8)assert.equal(painted[batch][i],stock[batch][i]);
+      if(['glass','lamps','tyres','rims'].includes(batch))assert.deepEqual(painted[batch],stock[batch]);
+    }
+    const colour=vehiclePaint(id,modelId).body;
+    const rgb=[1,3,5].map(i=>parseInt(colour.slice(i,i+2),16)/255);
+    assert(rgb.every((v,i)=>Math.abs(painted.shell[6+i]-v)<1e-6));
+    if(id!=='factory')assert.notDeepEqual(painted.shell,stock.shell);
+  }
+});
+
+test('accepted owned paint is cached, bounded across the finite palette and released on disposal',()=>{
+  const gl=recordingCanvas(),scene=createGarageScene(gl.canvas);
+  const bought=transactGarage(createGarage(),{type:'buy',targetId:'cinder-two',expectedRevision:0}).state;
+  const fitted=transactGarageInstallation(bought,{type:'install',ownedVehicleId:'car-000001',slot:'paint',partId:'midnight',
+    tuning:{finalDrive:0,spring:0,damper:0,travel:0,steering:0},expectedRevision:1});
+  assert(fitted.accepted);assert.equal(fitted.state.credits,1730);
+  scene.draw({garage:fitted.state,modelId:'cinder-two',ownedVehicleId:'car-000001'});
+  const uploaded=gl.uploads;
+  for(let i=0;i<8;i++)scene.draw({garage:fitted.state,modelId:'cinder-two',ownedVehicleId:'car-000001'});
+  assert.equal(gl.uploads,uploaded,'accepted repeated paint draws reuse retained GPU meshes');
+  // Authored visual fixtures only: exhaust the finite palette, not purchases.
+  for(const model of GARAGE_CATALOG)for(const {id} of vehicleParts('paint')) {
+    scene.draw({garage:{bays:[{ownedVehicleId:'car-000001',modelId:model.modelId,build:{parts:{paint:id}}},null,null,null]},
+      modelId:model.modelId,ownedVehicleId:'car-000001'});
+  }
+  const final=scene.stats();assert.equal(final.meshes,149);
+  assert(final.meshes<LIT_PROFILES.high.maxMeshes&&final.vertices<LIT_PROFILES.high.maxVertices);
+  const allUploads=gl.uploads;
+  for(const model of GARAGE_CATALOG)for(const {id} of vehicleParts('paint')) {
+    scene.draw({garage:{bays:[{ownedVehicleId:'car-000001',modelId:model.modelId,build:{parts:{paint:id}}},null,null,null]},
+      modelId:model.modelId,ownedVehicleId:'car-000001'});
+  }
+  assert.equal(gl.uploads,allUploads);
+  scene.dispose();assert.equal(gl.buffers.size+gl.programs.size+gl.listeners.size,0);
+});
 
 test('all catalogue switches and camera views retain bounded resources and never mutate ownership',()=>{
   const gl=recordingCanvas(),scene=createGarageScene(gl.canvas),garage=fullGarage(),before=JSON.stringify(garage);
