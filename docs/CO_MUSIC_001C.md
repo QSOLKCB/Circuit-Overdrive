@@ -39,7 +39,7 @@ The owner should listen to all seven exported WAVs on real speakers or headphone
 
 ## Separation from gameplay
 
-The runtime selects Speedway, Ridge, championship, night, Nitro and Rocket scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
+The runtime selects Speedway, Ridge, championship, night, Nitro, Rocket and Total Destruction scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
 
 ## Verification
 
