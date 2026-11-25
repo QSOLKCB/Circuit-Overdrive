@@ -284,6 +284,98 @@ try{
     accelerationSeconds:{stock:stock.result.metrics.accelerationSeconds,
       current:current.result.metrics.accelerationSeconds,proposed:proposed.result.metrics.accelerationSeconds},
     stockModels:stockAdmissions.length,credits:installed.garage.credits,errors},null,2));
+
+  // These later transactions intentionally establish a new accepted save. The
+  // first report above retains the exact-save-preservation journey separately.
+  const followup={version:1,source,browser:browser.version(),scenarios:[]};
+  await fit(page,'gearbox','short');
+  const gearedRaw=await raw(page),geared=JSON.parse(gearedRaw);
+  assert.equal(geared.garage.credits,1350);assert.equal(geared.garage.revision,3);
+  assert.equal(geared.garage.bays[0].ownedVehicleId,'car-000001');
+  assert.equal(geared.garage.bays[0].build.parts.engine,'street');
+  assert.equal(geared.garage.bays[0].build.parts.gearbox,'short');
+  assert.deepEqual(geared.garage.bays[0].build.inventory.gearbox,['short','stock']);
+  await page.locator('#garage-test-drive').click();
+  await page.waitForURL('**/proving-ground.html?vehicle=car-000001');await stamp(page);await admitted(page);
+  const gearComparison=await compare(page,'acceleration');
+  const actualGear=gearComparison.results.find(r=>r.mode==='current');
+  assert.equal(actualGear.build.parts.gearbox,'short');assert.equal(actualGear.ownedVehicleId,'car-000001');
+  assert.notEqual(actualGear.recipeDigest,current.recipeDigest);
+  assert.notEqual(actualGear.result.metrics.accelerationSeconds,current.result.metrics.accelerationSeconds);
+  assert.deepEqual(actualGear.commandsRLE,current.commandsRLE);assert.equal(actualGear.acceptedTicks,900);
+  assert.equal(await raw(page),gearedRaw,'Testing the actually purchased gearbox cannot spend or install a further part');
+  followup.gearbox={saved:geared,current:actualGear,engineOnlyAccelerationSeconds:current.result.metrics.accelerationSeconds};
+  followup.scenarios.push('A second real purchase fits the short gearbox to the same owned car; its accepted 900-call physical result differs from the engine-only installed build');
+  await capture(page,'installed-short-gearbox-comparison');
+
+  await load(page);assert.equal(await pg(page,'arm').isEnabled(),true);
+  const other=await openGarage(shared);await garage(other,'bay-0').click();await fit(other,'paint','seafoam');
+  const changedRaw=await raw(other),changedGarage=JSON.parse(changedRaw);
+  await page.waitForFunction(()=>/Garage changed|unavailable/i.test(document.querySelector('#pg-status').textContent));
+  assert.equal(await pg(page,'arm').isDisabled(),true,'A stale owned snapshot cannot resume after another tab commits');
+  await stable(page);assert.equal(await raw(page),changedRaw);
+  await other.close();await page.bringToFront();await load(page);
+  assert.equal(await pg(page,'arm').isEnabled(),true);
+  assert.match(await pg(page,'identity').textContent(),new RegExp('saved revision '+changedGarage.garage.revision));
+  followup.staleTab={saved:changedGarage,requiredExplicitLoad:true};
+  followup.scenarios.push('A real second-tab paint transaction invalidates the admitted owned snapshot; explicit Load is required before driving the newly accepted save');
+
+  await pg(page,'input').selectOption('touch');await pg(page,'arm').click();
+  const pedal=pg(page,'touch').locator('[data-touch="throttle"]');await pedal.scrollIntoViewIfNeeded();
+  const bounds=await pedal.boundingBox();assert(bounds);
+  const cdp=await shared.newCDPSession(page);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:bounds.x+bounds.width/2,y:bounds.y+bounds.height/2}]});
+  let touchDriven=await ticks(page,50);assert(horizontalSpeed(touchDriven)>1);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
+  await page.waitForFunction(()=>JSON.parse(document.querySelector('#pg-telemetry').textContent).paused);
+  const touchCancelled=await stable(page);await pg(page,'arm').click();
+  const touchResumed=await ticks(page,touchCancelled.ticks+35);
+  assert(horizontalSpeed(touchResumed)<=horizontalSpeed(touchCancelled)+.1,'Cancelled touch cannot reapply its held pedal');
+  await pg(page,'arm').click();await cdp.detach();assert.equal(await raw(page),changedRaw);
+  followup.touch={driven:touchDriven,cancelled:touchCancelled,resumed:touchResumed};
+  followup.scenarios.push('A browser-dispatched touch contact drives the actual car; native touch cancellation pauses and clears its pedal before neutral resume');
+
+  await load(page);
+  await page.evaluate(()=>{
+    // Replace only the browser device service. The production mapper, neutral
+    // arming, disconnection handling and physical update remain unchanged.
+    window.provingGamepadService={connected:true,throttle:1};
+    Object.defineProperty(navigator,'getGamepads',{configurable:true,value:()=>{
+      const service=window.provingGamepadService;
+      return service.connected?[{index:0,id:'Proving Browser Standard Controller',mapping:'standard',connected:true,
+        timestamp:1,axes:[0,0,0,0],buttons:Array.from({length:17},(_,i)=>({value:i===7?service.throttle:0,
+          pressed:i===7&&service.throttle>.5,touched:i===7&&service.throttle>0}))}]:[];
+    }});
+  });
+  await pg(page,'input').selectOption('gamepad');await pg(page,'arm').click();
+  await page.waitForFunction(()=>/neutral/i.test(document.querySelector('#pg-status').textContent));
+  assert.equal((await stable(page)).ticks,0,'A held virtual pedal cannot arm the stopped test');
+  await page.evaluate(()=>{window.provingGamepadService.throttle=0;});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await pg(page,'arm').click();await ticks(page,12);
+  await page.evaluate(()=>{window.provingGamepadService.throttle=1;});
+  const padDriven=await ticks(page,65);assert(horizontalSpeed(padDriven)>1);
+  await page.evaluate(()=>{window.provingGamepadService.connected=false;});
+  await page.waitForFunction(()=>JSON.parse(document.querySelector('#pg-telemetry').textContent).paused);
+  const disconnected=await stable(page);await pg(page,'arm').click();await stable(page);
+  assert.equal(await raw(page),changedRaw);
+  followup.controller={service:'Synthetic standard Gamepad API device; production mapping and driving path.',driven:padDriven,disconnected};
+  followup.scenarios.push('Synthetic controller service proves neutral arming, live throttle and disconnect pause through the shared production input path');
+
+  const invalid=await shared.newPage();
+  await invalid.goto(new URL('proving-ground.html?vehicle=car-999999',base).href);await stamp(invalid);
+  await invalid.waitForFunction(()=>/requested|owned|admission rejected/i.test(document.querySelector('#pg-status').textContent));
+  assert.equal(await pg(invalid,'arm').isDisabled(),true);
+  assert.equal(await pg(invalid,'telemetry').textContent(),'null','An invalid explicit owned ID cannot silently fall back to the active car');
+  assert.equal(await raw(invalid),changedRaw);await invalid.close();
+  followup.scenarios.push('An explicit unowned URL is rejected without silently substituting the active saved car');
+  followup.finalGarage=changedGarage;followup.errors=errors;assert.deepEqual(errors,[]);
+  followup.limitations=['Synthetic Gamepad API and browser touch dispatch test device-service lifecycle behavior; no vehicle state or outcome is injected.',
+    'SwiftShader functional acceptance only; native hardware performance remains a separate release gate.'];
+  if(evidence)await writeFile(join(evidence,'proving-ground-lifecycle-browser.json'),JSON.stringify(followup,null,2)+'\n');
+  console.log(JSON.stringify({source,followupScenarios:followup.scenarios.length,
+    installedGearboxAccelerationSeconds:actualGear.result.metrics.accelerationSeconds,
+    finalCredits:changedGarage.garage.credits,errors},null,2));
   await shared.close();
 }catch(error){
   const diagnostic={error:error.stack,source,scenarios,errors};
