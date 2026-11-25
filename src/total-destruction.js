@@ -347,7 +347,10 @@ function frame(time){
 arenaChoice.onchange=()=>{if(phase==='menu')reset();};
 $('derby-arm').onclick=arm;
 const pauseButton=$('derby-pause');
-pauseButton.onclick=togglePause;
+pauseButton.onclick=()=>{
+  togglePause();
+  if(phase==='paused')pauseButton.focus({preventScroll:true});
+};
 pauseButton.addEventListener('mousedown',event=>{
   // Keep canvas focus until the click pauses, even if the mouse is held across frames.
   if(event.button===0&&active()&&input.source==='keyboard'&&document.activeElement===canvas)
