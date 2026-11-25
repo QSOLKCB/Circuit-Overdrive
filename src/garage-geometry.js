@@ -2,7 +2,7 @@
 // Original, cosmetic showroom geometry. None of these dimensions is a vehicle recipe.
 import {box, lettering, quad, triangle} from './geometry.js';
 import {GARAGE_CATALOG, garageModel} from './garage-catalog.js';
-import {vehiclePaint} from './vehicle-parts.js';
+import {vehiclePaint,vehiclePart} from './vehicle-parts.js';
 
 const at=(x,y,z)=>[x,y,z], white=[1,1,1], ink=[.055,.075,.083], steel=[.38,.46,.48];
 const cream=[.91,.86,.70], amber=[.97,.57,.15], teal=[.15,.49,.49];
@@ -21,7 +21,7 @@ const shapes={
   'glass-comet':{length:4.38,width:1.96,deck:.78,roof:1.28,front:-1.23,rear:1.50,roofFront:-.40,roofRear:.63,radius:.35}
 };
 
-function wheel(tyres,rims,x,z,radius,side) {
+function wheel(tyres,rims,x,z,radius,side,style='stock') {
   const cy=radius+.03, outer=x+side*.15, inner=x-side*.12;
   const point=(u,angle,r)=>[u,cy+Math.cos(angle)*r,z+Math.sin(angle)*r];
   for(let i=0;i<12;i++) {
@@ -29,15 +29,18 @@ function wheel(tyres,rims,x,z,radius,side) {
     quad(tyres,point(inner,a,radius),point(outer,a,radius),point(outer,b,radius),point(inner,b,radius),ink);
     triangle(tyres,[outer,cy,z],point(outer,a,radius),point(outer,b,radius),ink,[side,0,0]);
     const face=outer+side*.008;
-    triangle(rims,[face,cy,z],point(face,a,radius*.65),point(face,b,radius*.65),i%2?steel:cream,[side,0,0]);
+    const spoke=style==='performance'?(i%3===0?amber:steel):style==='touring'?(i%3?ink:cream):style==='economy'?ink:i%2?steel:cream;
+    triangle(rims,[face,cy,z],point(face,a,radius*.65),point(face,b,radius*.65),spoke,[side,0,0]);
   }
   block(rims,outer+side*.016,cy,z,.018,radius*.27,radius*.27,steel);
 }
 
-export function garageVehicleGeometry(modelId,paintId='factory') {
+export function garageVehicleGeometry(modelId,paintId='factory',{tyres:tyreStyle='stock',exhaust='stock'}={}) {
+  vehiclePart('tyres',tyreStyle);vehiclePart('exhaust',exhaust);
   const model=garageModel(modelId),finish=vehiclePaint(paintId,modelId),s=shapes[modelId],paint=rgb(finish.body),accent=rgb(finish.accent);
   const shell=[],trim=[],glass=[],lamps=[],tyres=[],rims=[];
   const front=-s.length/2,rear=s.length/2,half=s.width/2;
+  if(exhaust==='flow')for(const x of [half*.60,half*.60+.14])block(trim,x,.34,rear+.04,.11,.11,.24,steel);
   // Six-ring chamfered lower body, with a distinct nose height and rear profile.
   const sections=[
     [front,half*.82,s.deck*(modelId==='glass-comet'?.65:.90)],
@@ -82,7 +85,7 @@ export function garageVehicleGeometry(modelId,paintId='factory') {
     // Sill and door gaps make the four small bay displays readable as cars.
     block(trim,side*(half+.012),.49,0,.026,.09,s.length*.68,ink);
     block(trim,side*(half+.014),.68,s.rear-.13,.018,.31,.018,ink);
-    for(const z of [-s.length*.29,s.length*.29])wheel(tyres,rims,side*half,z,s.radius,side);
+    for(const z of [-s.length*.29,s.length*.29])wheel(tyres,rims,side*half,z,s.radius,side,tyreStyle);
   }
 
   block(trim,0,.55,front-.014,s.width*.79,.17,.12,steel);

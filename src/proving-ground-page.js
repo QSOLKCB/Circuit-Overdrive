@@ -8,8 +8,10 @@ import {createGarageVault} from './garage-vault.js';
 import {GARAGE_CATALOG,garageModel} from './garage-catalog.js';
 import {PART_SLOTS,vehicleParts} from './vehicle-parts.js';
 import {admitProvingSelection} from './proving-ground-admission.js';
-import {createProvingRun,startProvingRun,stepProvingRun,referenceProvingCommand,provingReceipt,PROVING_STEP} from './proving-ground.js';
+import {createProvingRun,startProvingRun,stepProvingRun,stopProvingRun,referenceProvingCommand,provingReceipt,PROVING_STEP} from './proving-ground.js';
 import {createProvingScene} from './proving-ground-scene.js';
+import {createProvingRecording,serializeProvingReplay} from './proving-replay.js';
+import {retainWorkshopRecording} from './workshop-evidence.js';
 
 const $=id=>document.getElementById('pg-'+id);
 const sourceRevision=document.querySelector('meta[name="game-revision"]').content||null;
@@ -99,6 +101,8 @@ function instruments(){
   $('arm').textContent=running()?'Pause test':run?.phase==='running'?'Resume · fresh controls':'Arm controls';
   $('compare').disabled=comparing||$('test').value==='practice';
   $('export').disabled=!run?.result||!sourceRevision;
+  $('record').disabled=!run?.result||!sourceRevision;
+  $('finish').disabled=!run||run.phase!=='running'||run.ticks<1||comparing;
   $('result').textContent=JSON.stringify(run?.result??null,null,2);
   if(!run){
     $('telemetry').textContent='null';$('identity').textContent='';$('tick').textContent='0';$('speed').textContent='0';
@@ -129,7 +133,7 @@ async function compare(){
     const testId=$('test').value;if(testId==='practice')throw Error('Choose one of the four measured tests.');
     const view=vault.load(),chosen=selection();
     if(chosen.ownedVehicleId&&view.status!=='SAVED')throw Error('Reload a valid saved garage first.');
-    const results=[];
+    const results=[];let evidenceError=null;
     const modes=chosen.ownedVehicleId?['stock','current','proposed']:['stock','proposed'];
     for(const mode of modes){
       const proposed={...chosen,mode,slot:mode==='proposed'?$('proposed-slot').value:null,
@@ -144,6 +148,8 @@ async function compare(){
       }
       const receipt=await provingReceipt(test);if(token!==generation||disposed)return;
       results.push({...receipt,mode,scope:admission.scope,garageRevision:admission.garageRevision});
+      try{const recording=await createProvingRecording(test,{yieldTask:()=>new Promise(resolve=>setTimeout(resolve,0)),cancelled:()=>token!==generation||disposed});if(token!==generation||disposed)return;retainWorkshopRecording(recording,mode);}
+      catch(error){evidenceError=error.message;}
     }
     $('comparison').textContent=JSON.stringify({testId,comparisonPolicy:results[0].comparison,results},null,2);
     const [key,label,unit]={acceleration:['accelerationSeconds','0–100 km/h','s'],braking:['brakingDistanceM','Reached 100 to stop','m'],
@@ -157,11 +163,13 @@ async function compare(){
       for(const text of [receipt.mode,receipt.result.status==='completed'&&metric!==null?metric.toFixed(3)+' '+unit:receipt.result.status+' · '+receipt.result.reason,String(receipt.acceptedTicks)])row.insertCell().textContent=text;
     }
     $('measurements').append(table);
-    status('Comparison complete. Each receipt declares its build, source, accepted commands and physical outcome.');
+    status(evidenceError?'Comparison complete. Temporary evidence unavailable: '+evidenceError:
+      'Comparison complete. Return to The Garage and verify measured tests to inspect these exact builds.');
   }catch(error){if(token===generation)status('Comparison rejected: '+error.message);}
   finally{if(token===generation){comparing=false;instruments();}}
 }
 $('load').onclick=$('reset').onclick=load;$('arm').onclick=arm;$('compare').onclick=compare;
+$('finish').onclick=()=>{if(run?.phase==='running'&&run.ticks>0){pause();stopProvingRun(run);status('Run stopped. The accepted outcome and commands can be recorded.');instruments();}};
 $('build-mode').onchange=changed;
 $('owned').onchange=()=>{
   const car=vault.view.state?.bays.find(car=>car?.ownedVehicleId===$('owned').value);
@@ -188,6 +196,16 @@ $('export').onclick=async()=>{
     link.href=url;link.download='circuit-overdrive-'+receipt.modelId+'-'+receipt.testId+'-receipt.json';link.click();
     setTimeout(()=>URL.revokeObjectURL(url),0);
   }catch(error){status('Receipt rejected: '+error.message);}
+};
+$('record').onclick=async()=>{
+  const completed=run,attribution=accepted;
+  try{
+    const recording=await createProvingRecording(completed,{yieldTask:()=>new Promise(resolve=>setTimeout(resolve,0))}),text=serializeProvingReplay(recording);
+    const url=URL.createObjectURL(new Blob([text],{type:'application/json'})),link=document.createElement('a');
+    link.href=url;link.download='circuit-overdrive-'+recording.modelId+'-proving-v7.json';link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+    try{retainWorkshopRecording(recording,attribution.mode);}catch(error){status('Recording exported. Temporary workshop evidence unavailable: '+error.message);}
+  }catch(error){status('Recording rejected: '+error.message);}
 };
 window.addEventListener('blur',()=>pause('Focus lost. Arm with fresh controls to continue.'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause('Page hidden. Arm with fresh controls to continue.');});

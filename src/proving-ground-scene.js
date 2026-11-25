@@ -54,8 +54,8 @@ export function vehicleDrawTransforms(run,alpha=1) {
 }
 
 /** Keep each original wheel's authored triangles, recentered on its physical hub. */
-export function provingVehicleGeometry(modelId,paintId='factory') {
-  const parts=garageVehicleGeometry(modelId,paintId),recipe=stockRecipe(modelId),wheels=Array.from({length:4},()=>({tyres:[],rims:[]}));
+export function provingVehicleGeometry(modelId,paintId='factory',appearance={}) {
+  const parts=garageVehicleGeometry(modelId,paintId,appearance),recipe=stockRecipe(modelId),wheels=Array.from({length:4},()=>({tyres:[],rims:[]}));
   for(const name of ['tyres','rims'])for(let i=0;i<parts[name].length;i+=33) {
     const triangle=Array.from(parts[name].slice(i,i+33));
     const x=(triangle[0]+triangle[11]+triangle[22])/3,z=(triangle[2]+triangle[13]+triangle[24])/3;
@@ -155,15 +155,15 @@ const light={ambient:.69,sunDirection:[-.48,.82,-.29],sunColor:[.99,.91,.72],
 export function createProvingScene(canvas,run,pixelRatio=1) {
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   try {
-    const modelId=run.modelId,paintId=run.build.parts.paint;
+    const modelId=run.modelId,paintId=run.build.parts.paint,appearance={tyres:run.build.parts.tyres,exhaust:run.build.parts.exhaust};
     const upload=parts=>Object.entries(parts).map(([name,vertices])=>({name,mesh:renderer.mesh(vertices)}));
-    const facility=upload(provingGroundGeometry()),geometry=provingVehicleGeometry(modelId,paintId);
+    const facility=upload(provingGroundGeometry()),geometry=provingVehicleGeometry(modelId,paintId,appearance);
     const body=upload(geometry.body),wheels=geometry.wheels.map(upload);
     return {
       stats:()=>renderer.stats(),dispose:()=>renderer.dispose(),
       draw(current,{alpha=1,camera='chase',reducedMotion=false}={}) {
         if(renderer.lost)return;
-        if(current.modelId!==modelId||current.build.parts.paint!==paintId)throw RangeError('Proving-ground scene requires its accepted model and paint');
+        if(current.modelId!==modelId||current.build.parts.paint!==paintId||current.build.parts.tyres!==appearance.tyres||current.build.parts.exhaust!==appearance.exhaust)throw RangeError('Proving-ground scene requires its accepted model and paint / mechanical appearance');
         if(!['chase','high'].includes(camera))throw RangeError('Unknown proving-ground camera');
         const poses=vehicleDrawTransforms(current,alpha),{position,orientation}=poses.pose;
         // Follow horizontal accepted forward, leaving physical body pitch/roll on the car.

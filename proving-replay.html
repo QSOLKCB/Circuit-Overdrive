@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="game-revision" content=""><meta name="theme-color" content="#172527"><link rel="icon" href="data:,">
+<title>Machine Shop — Proving Replay</title><link rel="stylesheet" href="./src/proving-ground.css"></head><body>
+<header><a href="./index.html#garage">← The Machine Shop</a><strong>Proving Replay</strong><a href="./proving-ground.html">Test facility</a></header>
+<main><section class="stage"><canvas id="pr-world" tabindex="-1" aria-label="Reconstructed physical test"></canvas>
+<div class="station">Built Not Bought<br><b>Recorded machine. Actual motion.</b></div></section>
+<aside><h1>Watch the original build.</h1><p id="pr-status" role="status">Import a matching-source v7 proving recording.</p>
+<label for="pr-file">Build-bound recording · JSON, at most 2 MiB</label><input id="pr-file" type="file" accept=".json,application/json">
+<p id="pr-identity"></p><div class="actions"><button id="pr-play" disabled>Play recording</button><button id="pr-restart" disabled>Restart</button><button id="pr-cancel">Cancel loading / seeking</button></div>
+<label for="pr-seek">Accepted simulation tick</label><input id="pr-seek" type="range" min="0" max="0" value="0" step="1" disabled>
+<p id="pr-progress">0 / 0 ticks</p><label for="pr-camera">Camera</label><select id="pr-camera"><option value="chase">Chase</option><option value="high">High view</option></select>
+<label for="pr-input">Playback controls</label><select id="pr-input"><option value="keyboard">Keyboard / touch buttons</option><option value="gamepad">Controller / saved profile</option></select>
+<p>Space plays or pauses · Esc pauses · Left / right seek 60 accepted ticks. All motion is reconstructed from the recorded build and commands. Changing your garage does not change this recording.</p>
+<h2>Verified terminal result</h2><pre id="pr-result">null</pre><details><summary>Reconstructed physical telemetry</summary><pre id="pr-telemetry">null</pre></details>
+<p>Historical Replay Theatre v2–v6 remains separate. No imported positions or executable recipes are accepted. This viewer never writes your garage.</p></aside></main>
+<script type="module" src="./src/proving-replay-page.js"></script></body></html>
