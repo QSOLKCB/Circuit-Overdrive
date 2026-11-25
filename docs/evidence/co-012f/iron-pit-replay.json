@@ -1,0 +1,36 @@
+{
+  "version": 6,
+  "discipline": "derby",
+  "rules": 1,
+  "revision": "493f2c35295c23c1b857dcdbb165a7f05b6eb8b4",
+  "arena": "iron-pit",
+  "seed": 27,
+  "ticks": 10800,
+  "terminal": "time-limit",
+  "runs": [
+    [
+      54,
+      1,
+      0,
+      0
+    ],
+    [
+      30,
+      1,
+      0,
+      1
+    ],
+    [
+      28,
+      1,
+      0,
+      0
+    ],
+    [
+      10688,
+      0,
+      0,
+      0
+    ]
+  ]
+}

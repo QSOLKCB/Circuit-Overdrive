@@ -16,7 +16,7 @@ For the downloadable game, archive checksums and receipt verification, see the [
 
 ## Total Destruction — v1.2.0 candidate
 
-Choose **Total Destruction** from the main menu, select **The Crucible** or **Iron Pit**, arm the six-car grid and start the countdown. Drive the Ignition GT against five rivals. Accepted impacts crumple body panels and impair handling. Watch the knockout standings and follow the surviving cars if your car loses drive. The round finishes with a sole survivor or an official classification at the three-minute accepted tick limit. [Player guide](docs/total-destruction.md) · [Arena layouts](docs/derby-arenas.md)
+Choose **Total Destruction** from the main menu, select **The Crucible** or **Iron Pit**, arm the six-car grid and start the countdown. Drive the Ignition GT against five rivals. Accepted impacts crumple body panels and impair handling. Watch the knockout standings and follow the surviving cars if your car loses drive. The round finishes with a sole survivor, a draw if the last cars fail together, or a timed classification after three minutes of accepted play. The original **STEEL RIOT** score runs at 150 BPM. A stamped build saves a v6 replay and an inspection receipt after the official result. [Player guide](docs/total-destruction.md) · [Arena layouts](docs/derby-arenas.md) · [Browser and native acceptance](docs/co-012-acceptance.md)
 
 ## Crash Lab — The Impact Facility
 

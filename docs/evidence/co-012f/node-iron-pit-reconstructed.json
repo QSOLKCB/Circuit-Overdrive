@@ -1,0 +1,266 @@
+{
+  "format": "circuit-overdrive.derby-receipt.1",
+  "revision": "493f2c35295c23c1b857dcdbb165a7f05b6eb8b4",
+  "discipline": "derby",
+  "arena": "iron-pit",
+  "rules": 1,
+  "seed": 27,
+  "ticks": 5414,
+  "terminal": "simultaneous-elimination",
+  "attempts": 5414,
+  "runtime": "Node v22.18.0 linux x64",
+  "contactBatchSize": 120,
+  "inputSha256": "6affc63a26cfd903af53a58a1fcf131da57a31e263de9abb4234b2fe0359026c",
+  "contactCount": 2637,
+  "contactsSha256": "6ab94b209a649926bb0c9f2b51a6f8f81bb971bd07f0e972f14462fd4c2b6fa9",
+  "eliminations": [
+    {
+      "id": 2,
+      "tick": 112,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 155,
+        "left": 0,
+        "right": 188,
+        "engine": 1000,
+        "steering": 602,
+        "tyres": 502,
+        "suspension": 801
+      },
+      "impactId": "112/2/5/0",
+      "attackerId": 5,
+      "sequence": 1
+    },
+    {
+      "id": 5,
+      "tick": 112,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 0,
+        "right": 151,
+        "engine": 1000,
+        "steering": 592,
+        "tyres": 441,
+        "suspension": 724
+      },
+      "impactId": "112/2/5/0",
+      "attackerId": 2,
+      "sequence": 2
+    },
+    {
+      "id": 0,
+      "tick": 794,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 329,
+        "left": 0,
+        "right": 0,
+        "engine": 1000,
+        "steering": 479,
+        "tyres": 362,
+        "suspension": 673
+      },
+      "impactId": "794/0/4/0",
+      "attackerId": 4,
+      "sequence": 3
+    },
+    {
+      "id": 4,
+      "tick": 794,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 0,
+        "right": 0,
+        "engine": 1000,
+        "steering": 545,
+        "tyres": 330,
+        "suspension": 631
+      },
+      "impactId": "794/0/4/0",
+      "attackerId": 0,
+      "sequence": 4
+    },
+    {
+      "id": 1,
+      "tick": 5414,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 119,
+        "left": 0,
+        "right": 185,
+        "engine": 1000,
+        "steering": 592,
+        "tyres": 484,
+        "suspension": 776
+      },
+      "impactId": "5414/1/3/0",
+      "attackerId": 3,
+      "sequence": 5
+    },
+    {
+      "id": 3,
+      "tick": 5414,
+      "reason": "engine",
+      "damage": {
+        "front": 1000,
+        "rear": 181,
+        "left": 7,
+        "right": 42,
+        "engine": 1000,
+        "steering": 509,
+        "tyres": 372,
+        "suspension": 671
+      },
+      "impactId": "5414/1/3/0",
+      "attackerId": 1,
+      "sequence": 6
+    }
+  ],
+  "finalDamage": [
+    {
+      "id": 0,
+      "damage": {
+        "front": 1000,
+        "rear": 329,
+        "left": 0,
+        "right": 0,
+        "engine": 1000,
+        "steering": 479,
+        "tyres": 362,
+        "suspension": 673
+      }
+    },
+    {
+      "id": 1,
+      "damage": {
+        "front": 1000,
+        "rear": 119,
+        "left": 0,
+        "right": 185,
+        "engine": 1000,
+        "steering": 592,
+        "tyres": 484,
+        "suspension": 776
+      }
+    },
+    {
+      "id": 2,
+      "damage": {
+        "front": 1000,
+        "rear": 155,
+        "left": 110,
+        "right": 188,
+        "engine": 1000,
+        "steering": 631,
+        "tyres": 581,
+        "suspension": 864
+      }
+    },
+    {
+      "id": 3,
+      "damage": {
+        "front": 1000,
+        "rear": 181,
+        "left": 7,
+        "right": 42,
+        "engine": 1000,
+        "steering": 509,
+        "tyres": 372,
+        "suspension": 671
+      }
+    },
+    {
+      "id": 4,
+      "damage": {
+        "front": 1000,
+        "rear": 0,
+        "left": 0,
+        "right": 0,
+        "engine": 1000,
+        "steering": 545,
+        "tyres": 330,
+        "suspension": 631
+      }
+    },
+    {
+      "id": 5,
+      "damage": {
+        "front": 1000,
+        "rear": 245,
+        "left": 1,
+        "right": 151,
+        "engine": 1000,
+        "steering": 596,
+        "tyres": 496,
+        "suspension": 814
+      }
+    }
+  ],
+  "classification": [
+    {
+      "id": 1,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 3550,
+      "condition": 1148,
+      "eliminatedTick": 5414,
+      "rank": 1
+    },
+    {
+      "id": 3,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 3191,
+      "condition": 1448,
+      "eliminatedTick": 5414,
+      "rank": 2
+    },
+    {
+      "id": 0,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 3764,
+      "condition": 1486,
+      "eliminatedTick": 794,
+      "rank": 3
+    },
+    {
+      "id": 4,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 3327,
+      "condition": 1494,
+      "eliminatedTick": 794,
+      "rank": 4
+    },
+    {
+      "id": 2,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 4528,
+      "condition": 924,
+      "eliminatedTick": 112,
+      "rank": 5
+    },
+    {
+      "id": 5,
+      "active": false,
+      "knockouts": 1,
+      "inflicted": 3951,
+      "condition": 1094,
+      "eliminatedTick": 112,
+      "rank": 6
+    }
+  ],
+  "classificationSha256": "0cf9f4f5ce8fe10f51def57311ec543fd73be4068287c2516122f67abd27f999",
+  "finalStateSha256": "5fdffcd3261709667b01298299c1f5c3890a50bc1e074acbed861cc3cef8638a",
+  "winnerId": null,
+  "technicalStop": null
+}
