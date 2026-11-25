@@ -20,7 +20,7 @@
   <section id="replay-empty" class="theatre-intro" aria-label="Choose a race replay">
     <div class="eyebrow"><i class="checks" aria-hidden="true"></i> CO-REPLAY-001</div>
     <h1>Replay<br><em>Theatre</em></h1>
-    <p>Import a saved race or Crash Lab experiment. Follow a car through the original drive and inspect its finish or impact measurements.</p>
+    <p>Import a saved race, demolition derby or Crash Lab experiment. Follow a car and inspect the reconstructed results.</p>
     <p>Share the <code>.json</code> with a friend. Everything runs locally; no uploads or online accounts.</p>
   </section>
   <aside class="theatre-telemetry" id="replay-telemetry" hidden aria-label="Race telemetry">
@@ -34,6 +34,16 @@
       <dt>Lap / checkpoint</dt><dd id="replay-progress">—</dd>
     </dl>
     <ol id="replay-standing" aria-label="Live six-car standings"></ol></div>
+    <section id="derby-instruments" hidden>
+      <p id="theatre-derby-state"></p>
+      <p id="theatre-derby-driver"></p>
+      <p id="theatre-derby-damage"></p>
+      <p id="theatre-derby-hit"></p>
+      <ol id="theatre-derby-standing" aria-label="Derby classification"></ol>
+      <label for="theatre-eliminations">Eliminations</label>
+      <select id="theatre-eliminations"></select>
+      <button id="theatre-elimination-seek" type="button">Seek to elimination</button>
+    </section>
     <section id="crash-instruments" hidden>
       <p id="theatre-lab-state"></p><p id="theatre-lab-damage"></p>
       <label for="theatre-impacts">Recorded impacts</label><select id="theatre-impacts"></select>
@@ -46,6 +56,7 @@
     <label for="replay-file">Open local replay JSON</label>
     <input type="file" id="replay-file" accept=".json,application/json" aria-describedby="replay-help">
     <button type="button" id="replay-download" disabled>Download to share</button>
+    <button type="button" id="replay-evidence" hidden disabled>Save derby evidence</button>
   </div>
   <p id="replay-help">Open a source-stamped replay from a compatible Circuit Overdrive release. Private files never leave your device.</p>
   <p id="replay-status" role="status" aria-live="polite">Choose a recording to begin.</p>

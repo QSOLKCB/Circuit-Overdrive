@@ -98,3 +98,34 @@ Save the replay and evidence separately from a completed experiment. Load the in
 Version 5 has exactly eight fields: `version`, `revision`, `discipline`, `rules`, `scenario`, `seed`, `ticks` and `runs`. The discipline is `crash-lab`, rules 1. Scenarios are `wall`, `glancing` and `opposing`. Each dense row is [length, throttle, brake, steer]. Axes use the existing pedal [0,1] and steering [−1,1] ranges. There is no recovery command. Reset begins another tape. Lengths sum exactly to 1–3,600 ticks, the trial’s 60-second instrument window. The file limit remains 16 MiB. All legacy admission and flag rules continue independently. Crash Lab requires an exact source stamp and a reconstructed experiment result on precisely the declared last tick.
 
 Run `node scripts/replay-drive.mjs FILE.json` from the matching committed source to reconstruct a receipt locally. Compare SHA-256 of compact JSON for the input rows, all accepted contact measurements and final states, including latch state and component totals. The receipt identifies the runtime separately. Receipt measurements round to six decimal places in their stated units. This covers metre, second, radian, velocity, impulse and energy readings. The physics and the RLE controls retain full precision. Same-browser certification also compares unrounded contact and vehicle JSON. This policy permits independent Chrome/Node receipt comparison across libm rounding differences. The raw tape's file hash covers the entire header and its exact serialization. A receipt is reproducibility evidence; an owner of the inputs can compute another hash. The viewer accepts only inputs, never measurements or executable content.
+
+## Total Destruction version 6
+
+Finish a Total Destruction round in a source-stamped build, then choose **Save replay** and **Save evidence**. If your car is eliminated, the recording includes the rest of the match while you spectate. Open the replay JSON in Replay Theatre from the same source revision. Follow any driver, choose Chase, Arena or Spectator follow, and seek to either side of an elimination using the timeline. The Elimination picker can jump directly to an elimination that has been reconstructed. The viewer displays each driver's accepted impacts and damage, renders the same computational panels as the match, and reconstructs the final classification. **Save derby evidence** becomes available at the verified result.
+
+| Field | Derby recording |
+| --- | --- |
+| `version`, `discipline`, `rules` | `6`, `"derby"`, `1` |
+| `revision` | Exact matching lowercase 40-digit source SHA |
+| `arena` | `"crucible"` or `"iron-pit"` |
+| `seed`, `ticks` | Unsigned 32-bit seed and number of completed 60 Hz ticks, up to 10,800 |
+| `terminal` | `"last-car-standing"`, `"simultaneous-elimination"`, `"time-limit"`, or `"technical-stop"` |
+| `runs` | Dense `[length, throttle, brake, steer]` rows |
+
+Throttle and brake range from 0 to 1, and steer ranges from −1 to +1. Camera, pause and countdown use the presentation clock. The recorder appends the effective accepted command, including neutral controls after the driver is eliminated. The same source, arena, seed and immutable field reconstruct the rivals' commands. State, damage and standings derive from the stepped authority.
+
+Runs cover all completed ticks. A technical stop also needs one final attempted command to regenerate the partial interval and its diagnostic contact prefix. For that terminal only, the timeline includes one more position than the accepted tick count. The attempted step earns no competitive credit. Theatre checks the terminal reason and completed count together, rejects controls after settlement, and rejects a stream that ends before its declared terminal event. The same 16 MiB file bound and 240-step seek batches apply. Derby revisions require an exact match.
+
+The local `circuit-overdrive.derby-receipt.1` JSON includes source revision, arena, seed, rules, terminal, completed and attempted ticks, declared runtime, accepted contact count, eliminations with any credited attacker, final damage, classification, winner or technical stop and SHA-256 digests.
+
+- `inputSha256` hashes the UTF-8 compact JSON serialization of the input rows.
+- `contactsSha256` hashes the compact JSON list of ordered SHA-256 batch digests. Each batch contains up to 120 attempted steps, including empty steps. Each batch hashes compact JSON of the nested accepted contact arrays, including continuing constraints and any last partial interval. Only the latest entries and the current batch need to stay in memory.
+- `classificationSha256` hashes compact final classification JSON. `finalStateSha256` hashes the accepted result, final physical cars and final contact latches.
+
+The hashes retain the JavaScript numbers produced by the declared runtime. The same browser and source can compare exact live and Theatre receipts. Different engines or builds can have small differences in math-library functions. The receipts give local reproducibility evidence without identifying or authenticating a human driver.
+
+Reconstruct on the command line from the matching clean checkout:
+
+```sh
+node scripts/replay-drive.mjs derby-crucible-replay.json > derby-crucible-node-receipt.json
+```

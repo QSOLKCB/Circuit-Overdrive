@@ -63,3 +63,7 @@ The archive includes the facility, original test fixtures, damage and audio obse
 CO-012B includes the derby arena preview in the same archive. Open it from Crash Lab to inspect and run the launch test in either arena. All scenery and simulation modules are local to the package. [Review controls](derby-arenas.md#owner-review)
 
 The v1.2.0 candidate also includes the playable **Total Destruction** page. Select it from the offline game menu. Both arenas, the controller lifecycle, retained geometry, damage panels and STEEL RIOT run from local modules. The package stamps the mode page with the same source revision as the other game pages.
+
+## Total Destruction evidence from the offline package
+
+Serve the verified archive over loopback. Complete a Total Destruction round, save its v6 replay and evidence JSON, then import the replay into the Theatre in the same archive. Replay files include the accepted spectator period if the player was eliminated. At the official result, save a second evidence receipt and compare the input, contact, classification and final-state hashes. The CLI also reconstructs a v6 replay with `node scripts/replay-drive.mjs FILE.json` from a matching source checkout and declares its own runtime. Keep the stamped archive alongside the drive for later playback. [Derby replay format and evidence](replay-theatre.md#total-destruction-version-6)

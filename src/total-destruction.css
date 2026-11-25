@@ -67,3 +67,5 @@ dialog::backdrop {background:#10181cbd}
   header > strong {font-size:.75rem;letter-spacing:.07em}
   header button {font-size:.75rem}
 }
+
+#watch-derby-replay {align-self:center;color:var(--paper);padding:7px 5px;}

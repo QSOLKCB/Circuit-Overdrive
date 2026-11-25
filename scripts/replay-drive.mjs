@@ -7,6 +7,7 @@ import {createReplaySession,MAX_SEEK_STEPS} from '../src/replay-theatre-core.js'
 import {replayCommands} from '../src/replay.js';
 import {createRace,startRace,stepRace,recoverCar} from '../src/sim.js';
 import {crashReceipt} from '../src/crash-replay.js';
+import {DERBY_REPLAY_VERSION} from '../src/derby-replay.js';
 import {track} from '../src/track.js';
 import {ridge} from '../src/ridge.js';
 const path=process.argv[2];
@@ -14,10 +15,15 @@ if (!path || (await stat(path)).size>16*1024*1024) throw Error('Expected one rep
 const data=JSON.parse(await readFile(path,'utf8'));
 const {revision} = await readSite(fileURLToPath(new URL('../',import.meta.url)));
 if (data.version === 1) console.error('Legacy recording without revision metadata. Use the original game checkout.');
-if (data.version===5) {
+const runtime='Node '+process.version+' '+process.platform+' '+process.arch;
+if (data.version===DERBY_REPLAY_VERSION) {
   const session=createReplaySession(data,revision);
   while(!session.finished)session.advance(MAX_SEEK_STEPS);
-  console.log(JSON.stringify(await crashReceipt(data,session.race,'Node '+process.version+' '+process.platform+' '+process.arch),null,2));
+  console.log(JSON.stringify(await session.derbyEvidence(runtime),null,2));
+} else if (data.version===5) {
+  const session=createReplaySession(data,revision);
+  while(!session.finished)session.advance(MAX_SEEK_STEPS);
+  console.log(JSON.stringify(await crashReceipt(data,session.race,runtime),null,2));
 } else {
 let race;
 if (data.version===3 || data.version===4) {
