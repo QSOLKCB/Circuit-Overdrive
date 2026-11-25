@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172527"><meta name="game-revision" content="">
+<title>The Proving Grounds — Circuit Overdrive</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/proving-ground.css">
+</head><body>
+<header><a id="pg-return" href="./index.html#garage">← The Garage</a><strong>The Proving Grounds</strong><span>Machine Test Facility</span></header>
+<main>
+ <section class="stage" aria-label="Industrial proving facility">
+  <canvas id="pg-world" tabindex="-1" aria-label="Physical driving test facility"></canvas>
+  <div class="station">Built Not Bought<br><b id="pg-heading">Machine Test Facility</b></div>
+  <div class="speed"><strong id="pg-speed">0</strong> km/h · <span id="pg-tick">0</span> ticks</div>
+  <div id="pg-touch" hidden aria-label="Touch driving controls"></div>
+ </section>
+ <aside>
+  <h1>Own the car.<br>Prove the difference.</h1>
+  <p id="pg-status" role="status">Loading accepted builds…</p>
+  <p id="pg-identity"></p>
+  <label for="pg-owned">Owned car</label><select id="pg-owned"></select>
+  <label for="pg-build-mode">Test configuration</label>
+  <select id="pg-build-mode"><option value="current">Current saved build</option><option value="stock">Stock simulation · free</option><option value="proposed">Proposed simulation · not installed</option></select>
+  <label for="pg-stock-model">Catalogue stock model</label><select id="pg-stock-model"></select>
+  <div id="pg-proposal"><label for="pg-proposed-slot">Proposed slot</label><select id="pg-proposed-slot"></select>
+   <label for="pg-proposed-part">Proposed part</label><select id="pg-proposed-part"></select></div>
+  <label for="pg-test">Test discipline</label>
+  <select id="pg-test"><option value="practice">Free practice</option><option value="acceleration">01 · Acceleration 0–100</option><option value="braking">02 · Reached 100 to stop</option><option value="slalom">03 · Slalom gates</option><option value="handling">04 · Constant-radius handling</option></select>
+  <label for="pg-driver">Driving policy</label><select id="pg-driver"><option value="manual">Player controls</option><option value="reference">Deterministic reference driver</option></select>
+  <div class="actions"><button id="pg-load">Load selected build</button><button id="pg-arm" disabled>Arm controls</button><button id="pg-reset">Reset test</button></div>
+  <label for="pg-input">Input</label><select id="pg-input"><option value="keyboard">Keyboard</option><option value="touch">Touch</option><option value="gamepad">Controller / saved profile</option></select>
+  <label for="pg-camera">Camera</label><select id="pg-camera"><option value="chase">Chase</option><option value="high">High view</option></select>
+  <button id="pg-sound" aria-pressed="false">Sound off</button>
+  <p>W / ↑ accelerate · S / ↓ brake · A / D steer · C view · Esc pause. Arm with fresh controls after a pause.</p>
+  <p>Practice and simulations are free. No credits, parts, persistent damage or repairs are awarded by a test.</p>
+  <h2>Accepted result</h2><pre id="pg-result">null</pre>
+  <button id="pg-export" disabled>Export test receipt</button>
+  <h2>Stock / current / proposed</h2><p>Reference tests use the same rules. Feedback policies can produce different commands; each result declares its actual tape.</p>
+  <button id="pg-compare">Run reference comparisons</button><div id="pg-measurements" aria-live="polite"></div>
+  <details><summary>Source and accepted command receipts</summary><pre id="pg-comparison">null</pre></details>
+  <details><summary>Accepted physical telemetry</summary><pre id="pg-telemetry">null</pre></details>
+  <p id="pg-note">Receipts identify this build and source. Build-bound Replay Theatre playback follows in the Machine Shop milestone.</p>
+ </aside>
+</main><script type="module" src="./src/proving-ground-page.js"></script>
+</body></html>

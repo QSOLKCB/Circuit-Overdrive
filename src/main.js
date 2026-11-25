@@ -638,4 +638,5 @@ function frame(time) {
 initializeScene();
 $('boot-note').hidden = true;
 $('start').disabled = $('enter-woc').disabled = $('enter-garage').disabled = false;
+if (location.hash === '#garage') $('enter-garage').click();
 requestAnimationFrame(frame);

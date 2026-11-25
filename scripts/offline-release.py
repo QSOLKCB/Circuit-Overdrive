@@ -43,7 +43,12 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
    to return to your save. Export garage JSON backups; importing replaces the
    whole garage after confirmation. Web Locks and browser storage are required
    for purchases. Ownership does not change race vehicles or performance.
-7. Press Ctrl+C in the terminal when you are done.
+7. The Proving Grounds drives a selected owned car's accepted build. Open it
+   from an owned garage bay, or use the menu for free stock simulations. Load
+   a test and explicitly arm controls. Compare stock/current/proposed builds
+   with measured reference runs; proposals never install parts or spend credits.
+   Export finished test receipts for the exact source and mechanical build.
+8. Press Ctrl+C in the terminal when you are done.
 
 The server reads this folder on your computer. Both courses, the six-car field,
 controls and audio work without internet access. Controller exposure depends on

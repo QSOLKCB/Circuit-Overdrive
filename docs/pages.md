@@ -38,7 +38,7 @@ bash scripts/browser-pages.sh http://127.0.0.1:8000/Circuit-Overdrive/ "$(mktemp
 | `ridge` | Both Ridge sprints, finish classifications and byte-for-byte day/night replay comparison |
 | `controllers` | Standard gamepad, custom profiles, wheel mapping, controller diagnostics and three complete Crash Lab experiments |
 | `theatre` | Replay Theatre loading, playback, seeking and follow cameras |
-| `lifecycle` | Speedway and Ridge day smoke tests, Speedway night smoke test, mobile touch, three complete Total Destruction matches and the garage ownership/showroom journey |
+| `lifecycle` | Speedway and Ridge day smoke tests, Speedway night smoke test, mobile touch, three complete Total Destruction matches, the garage ownership/showroom journey and owned-build Proving Grounds |
 | `effects` | Night contact effects, the WebGL headlight pixel comparison, and a complete six-car Skyway race with v3 replay verification |
 
 The championship runner checks all four live flag orders, awards and running totals against a separate field and scoreboard oracle. It exercises boundary saves, an interrupted round, storage failure, trophy countback, four event replays and spectator isolation. The championship artifact retains the four JSON tapes, score report and presentation captures.
@@ -68,6 +68,8 @@ The controllers worker also drives the wall, glancing and opposing Crash Lab tri
 The lifecycle worker also plays Total Destruction through the ordinary keyboard controls. It covers both arenas, an eliminated player who spectates to the end, a player victory fixture, and replay export and Theatre reconstruction. Results, screenshots and physical receipts are retained with the tested revision. The native 1080p profiler runs separately on the documented GPU. [Derby acceptance and reproduction](co-012-acceptance.md)
 
 The lifecycle worker also opens **The Garage** through the packaged menu and completes confirmed purchases, four occupied bays, selection, sale, reload, JSON downloads/imports and rejected files. It exercises stale tabs, storage failure, controller neutral arming, touch, repeated showroom selection and WebGL restoration. `node tests/browser-garage.mjs BASE_URL` runs the same suite; `EVIDENCE_DIR` retains source-stamped captures and JSON observations. Its default software WebGL run verifies functionality and resource ownership, not native GPU performance.
+
+CO-014D adds `tests/browser-proving-ground.mjs` to that same lifecycle worker. It purchases and fits real parts through the Garage, drives the accepted owned build, measures all four reference tests, exports a receipt, admits six free stock models and verifies that tests do not mutate the save. The seven-worker matrix and every historical suite remain intact. `bash tests/browser-pages-shards.sh` checks the added invocation, retained evidence and failure propagation.
 
 CO-013E extends that same suite with premium and mixed-model purchases, inactive
 and final-car sales, duplicate confirmations, stale imports, actual Web Lock

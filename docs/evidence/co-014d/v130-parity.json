@@ -1,0 +1,162 @@
+{
+  "baseline": "1c745a90258d0f6cb968935f773354cff702b276",
+  "candidate": "a7abf42213aa831608eb3d25726200d503addf53",
+  "node": "v22.18.0",
+  "platform": "linux",
+  "blobs": {
+    "src/sim.js": "1e2eae60dc7f0ee157cd8a6c006f10b5f67091ae",
+    "src/contact.js": "1c4546c27a4ab938f8eb2491bf38f1e45a854b30",
+    "src/ai.js": "9d0c560a455bb21eb8e274cfb328f6ad140f1413",
+    "src/field.js": "e3a0ae52d30362dee6874eed4bdb772001b34f8d",
+    "src/nitro-race.js": "7ce4197f773aa8bc900301cfac748f5d07788bf8",
+    "src/nitro-physics.js": "a3286edf0b37d2d60388f1e6529a6f003cf2ad6b",
+    "src/rocket-race.js": "a441fa0f8123267d3e5fe4517513d4c5df802761",
+    "src/rocket-contact.js": "653ff15ad348851449ebd650dbc29dc97e8741dc",
+    "src/rocket-dynamics.js": "86c300170e59c4cf0f8b31ababeafbd240241432",
+    "src/championship.js": "187f11214a4c852ec0790dc93ac729b1a575acf0",
+    "src/championship-storage.js": "3c70f606913444fb3915dda57422dddc3a73fc5e",
+    "src/championship-ui.js": "2d76b79acc4792e0d2f7985db6c99e9ddf0f0ca4",
+    "src/driver-command.js": "649248d56a57e641833af682387567ba29dbfe27",
+    "src/driver-input.js": "03b50bf55ef647df71b7ca311159c03de9e6f850",
+    "src/gamepad.js": "60ab959a47b44b08acafde23c174fe25c41e9c8e",
+    "src/profiles.js": "a85ab7c9ed5d7f597aec141b7673381c98056936",
+    "src/touch.js": "fa4ecd00f3b0721b62d98ce7227bb2ee62be6512",
+    "src/input.js": "c37abab82264998a846ff5654c88d13e7391b864",
+    "src/replay-v2.js": "e7cd33164a077b573cbbddd1833e0a7fdb29372e",
+    "src/replay.js": "bfe2d4b7bb6b601aa4024796dadf46ec428aa10d",
+    "src/replay-presentation.js": "bc723eeea6b0f453f00230c8ea6b714f15fee32d",
+    "src/effects.js": "8c6f26d753838cf64fa17b8d3420f85b9df30780",
+    "src/scene.js": "96a901292113354e1ffb9c76b4040f897a9ba2c2",
+    "src/rocket-scene.js": "e15618b7bfed2f2a71efaeedb3bdd9a24e448bcd",
+    "tracks": "a54cde88c9101795bde4d7df4cf6da91c77837ed",
+    "vendor": "25b3e97458b825af4c16ced93f2939e1d063d27a"
+  },
+  "presentationChanges": {
+    "src/main.js": {
+      "baseline": "76a6805165316b0c944f4d5a146abca63aaa7429",
+      "candidate": "909422bc69c9729774e155092f30d7559fb2a997"
+    }
+  },
+  "results": [
+    {
+      "name": "speedway",
+      "light": "day",
+      "ticks": 9847,
+      "nightSamples": 0,
+      "recovered": true,
+      "contactTicks": 1,
+      "version": 2,
+      "runsSha256": "6b1d2befd96f6077862a9a7677fb5a5753178c6d08da61fc9cb1330f9feb2e8e",
+      "fieldSha256": "3178f0289dada8753f9c8e85696fc966150708d51e8c53968cf5db6ce29b3c7d",
+      "order": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5
+      ],
+      "finish": 9847
+    },
+    {
+      "name": "speedway",
+      "light": "night",
+      "ticks": 9847,
+      "nightSamples": 3282,
+      "recovered": true,
+      "contactTicks": 1,
+      "version": 2,
+      "runsSha256": "6b1d2befd96f6077862a9a7677fb5a5753178c6d08da61fc9cb1330f9feb2e8e",
+      "fieldSha256": "3178f0289dada8753f9c8e85696fc966150708d51e8c53968cf5db6ce29b3c7d",
+      "order": [
+        1,
+        3,
+        0,
+        2,
+        4,
+        5
+      ],
+      "finish": 9847
+    },
+    {
+      "name": "ridge",
+      "light": "day",
+      "ticks": 9402,
+      "nightSamples": 0,
+      "recovered": true,
+      "contactTicks": 1,
+      "version": 2,
+      "runsSha256": "ecc8b382ff8df2f02221e349449310c283efc5614fbbc9f005e1e69095338a0b",
+      "fieldSha256": "f0b97bff408c1055ecc017403a460120878c930ceeac3f183719a1bf160c6531",
+      "order": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "finish": 9402
+    },
+    {
+      "name": "ridge",
+      "light": "night",
+      "ticks": 9402,
+      "nightSamples": 3134,
+      "recovered": true,
+      "contactTicks": 1,
+      "version": 2,
+      "runsSha256": "ecc8b382ff8df2f02221e349449310c283efc5614fbbc9f005e1e69095338a0b",
+      "fieldSha256": "f0b97bff408c1055ecc017403a460120878c930ceeac3f183719a1bf160c6531",
+      "order": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "finish": 9402
+    },
+    {
+      "name": "skyway",
+      "light": "day",
+      "ticks": 3925,
+      "nightSamples": 0,
+      "recovered": false,
+      "contactTicks": 0,
+      "version": 3,
+      "runsSha256": "faee9b9ef06b8477845ebc8e9b3d9ef0f362cf3d4728948eb72643b33b6b1536",
+      "fieldSha256": "5a3295dde8531429690bc46776a5d08efa93961c9c7e784303c3800015da4bad",
+      "order": [
+        1,
+        2,
+        3,
+        0,
+        4,
+        5
+      ],
+      "finish": 3745
+    },
+    {
+      "name": "orbital",
+      "light": "day",
+      "ticks": 2802,
+      "nightSamples": 0,
+      "recovered": false,
+      "contactTicks": 0,
+      "version": 4,
+      "runsSha256": "544d8a940e1e4dc60ace51bceea08cbf5fa54ce0d9e2f22db03a1658a7a01745",
+      "fieldSha256": "ba4847267792d325311b3a789c3d40ae7cde440782f04a59fc724c9e2c5185ea",
+      "order": [
+        5,
+        2,
+        3,
+        4,
+        0,
+        1
+      ],
+      "finish": 2261
+    }
+  ]
+}

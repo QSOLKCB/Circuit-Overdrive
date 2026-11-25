@@ -1,0 +1,130 @@
+{
+  "kind": "co-014d-verification-v1",
+  "base": "80343db601b53df4f42071a46c377617e450d25e",
+  "implementation": "a7abf42213aa831608eb3d25726200d503addf53",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtime": {
+    "node": "v22.18.0",
+    "browser": "Chrome 158.0.8127.36",
+    "platform": "Linux",
+    "functionalRenderer": "ANGLE SwiftShader"
+  },
+  "checks": {
+    "node": {
+      "pass": 504,
+      "fail": 0,
+      "skipped": 0
+    },
+    "physical": {
+      "completed": 35,
+      "stockTests": 24,
+      "variants": 11
+    },
+    "provingBrowser": {
+      "scenarios": 13,
+      "errors": 0,
+      "injectedBuilds": false
+    },
+    "publishedMigrationBrowser": {
+      "scenarios": 6,
+      "errors": 0
+    },
+    "initialGarageBrowser": {
+      "scenarios": 23,
+      "source": "248b9b9e8924bf81c7bcc1a61703c42042e274c7"
+    },
+    "initialPartsBrowser": {
+      "scenarios": 8,
+      "source": "248b9b9e8924bf81c7bcc1a61703c42042e274c7"
+    },
+    "sevenWorkerOrchestration": "passed; all existing suites retained; proving-ground added to lifecycle",
+    "offlineTests": "passed",
+    "offlineIndependentVerify": "passed",
+    "httpAssets": 113,
+    "historicalParity": "45,225 ticks, direct published v1.3.0 plus full-suite historical comparison"
+  },
+  "offline": {
+    "source": "a7abf42213aa831608eb3d25726200d503addf53",
+    "sha256": "c2d3d5d1f8215e61a6a3f42b41d9272bca03e38703d09464b80a965446f0094d"
+  },
+  "limitations": [
+    "No native GPU/frame-time certification in D.",
+    "No persistent damage or repair adapter.",
+    "Diagnostic receipts are not v7 replay admission.",
+    "Owner review pending; no merge, tag or publication."
+  ],
+  "artifacts": {
+    "controlled-build-comparison.png": {
+      "bytes": 541050,
+      "sha256": "b40295eda567c51bd094e2e004ae854a0a242ac6c9bab4026cfd8b22ffc19492"
+    },
+    "garage-browser.json": {
+      "bytes": 13127,
+      "sha256": "dab7f6e10ca660f9d742a79c71cc227d81cef414847b46cd5aa62240543282a4"
+    },
+    "http.log": {
+      "bytes": 95,
+      "sha256": "f029b095c0810614622268f4b62c1af076e756685b946f8b8d963069bbcaa1e2"
+    },
+    "legacy-smoke.log": {
+      "bytes": 424,
+      "sha256": "b8eed66398e138d6f984f8d3d703adf3ed13ad6fbaf6a06e26f324e373093af6"
+    },
+    "migration-browser.json": {
+      "bytes": 10935,
+      "sha256": "bd48bed60d0de7981b13f86f332898588b4ea129b61c0bba4fe111f2ba704392"
+    },
+    "node-tests.log": {
+      "bytes": 123656,
+      "sha256": "3b71ad53a90cec597a8bbc029a5ce25034f8c3b97eb9621ed7b081e6e460cd65"
+    },
+    "offline-tests.log": {
+      "bytes": 98,
+      "sha256": "7e38f52ed67f92f8dc2e3ba632de312446b0c25685c0cc56c3e5ddc12b6ec24f"
+    },
+    "offline.log": {
+      "bytes": 831,
+      "sha256": "0bdf8360ae33e28c404639fc73882ec073b44d9b2a1f35c54fa6f0c096003100"
+    },
+    "owned-cinder-manual-drive.png": {
+      "bytes": 468801,
+      "sha256": "79a0748d7e5481fbd9b498cf276c0731cd1a5b52e1737800629aef00467a80aa"
+    },
+    "parts-browser.json": {
+      "bytes": 32072,
+      "sha256": "eb93250d464d4d018871a8470b5f1bfd16592159ed8694103a67b692a01e1311"
+    },
+    "physical-summary.json": {
+      "bytes": 170374,
+      "sha256": "1bfa8efa8e6b036ae29cc5db0d7e786aba66649a8fa04efc8b1ca42586dceea8"
+    },
+    "proving-browser.json": {
+      "bytes": 103802,
+      "sha256": "465fe96ef2201389d3dc72d9a9c2fb8f4cfbd279a68119a2cfd1f1803f754076"
+    },
+    "proving-ground-lifecycle-browser.json": {
+      "bytes": 20938,
+      "sha256": "9fedbd2ecfc8af795f4cc0ce5e7e862e7ad08fb70638319588ceb17ce4a9bb0a"
+    },
+    "proving-ground-receipt-01.json": {
+      "bytes": 7185,
+      "sha256": "ea8fb80ae3f04ed4241d30725189a3a98570cc612cb99bb2d2b08043aa583930"
+    },
+    "shards.log": {
+      "bytes": 80,
+      "sha256": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed"
+    },
+    "stock-glass-comet.png": {
+      "bytes": 420936,
+      "sha256": "44619d6199e63e74b05e9537fd257e9ae50d5e427e2575815509f667c80edc8f"
+    },
+    "stock-yardhand.png": {
+      "bytes": 405886,
+      "sha256": "6e069f6e002d2aa311b34a6fee4d75f24f8773ff84b2eca030794081dcc13632"
+    },
+    "v130-parity.json": {
+      "bytes": 4951,
+      "sha256": "956e8c4d5e9b7366944e18c565299613fc7420dc60e01516d1344aba02d64d2c"
+    }
+  }
+}
