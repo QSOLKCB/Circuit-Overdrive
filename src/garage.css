@@ -20,6 +20,11 @@ body[data-phase=garage] #foot-keys { display:none; }
 #garage button[aria-pressed=true] { color:#ffdc9f; border-color:#e7bc76; background:#35413e; box-shadow:inset 3px 0 #f4c67d; }
 #garage button:focus-visible,#garage input:focus-visible { outline:3px solid #fff1bd; outline-offset:2px; }
 .garage-status { margin:12px 0; padding:10px 12px; border-left:3px solid #a9dbc8; background:#25343b; font:700 11px/1.5 var(--mono); overflow-wrap:anywhere; }
+.garage-introduction { margin:12px 0 16px; padding:14px; border:2px solid #e7bc76; background:#303e3e; }
+#garage .garage-introduction h3 { margin:0 0 8px; font-size:18px; letter-spacing:0; text-transform:none; }
+#garage .garage-introduction p { margin:8px 0 12px; }
+#garage .garage-introduction button.primary { flex:1; }
+#garage .garage-introduction :focus-visible { outline:3px solid #fff1bd; outline-offset:2px; }
 .garage-models,.garage-bay-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
 .garage-models button { border-left:4px solid var(--paint); }
 .garage-catalogue button span,.garage-bays button span { display:block; margin-top:4px; font-size:10px; }

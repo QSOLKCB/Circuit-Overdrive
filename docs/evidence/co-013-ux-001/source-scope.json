@@ -1,0 +1,10 @@
+{
+  "baseline": "3565d6cb4d178b7b3b049c334a6aaef5cbe2aa5c",
+  "implementation": "75e2ba4645e728ffe107e246942d3fb60d08d638",
+  "vanillajs": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtimeFilesChanged": [
+    "src/garage-ui.js",
+    "src/garage.css"
+  ],
+  "runtimeScope": "DOM onboarding/focus/scroll and CSS only; vault, registry, transactions, model geometry and all race/replay modules byte-identical to baseline."
+}

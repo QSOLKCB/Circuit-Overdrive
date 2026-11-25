@@ -51,6 +51,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   let opened = false, disposed = false, modelId = GARAGE_CATALOG[0].modelId;
   let ownedVehicleId = null, camera = 'front', prepared = null, returnFocus = null;
   let reading = false, fileRead = 0, message = '', previousState = undefined;
+  let slotReason = 'not-loaded'; // Presentation of the last loaded slot, never proposed ownership.
   const held = new Set(), blocked = new Set(), downloads = new Set();
   host.classList.add('garage-panel');
   host.hidden = true;
@@ -69,6 +70,17 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   liveMessage.setAttribute('role','status'); liveMessage.setAttribute('aria-live','polite');
   const status = element('section',undefined,'garage-status');
   status.append(balance,saveStatus,statusCopy,liveMessage);
+  const introduction = element('section',undefined,'garage-introduction');
+  introduction.id = 'garage-introduction'; introduction.hidden = true;
+  introduction.setAttribute('aria-labelledby','garage-intro-title');
+  const introTitle = element('h3'); introTitle.id = 'garage-intro-title'; introTitle.tabIndex = -1;
+  const introCopy = element('p'); introCopy.id = 'garage-intro-copy';
+  const create = button('create','Create garage',reviewNewGarage,'primary');
+  const introImport = button('intro-import','Import a backup',() => reveal(importInput));
+  const introReload = button('intro-reload','Reload saved garage',reloadGarage);
+  const introActions = element('div',undefined,'garage-actions');
+  introActions.append(create,introImport,introReload);
+  introduction.append(introTitle,introCopy,introActions);
   const cameraControls = element('div',undefined,'garage-cameras');
   cameraControls.setAttribute('aria-label','Showroom camera');
   const cameras = new Map();
@@ -118,9 +130,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   bays.append(bayList); layout.append(catalogue,detail,bays);
   const tools = element('section',undefined,'garage-tools');
   tools.append(element('h3','Save vault'));
-  const reload = button('reload','Reload saved garage',() => {
-    cancelPending(); message = 'Loaded the current local save.'; render(vault.load());
-  });
+  const reload = button('reload','Reload saved garage',reloadGarage);
   const exportButton = button('export','Export garage JSON',() => {
     const result = vault.exportSave();
     if (result.accepted) {
@@ -138,9 +148,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   const cancelRead = button('cancel-read','Cancel file read',() => {
     cancelPending(); message = 'Import cancelled. Your save has not changed.'; render(vault.view);
   });
-  const reset = button('new','Create garage',() => {
-    cancelPending(); proposal(vault.prepareReset());
-  });
+  const reset = button('new','Create garage',reviewNewGarage);
   const vaultActions = element('div',undefined,'garage-actions');
   vaultActions.append(reload,exportButton,reset);
   tools.append(vaultActions,importLabel,importInput,cancelRead,
@@ -156,7 +164,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     if (prepared?.backup) download(prepared.backup,'circuit-overdrive-garage-before-replacement.json');
   });
   const cancelButton = button('cancel','Cancel',() => {
+    const origin = returnFocus;
     cancelPending(); message = 'Cancelled. Your saved garage has not changed.'; render(vault.view);
+    // The cancellation announcement can change panel height on narrow screens.
+    if (origin && introduction.contains(origin) && !origin.hidden && !origin.disabled) reveal(origin);
   },'primary');
   const confirmButton = button('confirm','Confirm',commit);
   const confirmActions = element('div',undefined,'garage-actions');
@@ -169,9 +180,19 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     // A queued close event from an earlier confirmation cannot cancel a new one.
     if (!dialog.open && prepared && !vault.view.busy) cancelPending();
   });
-  host.replaceChildren(header,status,cameraControls,layout,tools,dialog);
+  host.replaceChildren(header,status,introduction,cameraControls,layout,tools,dialog);
   const vault = createGarageVault({onChange:render});
 
+  function reveal(control) {
+    control.focus({preventScroll:true});
+    control.scrollIntoView({block:'nearest',behavior:'instant'});
+  }
+  function reviewNewGarage() {
+    cancelPending(); proposal(vault.prepareReset());
+  }
+  function reloadGarage() {
+    cancelPending(); message = 'Loaded the current local save.'; render(vault.load());
+  }
   function explanation(reason) { return reasons[reason] || 'The action could not be accepted. Reload the saved garage and review it again.'; }
   function boundary() {
     for (const key of held) blocked.add(key);
@@ -196,7 +217,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   function hideDialog() {
     prepared = null;
     if (dialog.open) { boundary(); dialog.close(); }
-    if (opened && returnFocus?.isConnected && !returnFocus.disabled) returnFocus.focus({preventScroll:true});
+    if (opened && returnFocus?.isConnected && !returnFocus.disabled && !returnFocus.closest('[hidden]')) {
+      if (introduction.contains(returnFocus)) reveal(returnFocus);
+      else returnFocus.focus({preventScroll:true});
+    }
     returnFocus = null;
   }
   function cancelPending() {
@@ -209,6 +233,8 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       if (prepared || reading) { cancelPending(); message = explanation(view.reason); }
     }
     const state = view.state;
+    if (state) slotReason = null;
+    else if (['empty','invalid-save'].includes(view.reason)) slotReason = view.reason;
     const car = state?.bays.find(entry => entry?.ownedVehicleId === ownedVehicleId);
     if (ownedVehicleId && !car) ownedVehicleId = null;
     // A whole-state import can give the same serial a different catalogue
@@ -224,13 +250,29 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     statusCopy.textContent = view.reason ? explanation(view.reason) : 'Saved locally in this browser. Export a backup for safekeeping.';
     liveMessage.textContent = message;
     const blockedWrite = view.busy || reading || ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status);
+    const introMode = view.status === 'CONFLICT' ? 'conflict' :
+      view.status === 'STORAGE UNAVAILABLE' ? 'unavailable' : !state ? slotReason : null;
+    introduction.hidden = !['empty','invalid-save','conflict','unavailable'].includes(introMode);
+    introduction.dataset.mode = introMode ?? '';
+    introTitle.textContent = introMode === 'empty' ? 'Create Your Garage' :
+      introMode === 'invalid-save' ? 'Recover your garage' :
+      introMode === 'conflict' ? 'Reload to continue' : 'Garage saving unavailable';
+    introCopy.textContent = introMode === 'empty' ?
+      'Four available bays. '+credits(INITIAL_CREDITS)+' to start. Six original vehicles to inspect. Confirm creation to unlock purchases.' :
+      introMode === 'invalid-save' ? reasons['invalid-save'] : explanation(view.reason);
+    create.hidden = !['empty','invalid-save'].includes(introMode);
+    create.textContent = introMode === 'invalid-save' ? 'Review new garage' : 'Create garage';
+    create.disabled = blockedWrite;
+    introImport.hidden = introMode !== 'invalid-save'; introImport.disabled = blockedWrite;
+    introReload.hidden = !['conflict','unavailable'].includes(introMode); introReload.disabled = view.busy;
     const full = state && state.bays.every(Boolean), poor = state && state.credits < model.purchasePrice;
     modelName.textContent = model.displayName;
     modelDescription.textContent = model.description;
     modelFinish.textContent = model.finish.name + ' · ' + model.bodyStyle.replaceAll('-',' ') + ' · Stock finish';
     ownership.textContent = car ? car.ownedVehicleId + (state.activeVehicleId === car.ownedVehicleId ? ' · Active vehicle' : ' · Owned vehicle') : 'Catalogue preview · Not an owned vehicle';
     price.textContent = 'Purchase ' + credits(model.purchasePrice) + ' · Resale ' + credits(garageResaleValue(modelId));
-    availability.textContent = !state ? reasons['no-garage'] : full ? reasons['garage-full'] : poor ? reasons['insufficient-credits'] : 'Purchase uses the first empty bay. You may own more than one of this model.';
+    availability.textContent = ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status) ? explanation(view.reason) :
+      !state ? slotReason === 'invalid-save' ? reasons['invalid-save'] : reasons['no-garage'] : full ? reasons['garage-full'] : poor ? reasons['insufficient-credits'] : 'Purchase uses the first empty bay. You may own more than one of this model.';
     buy.disabled = blockedWrite || !state || full || poor;
     select.hidden = sell.hidden = !car;
     select.disabled = blockedWrite || !car || state?.activeVehicleId === car?.ownedVehicleId;
@@ -304,6 +346,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   async function commit() {
     if (!prepared || vault.view.busy) return;
     const intent = prepared;
+    const creating = intent.preview.type === 'reset' && !vault.view.state;
     // Drop the UI reference before awaiting; the vault consumes its ticket too.
     prepared = null; fileRead++; boundary();
     const result = await vault.confirm(intent.ticket);
@@ -321,9 +364,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       message = receipt.type === 'buy' ? 'Purchase saved. Your vehicle is in bay '+(receipt.bayIndex+1)+'.' :
         receipt.type === 'sell' ? 'Sale saved. '+credits(receipt.creditDelta)+' received once.' :
         receipt.type === 'select' ? 'Active vehicle selection saved.' :
-        receipt.type === 'import' ? 'Imported garage saved. The previous garage was replaced.' : 'New garage saved. Your starting balance is ready.';
+        receipt.type === 'import' ? 'Imported garage saved. The previous garage was replaced.' : creating ? 'Garage created. You have '+credits(result.state.credits)+'. Choose your first car.' : 'New garage saved. Your starting balance is ready.';
     } else message = explanation(result.reason);
     render(vault.view); present();
+    if (opened && result.accepted && creating) reveal(buy.disabled ? modelButtons.get(modelId) : buy);
     if (opened && (!document.activeElement || document.activeElement === document.body)) closeButton.focus();
   }
   async function readImport() {
@@ -377,7 +421,11 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     open() {
       if (disposed) return;
       opened = true; host.hidden = false; message = ''; boundary();
-      render(vault.load()); present(); closeButton.focus({preventScroll:true});
+      render(vault.load()); present();
+      if (!introduction.hidden) {
+        if (introduction.dataset.mode === 'empty') host.scrollTop = 0;
+        reveal(create.hidden || create.disabled ? introTitle : create);
+      } else closeButton.focus({preventScroll:true});
     },
     close,back,
     navigate(action) {

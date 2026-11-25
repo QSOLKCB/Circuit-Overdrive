@@ -4,13 +4,13 @@ Open **The Garage** from the game menu to inspect six original models and manage
 
 ## Your first car
 
-1. Choose **Create garage**, review the four empty bays and 2,400-credit starting balance, then choose **Confirm new garage**. Opening the menu alone never creates credits or replaces a save.
-2. Select a model in **Original catalogue**. Inspect its stock finish, description, purchase price and resale value. Use **Front quarter**, **Side**, **Rear quarter** or **Four bays** to change the showroom camera. On a small screen, **View showroom** brings the vehicle back into view above the controls.
+1. On a first visit, **Create Your Garage** appears near the top of the garage controls and focuses **Create garage**. Choose it, review the four empty bays and 2,400-credit starting balance, then choose **Confirm new garage**. Opening the menu alone never creates credits or replaces a save.
+2. After **SAVED**, the setup prompt disappears and focus moves to the selected model’s enabled **Buy** button (or catalogue selection if it is unaffordable). The message announces your 2,400 credits. Select a model in **Original catalogue**. Inspect its stock finish, description, purchase price and resale value. Use **Front quarter**, **Side**, **Rear quarter** or **Four bays** to change the showroom camera. On a small screen, **View showroom** brings the vehicle back into view above the controls.
 3. Choose **Buy**, review the exact price, new vehicle identity, destination bay and remaining balance, then confirm. The car appears as owned only after the complete save succeeds.
 4. Select an occupied bay to inspect that particular owned vehicle. Two cars can share a model, but each has its own persistent identity. Choose **Make active** and confirm to save your collection selection.
 5. Reload the page and reopen The Garage. With the same browser profile and site address, the saved balance, cars, bay positions and active vehicle remain unchanged.
 
-The Cinder Two costs 600 credits. Four can fill all four bays using the initial balance. A full garage cannot buy a fifth vehicle. A model that costs more than the remaining balance cannot be bought. Catalogue inspection remains available without ownership or usable storage.
+The Cinder Two costs 600 credits. Confirming its purchase leaves 1,800 credits and puts `car-000001` in Bay 1; a browser reload retains both. Four can fill all four bays using the initial balance. A full garage cannot buy a fifth vehicle. A model that costs more than the remaining balance cannot be bought. Catalogue inspection remains available without ownership or usable storage.
 
 ## Sales and recovery
 
@@ -47,3 +47,30 @@ The workshop and vehicle silhouettes are original procedural WebGL geometry. Veh
 Camera changes are immediate and there is no automatic showroom motion. A lost graphics context rebuilds the showroom while keeping the vault independent. If WebGL is unavailable, the textual catalogue, confirmations and save controls remain usable; reopen the garage after restoring graphics support to retry the view.
 
 CO-013D delivers the usable garage experience. [CO-013E acceptance](co-013-acceptance.md) records the executed certification and remaining owner release gates. v1.3.0 remains a candidate until owner sign-off.
+
+
+## First-visit correction — CO-013-UX-001
+
+The owner's first play-through found that disabled Buy controls were visible
+while the prerequisite Create action was buried below the catalogue and bays.
+The introductory panel now puts confirmed creation before camera/catalogue
+controls. Opening or cancelling setup never allocates credits. A saved garage
+hides the first-visit prompt; reopening it does not reset the collection or
+force focus back to setup. The Save vault retains its Create/Reset management
+action.
+
+Unreadable or unsupported storage shows **Recover your garage**, with explicit
+backup import or review of a new-garage replacement. Storage denial and missing
+Web Locks show the capability explanation; conflicts require explicit reload.
+These states never advertise an uncommitted purchase. Save-in-progress controls
+remain disabled. Focus and scroll changes occur on opening or successful
+creation, rather than on each status/render update, and use immediate movement
+for reduced-motion preferences. On narrow screens the first action is brought
+into view; **View showroom** still returns to the preview above the panel.
+
+The actual packaged browser suite (`tests/browser-garage.mjs`) retains all
+CO-013E scenarios and adds first-visit visibility, setup cancellation, committed
+creation, focused first purchase, four desktop/responsive widths, stale scroll
+reopening, busy setup and failed creation/read-back recovery. It observes real
+storage and accepted UI actions; injected storage/lock faults are labelled.
+[Source-bound screenshots and executed results](evidence/co-013-ux-001/README.md) accompany the correction PR.

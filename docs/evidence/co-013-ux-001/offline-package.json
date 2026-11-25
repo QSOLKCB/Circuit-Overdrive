@@ -1,0 +1,12 @@
+{
+  "source": "75e2ba4645e728ffe107e246942d3fb60d08d638",
+  "zip": "Circuit-Overdrive-75e2ba4645e728ffe107e246942d3fb60d08d638.zip",
+  "bytes": 864152,
+  "sha256": "f3305c3d798e2e49b81cfbde76d1af94c6646b9e0cecba141ceb84e5b4a8d09a",
+  "runtimeFiles": 103,
+  "runtimeEquality": true,
+  "archiveExtras": [
+    "RELEASE.json",
+    "START-HERE.txt"
+  ]
+}

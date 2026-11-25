@@ -1,0 +1,17 @@
+{
+  "source": "3565d6cb4d178b7b3b049c334a6aaef5cbe2aa5c",
+  "browser": "158.0.8127.36",
+  "renderer": "software ANGLE SwiftShader",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "observation": {
+    "createButtonTop": 1310.65625,
+    "panelBottom": 867,
+    "createVisible": false,
+    "focus": "garage-close"
+  },
+  "file": "before-empty-garage.png",
+  "sha256": "8a53481c462dacbf370cc86bd7aa6bacf1fb6921ef9f276a0459333cc671c75b"
+}
