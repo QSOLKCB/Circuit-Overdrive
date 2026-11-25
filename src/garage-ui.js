@@ -3,6 +3,8 @@ import {GARAGE_CATALOG, INITIAL_CREDITS, garageModel} from './garage-catalog.js'
 import {GARAGE_SAVE_BYTES} from './garage.js';
 import {garageResaleValue} from './garage-transactions.js';
 import {createGarageVault} from './garage-vault.js';
+import {createGaragePartsUI} from './garage-parts-ui.js';
+import {vehiclePart, vehiclePaint} from './vehicle-parts.js';
 
 const credits = value => value.toLocaleString('en-US') + ' credits';
 const reasons = Object.freeze({
@@ -29,6 +31,9 @@ const reasons = Object.freeze({
   'credit-overflow':'This sale would exceed the credit limit. No sale was made.',
   'generation-unavailable':'The browser could not create a save identity. Reload after restoring browser capabilities.',
   'vehicle-not-owned':'That vehicle is no longer owned by this garage.',
+  'already-fitted':'That part and those settings are already fitted. No credits were spent.',
+  'invalid-build':'This parts combination or setup exceeds the accepted physical limits. Nothing was fitted or charged.',
+  'unrelated-tuning':'Review tuning for the selected part slot only.',
   committing:'Saving the complete garage…',
   busy:'Wait for the current save to complete.'
 });
@@ -122,7 +127,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   const showPreview = button('show-preview','View showroom',() => onCamera(camera),'garage-show-preview');
   const detailActions = element('div',undefined,'garage-actions'); detailActions.append(buy,select,sell);
   detail.append(modelName,modelDescription,modelFinish,ownership,showPreview,price,availability,detailActions,
-    element('p','Cosmetic collection · Stock finish. Garage selection does not change any racing vehicle or performance.','garage-physics-note'));
+    element('p','Paint is cosmetic. Garage selection does not change any established racing vehicle or performance.','garage-physics-note'));
   const bays = element('section',undefined,'garage-bays'); bays.append(element('h3','Your four bays'));
   const bayList = element('div',undefined,'garage-bay-list'), bayButtons = [];
   for (let index = 0; index < 4; index++) {
@@ -134,6 +139,9 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   }
   bays.append(bayList); layout.append(catalogue,detail,bays);
   const tools = element('section',undefined,'garage-tools');
+  const partsCounter = createGaragePartsUI(action => {
+    cancelPending();proposal(vault.prepareInstallation(action));
+  });
   tools.append(element('h3','Save vault'));
   const reload = button('reload','Reload saved garage',reloadGarage);
   const exportButton = button('export','Export garage JSON',() => {
@@ -193,7 +201,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     // A queued close event from an earlier confirmation cannot cancel a new one.
     if (!dialog.open && prepared && !vault.view.busy) cancelPending();
   });
-  host.replaceChildren(header,status,introduction,cameraControls,layout,tools,dialog);
+  host.replaceChildren(header,status,introduction,cameraControls,layout,partsCounter.host,tools,dialog);
   const vault = createGarageVault({onChange:render});
 
   function reveal(control) {
@@ -254,6 +262,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     // model. Reconcile the inspected car from the newly accepted snapshot.
     if (car) modelId = car.modelId;
     const model = garageModel(modelId);
+    partsCounter.render(view,car);
     host.dataset.status = view.status; host.dataset.busy = String(view.busy);
     host.dataset.ownedCount = String(state?.bays.filter(Boolean).length ?? 0);
     host.dataset.revision = state ? String(state.revision) : '';
@@ -283,7 +292,8 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     const full = state && state.bays.every(Boolean), poor = state && state.credits < model.purchasePrice;
     modelName.textContent = model.displayName;
     modelDescription.textContent = model.description;
-    modelFinish.textContent = model.finish.name + ' · ' + model.bodyStyle.replaceAll('-',' ') + ' · Stock finish';
+    const finish=vehiclePaint(car?.build?.parts.paint??'factory',modelId);
+    modelFinish.textContent = finish.name + ' · ' + model.bodyStyle.replaceAll('-',' ') + ' · Cosmetic finish';
     ownership.textContent = car ? car.ownedVehicleId + (state.activeVehicleId === car.ownedVehicleId ? ' · Active vehicle' : ' · Owned vehicle') : 'Catalogue preview · Not an owned vehicle';
     price.textContent = 'Purchase ' + credits(model.purchasePrice) + ' · Resale ' + credits(garageResaleValue(modelId));
     availability.textContent = needsMigration ? reasons['migration-required'] : ['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status) ? explanation(view.reason) :
@@ -345,6 +355,11 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       confirmTitle.textContent = 'Make '+garageModel(receipt.modelId).displayName+' active?';
       confirmCopy.textContent = 'Select '+receipt.ownedVehicleId+' as your active garage vehicle. This changes your collection selection only; racing vehicles and performance stay unchanged.';
       confirmButton.textContent = 'Confirm selection';
+    } else if (type === 'install') {
+      confirmTitle.textContent = 'Fit '+vehiclePart(receipt.slot,receipt.partId).name+'?';
+      const setup=state.bays[receipt.bayIndex].build.tuning;
+      confirmCopy.textContent = 'Fit to '+receipt.ownedVehicleId+' ('+garageModel(receipt.modelId).displayName+'). Part '+credits(receipt.partCost)+' + fitting '+credits(receipt.fittingCost)+'. Total '+credits(receipt.cost)+'. Balance after fitting: '+credits(state.credits)+'. Setup steps: final drive '+setup.finalDrive+', spring '+setup.spring+', damper '+setup.damper+', travel '+setup.travel+', steering '+setup.steering+'. This installs the reviewed build on this car only.';
+      confirmButton.textContent = 'Confirm fitting';
     } else if (type === 'migrate') {
       confirmTitle.textContent = 'Keep this garage and add individual builds?';
       confirmCopy.textContent = 'Keep every owned ID, bay, credit and selection. Each car receives its own stock build and pristine condition. The original legacy save is retained as an exportable backup. Existing racing vehicles stay unchanged.';
@@ -374,7 +389,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     hideDialog();
     if (result.accepted) {
       const receipt = result.receipt;
-      if (receipt.type === 'buy' || receipt.type === 'select') {
+      if (['buy','select','install'].includes(receipt.type)) {
         modelId = receipt.modelId; ownedVehicleId = receipt.ownedVehicleId;
       } else if (['import','reset','migrate'].includes(receipt.type)) {
         const active = result.state.bays.find(car => car?.ownedVehicleId === result.state.activeVehicleId);
@@ -384,6 +399,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       message = receipt.type === 'buy' ? 'Purchase saved. Your vehicle is in bay '+(receipt.bayIndex+1)+'.' :
         receipt.type === 'sell' ? 'Sale saved. '+credits(receipt.creditDelta)+' received once.' :
         receipt.type === 'select' ? 'Active vehicle selection saved.' :
+        receipt.type === 'install' ? 'Part and setup fitted and saved to '+receipt.ownedVehicleId+'. '+credits(receipt.cost)+' charged once.' :
         receipt.type === 'migrate' ? 'Garage upgraded and saved. Every owned vehicle kept its identity and received an independent stock build.' :
         receipt.type === 'import' ? 'Imported garage saved. The previous garage was replaced.' : creating ? 'Garage created. You have '+credits(result.state.credits)+'. Choose your first car.' : 'New garage saved. Your starting balance is ready.';
     } else message = explanation(result.reason);
@@ -453,9 +469,14 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
       if (!opened) return false;
       if (action === 'back') return back();
       const scope = dialog.open ? dialog : host;
-      const controls = [...scope.querySelectorAll('button:enabled,input:enabled')]
+      const controls = [...scope.querySelectorAll('button:enabled,input:enabled,select:enabled')]
         .filter(node => node.getClientRects().length && !node.hidden);
       const active = document.activeElement;
+      if (active?.tagName === 'SELECT' && controls.includes(active) && ['left','right'].includes(action)) {
+        active.selectedIndex=(active.selectedIndex+(action==='right'?1:-1)+active.options.length)%active.options.length;
+        active.dispatchEvent(new Event('change',{bubbles:true}));
+        return true;
+      }
       if (action === 'accept' || action === 'confirm') {
         if (controls.includes(active)) active.click();
       } else if (['up','down','left','right'].includes(action) && controls.length) {

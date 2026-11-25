@@ -2,7 +2,7 @@
 import {garageRecord} from './garage-data.js';
 import {createGarage, migrateLegacyGarage, parseGarageImport, serializeGarage} from './garage.js';
 import {parseLegacyGarage, serializeLegacyGarage} from './garage-legacy.js';
-import {transactGarage} from './garage-transactions.js';
+import {transactGarage, transactGarageInstallation, validateInstallationAction} from './garage-transactions.js';
 import {MAX_VAULT_SEQUENCE, parseVault, serializeVault} from './garage-vault-format.js';
 
 export const GARAGE_SLOT = 'circuit-overdrive.garage.v1';
@@ -109,6 +109,17 @@ export function createGarageVault({
     const copy = Object.freeze(garageRecord(action, ['type', 'targetId', 'expectedRevision'], 'Transaction'));
     return prepared(copy.type, result.state, result.receipt, copy);
   }
+  function prepareInstallation(action) {
+    const error = accessible();
+    if (error) return error;
+    pending = null;
+    if (needsMigration()) return reject('migration-required');
+    if (!state) return reject('no-garage');
+    const result = transactGarageInstallation(state,action);
+    if (!result.accepted) return result;
+    const copy = validateInstallationAction(action);
+    return prepared('install',result.state,result.receipt,copy);
+  }
   function prepareReset() {
     const error = accessible();
     if (error) return error;
@@ -170,7 +181,8 @@ export function createGarageVault({
         if (nextBackup === null && intent.importedLegacy) nextBackup = intent.importedLegacy;
         if (intent.action) {
           if (!current || current.version !== 2) return reject('invalid-save');
-          const transition = transactGarage(current.garage, intent.action);
+          const transition = intent.action.type === 'install' ?
+            transactGarageInstallation(current.garage,intent.action) : transactGarage(current.garage, intent.action);
           if (!transition.accepted) return transition;
           next = transition.state; receipt = transition.receipt;
         }
@@ -229,7 +241,7 @@ export function createGarageVault({
   eventTarget?.addEventListener('storage', storageChanged);
   return Object.freeze({
     get view() { return view(); },
-    load, prepareMigration, prepareTransaction, prepareReset, prepareImport, confirm, cancel, exportSave, exportLegacySave,
+    load, prepareMigration, prepareTransaction, prepareInstallation, prepareReset, prepareImport, confirm, cancel, exportSave, exportLegacySave,
     dispose() {
       disposed = true;
       ready = false;

@@ -18,7 +18,7 @@ body[data-phase=garage] #foot-keys { display:none; }
 #garage button { min-height:42px; font:700 12px/1.35 var(--mono); padding:9px 11px; }
 #garage button:disabled { opacity:.5; cursor:default; }
 #garage button[aria-pressed=true] { color:#ffdc9f; border-color:#e7bc76; background:#35413e; box-shadow:inset 3px 0 #f4c67d; }
-#garage button:focus-visible,#garage input:focus-visible { outline:3px solid #fff1bd; outline-offset:2px; }
+#garage button:focus-visible,#garage input:focus-visible,#garage select:focus-visible { outline:3px solid #fff1bd; outline-offset:2px; }
 .garage-status { margin:12px 0; padding:10px 12px; border-left:3px solid #a9dbc8; background:#25343b; font:700 11px/1.5 var(--mono); overflow-wrap:anywhere; }
 .garage-introduction { margin:12px 0 16px; padding:14px; border:2px solid #e7bc76; background:#303e3e; }
 #garage .garage-introduction h3 { margin:0 0 8px; font-size:18px; letter-spacing:0; text-transform:none; }
@@ -52,6 +52,7 @@ body[data-phase=garage] #foot-keys { display:none; }
 .garage-tools > h3 { width:100%; margin:0!important; }
 .garage-tools input[type=file] { width:100%; max-width:100%; font:12px var(--mono); padding:7px 0; }
 .garage-tools p { width:100%; margin:5px 0; color:#b8c9c4; }
+.garage-tools select { width:100%; max-width:100%; min-height:42px; padding:9px; color:#f7ebd7; background:#25343b; border:1px solid #71817f; font:12px var(--mono); }
 #garage-confirmation { width:min(510px,94vw); border:1px solid #deb67d; border-top:4px solid #f4c67d; background:#1b2a31; }
 #garage-confirmation h2 { font-size:27px; }
 #garage-confirmation p { line-height:1.65; }

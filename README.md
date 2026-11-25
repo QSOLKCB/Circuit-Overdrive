@@ -113,7 +113,7 @@ Each finisher records a time in ticks including three seconds per recovery. Fini
 
 ## Owned vehicle builds
 
-The Garage now stores an independent validated stock build for each owned car. Existing v1.3.0 garages require a reviewed conversion that preserves all cars, IDs, bays and credits and retains an exportable original backup. Mechanical upgrades and the playable test facility remain later CO-014 work. [Migration and recovery guide](docs/garage-player-guide.md#keep-an-existing-garage) · [Build Registry contract](docs/garage-build-registry.md)
+The Garage now stores an independent validated stock build for each owned car. Existing v1.3.0 garages require a reviewed conversion that preserves all cars, IDs, bays and credits and retains an exportable original backup. The Parts Counter fits validated engine, intake, exhaust, gearing, tyre, suspension, steering and original paint choices through confirmed per-car transactions. The playable owned-car facility and complete Machine Shop remain later CO-014 work. [Parts contract](docs/vehicle-parts.md) [Migration and recovery guide](docs/garage-player-guide.md#keep-an-existing-garage) · [Build Registry contract](docs/garage-build-registry.md)
 
 ## Engine source
 
