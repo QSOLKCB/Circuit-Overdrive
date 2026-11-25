@@ -161,12 +161,12 @@ function checkArena(world,stage) {
     }
   }
 }
-export function stepDerbyArena(world,commands) {
+export function stepDerbyArena(world,commands,options) {
   if (!world?.arena || DERBY_ARENAS[world.arena.id]!==world.arena) throw TypeError('Expected a derby arena world');
   if (world.technicalStop) throw Error('Derby arena stopped; create a fresh world');
   checkArena(world,'before-step');
   if (world.technicalStop) return {commands:[],contacts:[],stats:null,technicalStop:world.technicalStop};
-  const result=stepDerbyTick(world,commands);
+  const result=stepDerbyTick(world,commands,options);
   if (!world.technicalStop) checkArena(world,'after-step');
   return {...result,technicalStop:world.technicalStop};
 }

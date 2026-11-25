@@ -43,12 +43,17 @@ function withDamage(world) {
 // Integrate horizontal road forces once per tick. Collision integration alone
 // owns pose. In particular the tyre law never replaces velocity with heading.
 export function driveLabCar(car,cmd) {
+  applyRoadForces(car,cmd,false);
+}
+
+function applyRoadForces(car,cmd,competitive) {
   validateLabCommand(cmd);
   const condition=labCondition(car.damage);
   const c=Math.cos(car.yaw),s=Math.sin(car.yaw);
   let forward=-s*car.vx-c*car.vz, side=c*car.vx-s*car.vz;
-  const thrust=condition.disabled ? 0 : 12*cmd.throttle*condition.drive;
-  const resistance=.17+.0012*forward*forward+17*cmd.brake;
+  const reversing=competitive && !condition.disabled && cmd.throttle===0 && cmd.brake>0 && forward<=0;
+  const thrust=condition.disabled ? 0 : (reversing ? -6*cmd.brake*clamp(1+forward/9,0,1) : 12*cmd.throttle)*condition.drive;
+  const resistance=.17+.0012*forward*forward+(reversing ? 0 : 17*cmd.brake);
   forward=Math.sign(forward)*Math.max(0,Math.abs(forward)-resistance*LAB_STEP)+thrust*LAB_STEP;
   side*=1-4.8*condition.grip*LAB_STEP;
   const target=-cmd.steer*condition.steer*clamp(forward/9,-1,1)*1.45/(1+.018*Math.abs(forward));
@@ -69,10 +74,15 @@ function charge(damage,zone,severity) {
 // The charging function is private. There is no public interface that accepts
 // an alleged impact or recorded damage and installs it into a running trial.
 export function resolveLabTick(world) {
+  return resolveDamageTick(world,false);
+}
+
+function resolveDamageTick(world,competitive) {
   const result=stepImpacts(world);
   for (const contact of result.contacts) {
     const joules=Math.min(contact.dissipated,contact.normalEnergy)/contact.sites.length;
-    const severity=contact.newImpact ? Math.max(0,Math.floor((joules-1500)/1200)) : 0;
+    const joulesPerPoint=competitive ? (contact.kind==='vehicle' ? 100 : 800) : 1200;
+    const severity=contact.newImpact ? Math.max(0,Math.floor((joules-1500)/joulesPerPoint)) : 0;
     for (const site of contact.sites) {
       const car=world.cars.find(body=>body.id===site.id);
       site.damage=charge(car.damage,site.zone,severity);
@@ -83,7 +93,7 @@ export function resolveLabTick(world) {
 
 // Commands are in the world's ascending driver-ID order. Validate and copy
 // the full batch first so a rejected rival command cannot move another car.
-export function stepDerbyTick(world,commands) {
+export function stepDerbyTick(world,commands,{competitive=false}={}) {
   if (world?.discipline!=='derby') throw TypeError('Expected a derby damage world');
   if (world.technicalStop) throw Error('Derby impact world stopped; create a fresh world');
   if (!Array.isArray(commands) || commands.length!==world.cars.length)
@@ -99,6 +109,8 @@ export function stepDerbyTick(world,commands) {
     validateLabCommand(snapshot);
     return labCondition(car.damage).disabled ? neutralLab : snapshot;
   });
-  for (const [index,car] of world.cars.entries()) driveLabCar(car,accepted[index]);
-  return {...resolveLabTick(world),commands:accepted};
+  for (const [index,car] of world.cars.entries()) applyRoadForces(car,accepted[index],competitive);
+  // Enclosed matches have shorter run-up than the diagnostic lab. The arena
+  // calibration retains the entry-energy floor and localized component weights.
+  return {...resolveDamageTick(world,competitive),commands:accepted};
 }
