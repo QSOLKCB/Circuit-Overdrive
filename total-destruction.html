@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151b20"><meta name="game-revision" content="">
+<title>Total Destruction — Circuit Overdrive</title><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/total-destruction.css">
+</head><body data-phase="menu" data-tick="0">
+<header>
+  <a href="./index.html">← Circuit Overdrive</a>
+  <strong>Total Destruction</strong>
+  <button id="derby-controller" type="button">Controller</button>
+</header>
+<main>
+  <section class="stage" aria-label="Demolition arena">
+    <canvas id="derby-world" tabindex="-1" aria-label="Three-dimensional demolition arena"></canvas>
+    <div class="trackplate"><strong id="derby-venue">The Crucible</strong><span id="derby-phase">Arena selection</span></div>
+    <div class="speed" id="derby-speed-panel" hidden><strong id="derby-speed">0</strong> km/h</div>
+    <div class="signal" id="derby-countdown" hidden aria-live="polite"></div>
+    <div id="derby-touch" hidden aria-label="Touch driving controls"></div>
+  </section>
+  <aside>
+    <section aria-labelledby="derby-title">
+      <h1 id="derby-title">Last car standing</h1>
+      <p id="derby-intro">Six cars. Three minutes. Knock out the opposing field or finish ahead on the standings.</p>
+      <label for="derby-arena">Arena</label>
+      <select id="derby-arena"></select>
+      <div class="actions">
+        <button id="derby-arm" class="primary" type="button" disabled>Arm grid</button>
+        <button id="derby-pause" type="button" hidden>Pause</button>
+        <button id="derby-restart" type="button" hidden>Restart round</button>
+        <button id="derby-select" type="button" hidden>Change arena</button>
+      </div>
+      <p id="derby-status" role="status">Loading arena…</p>
+    </section>
+    <section class="instrument" id="derby-result" hidden aria-labelledby="derby-result-title">
+      <h2 id="derby-result-title">Official result</h2>
+      <p id="derby-winner"></p>
+      <div class="actions" id="derby-result-actions" hidden></div>
+    </section>
+    <div id="derby-instruments" hidden>
+      <section class="instrument" aria-label="Live match telemetry">
+        <div class="timing">
+          <div><small>Time left</small><strong id="derby-time">3:00</strong></div>
+          <div><small>Survivors</small><strong id="derby-survivors">6</strong></div>
+          <div><small>Knockouts</small><strong id="derby-knockouts">0</strong></div>
+        </div>
+        <dl>
+          <dt>Player</dt><dd id="derby-driver-status">Active</dd>
+          <dt>Nearest rival</dt><dd id="derby-target">—</dd>
+          <dt>Latest impact</dt><dd id="derby-impulse">—</dd>
+          <dt>Latest elimination</dt><dd id="derby-elimination">—</dd>
+        </dl>
+      </section>
+      <section class="instrument" aria-labelledby="derby-damage-heading">
+        <h2 id="derby-damage-heading">Player condition</h2>
+        <div class="condition">
+          <div class="diagram" aria-label="Body damage by zone">
+            <span id="derby-front"></span><span id="derby-left"></span>
+            <span id="derby-right"></span><span id="derby-rear"></span>
+          </div>
+          <div id="derby-components"></div>
+        </div>
+      </section>
+      <section class="instrument" aria-labelledby="derby-standing-title">
+        <h2 id="derby-standing-title">Standings</h2>
+        <ol id="derby-standings"></ol>
+      </section>
+    </div>
+    <section class="instrument" aria-label="View and audio">
+      <div class="selectors">
+        <label>Camera <select id="derby-camera"><option value="chase">Chase</option><option value="raised">Raised arena</option><option value="spectator">Spectator follow</option></select></label>
+        <label id="derby-follow-control" hidden>Follow <select id="derby-follow"></select></label>
+      </div>
+      <p class="keys">W / ↑ accelerate · S / ↓ brake or reverse<br>A / D steer · C camera · Esc pause</p>
+      <details><summary>Sound &amp; mixer</summary>
+        <p>STEEL RIOT · 150 BPM</p>
+        <button id="derby-sound" type="button" aria-pressed="true">Sound on</button>
+        <div id="derby-mixer"></div>
+      </details>
+    </section>
+  </aside>
+</main>
+<dialog id="controller-dialog" aria-labelledby="driver-title">
+  <h2 id="driver-title">Driving controller</h2>
+  <label for="driver-device">Input device</label>
+  <select id="driver-device"><option value="keyboard">Keyboard</option></select>
+  <p id="driver-layout"></p><div id="profile-host"></div><p id="driver-status" role="status"></p>
+  <div class="actions"><button id="use-device" type="button" class="primary">Use this device</button><button id="close-controller" type="button">Cancel</button></div>
+  <details id="controller-lab">
+    <summary>Controller diagnostics</summary>
+    <section id="lab-readings" tabindex="-1" aria-label="Controller readings">
+      <dl><dt>Driving input</dt><dd id="lab-owner"></dd><dt>Connection</dt><dd id="lab-device"></dd>
+      <dt>Neutral</dt><dd id="lab-neutral"></dd><dt>Steering</dt><dd id="lab-steer"></dd>
+      <dt>Accelerator</dt><dd id="lab-throttle"></dd><dt>Brake</dt><dd id="lab-brake"></dd>
+      <dt>Calibration</dt><dd id="lab-calibration"></dd><dt>Axes</dt><dd id="lab-axes"></dd>
+      <dt>Buttons</dt><dd id="lab-buttons"></dd></dl>
+    </section>
+  </details>
+</dialog>
+<script type="module" src="./src/total-destruction.js"></script>
+</body></html>

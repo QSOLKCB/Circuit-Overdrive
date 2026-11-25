@@ -8,7 +8,7 @@
   <link rel="icon" href="data:,"><link rel="stylesheet" href="./src/style.css">
   <link rel="stylesheet" href="./src/mobile.css">
   <link rel="stylesheet" href="./src/championship.css">
-  <style>#enter-crash{pointer-events:auto}.theatre-entry,#watch-replay{display:inline-flex;align-items:center;color:var(--cream);border:1px solid #7a8d91;padding:7px 11px;text-decoration:none;font:700 12px var(--mono);background:#142b36}.theatre-entry:hover,#watch-replay:hover{background:#344a54}#watch-replay{margin-left:5px}body:not([data-phase=finished]) #watch-replay{display:none}</style>
+  <style>#enter-crash,#enter-derby{pointer-events:auto}.theatre-entry,#watch-replay{display:inline-flex;align-items:center;color:var(--cream);border:1px solid #7a8d91;padding:7px 11px;text-decoration:none;font:700 12px var(--mono);background:#142b36}.theatre-entry:hover,#watch-replay:hover{background:#344a54}#watch-replay{margin-left:5px}body:not([data-phase=finished]) #watch-replay{display:none}</style>
 </head>
 <body data-phase="menu">
 <header>
@@ -42,6 +42,7 @@
       <button class="primary" id="start" type="button" disabled>Start race <span aria-hidden="true">➜</span></button>
       <a class="theatre-entry" id="enter-crash" href="./crash-lab.html">Crash Lab</a>
       <button id="enter-woc" type="button" disabled>World Overdrive Championship</button>
+      <a class="theatre-entry" id="enter-derby" href="./total-destruction.html">Total Destruction</a>
     </div>
     <p id="boot-note" role="status">Loading the game. If this message stays visible, use a browser with WebGL and native JSON module support (Safari 17.2 or later).</p>
     <div class="car-caption"><b>27</b><div><small id="car-class">Touring class</small><strong id="car-name">Ignition GT</strong></div></div>

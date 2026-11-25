@@ -28,6 +28,7 @@ export class RaceMusic {
     this.accentUntil=0;
   }
   accept(race) {
+    if(this.course==='derby'){this.#acceptDerby(race);return;}
     if(!race || !race.player || !Number.isSafeInteger(race.elapsedTicks) || race.elapsedTicks<0)
       throw RangeError('Invalid music race snapshot');
     const tick=race.elapsedTicks,player=race.player;
@@ -42,6 +43,16 @@ export class RaceMusic {
     } else this.target=0;
     this.tick=tick;
     this.lastPosition=player.position;
+  }
+  #acceptDerby(round) {
+    if(!round || !Number.isSafeInteger(round.elapsedTicks) || round.elapsedTicks<this.tick ||
+       !Number.isSafeInteger(round.surviving) || round.surviving<0 || round.surviving>6)
+      throw RangeError('Invalid music derby snapshot');
+    this.tick=round.elapsedTicks;
+    if(round.phase==='countdown')this.target=.34;
+    else if(round.phase==='running'||round.phase==='spectating')this.target=round.surviving<=2?1.03:.82;
+    else this.target=0;
+    if(round.eliminated)this.accentUntil=this.tick+40;
   }
   write(left,right) {
     if(!(left instanceof Float32Array) || !(right instanceof Float32Array) || left.length!==right.length ||

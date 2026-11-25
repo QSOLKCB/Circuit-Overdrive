@@ -1,0 +1,69 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+@import "./crash-lab.css";
+
+:root {
+  --panel:#1c252b;
+  --ink:#131a20;
+  --line:#45545e;
+  --mist:#b6c1c5;
+  --orange:#ffc25c;
+  --paper:#f5f0dc;
+}
+header {background:#10181e}
+header > strong {color:var(--orange)}
+aside {background:linear-gradient(180deg,#212c33,var(--panel) 280px);scrollbar-color:#647179 var(--panel)}
+h1 {margin:0 0 10px;font-weight:900;letter-spacing:-.025em}
+#derby-intro {max-width:30ch;color:var(--mist)}
+#derby-arena {display:block;width:100%;margin:4px 0 10px}
+#derby-status {min-height:1.4em;font-size:.86rem}
+#derby-winner {font-size:1.25rem;font-weight:750;color:var(--paper)}
+.trackplate {
+  position:absolute;inset:18px auto auto clamp(10px,3vw,42px);
+  display:grid;gap:2px;padding:9px 14px;background:#10181eee;border-left:4px solid var(--orange);
+  text-transform:uppercase;letter-spacing:.09em
+}
+.trackplate strong {font-size:1.05rem}
+.trackplate span {font:600 .71rem ui-monospace,monospace;color:var(--mist)}
+.signal {
+  position:absolute;inset:32% auto auto 50%;transform:translateX(-50%);margin:0;
+  width:auto;height:auto;padding:12px 28px;background:#10181eee;color:var(--orange);
+  border:2px solid var(--orange);font:900 clamp(30px,7vw,84px)/1 ui-monospace,monospace
+}
+.timing {display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:5px;margin-bottom:9px}
+.timing div {padding:6px 7px;background:#10181c;border-top:2px solid #807657;display:grid;gap:2px}
+.timing small {color:var(--mist);font:600 .7rem ui-monospace,monospace;text-transform:uppercase}
+.timing strong {font:800 1.25rem ui-monospace,monospace;color:var(--paper)}
+#derby-instruments dl {grid-template-columns:max-content 1fr}
+#derby-instruments dd {font-size:.76rem}
+#derby-driver-status {color:var(--orange)}
+.diagram {width:116px}
+#derby-front,#derby-rear {grid-column:span 2}
+#derby-components {flex:1;font-size:.75rem}
+#derby-components div {display:grid;grid-template-columns:1fr 33% 3.4ch;align-items:center;gap:3px}
+#derby-components meter {width:100%}
+#derby-standings {margin:0;padding-left:1.7em;font-size:.79rem}
+#derby-standings li {border-bottom:1px solid #34434b;padding:3px 2px}
+#derby-standings li::marker {font:600 .75rem ui-monospace,monospace;color:var(--mist)}
+#derby-standings li[data-player] {color:var(--orange)}
+#derby-standings li > span:last-child {float:right;font:600 .72rem/1.6 ui-monospace,monospace}
+#derby-mixer label {display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
+#derby-touch {
+  position:absolute;inset:auto 8px 8px;display:flex;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;pointer-events:none
+}
+#derby-touch > div {pointer-events:auto;touch-action:none}
+#derby-touch button {min-height:48px;min-width:48px;background:#1f2d36eb;font-size:.85rem}
+#derby-touch button.held {border-color:var(--orange);background:#4a493b}
+body:has(#derby-touch:not([hidden])) .speed {bottom:69px}
+dialog {
+  box-sizing:border-box;max-width:min(37rem,90vw);max-height:90dvh;
+  padding:22px;background:var(--panel);color:var(--paper);border:1px solid var(--line)
+}
+dialog::backdrop {background:#10181cbd}
+#driver-layout,#driver-status {font-size:.84rem}
+@media(max-width:700px){
+  .trackplate {inset:8px auto auto 8px;padding:4px 8px}
+  .trackplate strong {font-size:.84rem}
+  header > strong {font-size:.75rem;letter-spacing:.07em}
+  header button {font-size:.75rem}
+}

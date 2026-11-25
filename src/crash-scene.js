@@ -55,7 +55,7 @@ function facility(scenario) {
   }
   return new Float32Array(out);
 }
-function impactBody(renderer,raw,livery) {
+export function impactBody(renderer,raw,livery,sharedGlass) {
   const zones=IMPACT_PANEL_ZONES.map(name=>({name,damage:0,parts:[]}));
   function layer(vertices,options) {
     const {fixed,panels}=createImpactPanelGeometry(vertices,options);
@@ -76,10 +76,10 @@ function impactBody(renderer,raw,livery) {
   return {
     zones,paint:livery.paint,bakedPaint:{...livery.paint,color:[1,1,1]},
     shell:layer(raw.shell,{paint:livery.paint.color,exposedMetal:true}),
-    trim:layer(trim),lamps:layer(raw.lamps),glass:renderer.mesh(raw.glass)
+    trim:layer(trim),lamps:layer(raw.lamps),glass:sharedGlass??renderer.mesh(raw.glass)
   };
 }
-function drawImpactBody(renderer,rig,damage,root) {
+export function drawImpactBody(renderer,rig,damage,root) {
   // One canonical presentation per ledger value. This also covers seek,
   // pause, reset and context restoration without a separate animation clock.
   for(const zone of rig.zones){
