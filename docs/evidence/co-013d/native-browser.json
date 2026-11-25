@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "source": "3c257957d76293dff4f439eedaa98f7d2f13c861",
+  "browser": "158.0.8127.36",
+  "runtime": {
+    "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36",
+    "webLocks": true,
+    "secureContext": true,
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)"
+  },
+  "url": "http://127.0.0.1:8146/Circuit-Overdrive/",
+  "scenarios": [
+    "actual catalogue, confirmed purchases, four bays, selection, sale, reload, export, backup, valid import and rejected files",
+    "delayed native File.text cannot revive an import after explicit cancellation or leaving the garage",
+    "eight full catalogue cycles, four cameras, no idle uploads/draws, WebGL loss/restoration and repeated resource disposal",
+    "simultaneous pages reject stale purchase, reconcile explicitly and observe a real sale",
+    "fresh-key confirmation, held Enter suppression, Space release after blur and safe focus/cancel",
+    "failed quota write preserves inventory and explicit reload recovers",
+    "whole-save replacement with a reused serial reconciles displayed model and valuation from accepted ownership",
+    "synthetic standard gamepad with real menu polling: held confirmation, neutral rearming and disconnect protection",
+    "responsive touch purchase and reduced-motion camera controls",
+    "missing Web Locks fails closed with explicit storage status",
+    "showroom WebGL unavailability leaves explicit, working ownership controls",
+    "global WebGL failure still offers a reachable HTML garage with real persisted purchases"
+  ],
+  "resources": {
+    "catalogueCycles": 8,
+    "afterSwitch": {
+      "created": 84,
+      "deleted": 42,
+      "invalidated": 0,
+      "live": 42,
+      "uploads": 84,
+      "uploadBytes": 1577184,
+      "draws": 8451
+    },
+    "idle": {
+      "created": 84,
+      "deleted": 42,
+      "invalidated": 0,
+      "live": 42,
+      "uploads": 84,
+      "uploadBytes": 1577184,
+      "draws": 8451
+    },
+    "afterLifecycle": {
+      "created": 252,
+      "deleted": 210,
+      "invalidated": 42,
+      "live": 0,
+      "uploads": 252,
+      "uploadBytes": 4731552,
+      "draws": 8715
+    }
+  },
+  "captures": [
+    {
+      "file": "empty-garage.png",
+      "sha256": "9cceed7ce75e297402a76e164d44fc6d919a71300a709a4ffaa83768077a941d"
+    },
+    {
+      "file": "catalogue-starter.png",
+      "sha256": "bc1546e8f888a08b6b94d4f74ecb4ca322749fdfbf8ea9da34c87010ad9cd85d"
+    },
+    {
+      "file": "purchase-confirmation.png",
+      "sha256": "683360ed3946918c50a5ae7087551627a86925d4397c670182816a62ded584ee"
+    },
+    {
+      "file": "first-owned-bay.png",
+      "sha256": "d8a05a318328f0ca1dc38156148f62d03f040cd623c378b9e3459190dc53d109"
+    },
+    {
+      "file": "insufficient-credits.png",
+      "sha256": "73187e978e669617428e8b03bc1549d56725e5958c6eee31052f245f5b21d59a"
+    },
+    {
+      "file": "four-bays-front.png",
+      "sha256": "26284359877c1cbeea3cacd6ab8f9aae00d500aabcf9f0ed0c141256ed75f927"
+    },
+    {
+      "file": "four-bays-full.png",
+      "sha256": "70b7f0941ccf2eddb17d4eb7d35e33ed2d2925d8f5c0c65f71ce0316e9096cb1"
+    },
+    {
+      "file": "successful-sale.png",
+      "sha256": "fe5f116049b4af467b7c85c5778f933ae275f71946832d9697083c9b0082c079"
+    },
+    {
+      "file": "recovered-save.png",
+      "sha256": "495822380d68b8569d1d127bc92e3270bd14bdccc449a8aea7ea5ea9ecb0ecd4"
+    },
+    {
+      "file": "invalid-import.png",
+      "sha256": "d2d11d9118e1e4fb2dff4ca0d18ad349bd7f782dc56b0236deeef4db8d83d45a"
+    },
+    {
+      "file": "showroom-yardhand.png",
+      "sha256": "43b1cc75dba8f6e1ff7a55b967d279336c1405aceca6bba7a8620c9ea3197685"
+    },
+    {
+      "file": "showroom-glass-comet.png",
+      "sha256": "c773b903cf17d78177cc092bc07542b2591f70d8b21bd071729cb222a00d212b"
+    },
+    {
+      "file": "stale-tab-conflict.png",
+      "sha256": "1190fbb6a5ce535d4f81cf24661492601d2cdf330ffe2ca26ade85fb818fb8b6"
+    },
+    {
+      "file": "mobile-purchase-controls.png",
+      "sha256": "22f93e4fe9659302b0918106f40b20b2dc16ab9a4831a7a5eb4d3666825b8537"
+    },
+    {
+      "file": "mobile-owned-garage.png",
+      "sha256": "94a812d09ec4030961446aee9ac39afe32055e0cade9db7d400b9e04eb5542ea"
+    }
+  ],
+  "requests": 729,
+  "externalRequests": [],
+  "errors": [],
+  "finalGarage": {
+    "version": 1,
+    "edition": "after-hours-v1",
+    "catalogRevision": 1,
+    "credits": 1200,
+    "nextVehicleId": 2,
+    "activeVehicleId": "car-000001",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000001",
+        "modelId": "yardhand"
+      },
+      null,
+      null,
+      null
+    ],
+    "revision": 1
+  },
+  "limitations": [
+    "Synthetic standard gamepad reports and storage service faults are explicitly identified.",
+    "Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification."
+  ]
+}

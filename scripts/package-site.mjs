@@ -11,11 +11,11 @@ import vm from 'node:vm';
 const vendor = 'vendor/vanillajs/';
 const engine = ['collision', 'input', 'math', 'render-lit', 'scenic3d', 'terrain', 'time', 'vehicle-audio', 'vehicle3d'];
 const code = ['ai', 'audio', 'bps', 'camera', 'championship', 'championship-storage', 'championship-ui', 'contact', 'crash-impact', 'crash-damage', 'crash-trial', 'crash-replay', 'crash-scene', 'crash-audio', 'crash-lab', 'controller-lab', 'controller-menu', 'driver-command', 'driver-input', 'effects', 'environment', 'field', 'gamepad', 'geometry', 'headlights', 'impact-panels', 'input', 'main', 'map', 'music', 'music-scores', 'night-fixtures', 'nitro-physics', 'nitro-race', 'profile-editor', 'profiles', 'replay', 'replay-v2', 'replay-presentation', 'replay-theatre', 'replay-theatre-core', 'ridge', 'ridge-scene',
-  'derby-replay',
+  'derby-replay', 'garage-data', 'garage-catalog', 'garage', 'garage-transactions', 'garage-vault-format', 'garage-vault', 'garage-ui', 'garage-geometry', 'garage-scene', 'garage-experience',
   'derby', 'derby-ai', 'derby-arenas', 'derby-arena-scene', 'derby-arena-preview', 'derby-audio', 'total-destruction', 'orbital', 'orbital-scene', 'rocket-contact', 'rocket-dynamics', 'rocket-race', 'rocket-scene', 'scene', 'sim', 'skyway', 'skyway-scene', 'speedway', 'touch', 'touring-car', 'track'];
 const attribution = ['LICENSE', vendor + 'LICENSE', vendor + 'NOTICE', vendor + 'provenance.json'];
 export const siteFiles = Object.freeze([
-  'index.html', 'crash-lab.html', 'derby-arenas.html', 'total-destruction.html', 'replay-theatre.html', 'src/total-destruction.css', 'src/crash-lab.css', 'src/style.css', 'src/mobile.css', 'src/championship.css', 'src/replay-theatre.css',
+  'index.html', 'crash-lab.html', 'derby-arenas.html', 'total-destruction.html', 'replay-theatre.html', 'src/total-destruction.css', 'src/crash-lab.css', 'src/style.css', 'src/mobile.css', 'src/championship.css', 'src/replay-theatre.css', 'src/garage.css',
   ...code.map(name => 'src/' + name + '.js'),
   'tracks/overdrive-speedway.json', 'tracks/redline-ridge.json',
   vendor + 'demos/horizon-lab/race-audio.js', ...engine.map(name => vendor + 'modules/' + name + '/index.js'),

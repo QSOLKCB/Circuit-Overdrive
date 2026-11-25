@@ -1,6 +1,6 @@
 # CO-013C — Save Vault
 
-The vault commits the accepted B transactions to browser-native local storage. It is implemented in `src/garage-vault.js`, with strict storage-envelope admission in `src/garage-vault-format.js`. The development fixture exercises it through actual browser buttons, downloads and file inputs. The production garage menu, file controls and showroom remain D. v1.3.0 remains a candidate.
+The vault commits the accepted B transactions to browser-native local storage. It is implemented in `src/garage-vault.js`, with strict storage-envelope admission in `src/garage-vault-format.js`. The development fixture exercises it through actual browser buttons, downloads and file inputs. CO-013D connects it to the [production garage menu, file controls and showroom](garage-player-guide.md). v1.3.0 remains a candidate.
 
 ## Storage and coordination
 
@@ -81,6 +81,6 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs CHROME_BIN=/path/to/chrome \
 node tests/browser-garage-vault.mjs http://127.0.0.1:8000/
 ```
 
-`tests/fixtures/garage-vault.html` is explicitly a development test adapter. It invokes the actual vault module through buttons and real File/Blob APIs. Tests cover accepted purchases, another tab's stale confirmation, reload/reconciliation, sale visibility, canonical download/import, rejected files, identical-data replacement, quota/denial and interrupted read-back. Fault injection replaces browser services to exercise errors; it does not fabricate garage state or transaction results. The fixture and unused garage source are outside the shipped asset allowlist until D connects production UI. Existing protected CI/workflows and racing authority remain unchanged.
+`tests/fixtures/garage-vault.html` is explicitly a development test adapter. It invokes the actual vault module through buttons and real File/Blob APIs. Tests cover accepted purchases, another tab's stale confirmation, reload/reconciliation, sale visibility, canonical download/import, rejected files, identical-data replacement, quota/denial and interrupted read-back. Fault injection replaces browser services to exercise errors; it does not fabricate garage state or transaction results. The development fixture remains outside the shipped asset allowlist. D packages the complete garage runtime dependency closure through the production menu. Existing protected CI/workflows and racing authority remain unchanged.
 
 The [C acceptance record](co-013c-acceptance.md) identifies executed commands, exact source and browser, screenshot/JSON receipts and their limits. No native GPU performance or full showroom journey is claimed in C. Owner review of C precedes D.

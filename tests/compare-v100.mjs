@@ -17,12 +17,21 @@ for(const dir of [reference,candidate])assert.equal(git(dir,'status','--porcelai
 const unchanged=['src/sim.js','src/contact.js','src/ai.js','src/field.js','src/nitro-race.js','src/nitro-physics.js',
   'src/rocket-race.js','src/rocket-contact.js','src/rocket-dynamics.js','src/championship.js','src/championship-storage.js',
   'src/championship-ui.js','src/driver-command.js','src/driver-input.js','src/gamepad.js','src/profiles.js','src/touch.js',
-  'src/input.js','src/replay-v2.js','src/replay.js','src/main.js','src/replay-presentation.js','src/effects.js',
+  'src/input.js','src/replay-v2.js','src/replay.js','src/replay-presentation.js','src/effects.js',
   'src/scene.js','src/rocket-scene.js','tracks','vendor'];
 const blobs={};
 for(const path of unchanged){
   const oid=git(reference,'rev-parse','HEAD:'+path);assert.equal(git(candidate,'rev-parse','HEAD:'+path),oid,path);blobs[path]=oid;
 }
+// CO-013D adds garage menu routing to main.js. It is a reviewed presentation
+// change, covered by the actual packaged gameplay/input browser suites. Keep
+// every simulation, command, replay and championship module above byte-checked,
+// and retain the full per-tick comparison below. Record the adapter separately
+// instead of requiring all future menu additions to match v1.0.0 byte for byte.
+const presentationChanges={'src/main.js':{
+  baseline:git(reference,'rev-parse','HEAD:src/main.js'),
+  candidate:git(candidate,'rev-parse','HEAD:src/main.js')
+}};
 const hash=s=>createHash('sha256').update(JSON.stringify(s)).digest('hex');
 async function load(dir){
   const mod=path=>import(pathToFileURL(join(dir,path+'.js')));
@@ -65,4 +74,4 @@ for(const [name,light] of [['speedway','day'],['speedway','night'],['ridge','day
   results.push({name,light,ticks,nightSamples,recovered,contactTicks,version:ta.version,runsSha256:hash(ta.runs),
     fieldSha256:hash(a.race.entrants),order:a.race.order.map(e=>e.id),finish:a.race.player.finishTicks});
 }
-console.log(JSON.stringify({baseline:sha,candidate:head,node:process.version,platform:process.platform,blobs,results},null,2));
+console.log(JSON.stringify({baseline:sha,candidate:head,node:process.version,platform:process.platform,blobs,presentationChanges,results},null,2));

@@ -1,6 +1,6 @@
 # CO-013A — The Vehicle Registry
 
-After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55 and [CO-013B](garage-transactions.md) as PR #56. The [Save Vault](garage-save-vault.md) adds coordinated persistence around this unchanged schema in C. The playable showroom remains stage D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
+After Hours Motor Works begins with an original catalogue and a pure ownership schema. CO-013A merged as PR #55 and [CO-013B](garage-transactions.md) as PR #56. The [Save Vault](garage-save-vault.md) adds coordinated persistence around this unchanged schema in C. The [playable showroom](garage-player-guide.md) is implemented in stage D. Stage E certifies the complete experience. v1.3.0 remains a candidate.
 
 ## Original catalogue, revision 1
 
@@ -13,7 +13,7 @@ After Hours Motor Works begins with an original catalogue and a pure ownership s
 | `yardhand` | Yardhand | Utility pickup, square cab and open bed | Workshop Teal | 1,200 |
 | `glass-comet` | Glass Comet | Premium sports coupe, wedge nose and broad canopy | Violet Current | 2,400 |
 
-These are original cosmetic designs. Prices do not measure horsepower, grip, acceleration, speed or collision strength. No garage model is connected to an existing racing recipe. Mechanical damage remains inside its originating Crash Lab or Derby event. The `visualModel` identifiers reserve six bounded presentation styles for D; they are not executable paths or claims that the showroom already renders them.
+These are original cosmetic designs. Prices do not measure horsepower, grip, acceleration, speed or collision strength. No garage model is connected to an existing racing recipe. Mechanical damage remains inside its originating Crash Lab or Derby event. The `visualModel` identifiers name six bounded presentation styles implemented by D; they are not executable paths.
 
 `src/garage-catalog.js` validates and deeply freezes the six records, including each nested `finish`. Each has exactly `modelId`, `displayName`, `description`, `bodyStyle`, `finish`, `purchasePrice`, `resalePolicy`, `visualModel` and `catalogRevision`. `finish` has exactly `name`, `body` and `accent`. Colours are lowercase `#rrggbb`. Names and finish names are 1–48 printable ASCII characters; descriptions are 1–240, with no leading/trailing whitespace or angle brackets. Model IDs are 1–48 lowercase identifier characters starting with a letter. IDs and display names are unique. Body-style/presentation pairs are an explicit finite mapping, with no URL, module loader or script support.
 
@@ -44,7 +44,7 @@ Each occupied bay contains exactly `{"ownedVehicleId":"car-000001","modelId":"ci
 
 The allocator must never move backwards on a transaction, even after the last car sells. At 1,000,000, future purchases must reject identity exhaustion. At maximum revision, future mutations must reject revision exhaustion rather than wrap. These are transition obligations for B. A snapshot validator cannot prove historical monotonicity or previously committed payments. It checks structural invariants without inventing transaction history. A confirmed reset or import in C is an explicit whole-garage replacement, not a source of additional cash within the existing state.
 
-`createGarage()` returns a fresh immutable empty state with 2,400 credits and no free car. It is a constructor, not an implicit top-up on entering a future menu. B/C must implement the documented explicit reset/recovery path. There is no current browser storage access, reset UI, persistence claim or commitment protocol.
+`createGarage()` returns a fresh immutable empty state with 2,400 credits and no free car. It is a constructor, not an implicit top-up on entering a future menu. B/C implement the documented transaction and persistence contracts; D supplies explicit confirmed reset/recovery in the UI. The pure registry itself never accesses browser storage.
 
 ## Data boundary
 
@@ -62,7 +62,7 @@ The current STREET-RACER reference was inspected at [`03c038c401b3dada8646aa0c57
 
 The existing championship uses `circuit-overdrive.woc.v1`, Web Locks and a compare-against-last-observed storage value. C must use a separate key and preserve championship/settings/profile saves. Garage compatibility is schema/catalogue-based; it does not relax exact-source replay or championship rules.
 
-The static package requires all allowlisted files to be reachable from `index.html`. These pure modules have no browser importer yet and intentionally stay outside that allowlist in A. D must include the complete new dependency closure when connecting the UI. This PR's shipped runtime remains byte-identical to published v1.2.0 before normal source stamping.
+The static package requires all allowlisted files to be reachable from `index.html`. These pure modules stayed outside that allowlist in A–C, whose shipped runtimes remained byte-identical to published v1.2.0 before normal source stamping. D includes the complete new dependency closure through the production UI.
 
 ## Review
 

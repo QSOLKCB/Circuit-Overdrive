@@ -1,0 +1,49 @@
+# Street Rod — After Hours Motor Works
+
+Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any racing mode. Tuning, repairs and race rewards are future milestones.
+
+## Your first car
+
+1. Choose **Create garage**, review the four empty bays and 2,400-credit starting balance, then choose **Confirm new garage**. Opening the menu alone never creates credits or replaces a save.
+2. Select a model in **Original catalogue**. Inspect its stock finish, description, purchase price and resale value. Use **Front quarter**, **Side**, **Rear quarter** or **Four bays** to change the showroom camera. On a small screen, **View showroom** brings the vehicle back into view above the controls.
+3. Choose **Buy**, review the exact price, new vehicle identity, destination bay and remaining balance, then confirm. The car appears as owned only after the complete save succeeds.
+4. Select an occupied bay to inspect that particular owned vehicle. Two cars can share a model, but each has its own persistent identity. Choose **Make active** and confirm to save your collection selection.
+5. Reload the page and reopen The Garage. With the same browser profile and site address, the saved balance, cars, bay positions and active vehicle remain unchanged.
+
+The Cinder Two costs 600 credits. Four can fill all four bays using the initial balance. A full garage cannot buy a fifth vehicle. A model that costs more than the remaining balance cannot be bought. Catalogue inspection remains available without ownership or usable storage.
+
+## Sales and recovery
+
+Select an occupied bay and choose **Sell**. The confirmation identifies the exact owned car, proceeds and resulting balance. Sales return 60% of the catalogue purchase price, using integer arithmetic. A Cinder Two sells for 360 credits; repeated buying and selling does not create profit. Selling the active car selects the first remaining occupied bay. Selling the last car leaves a valid empty garage with no active vehicle.
+
+If you have no cars or cannot afford another purchase, you can still inspect the entire catalogue. **Reset garage** offers an explicit replacement with four empty bays and 2,400 credits. This discards the old collection and balance; it is a new garage, not an income source or a repair. Export your current garage before confirming if you want to keep it. Returning to the menu or revisiting the garage never tops up credits.
+
+## Save vault
+
+**Export garage JSON** downloads the complete validated snapshot. Keep a backup outside browser storage. The file contains inert ownership data, not executable code, vehicle recipes or authentication. The player controls the local file; strict validation protects program invariants, not against deliberate local edits.
+
+Choose a file through **Import garage JSON**. Files are limited to 64 KiB and the complete schema and inventory are checked before any replacement is offered. A valid file opens a confirmation showing the balance and owned identities that would replace the current garage. **Export current garage first** is available on replacement confirmations. Import replaces the whole state; it never adds imported credits or vehicles to the current save. Cancel leaves the existing save intact. **Cancel file read**, Back, reload and navigation also invalidate an unfinished file read.
+
+Invalid, corrupt, oversized or unsupported files show **IMPORT REJECTED** and preserve the existing save. Importing a valid backup is also available when the currently stored data is corrupt. No automatic reset replaces unreadable data.
+
+| Status | What to do |
+| --- | --- |
+| SAVED | The browser confirmed the saved snapshot. Export a backup for safekeeping. |
+| UNSAVED | Read the message: this may be an empty/corrupt slot, a save in progress or a rejected attempt. |
+| STORAGE UNAVAILABLE | Restore browser storage/coordination support, then use Reload saved garage. Inspection remains available. |
+| CONFLICT | Another tab changed the save. Reload saved garage before reviewing a new action. |
+| IMPORT REJECTED | Choose a valid file. Existing ownership has not been replaced. |
+
+Two tabs can inspect the same garage. After one commits a purchase or sale, the other must reload before writing. An old confirmation cannot overwrite newer ownership; actions are never silently retried against another balance. A failed write does not award a free vehicle. If a write completed but verification failed, reload discovers the actual whole saved state before any retry.
+
+Storage is local to the browser profile and exact origin (scheme, host and port). Use HTTPS hosting or the supported offline loopback server, with accessible localStorage and Web Locks. A different port, browser or profile has a separate save. Storage denial, unavailable coordination and exhausted limits fail closed. There is no cloud synchronisation, and browser eviction or deletion can remove local saves. The championship and settings use separate keys.
+
+## Controls and presentation
+
+Use ordinary buttons with keyboard Tab/Shift+Tab and Enter/Space, touch or the configured controller's menu navigation. Confirmations initially focus **Cancel**. A held activation key cannot carry across a focus or confirmation transition to make a purchase. Back/Escape cancels a confirmation or pending file read before leaving the garage. While a save is committing, wait for its result before navigating away.
+
+The workshop and vehicle silhouettes are original procedural WebGL geometry. Vehicles display their catalogue stock finish; cosmetic size and body style are not claims about horsepower or racing performance. The four-bay view displays only accepted owned vehicles. The separate inspection platform can show an available catalogue vehicle without granting ownership.
+
+Camera changes are immediate and there is no automatic showroom motion. A lost graphics context rebuilds the showroom while keeping the vault independent. If WebGL is unavailable, the textual catalogue, confirmations and save controls remain usable; reopen the garage after restoring graphics support to retry the view.
+
+CO-013D delivers the usable garage experience. v1.3.0 remains a candidate pending the separate certification PR and owner acceptance.

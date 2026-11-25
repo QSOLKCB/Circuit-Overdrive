@@ -3,6 +3,7 @@ import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {TouringAudio, DEFAULT_VOLUMES} from './audio.js';
 import {attachDriverInput} from './driver-input.js';
 import {championshipUI} from './championship-ui.js';
+import {createGarageExperience} from './garage-experience.js';
 import {createRecording} from './replay.js';
 import {controllerMenu, menuAction} from './controller-menu.js';
 import {track} from './track.js';
@@ -40,7 +41,7 @@ let recording;
 let drawMap = createMap($('map'), race.course);
 let scene, error = '', grid = false, camera = 'chase', sound = true;
 let lastTime = null, lastPanel = '', soundGeneration = 0;
-const phase = () => error ? 'error' : championship.visible ? 'championship' : grid ? 'grid' : race.phase;
+const phase = () => garage.visible ? 'garage' : error ? 'error' : championship.visible ? 'championship' : grid ? 'grid' : race.phase;
 const driving = () => ['countdown','racing'].includes(phase());
 const modalOpen = () => !!document.querySelector('dialog[open]');
 const focused = () => (input.source !== 'keyboard' || document.activeElement === canvas) && document.hasFocus() && !document.hidden && !modalOpen();
@@ -64,6 +65,9 @@ const championship = championshipUI({revision, formatTime, grid:() => enterGrid(
     $('enter-woc').focus();
   }
 });
+const garage = createGarageExperience({host:$('garage'), viewport:$('garage-view'),
+  canvas:$('garage-canvas'), status:$('garage-graphics-status'), boundary:resetClock,
+  changed:() => updatePanel(true), leave:() => $(error ? 'error-garage' : 'enter-garage').focus()});
 let inputNotice = '';
 function showSource(kind) {
   inputNotice = '';
@@ -180,7 +184,8 @@ function updatePanel(screenChanged = false) {
   lastPanel = mode;
   document.body.dataset.phase = mode;
   $('menu').hidden = mode !== 'menu';
-  $('hud').hidden = ['menu','championship','grid','error'].includes(mode);
+  $('hud').hidden = ['menu','championship','garage','grid','error'].includes(mode);
+  canvas.hidden = mode === 'garage';
   $('woc').hidden = mode !== 'championship';
   $('overlay').hidden = !['grid','paused','finished','error'].includes(mode);
   $('touch-arm').hidden = !(mode === 'grid' && input.hasTouch && (navigator.maxTouchPoints > 0 || input.source === 'touch'));
@@ -189,6 +194,7 @@ function updatePanel(screenChanged = false) {
   $('restart').className = mode === 'finished' ? 'primary' : '';
   $('courses').hidden = !['paused','finished'].includes(mode);
   $('results').hidden = mode !== 'finished';
+  $('error-garage').hidden = mode !== 'error';
   $('save-drive').hidden = mode !== 'finished' || !recording?.complete;
   $('signal').hidden = true;
   $('lights').hidden = true;
@@ -232,7 +238,7 @@ function updatePanel(screenChanged = false) {
   if (mode === 'paused' && !document.hidden && !modalOpen()) {
     $('continue').focus({preventScroll:true});
   }
-  const statuses = {championship:championship.announcement, menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
+  const statuses = {garage:'After Hours Motor Works · Local vehicle ownership', championship:championship.announcement, menu:'Race selection', grid:'Awaiting driver input', countdown:'Starting grid',
     racing:'Race live', paused:'Paused', finished:race.player.position === 1 ? 'Race winner' : 'Chequered flag', error:'Renderer offline'};
   set('status', championship.active ? championship.roundName+' · '+statuses[mode] : statuses[mode]);
 }
@@ -349,6 +355,12 @@ $('enter-woc').onclick = () => {
   championship.open();
 };
 $('start').onclick = () => enterGrid();
+$('error-garage').onclick = $('enter-garage').onclick = () => {
+  if (!['menu','error'].includes(phase())) return;
+  resetClock();
+  stopAudio();
+  garage.open();
+};
 $('restart').onclick = () => { if (['paused','finished'].includes(phase())) enterGrid(championship.active); };
 $('continue').onclick = resume;
 $('touch-arm').onclick = () => {
@@ -415,6 +427,10 @@ window.addEventListener('pagehide', pause);
 function handleAction(action) {
   if (document.hidden || !document.hasFocus()) return false;
   if ($('controller-dialog').open) return input.source === 'gamepad' && controller.navigate(action);
+  if (garage.visible && (!modalOpen() || $('garage-confirmation').open)) {
+    if (action === 'pause' || action === 'back') { garage.back(); return true; }
+    return input.source === 'gamepad' && garage.navigate(action);
+  }
   if (modalOpen()) return input.source === 'gamepad' && menuAction(action);
   if (championship.visible && (action === 'back' || action === 'pause')) {
     championship.back();
@@ -599,7 +615,7 @@ function render(alpha, elapsed) {
 function frame(time) {
   const elapsed = lastTime === null ? 0 : Math.max(0, (time - lastTime) / 1000);
   lastTime = time;
-  if (!error && !document.hidden) {
+  if ((!error || garage.visible) && !document.hidden) {
     // Read the effective preference before drawing, including after a missed
     // MediaQueryList change notification or a suspended browser tab.
     if (quality === 'auto') applyQuality();
@@ -611,7 +627,7 @@ function frame(time) {
     }
     const alpha = driving() ? clock.advance(elapsed, fixedUpdate).alpha : 1;
     updatePanel();
-    try { render(alpha, elapsed); }
+    try { if (garage.visible) garage.render(pixelRatio); else render(alpha, elapsed); }
     catch (failure) {
       console.error(failure);
       graphicsError('Rendering stopped. Reload to initialise the graphics device again.');
@@ -621,5 +637,5 @@ function frame(time) {
 }
 initializeScene();
 $('boot-note').hidden = true;
-$('start').disabled = $('enter-woc').disabled = false;
+$('start').disabled = $('enter-woc').disabled = $('enter-garage').disabled = false;
 requestAnimationFrame(frame);

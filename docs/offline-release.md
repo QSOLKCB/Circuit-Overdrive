@@ -67,3 +67,9 @@ The v1.2.0 candidate also includes the playable **Total Destruction** page. Sele
 ## Total Destruction evidence from the offline package
 
 Serve the verified archive over loopback. Complete a Total Destruction round, save its v6 replay and evidence JSON, then import the replay into the Theatre in the same archive. Replay files include the accepted spectator period if the player was eliminated. At the official result, save a second evidence receipt and compare the input, contact, classification and final-state hashes. The CLI also reconstructs a v6 replay with `node scripts/replay-drive.mjs FILE.json` from a matching source checkout and declares its own runtime. Keep the stamped archive alongside the drive for later playback. [Derby replay format and evidence](replay-theatre.md#total-destruction-version-6)
+
+## The Garage in the v1.3.0 candidate
+
+The packaged main menu includes **The Garage — After Hours Motor Works**. Its catalogue, six original procedural previews, workshop, transaction authority and Save Vault are local modules. Serve the extracted ZIP over loopback as above; no asset or ownership service is required. Native modules still require HTTP rather than double-clicking `index.html`.
+
+Keep using the same browser, host and port for the same local save. An empty vault requires an explicit **New garage** confirmation before creating 2,400 fictional credits. Successful transactions show **SAVED**. A storage conflict requires **Reload saved garage**; it does not replay the pending action. Storage or Web Locks unavailability blocks persistent mutations while catalogue inspection remains available. Export JSON backups before changing origin, clearing browser storage or replacing a garage. Import replaces the complete validated save after confirmation; it does not combine credits. [Player workflow and recovery](garage-player-guide.md) · [Storage guarantees and limits](garage-save-vault.md)
