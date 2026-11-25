@@ -123,7 +123,7 @@ function fixedUpdate(){
   if(run.phase==='finished')pause('Test '+run.result.status+' · '+run.result.reason+'. Reset or load another test.');
 }
 async function compare(){
-  pause();const token=++generation;comparing=true;instruments();$('comparison').textContent='null';
+  pause();const token=++generation;comparing=true;instruments();$('comparison').textContent='null';$('measurements').replaceChildren();
   try{
     if(!sourceRevision)throw Error('Use a source-stamped standalone package for attributable comparisons.');
     const testId=$('test').value;if(testId==='practice')throw Error('Choose one of the four measured tests.');
@@ -146,6 +146,17 @@ async function compare(){
       results.push({...receipt,mode,scope:admission.scope,garageRevision:admission.garageRevision});
     }
     $('comparison').textContent=JSON.stringify({testId,comparisonPolicy:results[0].comparison,results},null,2);
+    const [key,label,unit]={acceleration:['accelerationSeconds','0–100 km/h','s'],braking:['brakingDistanceM','Reached 100 to stop','m'],
+      slalom:['slalomSeconds','Six-gate slalom','s'],handling:['handlingSeconds','Constant-radius handling','s']}[testId];
+    const table=document.createElement('table'),caption=table.createCaption();caption.textContent=label+' · measured';
+    const head=table.createTHead().insertRow();
+    for(const text of ['Configuration','Outcome','Ticks']){const cell=document.createElement('th');cell.scope='col';cell.textContent=text;head.append(cell);}
+    const body=table.createTBody();
+    for(const receipt of results){
+      const row=body.insertRow(),metric=receipt.result.metrics[key];
+      for(const text of [receipt.mode,receipt.result.status==='completed'&&metric!==null?metric.toFixed(3)+' '+unit:receipt.result.status+' · '+receipt.result.reason,String(receipt.acceptedTicks)])row.insertCell().textContent=text;
+    }
+    $('measurements').append(table);
     status('Comparison complete. Each receipt declares its build, source, accepted commands and physical outcome.');
   }catch(error){if(token===generation)status('Comparison rejected: '+error.message);}
   finally{if(token===generation){comparing=false;instruments();}}

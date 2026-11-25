@@ -179,6 +179,8 @@ export function stepProvingRun(run,value){
   if(next.truncated||next.needsRecovery||!['position','velocity','orientation','angularVelocity'].every(key=>next[key].every(Number.isFinite)))return finish(run,'physical-failure','solver-limit-or-nonfinite');
   if(next.position[0]<-125||next.position[0]>125||next.position[2]<-1345||next.position[2]>125)return finish(run,'physical-failure','facility-enclosure');
   if(run.testId!=='practice'&&next.contacts.length)return finish(run,'invalid','barrier-contact');
+  // A terminal stopping tick must remain inside the test corridor too.
+  if(['acceleration','braking'].includes(run.testId)&&Math.abs(next.position[0])>PROVING_TRACK.straight.halfWidth)return finish(run,'invalid','straight-corridor');
   if(!run.accelerationCrossing&&priorSpeed<100/3.6&&nextSpeed>=100/3.6){
     const fraction=(100/3.6-priorSpeed)/(nextSpeed-priorSpeed);
     run.accelerationCrossing=freeze({acceptedTick:run.ticks,previousSpeedMps:priorSpeed,nextSpeedMps:nextSpeed,fraction});
@@ -192,7 +194,6 @@ export function stepProvingRun(run,value){
     run.braking.fullBrakeCommands &&=command.throttle===0&&command.brake===1&&command.steer===0;
     if(nextSpeed<=.1){m.brakingDistanceM=run.braking.pathM;return finish(run,'completed','braked-to-stop');}
   }
-  if(['acceleration','braking'].includes(run.testId)&&Math.abs(next.position[0])>PROVING_TRACK.straight.halfWidth)return finish(run,'invalid','straight-corridor');
   if(run.testId==='slalom'){
     const c=PROVING_TRACK.slalom.corridor;
     if(next.position[0]<c.minX||next.position[0]>c.maxX||next.position[2]>c.maxZ||next.position[2]<c.minZ)return finish(run,'invalid','slalom-boundary');

@@ -207,6 +207,22 @@ test('straight driving cannot claim a slalom and driving off the ring cannot cla
   }
 });
 
+test('braking cannot complete when its actual final stopping tick leaves the straight corridor',()=>{
+  const run=createProvingRun({modelId:'cinder-two',build:stockVehicleBuild('cinder-two'),testId:'braking'});
+  // Test-only near-boundary setup exercises two conditions on the same actual
+  // solver tick: crossing the corridor and reaching the stopping threshold.
+  run.vehicle=run.solver.spawn({...run.startingPose,
+    position:[15.999999,run.startingPose.position[1],-100],yaw:-Math.PI/2,velocity:[.11,0,0]});
+  run.previous=run.vehicle;
+  run.accelerationCrossing={acceptedTick:0,previousSpeedMps:0,nextSpeedMps:100/3.6,fraction:1};
+  run.braking={startTick:0,startSpeedMps:100/3.6,startPosition:run.vehicle.position.slice(),pathM:37,fullBrakeCommands:true};
+  startProvingRun(run);stepProvingRun(run,{throttle:0,brake:1,steer:0});
+  assert(run.vehicle.position[0]>PROVING_TRACK.straight.halfWidth);
+  assert(horizontalSpeed(run.vehicle)<=.1);
+  assert.equal(run.ticks,1);assert.equal(run.result.status,'invalid');assert.equal(run.result.reason,'straight-corridor');
+  assert.equal(run.result.metrics.brakingDistanceM,null);
+});
+
 test('a solver recovery flag is a visible physical failure, never a fabricated benchmark result',()=>{
   const run=createProvingRun({modelId:'cinder-two',build:stockVehicleBuild('cinder-two'),testId:'handling'});
   // Test-only solver-valid state exercises the fault boundary. Player commands
