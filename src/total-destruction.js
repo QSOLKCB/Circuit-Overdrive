@@ -3,7 +3,8 @@ import {FixedClock} from '../vendor/vanillajs/modules/time/index.js';
 import {TouringAudio,DEFAULT_VOLUMES} from './audio.js';
 import {controllerMenu,menuAction} from './controller-menu.js';
 import {labCondition,neutralLab} from './crash-damage.js';
-import {DERBY_TICK_LIMIT,createDerbyRound,stepDerbyRound} from './derby.js';
+import {DERBY_TICK_LIMIT,createDerbyRound} from './derby.js';
+import {createDerbyRecorder} from './derby-replay.js';
 import {createDerbyArenaScene} from './derby-arena-scene.js';
 import {DERBY_ARENAS} from './derby-arenas.js';
 import {DerbyVoice} from './derby-audio.js';
@@ -25,7 +26,7 @@ const set=(id,value)=>{
   const text=String(value),node=$(id);
   if(node.textContent!==text)node.textContent=text;
 };
-let round,scene,previous,lastImpact,lastTime,resumePhase,countdown,standingsOrder;
+let round,recorder,scene,previous,lastImpact,lastTime,resumePhase,countdown,standingsOrder;
 let effects=[],phase='menu',lost=false,dirty=true,muted=false,tail=0;
 
 let settings;
@@ -95,6 +96,8 @@ function syncControls(){
   $('derby-instruments').hidden=selection;
   $('derby-speed-panel').hidden=selection;
   $('derby-result').hidden=!finished;
+  $('derby-result-actions').hidden=!finished||!recorder.available;
+  $('derby-stamp-help').hidden=!finished||recorder.available;
   $('derby-follow-control').hidden=camera.value!=='spectator';
   $('derby-touch').hidden=input.source!=='touch'||!active();
   $('derby-countdown').hidden=phase!=='countdown';
@@ -170,6 +173,7 @@ function reset(next='menu'){
   audio.stop();
   audio.selectMusic('derby');
   round=createDerbyRound({arena:arenaChoice.value,seed,revision});
+  recorder=createDerbyRecorder(round);
   lastImpact=null;
   previous=null;
   lastTime=null;
@@ -294,7 +298,7 @@ function advance(){
   }
   const command=phase==='spectating'?neutralLab:sample.command;
   previous=round.world.cars.map(({x,z,yaw})=>({x,z,yaw}));
-  const result=stepDerbyRound(round,command);
+  const result=recorder.step(command);
   if(result.technicalStop){
     // The partial solver prefix is diagnostic. Keep the last certified image and instruments.
     settle();
@@ -343,6 +347,26 @@ function frame(time){
   }
   requestAnimationFrame(frame);
 }
+
+function downloadDerby(data,suffix) {
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='derby-'+data.arena+'-'+suffix+'.json';
+  link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$('save-derby-replay').onclick=()=>{
+  if(recorder.available)downloadDerby(recorder.export(),'replay');
+};
+$('save-derby-evidence').onclick=async()=>{
+  if(!recorder.available)return;
+  try {
+    downloadDerby(await recorder.receipt(navigator.userAgent),'receipt');
+  }catch(error){
+    set('derby-status','Evidence unavailable · '+error.message);
+  }
+};
 
 arenaChoice.onchange=()=>{if(phase==='menu')reset();};
 $('derby-arm').onclick=arm;

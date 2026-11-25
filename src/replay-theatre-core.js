@@ -7,6 +7,10 @@ import {LAB_TICKS,createTrial,startTrial,stepTrial,scenarios} from './crash-tria
 import {LAB_RULES} from './crash-impact.js';
 import {validateLabCommand} from './crash-damage.js';
 import {track} from './track.js';
+import {DERBY_ARENAS} from './derby-arenas.js';
+import {DERBY_RULES,DERBY_TICK_LIMIT,createDerbyRound,stepDerbyRound} from './derby.js';
+import {PLAYER_ID} from './field.js';
+import {DERBY_REPLAY_VERSION,DERBY_TERMINALS,createDerbyContactLog,derbyAttempts,derbyReceipt} from './derby-replay.js';
 import {ridge} from './ridge.js';
 import {skyway} from './skyway.js';
 import {createRocketRace,startRocketRace,stepRocketRace,recoverRocketCar} from './rocket-race.js';
@@ -74,6 +78,36 @@ function validateCrashTape(source,revision) {
   return Object.freeze({version:5,revision,discipline:'crash-lab',rules:LAB_RULES,scenario,seed,ticks,
     runs:Object.freeze(runs),compatibility:'exact'});
 }
+function validateDerbyTape(source,revision) {
+  const fields=own(source,['version','discipline','rules','revision','arena','seed','ticks','terminal','runs'],'Derby replay');
+  const value=key=>fields[key].value;
+  if (value('revision')!==revision) throw RangeError('Derby replay needs its exact source revision');
+  const arena=value('arena'),seed=value('seed'),ticks=value('ticks'),terminal=value('terminal'),raw=value('runs');
+  if (value('discipline')!=='derby' || value('rules')!==DERBY_RULES ||
+      typeof arena!=='string' || !Object.hasOwn(DERBY_ARENAS,arena)) throw RangeError('Unknown derby arena or rules');
+  if (!Number.isSafeInteger(seed) || seed<0 || seed>0xffffffff) throw RangeError('Invalid derby replay seed');
+  if (!DERBY_TERMINALS.includes(terminal)) throw RangeError('Unknown derby terminal reason');
+  if (!Number.isSafeInteger(ticks) || ticks<0 || ticks>DERBY_TICK_LIMIT)
+    throw RangeError('Invalid derby replay duration');
+  const attempts=derbyAttempts({ticks,terminal});
+  if (attempts<1 || attempts>DERBY_TICK_LIMIT || (terminal==='time-limit' && ticks!==DERBY_TICK_LIMIT) ||
+      !Array.isArray(raw) || !raw.length || raw.length>attempts)
+    throw RangeError('Invalid derby replay duration');
+  dense(raw,raw.length,'Derby runs');
+  let total=0;
+  const runs=raw.map(row=>{
+    dense(row,4,'Derby run');
+    const [length,throttle,brake,steer]=row;
+    validateLabCommand({throttle,brake,steer});
+    if (!Number.isSafeInteger(length) || length<1 || length>attempts-total)
+      throw RangeError('Invalid derby run length');
+    total+=length;
+    return Object.freeze([length,throttle,brake,steer]);
+  });
+  if (total!==attempts) throw RangeError('Truncated derby command stream');
+  return Object.freeze({version:DERBY_REPLAY_VERSION,discipline:'derby',rules:DERBY_RULES,revision,arena,seed,ticks,terminal,
+    runs:Object.freeze(runs),compatibility:'exact'});
+}
 /** Validated, copied RLE. Old source compatibility is allowed ONLY for the exact
  * releases whose authority blobs are pinned in tests/replay-theatre.test.mjs.
  */
@@ -88,6 +122,7 @@ export function validateTheatreReplay(recording,siteRevision) {
     throw RangeError('Legacy v1 replay has no source revision. Re-record it with a source-stamped release.');
   const version=info.version.value;
   if (version===5) return validateCrashTape(recording,siteRevision);
+  if (version===DERBY_REPLAY_VERSION) return validateDerbyTape(recording,siteRevision);
   if (version!==2 && version!==3 && version!==4) throw RangeError('Unsupported replay version');
   const fields=own(recording,version===2 ? headerKeys : [...headerKeys,'discipline','rules'],'Replay');
   const get=name=>fields[name].value;
@@ -139,26 +174,31 @@ export function decodeReplayRun(version,row) {
   } else if (version===3) {
     command.drift=row[4]; command.boost=row[5];
   }
-  return {command,recover:version===5 ? false : row.at(-1)};
+  return {command,recover:version===5 || version===DERBY_REPLAY_VERSION ? false : row.at(-1)};
 }
 /** Rebuild from the race start on backwards seeks. No unbounded checkpoint
  * snapshots or arbitrary pose assignment. At most MAX_SEEK_STEPS per call.
  */
 export function createReplaySession(source,siteRevision) {
   const tape=validateTheatreReplay(source,siteRevision);
-  const crash=tape.version===5;
-  const rules=crash ? {create:seed=>createTrial(tape.scenario,seed,tape.revision),start:startTrial,step:stepTrial} :
+  const crash=tape.version===5,derby=tape.version===DERBY_REPLAY_VERSION;
+  const totalTicks=derby ? derbyAttempts(tape) : tape.ticks;
+  const rules=derby ? {create:()=>createDerbyRound({arena:tape.arena,seed:tape.seed,revision:tape.revision}),
+    step:stepDerbyRound} : crash ? {create:seed=>createTrial(tape.scenario,seed,tape.revision),start:startTrial,step:stepTrial} :
     tape.version===4 ? {create:createRocketRace,start:startRocketRace,step:stepRocketRace,recover:recoverRocketCar} :
     tape.version===3 ? {create:seed=>createNitroRace(seed,skyway,tape.rules),start:startNitroRace,step:stepNitroRace,recover:recoverNitroCar} :
     {create:seed=>createRace(seed,tape.course==='ridge' ? ridge : track),start:startRace,step:stepRace,recover:recoverCar};
-  let race,at,runIndex,remaining;
+  let race,at,runIndex,remaining,derbyLog,lastStep,previous,failure;
   function reset(){
     race=rules.create(tape.seed);
-    rules.start(race);
+    rules.start?.(race);
+    derbyLog=derby ? createDerbyContactLog() : null;
+    lastStep=previous=failure=null;
     at=0;runIndex=0;remaining=0;
   }
-  function one(){
-    if(at>=tape.ticks)return false;
+  function step(){
+    if (at>=totalTicks) return false;
+    if (derby && race.result) throw RangeError('Replay contains controls after the derby settled');
     if(race.phase==='finished')throw RangeError(crash?'Controls after the experiment result':'Replay contains controls after the chequered flag');
     if(!remaining) {
       if(runIndex>=tape.runs.length)throw RangeError('Truncated replay');
@@ -166,20 +206,45 @@ export function createReplaySession(source,siteRevision) {
     }
     const {command,recover}=decodeReplayRun(tape.version,tape.runs[runIndex]);
     if(recover && !rules.recover(race)) throw RangeError('Replay requests an invalid recovery at tick '+at);
-    rules.step(race,command);
+    if (derby) {
+      if (!race.standings.find(driver=>driver.id===PLAYER_ID).active &&
+          (command.throttle!==0 || command.brake!==0 || command.steer!==0))
+        throw RangeError('Non-neutral derby control during spectating');
+      previous=race.world.cars.map(({x,z,yaw})=>({x,z,yaw}));
+      lastStep=rules.step(race,command);
+      derbyLog.record(lastStep.contacts);
+    } else rules.step(race,command);
     at++;remaining--;
     if(remaining===0)runIndex++;
-    if(at===tape.ticks && race.phase!=='finished')
+    if (derby) {
+      if (race.result && at!==totalTicks) throw RangeError('Derby settled before the end of the command stream');
+      if (at===totalTicks && (race.result?.reason!==tape.terminal || race.ticks!==tape.ticks))
+        throw RangeError('Derby terminal reason or accepted tick count does not match reconstructed play');
+    }
+    if(!derby && at===totalTicks && race.phase!=='finished')
       throw RangeError(crash?'Recording ended before the experiment reached a result':'Replay ended before the recorded race reached the finish');
     return true;
+  }
+  function one(){
+    if (!derby) return step();
+    if (failure) throw failure;
+    try {return step();}
+    catch (error) {failure=error;throw error;}
   }
   reset();
   return {
     get race(){return race;},
     get tick(){return at;},
-    get totalTicks(){return tape.ticks;},
+    get totalTicks(){return totalTicks;},
     get recording(){return tape;},
-    get finished(){return at===tape.ticks;},
+    get finished(){return !failure && at===totalTicks;},
+    get lastStep(){return lastStep;},
+    get previous(){return previous;},
+    latestImpact(id){return derbyLog?.latestImpact(id)??null;},
+    derbyEvidence(runtime){
+      if (!derby || !this.finished) throw Error('Reconstruct a full derby before exporting evidence');
+      return derbyReceipt(tape,race,derbyLog,runtime);
+    },
     reset,
     step(){return one();},
     advance(steps){
@@ -190,7 +255,7 @@ export function createReplaySession(source,siteRevision) {
       return count;
     },
     seekBatch(target){
-      if(!Number.isSafeInteger(target)||target<0||target>tape.ticks)
+      if(!Number.isSafeInteger(target)||target<0||target>totalTicks)
         throw RangeError('Invalid seek target');
       if(target<at)reset();
       return this.advance(Math.min(MAX_SEEK_STEPS,target-at));
