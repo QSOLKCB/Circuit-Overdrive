@@ -8,7 +8,7 @@ import {join} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
 const releases=['47b1a5c1562136bfd6b98ca9d4ef2ce07282200b','541ba6ca27dabe644ab23fe9a061c91dda8794a6',
-  'e12665b04609f40d452084a37264756a23d730da'];
+  'e12665b04609f40d452084a37264756a23d730da','1c745a90258d0f6cb968935f773354cff702b276'];
 const reference=realpathSync(process.argv[2]),candidate=realpathSync(fileURLToPath(new URL('../',import.meta.url)));
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8'}).trim();
 const sha=git(reference,'rev-parse','HEAD');
