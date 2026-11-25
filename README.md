@@ -14,6 +14,10 @@ Choose **Day** or **Nightshift** on Speedway or Ridge. Nightshift Speedway runs 
 
 For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
 
+## Total Destruction — v1.2.0 candidate
+
+Choose **Total Destruction** from the main menu, select **The Crucible** or **Iron Pit**, arm the six-car grid and start the countdown. Drive the Ignition GT against five rivals. Accepted impacts crumple body panels and impair handling. Watch the knockout standings and follow the surviving cars if your car loses drive. The round finishes with a sole survivor or an official classification at the three-minute accepted tick limit. [Player guide](docs/total-destruction.md) · [Arena layouts](docs/derby-arenas.md)
+
 ## Crash Lab — The Impact Facility
 
 Choose **Crash Lab** from course select. Arm the Ignition GT, hold gas and drive into a concrete wall, an angled steel rail or an opposing physical car. Inspect the measured impulse, local panel damage and remaining mechanical condition, then reset to repeat the setup. The result screen saves a v5 input replay and a separate local evidence receipt. Published v1.1.1 adds computational panels. A light strike leaves a local crease and harder hits buckle the bodywork and expose steel. [Published v1.1.1](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Player guide](docs/crash-lab.md) · [Impact authority](docs/crash-impact.md) · [Computational panels](docs/computational-impact-panels.md) · [CO-011 certification](docs/co-011-acceptance.md)

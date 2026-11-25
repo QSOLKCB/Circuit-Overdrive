@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {LitRenderer} from '../vendor/vanillajs/modules/render-lit/index.js';
 import {lookAt} from './camera.js';
+import {drawImpactBody,impactBody} from './crash-scene.js';
 import {box,lettering,quad,triangle} from './geometry.js';
 import {carRecipe,rideHeight} from './sim.js';
 import {bodyTransform,touringMeshes,wheelTransforms} from './touring-car.js';
@@ -190,8 +191,9 @@ const trimMaterial={roughness:.54,metalness:.13};
 
 function poseFor(car,previous,alpha) {
   const old=previous??car,lerp=(n)=>old[n]+(car[n]-old[n])*alpha;
-  return {x:lerp('x'),z:lerp('z'),yaw:lerp('yaw'),y:rideHeight,pitch:0,roll:0,
-    steering:car.spin*.20,wheelSpin:0,compression};
+  const turn=Math.atan2(Math.sin(car.yaw-old.yaw),Math.cos(car.yaw-old.yaw));
+  return {x:lerp('x'),z:lerp('z'),yaw:old.yaw+turn*alpha,y:rideHeight,pitch:0,roll:0,
+    steering:Math.max(-.65,Math.min(.65,car.spin*.20)),wheelSpin:0,compression};
 }
 
 function raisedEye(arena,reverse,aspect) {
@@ -211,7 +213,22 @@ function raisedEye(arena,reverse,aspect) {
   return [target[0]+vx*scale,target[1]+vy*scale,target[2]+vz*scale];
 }
 
-export function createDerbyArenaScene(canvas,arena,pixelRatio=1) {
+// A chase view rises if its eye would cross a solid boundary or obstacle.
+function followView(arena,pose,spectating) {
+  const x=Math.sin(pose.yaw),z=Math.cos(pose.yaw),distance=spectating?12:8.5;
+  const target=[pose.x-2*x,.75,pose.z-2*z];
+  const eye=[pose.x+x*distance,spectating?8.5:4.6,pose.z+z*distance];
+  for(const b of arena.fixtures){
+    const u=Math.max(0,Math.min(1,((eye[0]-b.x1)*b.dx+(eye[2]-b.z1)*b.dz)/(b.length*b.length)));
+    if(Math.hypot(eye[0]-b.x1-u*b.dx,eye[2]-b.z1-u*b.dz)<b.r+2){
+      eye[1]+=2;
+      break;
+    }
+  }
+  return {eye,target};
+}
+
+export function createDerbyArenaScene(canvas,arena,pixelRatio=1,{damagePanels=false}={}) {
   const renderer=new LitRenderer(canvas,{profile:'high',pixelRatio});
   try {
     const geometry=buildDerbyArenaGeometry(arena);
@@ -219,17 +236,32 @@ export function createDerbyArenaScene(canvas,arena,pixelRatio=1) {
     const paint=renderer.mesh(geometry.paint),lights=renderer.mesh(geometry.lights);
     const fixtures=geometry.fixtures.map(f=>({mesh:renderer.mesh(f.vertices),material:f.material==='steel'
       ? {roughness:.42,metalness:.45} : {roughness:.94,metalness:.05}}));
-    const car=touringMeshes(renderer),carShadow=renderer.mesh(shadow);
+    const raw=damagePanels?touringMeshes({mesh:vertices=>vertices}):null;
+    const car=raw?{...raw,tyre:renderer.mesh(raw.tyre),rim:renderer.mesh(raw.rim),glass:renderer.mesh(raw.glass)}
+      : touringMeshes(renderer);
+    const bodies=raw?raw.liveries.map(livery=>impactBody(renderer,raw,livery,car.glass)):null;
+    const carShadow=renderer.mesh(shadow);
+    const particles=[];
+    for(let i=0;i<9;i++){
+      const a=2.4*i,r=.44+i*.15;
+      triangle(particles,[0,.03,0],[Math.cos(a)*r,.35+i*.09,Math.sin(a)*r],[.13,.12,0],warning);
+    }
+    const sparks=damagePanels?renderer.mesh(new Float32Array(particles)):null;
+    const marker=[];
+    triangle(marker,[-.55,0,0],[.55,0,0],[0,.37,0],warning);
+    const wreck=damagePanels?renderer.mesh(new Float32Array(marker)):null;
     const surface={pattern:arena.surface==='concrete'?'stone':'asphalt',patternScale:.38,roughness:.9};
     const frame={...palettes[arena.id].light,near:.14,far:500,fov:fieldOfView};
     return {
       stats:()=>renderer.stats(),
       dispose:()=>renderer.dispose(),
-      draw(world,{camera='raised',alpha=1,previous=null}={}) {
+      draw(world,{camera='raised',follow=5,alpha=1,previous=null,effects=[]}={}) {
         if(renderer.lost)return;
-        const field=world.cars.map((body,i)=>({id:body.id,pose:poseFor(body,previous?.[i],alpha)}));
+        const field=world.cars.map((body,i)=>({body,pose:poseFor(body,previous?.[i],alpha)}));
         const rect=canvas.getBoundingClientRect(),aspect=Math.max(.25,rect.width/Math.max(1,rect.height));
-        const eye=raisedEye(arena,camera==='reverse',aspect),target=arena.camera.target;
+        const focus=field.find(({body})=>body.id===follow)??field[0];
+        const {eye,target}=camera==='chase'||camera==='spectator'?followView(arena,focus.pose,camera==='spectator'):
+          {eye:raisedEye(arena,camera==='reverse',aspect),target:arena.camera.target};
         renderer.begin(eye,lookAt(eye,target),frame);
         renderer.draw(scenery);
         renderer.draw(floor,{material:surface});
@@ -238,20 +270,35 @@ export function createDerbyArenaScene(canvas,arena,pixelRatio=1) {
         renderer.draw(lights,{material:{roughness:.52,emission:.65}});
 
         const glass=[];
-        for(const {id,pose} of field){
-          const root=bodyTransform(pose),livery=car.liveries[id];
+        for(const {body,pose} of field){
+          const root=bodyTransform(pose),livery=car.liveries[body.id];
           const shadowTransform=root.slice();shadowTransform[13]=.025;
           renderer.draw(carShadow,{matrix:shadowTransform,material:shadowMaterial});
-          renderer.draw(car.shell,{matrix:root,material:livery.paint});
-          renderer.draw(car.detail,{matrix:root,material:trimMaterial});
-          renderer.draw(livery.graphics,{matrix:root,material:trimMaterial});
-          renderer.draw(car.lamps,{matrix:root,material:lampMaterial});
+          if(bodies){
+            drawImpactBody(renderer,bodies[body.id],body.damage,root);
+            if(body.damage.engine===1000 || body.damage.tyres===1000){
+              const face=Math.atan2(eye[0]-pose.x,eye[2]-pose.z),x=Math.cos(face),z=Math.sin(face);
+              renderer.draw(wreck,{matrix:[x,0,-z,0,0,1,0,0,z,0,x,0,pose.x,2.05,pose.z,1],material:{emission:.35}});
+            }
+          }else{
+            renderer.draw(car.shell,{matrix:root,material:livery.paint});
+            renderer.draw(car.detail,{matrix:root,material:trimMaterial});
+            renderer.draw(livery.graphics,{matrix:root,material:trimMaterial});
+            renderer.draw(car.lamps,{matrix:root,material:lampMaterial});
+          }
           for(const matrix of wheelTransforms(car.rig,pose,root)){
             renderer.draw(car.tyre,{matrix,material:car.tyreMaterial});
             renderer.draw(car.rim,{matrix,material:car.rimMaterial});
           }
           const depth=(pose.x-eye[0])*(target[0]-eye[0])+(pose.z-eye[2])*(target[2]-eye[2]);
           glass.push({root,depth});
+        }
+        if(sparks)for(let i=Math.max(0,effects.length-8);i<effects.length;i++){
+          const hit=effects[i],age=world.tick-hit.tick;
+          if(age<0 || age>=10 || hit.normalImpulse<=0)continue;
+          const size=(1-age/10)*Math.min(1.7,hit.normalImpulse/14000);
+          renderer.draw(sparks,{matrix:[size,0,0,0,0,size,0,0,0,0,size,0,hit.point[0],.40,hit.point[1],1],
+            material:{emission:.76}});
         }
         glass.sort((a,b)=>b.depth-a.depth);
         for(const {root} of glass)renderer.draw(car.glass,{matrix:root,material:glassMaterial});

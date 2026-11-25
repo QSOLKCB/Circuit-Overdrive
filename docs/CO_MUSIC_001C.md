@@ -9,7 +9,7 @@ The original six-score catalogue shipped in v0.6.1. CO-007 activated Digital Dom
 | RASTER VELOCITY | CO-010 Rocket Overdrive — Orbital Spine | Fast demoscene arpeggios, syncopated breaks | 180 | 10.67 s |
 | MIDNIGHT PROTOCOL | CO-008 After Dark — **live** | Sparse minor-key cyberpunk synth | 144 | 13.33 s |
 | DIGITAL DOMINION | CO-007 W.O.C. — **live** | Major-key arcade championship anthem | 120 | 16.00 s |
-| STEEL RIOT | CO-012 Total Destruction — **future** | Industrial power riffs and mechanical percussion | 150 | 12.80 s |
+| STEEL RIOT | CO-012 Total Destruction — v1.2.0 candidate | Industrial power riffs and mechanical percussion | 150 | 12.80 s |
 | NITRO PULSE | CO-009 Nitro Skyway — **candidate** | Syncopated demoscene bass, sixteenth-note arpeggios, rising lead answer | 160 | 12.00 s |
 
 Nitro Pulse uses eight bars in four-four time. Each sixteenth is exactly 4,500 sample frames at 48 kHz. Seed `0x9df05a37` drives the timbres for the original F♯ pedal-point bass, pitched arpeggio, lead and percussion. The loop contains 576,000 stereo frames. On Node 22.18.0 x86-64, the interleaved little-endian PCM16 SHA-256 is `87d4fba988f5ddfbc309682e99499eb5e45154b6179debd59a1f22cb34104253`. The full WAV SHA-256 is `aca8683f9a00768df1698d5aca0111fd8950deaa2aeafe7affd5d9fc04acb84f`.
@@ -39,10 +39,12 @@ The owner should listen to all seven exported WAVs on real speakers or headphone
 
 ## Separation from gameplay
 
-The runtime selects Speedway, Ridge, championship, night, Nitro and Rocket scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
+The runtime selects Speedway, Ridge, championship, night, Nitro, Rocket and Total Destruction scores through `musicForCourse`. Developers can export the original future-mode catalogue through `scoreForFutureMode`. The selection is local to the audio presentation.
 
 ## Verification
 
 Run `node --test tests/music-catalogue.test.mjs tests/music.test.mjs tests/bps.test.mjs`, the full Node suite, the Python offline-release regression, and the packaged browser/Pages workflow. Record real execution outcomes and exact source SHAs. Owner listening review covers the mix on speakers and headphones.
 
 The eight-phrase RASTER VELOCITY arrangement at 180 BPM uses 4,000 samples per sixteenth and loops after 512,000 stereo frames. Its canonical score JSON has SHA-256 `b1330b2375946ed4e0f801f2283ace06865c9f556aa1af8a5d94582018f2760e`. Its WAV has SHA-256 `33c1dce3400e537a46736e8ee681fee21cf12770d93d061ec8fe40d8bf979afd`. Both digests match the reserved v0.9.0 arrangement. Thrust, magnetic lock/release, ceiling, flight, landing, impact and dodge effects share the existing bounded mono effects stream. The soundtrack uses the separate stereo music bus and its original volume setting.
+
+Total Destruction selects the authored `steel-riot` score through the shared BPS-001 sequencer. The score retains its seed, phrases and 150 BPM tempo. A sixteenth-note step spans 4,800 samples at 48 kHz. A countdown filter opens as the round starts, elimination cues accent the score, and the mix rises when two competitors remain. The sound and music controls use the existing gesture-owned PCM pools.

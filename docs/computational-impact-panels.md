@@ -72,3 +72,9 @@ export PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs
 export EVIDENCE_DIR=$(mktemp -d)
 node tests/browser-impact-panels.mjs http://127.0.0.1:8000/Circuit-Overdrive/
 ```
+
+## Six-car derby presentation
+
+Total Destruction creates six independent body rigs with the existing CO-CRACK-001 geometry and deformation functions. Each rig reads the front, rear, left and right channels from its own world body. The zone cache updates a layer only when its accepted channel changes. Reset and context restoration derive clean or damaged geometry from those same values.
+
+The arena retains one tyre, one rim and one glass mesh for the fleet. Its independent mutable body buffers cover shell, combined trim and livery, and lamps. The high LitRenderer profile caps the scene at 256 meshes, 256 draws per frame and 600,000 retained vertices. Collision bursts share one small mesh, with at most eight live flashes drawn for ten accepted ticks.
