@@ -1,0 +1,178 @@
+{
+  "base": "20e0b2bf8f242901ed21a056815eaf5926af99d2",
+  "implementation": "17426dd8359ed69ba95db1466f1af626c670e706",
+  "publishedLegacy": "1c745a90258d0f6cb968935f773354cff702b276",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtime": {
+    "node": {
+      "node": "v22.18.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    "chrome": "158.0.8127.36",
+    "graphics": "ANGLE SwiftShader"
+  },
+  "executed": [
+    {
+      "command": "node --test tests/*.test.mjs",
+      "exit": 0,
+      "tests": 475,
+      "pass": 475,
+      "fail": 0,
+      "durationMs": 286433.797292,
+      "newCatalogTests": 10,
+      "newPhysicalTests": 21,
+      "newInstallationTests": 12,
+      "newSizeTests": 1,
+      "newPaintGeometryResourceTests": 2,
+      "historicalV100MatchingTicks": 45225
+    },
+    {
+      "command": "node tests/compare-v100.mjs /tmp/co014a-published-v130",
+      "exit": 0,
+      "matchingTicks": 45225,
+      "baseline": "1c745a90258d0f6cb968935f773354cff702b276",
+      "candidate": "17426dd8359ed69ba95db1466f1af626c670e706"
+    },
+    {
+      "command": "node scripts/measure-vehicle-parts.mjs",
+      "exit": 0,
+      "rawFile": "/tmp/co014c-verification/physical-raw.json",
+      "sha256": "1fbb78cb0a779a43f01ced3037954b1bfc21bf434cff2c270d86a8f1030eed9a",
+      "bytes": 2150651
+    },
+    {
+      "command": "node scripts/measure-vehicle-parts.mjs --summary",
+      "exit": 0,
+      "independentlyMatchesFullReceiptSha256": true,
+      "sourceMatchesHead": true,
+      "resultCount": 27
+    },
+    {
+      "command": "node --experimental-vm-modules scripts/package-site.mjs /tmp/co014c-verification/Circuit-Overdrive",
+      "exit": 0,
+      "runtimeFiles": 107
+    },
+    {
+      "command": "python3 scripts/offline-release.py build /tmp/co014c-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 scripts/offline-release.py verify /tmp/co014c-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 tests/test_offline_release.py",
+      "exit": 0,
+      "tests": 1
+    },
+    {
+      "command": "bash tests/browser-pages-shards.sh",
+      "exit": 0,
+      "scope": "Preserved seven-worker orchestration/inventory/failure propagation, distinct from running all browser lanes"
+    },
+    {
+      "command": "node tests/browser-garage-parts.mjs http://127.0.0.1:8767/Circuit-Overdrive/",
+      "exit": 0,
+      "scenarios": 8,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "SOURCE_SHA": "17426dd8359ed69ba95db1466f1af626c670e706",
+        "EVIDENCE_DIR": "/tmp/co014c-verification/parts-browser"
+      }
+    },
+    {
+      "command": "node tests/browser-garage.mjs http://127.0.0.1:8767/Circuit-Overdrive/",
+      "exit": 0,
+      "scenarios": 23,
+      "invalidImports": 17,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "EVIDENCE_DIR": "/tmp/co014c-verification/garage-browser"
+      }
+    },
+    {
+      "command": "node tests/browser-garage-migration.mjs http://127.0.0.1:8767/Circuit-Overdrive/ --legacy=http://127.0.0.1:8767/legacy/",
+      "exit": 0,
+      "scenarios": 6,
+      "publishedPackageFiles": 103,
+      "publishedPackageSource": "1c745a90258d0f6cb968935f773354cff702b276",
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "EVIDENCE_DIR": "/tmp/co014c-verification/migration-browser",
+        "SOURCE_SHA": "17426dd8359ed69ba95db1466f1af626c670e706"
+      }
+    },
+    {
+      "command": "node tests/browser-smoke.mjs http://127.0.0.1:8767/Circuit-Overdrive/",
+      "exit": 0,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "EVIDENCE_DIR": "/tmp/co014c-verification/smoke"
+      }
+    }
+  ],
+  "generatedInstallationLedger": {
+    "sequences": 1024,
+    "operations": 32768,
+    "accepted": 16414,
+    "rejected": 16354,
+    "installs": 8471,
+    "refits": 3364,
+    "setups": 1056,
+    "retries": 8471,
+    "slotInstalls": {
+      "engine": 3541,
+      "intake": 148,
+      "exhaust": 121,
+      "gearbox": 488,
+      "finalDrive": 2757,
+      "tyres": 408,
+      "suspension": 138,
+      "steering": 169,
+      "paint": 701
+    }
+  },
+  "retainedGeneratedGarageOperations": 65536,
+  "canonicalSizesUtf8": {
+    "build": 708,
+    "fourCarGarage": 3444,
+    "envelopeWithLegacyBackup": 3942
+  },
+  "unchangedLimitsUtf8": {
+    "build": 2048,
+    "garage": 65536,
+    "envelope": 65536
+  },
+  "artifact": {
+    "name": "Circuit-Overdrive-17426dd8359ed69ba95db1466f1af626c670e706.zip",
+    "sha256": "26531de86561b8362ddda1f337c5f33fab90537b184f49db5ade6917b90ae5b4",
+    "independentlyRebuilt": true,
+    "standaloneRuntimeFilesEqualToZip": 107,
+    "localDirectory": "/tmp/co014c-verification/offline"
+  },
+  "limits": [
+    "Software browser rendering, not native GPU/frame-time certification.",
+    "Development physical profiles and actual-purchase browser solver runs, not a playable proving-ground facility.",
+    "Condition remains pristine only; no damage, repairs, income, v7 replay or established-race build integration.",
+    "Full seven-lane browser execution and post-merge/public verification remain CI/owner gates.",
+    "Older rules-1-only clients can deliberately overwrite unsupported data after a fresh explicit destructive recovery; pending confirmations conflict."
+  ],
+  "sha256": {
+    "after-paint.png": "594b4167bcfa1d42db16796969ad6cabc08cc93cf428cf2ed84b00506eb44c0d",
+    "before-paint.png": "cdb96ec093fb08f08d76e20c392aae79889993221a6c5e7cc02ce89d6ff7900e",
+    "engine-confirmation.png": "5b4a8e0305dd3a5412469c753f70ee7d8826048c4c167ed40fae0cbb7072b219",
+    "garage-browser.json": "6888725a806c004b917899f6a3568183a3d127e19235f37496779cebd84b0215",
+    "migration-browser.json": "ec32d35a9df305b8809589e2d111ea758e51b2ce6b56d299cd296052666f4bf2",
+    "node-tests.log": "4e0b2173f06294ab5baa33fb896be6ba256ab0cfbb98924a2710fa20d22f9dbd",
+    "parts-browser.json": "00660e832dfac98de8fb9128b6e6fc0932912490a4a67fbe0ecf21a7a5877f67",
+    "physical-summary.json": "eecb9473ef72f86806769b2e50fba2c21411a9ecae470f87daaa95fbc2e8dae2",
+    "shards.log": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed",
+    "smoke.log": "4dd837c9e3d5f64665a0d4c24b940a4ea6ccdb6db8f62774d8fe2a7277761073",
+    "v130-parity.json": "716c0152cc4095b29b4dc3c6c757c9ebbc14ddb90e13a8209608e426382096ef"
+  }
+}

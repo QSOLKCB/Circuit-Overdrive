@@ -9,11 +9,14 @@ recordings remain D/E; complete native certification remains F.
 
 Garage and Vault remain version 2 in the same coordinated key. The accepted
 rules-1 stock build format, all six canonical recipes and recorded B identities
-remain exact. Loading, rendering, exporting or importing such a build does not
+at the same declared game source remain exact. A new game-source stamp naturally
+changes its source-bound recipe digest. Loading, rendering, exporting or importing such a build does not
 silently convert it or charge credits. New purchases and v1.3.0 migration still
 receive independent rules-1 stock builds. Both rules 1 and 2 are admitted.
 
-Only a confirmed installation changes that owned car to build **rules 2**. Its
+In ordinary fitting, only a confirmed installation changes that owned car to
+build **rules 2**. An explicitly confirmed current-file import can also admit
+rules-2 builds as a whole-state replacement. Its
 exact fields are `format`, `version`, `rulesVersion`, `parts`, `tuning`,
 `inventory`. Format/version remain `circuit-overdrive.vehicle-build` / 1.
 Parts are the nine established slots. Tuning has exactly five integer step
@@ -34,6 +37,9 @@ installed visual identity without changing the complete physical recipe.
 The pure `stockUpgradeBuild` helper constructs data only. It is not proof of
 payment, installation or ownership. The compiler resolves and validates the
 complete combination before any accepted installation state is returned.
+Canonical maximum sizes are 708 bytes per rules-2 build, 3,444 bytes for four
+fully inventoried cars and 3,942 bytes for their envelope plus legacy backup.
+The existing 2 KiB build and 64 KiB garage/envelope UTF-8 limits remain unchanged.
 
 ## Authored catalogue and integer costs
 
