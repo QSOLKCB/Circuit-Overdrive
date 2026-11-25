@@ -260,12 +260,14 @@ try{
   const padContext=await makeContext();await padContext.addInitScript(()=>{
     window.garagePad={index:0,id:'Garage acceptance pad',mapping:'standard',connected:true,
       axes:[0,0,0,0],buttons:Array.from({length:17},()=>({value:0,pressed:false}))};
-    window.garageReports=[window.garagePad];
-    Object.defineProperty(navigator,'getGamepads',{value:()=>window.garageReports});
+    window.garageReports=[window.garagePad];window.garagePadReads=0;
+    Object.defineProperty(navigator,'getGamepads',{value:()=>{window.garagePadReads++;return window.garageReports;}});
   });
   const pad=await padContext.newPage();await pad.goto(base.href);await el(pad,'controllers').click();
-  await el(pad,'driver-device').selectOption('pad-0');await el(pad,'use-device').click();await pad.waitForTimeout(100);
-  const padButton=async(button,value)=>{await pad.evaluate(([button,value])=>{window.garagePad.buttons[button]={value,pressed:value>0};},[button,value]);await pad.waitForTimeout(100);};
+  await el(pad,'driver-device').selectOption('pad-0');await el(pad,'use-device').click();await pad.bringToFront();
+  const waitPadPoll=async()=>{const reads=await pad.evaluate(()=>window.garagePadReads);await pad.waitForFunction(reads=>window.garagePadReads>=reads+2,reads);};
+  await waitPadPoll();
+  const padButton=async(button,value)=>{await pad.evaluate(([button,value])=>{window.garagePad.buttons[button]={value,pressed:value>0};},[button,value]);await waitPadPoll();};
   await el(pad,'enter-garage').focus();await padButton(0,1);await pad.waitForSelector('body[data-phase="garage"]');
   await el(pad,'garage-new').focus();await pad.waitForTimeout(150);assert(!(await el(pad,'garage-confirmation').isVisible()),'held controller confirm cannot cross the menu boundary');
   await padButton(0,0);await padButton(0,1);await el(pad,'garage-confirmation').waitFor({state:'visible'});
