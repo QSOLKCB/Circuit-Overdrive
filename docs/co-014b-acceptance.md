@@ -54,8 +54,8 @@ stays exact. Neither load, proposal, cancellation nor rejected confirmation
 writes or rewards. Verified write/read-back precedes publication. Unknown write
 completion requires explicit reload, with no rollback or automatic retry.
 
-Current stock saves measure at most **1,604 bytes**; complete storage with the
-maximum retained canonical legacy backup measures **2,102 bytes**. Both remain
+Canonical current stock saves measure at most **1,604 bytes**; the canonical
+storage envelope with maximum retained legacy backup measures **2,102 bytes**. Both remain
 under the unchanged **64 KiB UTF-8** bound. Valid 64 KiB padded old inputs
 canonicalize safely. Invalid and unknown-schema content is not automatically
 erased. Backup export never restores an old raw envelope or revives stale tickets.

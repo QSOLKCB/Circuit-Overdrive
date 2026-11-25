@@ -107,8 +107,8 @@
     }
   ],
   "sizes": {
-    "maxCurrentStockGarageUtf8": 1604,
-    "maxEnvelopeWithLegacyBackupUtf8": 2102,
+    "maxCanonicalCurrentStockGarageUtf8": 1604,
+    "maxCanonicalEnvelopeWithLegacyBackupUtf8": 2102,
     "unchangedLimitUtf8": 65536
   },
   "artifact": {

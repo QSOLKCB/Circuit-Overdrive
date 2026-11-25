@@ -113,8 +113,8 @@ Unknown fields, IDs, versions, builds, tuning, conditions, capacity, counters,
 credits and malformed bounded JSON reject before any replacement is offered.
 
 All JSON files and storage envelopes retain the **64 KiB UTF-8** limit, checked
-before parsing. The maximum supported B garage is **1,604 bytes** (four
-Evening Line cars, maximum-width counters/IDs and balances). Its complete
+before parsing. The maximum canonical serialized B garage is **1,604 bytes** (four
+Evening Line cars, maximum-width counters/IDs and balances). Its canonical
 envelope plus maximum canonical v1 backup is **2,102 bytes**. Even a valid legacy
 input padded to 64 KiB converts to the bounded canonical representation rather
 than embedding all padding. Tests pin these measurements. No arbitrary byte-limit
