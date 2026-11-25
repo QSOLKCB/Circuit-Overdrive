@@ -1,0 +1,587 @@
+TAP version 13
+# Subtest: legacy admission preserves the exact published v1.3.0 registry source body
+ok 1 - legacy admission preserves the exact published v1.3.0 registry source body
+  ---
+  duration_ms: 5.77372
+  type: 'test'
+  ...
+# Subtest: new current garages retain the initial economy with explicit schema 2 and no owned damage
+ok 2 - new current garages retain the initial economy with explicit schema 2 and no owned damage
+  ---
+  duration_ms: 0.49543
+  type: 'test'
+  ...
+# Subtest: legacy empty, one-car, sparse, full duplicate-model and every-active-bay states preserve ownership exactly
+ok 3 - legacy empty, one-car, sparse, full duplicate-model and every-active-bay states preserve ownership exactly
+  ---
+  duration_ms: 12.689849
+  type: 'test'
+  ...
+# Subtest: same-model cars own independent copied build and condition records
+ok 4 - same-model cars own independent copied build and condition records
+  ---
+  duration_ms: 1.17725
+  type: 'test'
+  ...
+# Subtest: current owned-car admission rejects unsupported parts, build rules, tuning, damage and ownership fields
+ok 5 - current owned-car admission rejects unsupported parts, build rules, tuning, damage and ownership fields
+  ---
+  duration_ms: 7.962559
+  type: 'test'
+  ...
+# Subtest: owned build and condition accessors are rejected without execution
+ok 6 - owned build and condition accessors are rejected without execution
+  ---
+  duration_ms: 1.19043
+  type: 'test'
+  ...
+# Subtest: legacy/current import is explicit and bounded; current admission never silently migrates
+ok 7 - legacy/current import is explicit and bounded; current admission never silently migrates
+  ---
+  duration_ms: 2.80794
+  type: 'test'
+  ...
+# Subtest: legacy serial/revision exhaustion and maximum credits survive without wrap, reset or reward
+ok 8 - legacy serial/revision exhaustion and maximum credits survive without wrap, reset or reward
+  ---
+  duration_ms: 0.79671
+  type: 'test'
+  ...
+# Subtest: ordinary purchases allocate one stock build and pristine condition for each stable owned identity
+ok 9 - ordinary purchases allocate one stock build and pristine condition for each stable owned identity
+  ---
+  duration_ms: 1.840339
+  type: 'test'
+  ...
+# Subtest: largest current supported stock save is measured within the unchanged 64 KiB bound
+ok 10 - largest current supported stock save is measured within the unchanged 64 KiB bound
+  ---
+  duration_ms: 3.87337
+  type: 'test'
+  ...
+# Subtest: recreated identical garage histories cannot revive tickets after cleared or corrupt storage
+ok 11 - recreated identical garage histories cannot revive tickets after cleared or corrupt storage
+  ---
+  duration_ms: 1.82544
+  type: 'test'
+  ...
+# Subtest: the final storage sequence commits once and exhaustion preserves exportable ownership
+ok 12 - the final storage sequence commits once and exhaustion preserves exportable ownership
+  ---
+  duration_ms: 2.40173
+  type: 'test'
+  ...
+# Subtest: immutable v1.3.0 validation/transaction/vault closure retains its exact source hashes
+ok 13 - immutable v1.3.0 validation/transaction/vault closure retains its exact source hashes
+  ---
+  duration_ms: 5.450059
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: empty
+ok 14 - explicit migration preserves exact published ownership: empty
+  ---
+  duration_ms: 0.88769
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-cinder-two
+ok 15 - explicit migration preserves exact published ownership: one-cinder-two
+  ---
+  duration_ms: 1.4392
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-lilt
+ok 16 - explicit migration preserves exact published ownership: one-lilt
+  ---
+  duration_ms: 0.98208
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-evening-line
+ok 17 - explicit migration preserves exact published ownership: one-evening-line
+  ---
+  duration_ms: 0.90976
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-rivet-eight
+ok 18 - explicit migration preserves exact published ownership: one-rivet-eight
+  ---
+  duration_ms: 0.89087
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-yardhand
+ok 19 - explicit migration preserves exact published ownership: one-yardhand
+  ---
+  duration_ms: 1.091839
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-glass-comet
+ok 20 - explicit migration preserves exact published ownership: one-glass-comet
+  ---
+  duration_ms: 0.87926
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: four-full-bays
+ok 21 - explicit migration preserves exact published ownership: four-full-bays
+  ---
+  duration_ms: 2.44611
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: two-duplicate-models
+ok 22 - explicit migration preserves exact published ownership: two-duplicate-models
+  ---
+  duration_ms: 1.47478
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: sold-id-gap
+ok 23 - explicit migration preserves exact published ownership: sold-id-gap
+  ---
+  duration_ms: 2.36766
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-1
+ok 24 - explicit migration preserves exact published ownership: active-bay-1
+  ---
+  duration_ms: 2.406469
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-2
+ok 25 - explicit migration preserves exact published ownership: active-bay-2
+  ---
+  duration_ms: 3.16982
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-3
+ok 26 - explicit migration preserves exact published ownership: active-bay-3
+  ---
+  duration_ms: 2.46871
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-4
+ok 27 - explicit migration preserves exact published ownership: active-bay-4
+  ---
+  duration_ms: 3.00648
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: revision-exhausted
+ok 28 - explicit migration preserves exact published ownership: revision-exhausted
+  ---
+  duration_ms: 2.978899
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: serial-exhausted
+ok 29 - explicit migration preserves exact published ownership: serial-exhausted
+  ---
+  duration_ms: 0.80399
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: revision-and-serial-exhausted
+ok 30 - explicit migration preserves exact published ownership: revision-and-serial-exhausted
+  ---
+  duration_ms: 0.84027
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: worst-case-valid-fields
+ok 31 - explicit migration preserves exact published ownership: worst-case-valid-fields
+  ---
+  duration_ms: 2.1184
+  type: 'test'
+  ...
+# Subtest: legacy migration blocks ordinary mutations and cancellation performs no write
+ok 32 - legacy migration blocks ordinary mutations and cancellation performs no write
+  ---
+  duration_ms: 0.3844
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 buy confirmation cannot overwrite a newer schema
+ok 33 - actual published v1.3.0 buy confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 1.28028
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 reset confirmation cannot overwrite a newer schema
+ok 34 - actual published v1.3.0 reset confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 0.51673
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 import confirmation cannot overwrite a newer schema
+ok 35 - actual published v1.3.0 import confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 0.9593
+  type: 'test'
+  ...
+# Subtest: two migration attempts and a delayed old storage event cannot silently replace accepted ownership
+ok 36 - two migration attempts and a delayed old storage event cannot silently replace accepted ownership
+  ---
+  duration_ms: 0.670469
+  type: 'test'
+  ...
+# Subtest: a published old-tab purchase made after migration review is preserved through conflict and fresh review
+ok 37 - a published old-tab purchase made after migration review is preserved through conflict and fresh review
+  ---
+  duration_ms: 1.01791
+  type: 'test'
+  ...
+# Subtest: migration quota persistence failure needs explicit rollback-free reconciliation
+ok 38 - migration quota persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 0.80856
+  type: 'test'
+  ...
+# Subtest: migration drop persistence failure needs explicit rollback-free reconciliation
+ok 39 - migration drop persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 0.57629
+  type: 'test'
+  ...
+# Subtest: migration readback persistence failure needs explicit rollback-free reconciliation
+ok 40 - migration readback persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 0.45136
+  type: 'test'
+  ...
+# Subtest: migration throw-after-write persistence failure needs explicit rollback-free reconciliation
+ok 41 - migration throw-after-write persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 0.43388
+  type: 'test'
+  ...
+# Subtest: migration keeps exhausted garage counters but cannot wrap the storage sequence
+ok 42 - migration keeps exhausted garage counters but cannot wrap the storage sequence
+  ---
+  duration_ms: 0.69236
+  type: 'test'
+  ...
+# Subtest: bounded current state plus a canonical legacy backup fits the unchanged 64KiB envelope limit
+ok 43 - bounded current state plus a canonical legacy backup fits the unchanged 64KiB envelope limit
+  ---
+  duration_ms: 1.29495
+  type: 'test'
+  ...
+# Subtest: current envelope rejects malformed legacy backups and unsupported versions without mutating accepted ownership
+ok 44 - current envelope rejects malformed legacy backups and unsupported versions without mutating accepted ownership
+  ---
+  duration_ms: 3.16197
+  type: 'test'
+  ...
+# Subtest: unsupported or corrupt legacy saves are never automatically migrated or erased
+ok 45 - unsupported or corrupt legacy saves are never automatically migrated or erased
+  ---
+  duration_ms: 0.29923
+  type: 'test'
+  ...
+# Subtest: legacy and current imports are explicit whole-state proposals and preserve recoverable legacy provenance
+ok 46 - legacy and current imports are explicit whole-state proposals and preserve recoverable legacy provenance
+  ---
+  duration_ms: 6.203599
+  type: 'test'
+  ...
+# Subtest: duplicate-model owned cars receive independent deeply immutable build/condition records
+ok 47 - duplicate-model owned cars receive independent deeply immutable build/condition records
+  ---
+  duration_ms: 1.39281
+  type: 'test'
+  ...
+# Subtest: six distinct original catalogue entries are inert, immutable and include an affordable starter
+ok 48 - six distinct original catalogue entries are inert, immutable and include an affordable starter
+  ---
+  duration_ms: 0.80781
+  type: 'test'
+  ...
+# Subtest: catalogue admission owns every row and finish without freezing or aliasing caller data
+ok 49 - catalogue admission owns every row and finish without freezing or aliasing caller data
+  ---
+  duration_ms: 0.42853
+  type: 'test'
+  ...
+# Subtest: catalogue rejects duplicate identities, unsupported metadata, unsafe prices and excessive arrays
+ok 50 - catalogue rejects duplicate identities, unsupported metadata, unsafe prices and excessive arrays
+  ---
+  duration_ms: 5.389629
+  type: 'test'
+  ...
+# Subtest: validating authored catalogue data cannot install a user-supplied ownership model
+ok 51 - validating authored catalogue data cannot install a user-supplied ownership model
+  ---
+  duration_ms: 0.28767
+  type: 'test'
+  ...
+# Subtest: new garages have four empty bays, no active vehicle and exactly the starting fictional credits
+ok 52 - new garages have four empty bays, no active vehicle and exactly the starting fictional credits
+  ---
+  duration_ms: 0.20223
+  type: 'test'
+  ...
+# Subtest: owned identity is independent from model identity and all four bays can contain the same model
+ok 53 - owned identity is independent from model identity and all four bays can contain the same model
+  ---
+  duration_ms: 0.72787
+  type: 'test'
+  ...
+# Subtest: canonical serialization preserves bay positions and owns a deeply frozen complete state
+ok 54 - canonical serialization preserves bay positions and owns a deeply frozen complete state
+  ---
+  duration_ms: 1.37794
+  type: 'test'
+  ...
+# Subtest: registry rejects missing and extra save fields, broken ownership, capacity and active selection
+ok 55 - registry rejects missing and extra save fields, broken ownership, capacity and active selection
+  ---
+  duration_ms: 4.888769
+  type: 'test'
+  ...
+# Subtest: integer bounds include explicit serial exhaustion and reject coercion, fractions and negative zero
+ok 56 - integer bounds include explicit serial exhaustion and reject coercion, fractions and negative zero
+  ---
+  duration_ms: 3.55642
+  type: 'test'
+  ...
+# Subtest: object admission rejects accessors, hidden fields, prototype tricks and executable serialization hooks inertly
+ok 57 - object admission rejects accessors, hidden fields, prototype tricks and executable serialization hooks inertly
+  ---
+  duration_ms: 1.59557
+  type: 'test'
+  ...
+# Subtest: text admission is bounded in UTF-8 bytes and rejects malformed or unsupported complete saves
+ok 58 - text admission is bounded in UTF-8 bytes and rejects malformed or unsupported complete saves
+  ---
+  duration_ms: 1.15423
+  type: 'test'
+  ...
+# Subtest: 1,024 deterministic inventory states preserve independently specified IDs, balances and bay order
+ok 59 - 1,024 deterministic inventory states preserve independently specified IDs, balances and bay order
+  ---
+  duration_ms: 422.207016
+  type: 'test'
+  ...
+# Subtest: six original showroom silhouettes have bounded complete lit geometry and four separated bays
+ok 60 - six original showroom silhouettes have bounded complete lit geometry and four separated bays
+  ---
+  duration_ms: 54.270325
+  type: 'test'
+  ...
+# Subtest: all catalogue switches and camera views retain bounded resources and never mutate ownership
+ok 61 - all catalogue switches and camera views retain bounded resources and never mutate ownership
+  ---
+  duration_ms: 106.714479
+  type: 'test'
+  ...
+# Subtest: failed uploads clean construction; lost contexts skip drawing and recreate without stale handles
+ok 62 - failed uploads clean construction; lost contexts skip drawing and recreate without stale handles
+  ---
+  duration_ms: 64.187943
+  type: 'test'
+  ...
+# Subtest: 1,024 deterministic 64-operation sequences reconcile against an independent ownership and money ledger
+ok 63 - 1,024 deterministic 64-operation sequences reconcile against an independent ownership and money ledger
+  ---
+  duration_ms: 10531.509148
+  type: 'test'
+  ...
+# {"sequences":1024,"operations":65536,"freshSequences":768,"syntheticBoundarySequences":256,"buy":5493,"sell":5080,"select":3470,"rejected":51493}
+# Subtest: repeated fresh-garage buy/sell cycles strictly spend credits and never recycle an owned ID
+ok 64 - repeated fresh-garage buy/sell cycles strictly spend credits and never recycle an owned ID
+  ---
+  duration_ms: 2.8258
+  type: 'test'
+  ...
+# Subtest: a real starter purchase changes credits, one bay, the allocator and revision atomically
+ok 65 - a real starter purchase changes credits, one bay, the allocator and revision atomically
+  ---
+  duration_ms: 0.51656
+  type: 'test'
+  ...
+# Subtest: four actual 600-credit purchases fill the garage and a fifth cannot allocate or charge
+ok 66 - four actual 600-credit purchases fill the garage and a fifth cannot allocate or charge
+  ---
+  duration_ms: 2.33535
+  type: 'test'
+  ...
+# Subtest: premium purchase uses its catalogue price and inadequate credits cannot create a partial car
+ok 67 - premium purchase uses its catalogue price and inadequate credits cannot create a partial car
+  ---
+  duration_ms: 0.44853
+  type: 'test'
+  ...
+# Subtest: resale is a fixed catalogue amount and a buy/sell cycle reduces the balance for every model
+ok 68 - resale is a fixed catalogue amount and a buy/sell cycle reduces the balance for every model
+  ---
+  duration_ms: 1.997589
+  type: 'test'
+  ...
+# Subtest: selling inactive cars preserves selection and selling the active car chooses the lowest occupied bay
+ok 69 - selling inactive cars preserves selection and selling the active car chooses the lowest occupied bay
+  ---
+  duration_ms: 4.29001
+  type: 'test'
+  ...
+# Subtest: selection only changes the active owned ID and consumes exactly one revision
+ok 70 - selection only changes the active owned ID and consumes exactly one revision
+  ---
+  duration_ms: 1.6922
+  type: 'test'
+  ...
+# Subtest: retrying a previously committed purchase or sale cannot duplicate ownership or proceeds
+ok 71 - retrying a previously committed purchase or sale cannot duplicate ownership or proceeds
+  ---
+  duration_ms: 0.61949
+  type: 'test'
+  ...
+# Subtest: stale competing intents reject before spending and never rebase themselves onto a newer revision
+ok 72 - stale competing intents reject before spending and never rebase themselves onto a newer revision
+  ---
+  duration_ms: 0.580809
+  type: 'test'
+  ...
+# Subtest: sale at the money ceiling is exact and one-credit overflow rejects the entire transaction
+ok 73 - sale at the money ceiling is exact and one-credit overflow rejects the entire transaction
+  ---
+  duration_ms: 0.35704
+  type: 'test'
+  ...
+# Subtest: serial and revision exhaustion never wrap and the last representable purchase remains valid
+ok 74 - serial and revision exhaustion never wrap and the last representable purchase remains valid
+  ---
+  duration_ms: 0.94618
+  type: 'test'
+  ...
+# Subtest: requests cannot override prices, resale, bay placement, IDs or the revision contract
+ok 75 - requests cannot override prices, resale, bay placement, IDs or the revision contract
+  ---
+  duration_ms: 1.69561
+  type: 'test'
+  ...
+# Subtest: invalid catalogue identities and malformed or unowned vehicle IDs return distinct rejection reasons
+ok 76 - invalid catalogue identities and malformed or unowned vehicle IDs return distinct rejection reasons
+  ---
+  duration_ms: 0.37625
+  type: 'test'
+  ...
+# Subtest: invalid states reject before requests and query helpers validate the complete garage
+ok 77 - invalid states reject before requests and query helpers validate the complete garage
+  ---
+  duration_ms: 1.17841
+  type: 'test'
+  ...
+# Subtest: successful transitions own all records and cannot be changed through mutable input aliases
+ok 78 - successful transitions own all records and cannot be changed through mutable input aliases
+  ---
+  duration_ms: 1.09813
+  type: 'test'
+  ...
+# Subtest: request and state accessors, hidden fields and prototype tricks reject without executing code
+ok 79 - request and state accessors, hidden fields and prototype tricks reject without executing code
+  ---
+  duration_ms: 1.19564
+  type: 'test'
+  ...
+# Subtest: vault envelopes have a strict bounded format independent of exported garage state
+ok 80 - vault envelopes have a strict bounded format independent of exported garage state
+  ---
+  duration_ms: 1.26214
+  type: 'test'
+  ...
+# Subtest: empty storage stays empty until explicit confirmation and existing unrelated saves remain untouched
+ok 81 - empty storage stays empty until explicit confirmation and existing unrelated saves remain untouched
+  ---
+  duration_ms: 0.45844
+  type: 'test'
+  ...
+# Subtest: confirmed purchases persist complete state before publication and reload restores ownership
+ok 82 - confirmed purchases persist complete state before publication and reload restores ownership
+  ---
+  duration_ms: 0.901059
+  type: 'test'
+  ...
+# Subtest: confirmation tickets are owner-bound, single-use and invalidated by a new prepare or reload
+ok 83 - confirmation tickets are owner-bound, single-use and invalidated by a new prepare or reload
+  ---
+  duration_ms: 0.71544
+  type: 'test'
+  ...
+# Subtest: stale tabs cannot overwrite purchases or resurrect a sold car
+ok 84 - stale tabs cannot overwrite purchases or resurrect a sold car
+  ---
+  duration_ms: 1.06816
+  type: 'test'
+  ...
+# Subtest: identical import and reset preserve storage history and reject ABA-stale confirmations
+ok 85 - identical import and reset preserve storage history and reject ABA-stale confirmations
+  ---
+  duration_ms: 0.49902
+  type: 'test'
+  ...
+# Subtest: whole-state import keeps identities, allocator and revision without merging balances
+ok 86 - whole-state import keeps identities, allocator and revision without merging balances
+  ---
+  duration_ms: 1.8123
+  type: 'test'
+  ...
+# Subtest: invalid imports preserve accepted ownership and invalidate any prior confirmation
+ok 87 - invalid imports preserve accepted ownership and invalidate any prior confirmation
+  ---
+  duration_ms: 3.4668
+  type: 'test'
+  ...
+# Subtest: quota failure never awards a purchase and writes remain blocked until explicit reload
+ok 88 - quota failure never awards a purchase and writes remain blocked until explicit reload
+  ---
+  duration_ms: 0.794729
+  type: 'test'
+  ...
+# Subtest: unconfirmed write verification fails closed and reload reconciles without paying twice
+ok 89 - unconfirmed write verification fails closed and reload reconciles without paying twice
+  ---
+  duration_ms: 1.14885
+  type: 'test'
+  ...
+# Subtest: unavailable storage, locks, crypto and exhausted storage sequence cannot silently downgrade writes
+ok 90 - unavailable storage, locks, crypto and exhausted storage sequence cannot silently downgrade writes
+  ---
+  duration_ms: 0.65489
+  type: 'test'
+  ...
+# Subtest: observers see only confirmed saved state and cannot undo a successful commit by throwing
+ok 91 - observers see only confirmed saved state and cannot undo a successful commit by throwing
+  ---
+  duration_ms: 0.54511
+  type: 'test'
+  ...
+# Subtest: reentrant observers cannot change the accepted state attached to a transaction receipt
+ok 92 - reentrant observers cannot change the accepted state attached to a transaction receipt
+  ---
+  duration_ms: 0.4277
+  type: 'test'
+  ...
+# Subtest: disposal after the write suppresses observers while preserving the completed commit acknowledgement
+ok 93 - disposal after the write suppresses observers while preserving the completed commit acknowledgement
+  ---
+  duration_ms: 0.51405
+  type: 'test'
+  ...
+# Subtest: corrupt stored data is preserved until a confirmed complete replacement
+ok 94 - corrupt stored data is preserved until a confirmed complete replacement
+  ---
+  duration_ms: 0.40454
+  type: 'test'
+  ...
+# Subtest: storage notifications invalidate stale views, ignore unrelated areas and tolerate delayed old events
+ok 95 - storage notifications invalidate stale views, ignore unrelated areas and tolerate delayed old events
+  ---
+  duration_ms: 0.58774
+  type: 'test'
+  ...
+# Subtest: busy locks reject without writes and pending acquisition rechecks lifecycle invalidation
+ok 96 - busy locks reject without writes and pending acquisition rechecks lifecycle invalidation
+  ---
+  duration_ms: 0.63841
+  type: 'test'
+  ...
+1..96
+# tests 96
+# suites 0
+# pass 96
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11393.001059

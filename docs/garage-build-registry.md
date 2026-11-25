@@ -31,6 +31,9 @@ It retains the first legacy ownership converted in this storage lifetime.
 Ordinary transactions, reset and whole-state imports retain that backup.
 The current garage and the backup can deliberately differ after later edits.
 The backup is inert recovery data, not another active garage or extra inventory.
+Current garage JSON exports omit this storage history, just as they omit
+generation/sequence. Export the original legacy backup separately to carry both
+snapshots to another browser or origin.
 
 The new loader accepts explicitly supported v1/v2 envelopes. Loading v1 shows
 **MIGRATION REQUIRED** with the actual validated legacy ownership still visible.

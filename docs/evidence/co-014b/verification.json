@@ -1,0 +1,140 @@
+{
+  "base": "eb3b11d50ec2c92f026455d0790a79214f525242",
+  "implementation": "1f7fd70e49032dfa9a21166468571fcde63d9f08",
+  "publishedLegacy": "1c745a90258d0f6cb968935f773354cff702b276",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtime": {
+    "node": {
+      "node": "v22.18.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    "browser": "158.0.8127.36",
+    "browserGraphics": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "executed": [
+    {
+      "command": "node --test tests/*.test.mjs",
+      "exit": 0,
+      "tests": 429,
+      "pass": 429,
+      "fail": 0,
+      "durationMs": 278107.060597,
+      "historicalV100MatchingTicks": 45225
+    },
+    {
+      "command": "node --experimental-test-isolation=none --test tests/garage-*.test.mjs",
+      "exit": 0,
+      "tests": 96,
+      "pass": 96,
+      "includesNewRegistryTests": 10,
+      "includesNewMigrationTests": 35,
+      "retainedGeneratedOperations": 65536
+    },
+    {
+      "command": "node tests/compare-v100.mjs /tmp/co014a-published-v130",
+      "exit": 0,
+      "matchingTicks": 45225,
+      "baseline": "1c745a90258d0f6cb968935f773354cff702b276",
+      "candidate": "1f7fd70e49032dfa9a21166468571fcde63d9f08"
+    },
+    {
+      "command": "node scripts/measure-vehicle-builds.mjs",
+      "exit": 0,
+      "models": 6,
+      "sourceMatchesHead": true
+    },
+    {
+      "command": "node --experimental-vm-modules scripts/package-site.mjs /tmp/co014b-verification/Circuit-Overdrive",
+      "exit": 0,
+      "runtimeFiles": 105
+    },
+    {
+      "command": "node --experimental-vm-modules scripts/package-site.mjs /tmp/co014b-verification/legacy",
+      "cwd": "/tmp/co014a-published-v130",
+      "exit": 0,
+      "runtimeFiles": 103,
+      "source": "1c745a90258d0f6cb968935f773354cff702b276"
+    },
+    {
+      "command": "python3 scripts/offline-release.py build /tmp/co014b-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 scripts/offline-release.py verify /tmp/co014b-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 tests/test_offline_release.py",
+      "exit": 0,
+      "tests": 1
+    },
+    {
+      "command": "bash tests/browser-pages-shards.sh",
+      "exit": 0,
+      "scope": "Preserved seven-worker orchestration and failure propagation; not a full browser matrix execution"
+    },
+    {
+      "command": "node tests/browser-garage-migration.mjs http://127.0.0.1:8766/Circuit-Overdrive/ --legacy=http://127.0.0.1:8766/legacy/",
+      "exit": 0,
+      "scenarios": 6,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "SOURCE_SHA": "1f7fd70e49032dfa9a21166468571fcde63d9f08",
+        "EVIDENCE_DIR": "/tmp/co014b-verification/migration-browser"
+      }
+    },
+    {
+      "command": "node tests/browser-garage.mjs http://127.0.0.1:8766/Circuit-Overdrive/",
+      "exit": 0,
+      "scenarios": 23,
+      "invalidImports": 17,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "EVIDENCE_DIR": "/tmp/co014b-verification/garage-browser"
+      }
+    },
+    {
+      "command": "node tests/browser-smoke.mjs http://127.0.0.1:8766/Circuit-Overdrive/",
+      "exit": 0,
+      "browserEnvironment": {
+        "PLAYWRIGHT_MODULE": "/tmp/co-012-browser-tools/node_modules/playwright/index.mjs",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "EVIDENCE_DIR": "/tmp/co014b-verification/smoke"
+      }
+    }
+  ],
+  "sizes": {
+    "maxCurrentStockGarageUtf8": 1604,
+    "maxEnvelopeWithLegacyBackupUtf8": 2102,
+    "unchangedLimitUtf8": 65536
+  },
+  "artifact": {
+    "name": "Circuit-Overdrive-1f7fd70e49032dfa9a21166468571fcde63d9f08.zip",
+    "sha256": "e7948e00a3d4943a0a654aee5a589fe3f589b324e22f3a04fedb871a2a3c2095",
+    "independentlyRebuilt": true,
+    "standaloneRuntimeFilesComparedEqualToZip": 105,
+    "localDirectory": "/tmp/co014b-verification/offline"
+  },
+  "limitations": [
+    "Fresh explicitly confirmed destructive recovery by an obsolete client can overwrite unsupported current data; old pending confirmations cannot.",
+    "Current garage exports omit storage history; export original legacy backup separately.",
+    "Only pristine stock builds supported; parts, tuning, damage, repairs and facility are later C-F.",
+    "Browser tests use software rendering; no new native GPU/frame-time claim.",
+    "Full seven browser lanes, post-merge/public CI and owner play-through are later owner/CI gates."
+  ],
+  "sha256": {
+    "garage-browser.json": "1cb76116ebd3298110cd9404af2a4dfc2aa0be82ad3b5b0ad3410b8cdfb54c44",
+    "garage-tests.log": "7e01e8f178d95041983c09b7e210ad268f72b2bf9fc7942f103275cbce515060",
+    "migrated-reloaded.png": "7f9ea07df2664f064e8c27b5d869086046c88839e3bfdd363acd71c846ebeb1f",
+    "migration-browser.json": "e9b7ca4ba653ec06c2d9e65026883c9589089c4ebd123c93eda829b2ea4b5200",
+    "migration-confirmation.png": "cffd1c213e56ac9d861916e292a5ebbf88bbcf5fc0a75b4e2436ec124a94555b",
+    "node-tests.log": "5e1aa0fbb9caa288e18efe7c8eda71d1c9cf0c8d0905f32a686a265bea754311",
+    "shards.log": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed",
+    "smoke.log": "a7ddb6afa49341519c1145791b68e22bedcccb9fe074cbacfecf15c839984567",
+    "stock-physical.json": "50f7201512fb5aa53e7774cb0e5a093012cef89ee150ae5bcc0d3e2bca4dca63",
+    "v130-parity.json": "be32fc7c06ae74ed5d2262b46be929b44215a19345a7b1e770eaaa480aefdc9a"
+  }
+}
