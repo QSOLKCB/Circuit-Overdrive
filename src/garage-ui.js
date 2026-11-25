@@ -214,7 +214,10 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   function hideDialog() {
     prepared = null;
     if (dialog.open) { boundary(); dialog.close(); }
-    if (opened && returnFocus?.isConnected && !returnFocus.disabled && !returnFocus.closest('[hidden]')) returnFocus.focus({preventScroll:true});
+    if (opened && returnFocus?.isConnected && !returnFocus.disabled && !returnFocus.closest('[hidden]')) {
+      if (introduction.contains(returnFocus)) reveal(returnFocus);
+      else returnFocus.focus({preventScroll:true});
+    }
     returnFocus = null;
   }
   function cancelPending() {
