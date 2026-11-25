@@ -1,0 +1,47 @@
+{
+  "source": "719ec7f503ad767cd588d583458184b207ce74a7",
+  "url": "http://127.0.0.1:8135/Circuit-Overdrive/tests/fixtures/garage-vault.html",
+  "browser": "158.0.8127.36",
+  "support": {
+    "secureContext": true,
+    "webLocks": true,
+    "cryptoRandom": true,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36"
+  },
+  "requests": 56,
+  "errors": [],
+  "scenarios": [
+    "two-tab purchase conflict, reload reconciliation and sale visibility",
+    "download/file import, backup, whole-state replacement, canonical round-trip and invalid-file recovery",
+    "identical-import storage generation/sequence invalidates stale confirmation",
+    "stale-tab import cannot undo a newer committed purchase",
+    "cancelled asynchronous file read cannot revive a replacement confirmation",
+    "QuotaExceededError and SecurityError writes preserve ownership and recover without free cars",
+    "interrupted read-back blocks mutation until reload discovers committed result",
+    "denied reads and unavailable Web Locks fail closed without funding a garage",
+    "malformed and unsupported stored saves recover only through confirmed validated replacement"
+  ],
+  "finalGarage": {
+    "version": 1,
+    "edition": "after-hours-v1",
+    "catalogRevision": 1,
+    "credits": 960,
+    "nextVehicleId": 4,
+    "activeVehicleId": "car-000002",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000002",
+        "modelId": "cinder-two"
+      },
+      {
+        "ownedVehicleId": "car-000003",
+        "modelId": "cinder-two"
+      },
+      null,
+      null
+    ],
+    "revision": 4
+  },
+  "storageSequence": 7,
+  "scope": "development fixture using production vault; no showroom or native GPU claim"
+}

@@ -20,7 +20,7 @@ Choose **Total Destruction** from the main menu, select **The Crucible** or **Ir
 
 ## Street Rod — The Garage, v1.3.0 candidate
 
-CO-013A establishes the original six-model catalogue and validated four-bay ownership schema for **After Hours Motor Works**. CO-013B adds pure purchase, sale and active-selection transactions with revision checks and deterministic resale. Storage and the WebGL showroom follow in separately reviewed PRs C–D; no garage entry appears in the game yet. Catalogue styling is cosmetic, and garage selection does not change racing physics or event damage. [Registry contract and catalogue](docs/garage-registry.md) · [Transaction contract and recovery policy](docs/garage-transactions.md) · [Executed transaction checks](docs/co-013b-acceptance.md)
+CO-013A–B establish the original six-model catalogue, four-bay ownership and pure purchase/sale/selection transactions for **After Hours Motor Works**. CO-013C adds the Save Vault with coordinated local persistence, stale-tab rejection, confirmed replacement and canonical JSON import/export. Its development fixture exercises the real browser storage protocol; the production garage menu and WebGL showroom follow in PR D. Catalogue styling is cosmetic, and ownership does not change racing physics or event damage. [Registry](docs/garage-registry.md) · [Transactions](docs/garage-transactions.md) · [Save Vault and browser reproduction](docs/garage-save-vault.md)
 
 ## Crash Lab — The Impact Facility
 
