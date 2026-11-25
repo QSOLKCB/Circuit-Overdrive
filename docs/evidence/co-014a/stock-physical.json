@@ -1,0 +1,3026 @@
+{
+  "kind": "co-014a-stock-physical-receipts-v1",
+  "source": {
+    "head": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+    "workingTreeMatchesHead": true,
+    "modified": "",
+    "sha256": {
+      "src/vehicle-builds.js": "8b5e64e22c637a1c5798ea95ed89a224334015268a70e2ceef22d050e078b4d5",
+      "src/garage-catalog.js": "12b8a864680f765962559d9a22a3b0597d8c9bc0c69159ddae1f0b10d63f9500",
+      "src/garage-data.js": "f4b8b34ec48d14bd0134b872310e6fbaac452baa1a22081c0f974154a670d679",
+      "tests/vehicle-build-driver.mjs": "368dc20dcc0683cb6a17025890d47c7126ee1317f0eb46d498d8c4ad9abdc19f",
+      "scripts/measure-vehicle-builds.mjs": "fd26884f37b99b8212962db3953abced8f55ac62b8a40fff8cca4ae9fb330b14",
+      "vendor/vanillajs/modules/vehicle3d/index.js": "60e0bc1e11d44773af302ab8e76e8076aacd7b324461d2ea1f08ea86297797ad",
+      "vendor/vanillajs/modules/math/index.js": "4f4ebf0786b97342c11004b8830a535890b16693458a0436edb1fc581a411da7",
+      "vendor/vanillajs/modules/collision/index.js": "99c0f4bc106d4162fc5bea057a7108d7cf52526279b2a8ad4e4f27c1f0e6f5c1"
+    }
+  },
+  "runtime": {
+    "node": "v22.18.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "units": "SI; +Y up, -Z forward. acceptedTicks are 60 Hz calls; solverSubsteps are 240 Hz internal steps.",
+  "comparison": "Same deterministic threshold policy and command values; stream lengths and braking start speeds differ. Stock designs vary in multiple mechanical parameters.",
+  "rules": {
+    "id": "co-014a-stock-physical-v1",
+    "step": 0.016666666666666666,
+    "seed": 0,
+    "surfaceId": "forge-level-dry-v1",
+    "friction": 1,
+    "acceleration": {
+      "thresholdMps": 27.77777777777778,
+      "maxTicks": 1500,
+      "command": {
+        "throttle": 1,
+        "brake": 0,
+        "steer": 0
+      },
+      "crossing": "linear interpolation of consecutive accepted horizontal speeds"
+    },
+    "braking": {
+      "thresholdMps": 0.1,
+      "maxTicks": 600,
+      "command": {
+        "throttle": 0,
+        "brake": 1,
+        "steer": 0
+      },
+      "start": "unaltered accepted state immediately after the first acceleration threshold crossing",
+      "result": "horizontal path length to the first accepted state at or below 0.1 m/s; exact initial speed is reported"
+    },
+    "steering": {
+      "initialVelocity": [
+        0,
+        0,
+        -10
+      ],
+      "settleTicks": 60,
+      "ticks": 180,
+      "settleCommand": {
+        "throttle": 0,
+        "brake": 0,
+        "steer": 0
+      },
+      "command": {
+        "throttle": 0,
+        "brake": 0,
+        "steer": 0.35
+      }
+    },
+    "support": {
+      "ticks": 120,
+      "command": {
+        "throttle": 0,
+        "brake": 0,
+        "steer": 0
+      }
+    }
+  },
+  "measurements": [
+    {
+      "modelId": "cinder-two",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Cinder Two / stock rules 1\",\"mass\":1080,\"inertia\":[1755,1901,405],\"chassis\":{\"width\":1.75,\"length\":4.25,\"height\":1.2},\"wheel\":{\"radius\":0.34,\"wheelbase\":2.465,\"track\":1.75},\"suspension\":{\"restLength\":0.24,\"travel\":0.19,\"spring\":34000,\"damper\":3100},\"tyres\":{\"grip\":1.02,\"corneringStiffness\":2600,\"rollingResistance\":0.016},\"steering\":{\"maxAngle\":0.48,\"rate\":1.8,\"speedReduction\":0.035},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,105],[2200,175],[4200,210],[5800,185],[6800,130]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":3.9,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"front\",\"drag\":0.44}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.5020970588235295,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            -2.2105774001425334e-16,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07790294117647056,
+            0.07790294117647056,
+            0.07790294117647056,
+            0.07790294117647056
+          ],
+          "loadsN": [
+            2648.7000000000003,
+            2648.7000000000003,
+            2648.7000000000003,
+            2648.7000000000003
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 10594.800000000001,
+        "weightN": 10594.800000000001
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 487,
+        "crossing": {
+          "previousSpeedMps": 27.76506887925197,
+          "nextSpeedMps": 27.805609067209744,
+          "fraction": 0.3134888900625179,
+          "elapsedSeconds": 8.105224814834376
+        },
+        "shifts": [
+          {
+            "acceptedTick": 292,
+            "from": 1,
+            "to": 2,
+            "speedMps": 18.222732070174022,
+            "rpm": 6088.630833764488,
+            "shiftRemaining": 0.17166666666666663
+          },
+          {
+            "acceptedTick": 469,
+            "from": 2,
+            "to": 3,
+            "speedMps": 27.557765161078972,
+            "rpm": 6039.605728305304,
+            "shiftRemaining": 0.16749999999999995
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5020970588235295,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1948,
+          "position": [
+            0,
+            0.5020970588235295,
+            -118.03759816441985
+          ],
+          "orientation": [
+            0.0014133808941840622,
+            0,
+            0,
+            0.9999990011767254
+          ],
+          "velocity": [
+            0,
+            -3.6175517625360743e-16,
+            -27.805609067209744
+          ],
+          "angularVelocity": [
+            0.04174121519031558,
+            0,
+            0
+          ],
+          "speedMps": 27.805609067209744,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 3,
+          "rpm": 4506.002225512664,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07441896075219101,
+            0.07441896075219101,
+            0.08138692160075006,
+            0.08138692160075006
+          ],
+          "loadsN": [
+            2379.438177574849,
+            2379.438177574849,
+            2917.961822425154,
+            2917.961822425154
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 165,
+        "elapsedSeconds": 2.75,
+        "distanceM": 37.97894437042572,
+        "start": {
+          "solverSubsteps": 1948,
+          "position": [
+            0,
+            0.5020970588235295,
+            -118.03759816441985
+          ],
+          "orientation": [
+            0.0014133808941840622,
+            0,
+            0,
+            0.9999990011767254
+          ],
+          "velocity": [
+            0,
+            -3.6175517625360743e-16,
+            -27.805609067209744
+          ],
+          "angularVelocity": [
+            0.04174121519031558,
+            0,
+            0
+          ],
+          "speedMps": 27.805609067209744,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 3,
+          "rpm": 4506.002225512664,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07441896075219101,
+            0.07441896075219101,
+            0.08138692160075006,
+            0.08138692160075006
+          ],
+          "loadsN": [
+            2379.438177574849,
+            2379.438177574849,
+            2917.961822425154,
+            2917.961822425154
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 2608,
+          "position": [
+            0,
+            0.5020970588235295,
+            -156.01654253484557
+          ],
+          "orientation": [
+            -0.01313279503372744,
+            0,
+            0,
+            0.9999137611287297
+          ],
+          "velocity": [
+            0,
+            -4.0707550994525776e-16,
+            -0.009433084064343754
+          ],
+          "angularVelocity": [
+            0.002438860391974975,
+            0,
+            0
+          ],
+          "speedMps": 0.009433084064343754,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.11027248918056759,
+            0.11027248918056759,
+            0.04553339317237359,
+            0.04553339317237359
+          ],
+          "loadsN": [
+            3749.6905675131115,
+            3749.6905675131115,
+            1547.7094324868895,
+            1547.7094324868895
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5020970588235295,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.5020970588235295,
+            -9.241472690430198
+          ],
+          "orientation": [
+            -0.0019421337943390088,
+            0,
+            0,
+            0.9999981140563841
+          ],
+          "velocity": [
+            0,
+            -3.426413899740401e-16,
+            -8.491127330029146
+          ],
+          "angularVelocity": [
+            0.000007965926140781835,
+            0,
+            0
+          ],
+          "speedMps": 8.491127330029146,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 2885.3673363253133,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08269029195082556,
+            0.08269029195082556,
+            0.07311559040211557,
+            0.07311559040211557
+          ],
+          "loadsN": [
+            2811.469669689893,
+            2811.469669689893,
+            2485.9303303101074,
+            2485.9303303101074
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            7.558666621207337,
+            0.5020970588235295,
+            -24.992243343481285
+          ],
+          "orientation": [
+            -0.002759241315107971,
+            -0.43811332414419313,
+            0.0010297856064699056,
+            0.8989149244151502
+          ],
+          "velocity": [
+            3.051306700860351,
+            -3.321354409618323e-16,
+            -2.158800792763842
+          ],
+          "angularVelocity": [
+            0.002803421085370294,
+            -0.21299956867425524,
+            -0.0020366259987748283
+          ],
+          "speedMps": 3.7377658361049146,
+          "steering": 0.14855557599258998,
+          "headingRadians": 0.9070104335219279,
+          "gear": 1,
+          "rpm": 1269.8629338248033,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08664028413162589,
+            0.07916935900814004,
+            0.07663652334480109,
+            0.0691655982213153
+          ],
+          "loadsN": [
+            2936.3442786992305,
+            2700.2861350263065,
+            2597.113864973694,
+            2361.0557213007723
+          ],
+          "lateralSpeedsMps": [
+            -0.14518142470495765,
+            -0.08992029799811774,
+            -0.0850205124492518,
+            -0.08501402174927941
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 0.9070104335219279,
+        "lateralDisplacementM": 7.558666621207337
+      },
+      "diagnostics": {
+        "acceptedTicks": 1012,
+        "minimumUpY": 0.9995227077108982,
+        "maxAngularSpeed": 0.38674743435747494,
+        "maxSpeedMps": 27.805609067209744,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+      "recipeDigest": "a694d7c1ec5f28734310bfdc9e17717ca657c9c137294dea544ac772e0ce31f1",
+      "recipeSha256": "04723808f7a05729d64ef4385fdc964445966836dbbdc317715efb319a993b8b",
+      "receiptSha256": "154ad95623019cacc12c18f2166aebb63f2837e173ba59e95d53e3d2428c7f7f"
+    },
+    {
+      "modelId": "lilt",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Lilt / stock rules 1\",\"mass\":850,\"inertia\":[1031,1101,316],\"chassis\":{\"width\":1.65,\"length\":3.58,\"height\":1.32},\"wheel\":{\"radius\":0.32,\"wheelbase\":2.0764,\"track\":1.65},\"suspension\":{\"restLength\":0.23,\"travel\":0.18,\"spring\":29000,\"damper\":2700},\"tyres\":{\"grip\":1.06,\"corneringStiffness\":2800,\"rollingResistance\":0.015},\"steering\":{\"maxAngle\":0.52,\"rate\":2.4,\"speedReduction\":0.03},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,85],[2200,140],[4200,170],[5800,150],[6800,105]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":4.1,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"front\",\"drag\":0.39}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.4781163793103449,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            -2.541235196130243e-16,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07188362068965515,
+            0.07188362068965515,
+            0.07188362068965515,
+            0.07188362068965515
+          ],
+          "loadsN": [
+            2084.625,
+            2084.625,
+            2084.625,
+            2084.625
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 8338.5,
+        "weightN": 8338.5
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 470,
+        "crossing": {
+          "previousSpeedMps": 27.741416773007924,
+          "nextSpeedMps": 27.786503665329498,
+          "fraction": 0.8064650921273646,
+          "elapsedSeconds": 7.830107751535456
+        },
+        "shifts": [
+          {
+            "acceptedTick": 249,
+            "from": 1,
+            "to": 2,
+            "speedMps": 16.319085479707763,
+            "rpm": 6189.476257623991,
+            "shiftRemaining": 0.18
+          },
+          {
+            "acceptedTick": 392,
+            "from": 2,
+            "to": 3,
+            "speedMps": 24.668549231262773,
+            "rpm": 6038.673011359028,
+            "shiftRemaining": 0.16749999999999995
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.4781163793103449,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1880,
+          "position": [
+            0,
+            0.4781163793103449,
+            -115.36417210088744
+          ],
+          "orientation": [
+            0.00499661394790153,
+            0,
+            0,
+            0.9999875168466132
+          ],
+          "velocity": [
+            0,
+            -2.668992159671341e-16,
+            -27.786503665329498
+          ],
+          "angularVelocity": [
+            -0.0005835192053480295,
+            0,
+            0
+          ],
+          "speedMps": 27.786503665329498,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 3,
+          "rpm": 5029.24799921576,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06150878100056434,
+            0.06150878100056434,
+            0.08225846037874596,
+            0.08225846037874596
+          ],
+          "loadsN": [
+            1785.3162001314051,
+            1785.3162001314051,
+            2383.933799868595,
+            2383.933799868595
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 158,
+        "elapsedSeconds": 2.6333333333333333,
+        "distanceM": 36.44693023637559,
+        "start": {
+          "solverSubsteps": 1880,
+          "position": [
+            0,
+            0.4781163793103449,
+            -115.36417210088744
+          ],
+          "orientation": [
+            0.00499661394790153,
+            0,
+            0,
+            0.9999875168466132
+          ],
+          "velocity": [
+            0,
+            -2.668992159671341e-16,
+            -27.786503665329498
+          ],
+          "angularVelocity": [
+            -0.0005835192053480295,
+            0,
+            0
+          ],
+          "speedMps": 27.786503665329498,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 3,
+          "rpm": 5029.24799921576,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06150878100056434,
+            0.06150878100056434,
+            0.08225846037874596,
+            0.08225846037874596
+          ],
+          "loadsN": [
+            1785.3162001314051,
+            1785.3162001314051,
+            2383.933799868595,
+            2383.933799868595
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 2512,
+          "position": [
+            0,
+            0.4781163793103449,
+            -151.81110233726304
+          ],
+          "orientation": [
+            -0.016911724233476574,
+            0,
+            0,
+            0.9998569865653042
+          ],
+          "velocity": [
+            0,
+            -2.6681720934900504e-16,
+            -0.09355667754725897
+          ],
+          "angularVelocity": [
+            2.0246948369321584e-8,
+            0,
+            0
+          ],
+          "speedMps": 0.09355667754725897,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.10699410289917943,
+            0.10699410289917943,
+            0.03677313848013086,
+            0.03677313848013086
+          ],
+          "loadsN": [
+            3102.828914987271,
+            3102.828914987271,
+            1066.4210850127301,
+            1066.4210850127301
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.4781163793103449,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.4781163793103449,
+            -8.967614061748586
+          ],
+          "orientation": [
+            -0.0032867499246147813,
+            0,
+            0,
+            0.9999945986228791
+          ],
+          "velocity": [
+            0,
+            -2.709532015187172e-16,
+            -7.946602986015044
+          ],
+          "angularVelocity": [
+            0.000016302835592881774,
+            0,
+            0
+          ],
+          "speedMps": 7.946602986015044,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 3017.2033668257677,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07870819137084623,
+            0.07870819137084623,
+            0.06505905000846407,
+            0.06505905000846407
+          ],
+          "loadsN": [
+            2282.5210144303082,
+            2282.5210144303082,
+            1886.7289855696913,
+            1886.7289855696913
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            6.279962434741834,
+            0.4781163793103449,
+            -20.896114546636312
+          ],
+          "orientation": [
+            -0.003091045332176812,
+            -0.4590417287540495,
+            -0.0012479031404494594,
+            0.8884084530434184
+          ],
+          "velocity": [
+            1.3662453001865396,
+            -2.569830572530651e-16,
+            -0.833545371720165
+          ],
+          "angularVelocity": [
+            0.002710281876201506,
+            -0.12164570422764881,
+            -0.0016973965172061311
+          ],
+          "speedMps": 1.600444971561945,
+          "steering": 0.17363915352854717,
+          "headingRadians": 0.9538403351518175,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07928703664074194,
+            0.07826314202927193,
+            0.06550409935003837,
+            0.06448020473856836
+          ],
+          "loadsN": [
+            2292.008876923251,
+            2275.9600513639657,
+            1893.2899486360348,
+            1877.241123076749
+          ],
+          "lateralSpeedsMps": [
+            -0.061760713205597395,
+            -0.026893195400740533,
+            -0.017401225135714404,
+            -0.017400375931379997
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 0.9538403351518175,
+        "lateralDisplacementM": 6.279962434741834
+      },
+      "diagnostics": {
+        "acceptedTicks": 988,
+        "minimumUpY": 0.9991937734497488,
+        "maxAngularSpeed": 0.4813277532201632,
+        "maxSpeedMps": 27.786503665329498,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "0a8dbe45d4e36583bf6049ff6a94647bc09330b63e75f85dafd956598881778a",
+      "recipeDigest": "8fb47dc891d210960f425426e45aeac175209c511e884a3fd418cf6731824a70",
+      "recipeSha256": "da5990405658f817ac0868e99b724ee849a88190cebe0501f70e127305441623",
+      "receiptSha256": "0859507856c3107d4e6f1294951d8cb99d5bd0946e6553f98a3f229691aa2dc2"
+    },
+    {
+      "modelId": "evening-line",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Evening Line / stock rules 1\",\"mass\":1510,\"inertia\":[3126,3395,602],\"chassis\":{\"width\":1.86,\"length\":4.85,\"height\":1.15},\"wheel\":{\"radius\":0.35,\"wheelbase\":2.813,\"track\":1.86},\"suspension\":{\"restLength\":0.26,\"travel\":0.21,\"spring\":42000,\"damper\":4100},\"tyres\":{\"grip\":1.08,\"corneringStiffness\":3300,\"rollingResistance\":0.014},\"steering\":{\"maxAngle\":0.43,\"rate\":1.4,\"speedReduction\":0.045},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,150],[2200,260],[4200,310],[5800,280],[6800,195]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":3.5,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"rear\",\"drag\":0.38}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.5218267857142858,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            -6.123529449023041e-16,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08817321428571423,
+            0.08817321428571423,
+            0.08817321428571423,
+            0.08817321428571423
+          ],
+          "loadsN": [
+            3703.275,
+            3703.275,
+            3703.275,
+            3703.275
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 14813.1,
+        "weightN": 14813.1
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 436,
+        "crossing": {
+          "previousSpeedMps": 27.748788175324293,
+          "nextSpeedMps": 27.801675380470602,
+          "fraction": 0.5481401857649247,
+          "elapsedSeconds": 7.259135669762748
+        },
+        "shifts": [
+          {
+            "acceptedTick": 302,
+            "from": 1,
+            "to": 2,
+            "speedMps": 20.918210159360164,
+            "rpm": 6142.612123224736,
+            "shiftRemaining": 0.1758333333333333
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5218267857142858,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1744,
+          "position": [
+            0,
+            0.5218267857142858,
+            -99.58061031884702
+          ],
+          "orientation": [
+            0.0040068024031310505,
+            0,
+            0,
+            0.9999919727350327
+          ],
+          "velocity": [
+            0,
+            -5.723842954949961e-16,
+            -27.801675380470602
+          ],
+          "angularVelocity": [
+            -0.00034084902514443135,
+            0,
+            0
+          ],
+          "speedMps": 27.801675380470602,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5439.710010917554,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07690216960209495,
+            0.07690216960209495,
+            0.09944425896933351,
+            0.09944425896933351
+          ],
+          "loadsN": [
+            3231.7736850108017,
+            3231.7736850108017,
+            4174.776314989198,
+            4174.776314989198
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 156,
+        "elapsedSeconds": 2.6,
+        "distanceM": 36.087407946634585,
+        "start": {
+          "solverSubsteps": 1744,
+          "position": [
+            0,
+            0.5218267857142858,
+            -99.58061031884702
+          ],
+          "orientation": [
+            0.0040068024031310505,
+            0,
+            0,
+            0.9999919727350327
+          ],
+          "velocity": [
+            0,
+            -5.723842954949961e-16,
+            -27.801675380470602
+          ],
+          "angularVelocity": [
+            -0.00034084902514443135,
+            0,
+            0
+          ],
+          "speedMps": 27.801675380470602,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5439.710010917554,
+          "shiftRemaining": 0,
+          "compression": [
+            0.07690216960209495,
+            0.07690216960209495,
+            0.09944425896933351,
+            0.09944425896933351
+          ],
+          "loadsN": [
+            3231.7736850108017,
+            3231.7736850108017,
+            4174.776314989198,
+            4174.776314989198
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 2368,
+          "position": [
+            0,
+            0.5218267857142858,
+            -135.6680182654816
+          ],
+          "orientation": [
+            -0.012564615350115908,
+            0,
+            0,
+            0.9999210621049562
+          ],
+          "velocity": [
+            0,
+            -6.146227305466771e-16,
+            -0.08650391611845798
+          ],
+          "angularVelocity": [
+            3.3571962773339195e-7,
+            0,
+            0
+          ],
+          "speedMps": 0.08650391611845798,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.12351468726386877,
+            0.12351468726386877,
+            0.05283174130755974,
+            0.05283174130755974
+          ],
+          "loadsN": [
+            5187.614995699192,
+            5187.614995699192,
+            2218.9350043008058,
+            2218.9350043008058
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5218267857142858,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.5218267857142858,
+            -9.506905742699836
+          ],
+          "orientation": [
+            -0.0011395686612468156,
+            0,
+            0,
+            0.9999993506914223
+          ],
+          "velocity": [
+            0,
+            -5.959992128035762e-16,
+            -9.018683231330783
+          ],
+          "angularVelocity": [
+            -0.000060457037786732125,
+            0,
+            0
+          ],
+          "speedMps": 9.018683231330783,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 2670.9851472029377,
+          "shiftRemaining": 0,
+          "compression": [
+            0.09137881884837362,
+            0.09137881884837362,
+            0.08496760972305484,
+            0.08496760972305484
+          ],
+          "loadsN": [
+            3838.276871816752,
+            3838.276871816752,
+            3568.2731281832475,
+            3568.2731281832475
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            8.464326937358862,
+            0.5218267857142858,
+            -29.30168763798067
+          ],
+          "orientation": [
+            -0.002764264036375714,
+            -0.4016976981902045,
+            0.0032075198159374997,
+            0.9157625401432726
+          ],
+          "velocity": [
+            4.4363937588263225,
+            -5.888984596483512e-16,
+            -3.833664981524276
+          ],
+          "angularVelocity": [
+            0.0018579790731169086,
+            -0.24676977713841336,
+            -0.0016329783220457772
+          ],
+          "speedMps": 5.863324720149709,
+          "steering": 0.11907512382584762,
+          "headingRadians": 0.8267578013294985,
+          "gear": 1,
+          "rpm": 1736.0934371810306,
+          "shiftRemaining": 0,
+          "compression": [
+            0.09919841836584975,
+            0.0841408813851755,
+            0.09220554718625296,
+            0.07714801020557871
+          ],
+          "loadsN": [
+            4156.98783015152,
+            3542.634999601788,
+            3863.915000398212,
+            3249.56216984848
+          ],
+          "lateralSpeedsMps": [
+            -0.19769901897878572,
+            -0.1431377885058409,
+            -0.16454999300475093,
+            -0.16454073819142545
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 0.8267578013294985,
+        "lateralDisplacementM": 8.464326937358862
+      },
+      "diagnostics": {
+        "acceptedTicks": 952,
+        "minimumUpY": 0.999545171382225,
+        "maxAngularSpeed": 0.31732892324578865,
+        "maxSpeedMps": 27.801675380470602,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "30ad4b8e93f7160e92abf89da3569c914fca1f8071507c691d13809f8812a360",
+      "recipeDigest": "6ada92fb79606ab7cf934ea2f363ad9c72f9685680a0ac1e3d2e45ec0f37c306",
+      "recipeSha256": "186b68a67a7c7a33fe3cee032a338f32e77602c496800bef67a21da2e6aa6d2f",
+      "receiptSha256": "19ce7f195820f92dfa435583bcfbae64541a9c9b0f571f3c9a795316443125d1"
+    },
+    {
+      "modelId": "rivet-eight",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Rivet Eight / stock rules 1\",\"mass\":1610,\"inertia\":[3132,3486,741],\"chassis\":{\"width\":2.02,\"length\":4.68,\"height\":1.2},\"wheel\":{\"radius\":0.38,\"wheelbase\":2.7144,\"track\":2.02},\"suspension\":{\"restLength\":0.27,\"travel\":0.22,\"spring\":46000,\"damper\":4200},\"tyres\":{\"grip\":1.08,\"corneringStiffness\":3200,\"rollingResistance\":0.017},\"steering\":{\"maxAngle\":0.46,\"rate\":1.6,\"speedReduction\":0.04},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,230],[2200,390],[4200,450],[5800,380],[6800,260]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":3.8,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"rear\",\"drag\":0.56}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.5641625,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            5.1782824635104626e-17,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08583750000000001,
+            0.08583750000000001,
+            0.08583750000000001,
+            0.08583750000000001
+          ],
+          "loadsN": [
+            3948.525,
+            3948.525,
+            3948.525,
+            3948.525
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 15794.1,
+        "weightN": 15794.1
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 326,
+        "crossing": {
+          "previousSpeedMps": 27.72568579370531,
+          "nextSpeedMps": 27.79409235223863,
+          "fraction": 0.7615056975435531,
+          "elapsedSeconds": 5.429358428292392
+        },
+        "shifts": [
+          {
+            "acceptedTick": 223,
+            "from": 1,
+            "to": 2,
+            "speedMps": 20.91462377974652,
+            "rpm": 6091.700157604644,
+            "shiftRemaining": 0.17166666666666663
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5641625,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1304,
+          "position": [
+            0,
+            0.5641625,
+            -76.48821188976908
+          ],
+          "orientation": [
+            0.005900848430980035,
+            0,
+            0,
+            0.9999825898423406
+          ],
+          "velocity": [
+            0,
+            9.618398509347754e-17,
+            -27.79409235223863
+          ],
+          "angularVelocity": [
+            -0.0010209890672781324,
+            0,
+            0
+          ],
+          "speedMps": 27.79409235223863,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5437.263319906346,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06982051588202154,
+            0.06982051588202154,
+            0.10185448411797848,
+            0.10185448411797848
+          ],
+          "loadsN": [
+            3217.297826119436,
+            3217.297826119436,
+            4679.7521738805635,
+            4679.7521738805635
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 156,
+        "elapsedSeconds": 2.6,
+        "distanceM": 35.943638483951375,
+        "start": {
+          "solverSubsteps": 1304,
+          "position": [
+            0,
+            0.5641625,
+            -76.48821188976908
+          ],
+          "orientation": [
+            0.005900848430980035,
+            0,
+            0,
+            0.9999825898423406
+          ],
+          "velocity": [
+            0,
+            9.618398509347754e-17,
+            -27.79409235223863
+          ],
+          "angularVelocity": [
+            -0.0010209890672781324,
+            0,
+            0
+          ],
+          "speedMps": 27.79409235223863,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5437.263319906346,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06982051588202154,
+            0.06982051588202154,
+            0.10185448411797848,
+            0.10185448411797848
+          ],
+          "loadsN": [
+            3217.297826119436,
+            3217.297826119436,
+            4679.7521738805635,
+            4679.7521738805635
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1928,
+          "position": [
+            0,
+            0.5641625,
+            -112.43185037372045
+          ],
+          "orientation": [
+            -0.014202593795691977,
+            0,
+            0,
+            0.9998991380781737
+          ],
+          "velocity": [
+            0,
+            8.319878378398342e-17,
+            -0.01771530322342972
+          ],
+          "angularVelocity": [
+            0.0006125385236779058,
+            0,
+            0
+          ],
+          "speedMps": 0.01771530322342972,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.1243851322185694,
+            0.1243851322185694,
+            0.04728986778143063,
+            0.04728986778143063
+          ],
+          "loadsN": [
+            5721.870651102922,
+            5721.870651102922,
+            2175.1793488970775,
+            2175.1793488970775
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5641625,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.5641625,
+            -9.513203544104416
+          ],
+          "orientation": [
+            -0.0012619590048611369,
+            0,
+            0,
+            0.999999203729418
+          ],
+          "velocity": [
+            0,
+            8.677794228207986e-17,
+            -9.031511142940024
+          ],
+          "angularVelocity": [
+            -0.00004283437015977467,
+            0,
+            0
+          ],
+          "speedMps": 9.031511142940024,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 2674.7641315691735,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08926295879520085,
+            0.08926295879520085,
+            0.08241204120479917,
+            0.08241204120479917
+          ],
+          "loadsN": [
+            4106.373903467671,
+            4106.373903467671,
+            3790.6760965323288,
+            3790.6760965323288
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            9.226318858149067,
+            0.5641625,
+            -28.711571596928664
+          ],
+          "orientation": [
+            -0.003078308549901462,
+            -0.448981306105419,
+            0.002997220891495464,
+            0.893530820649893
+          ],
+          "velocity": [
+            4.7850357362830245,
+            9.775684928139758e-17,
+            -3.3398897982794526
+          ],
+          "angularVelocity": [
+            0.0020650048889135288,
+            -0.27801754971728915,
+            -0.0014339412214631711
+          ],
+          "speedMps": 5.835360388369923,
+          "steering": 0.1305255041134688,
+          "headingRadians": 0.9312705804352275,
+          "gear": 1,
+          "rpm": 1727.8826169304052,
+          "shiftRemaining": 0,
+          "compression": [
+            0.09785250082633701,
+            0.08144924339218118,
+            0.09022575660781884,
+            0.07382249917366301
+          ],
+          "loadsN": [
+            4490.5911255226365,
+            3756.398855039359,
+            4140.651144960641,
+            3406.458874477363
+          ],
+          "lateralSpeedsMps": [
+            -0.2489562862289687,
+            -0.17581228713145514,
+            -0.2030851344139446,
+            -0.20307229548925054
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 0.9312705804352275,
+        "lateralDisplacementM": 9.226318858149067
+      },
+      "diagnostics": {
+        "acceptedTicks": 842,
+        "minimumUpY": 0.9993728422510565,
+        "maxAngularSpeed": 0.358758182821919,
+        "maxSpeedMps": 27.79409235223863,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "6821cfb6d592163d3717cf23848629c2efaa1522906ef932bd71ad06eb634eff",
+      "recipeDigest": "70d9148127d78d50132fa360b55ce30a50a955aa4f548a2d5d94658c0fed6d94",
+      "recipeSha256": "55bab15c0a7430f236575fabbbed282e50a614da2f0fc3fa0b933f286f9f3b49",
+      "receiptSha256": "14739a2853886667501de2061950514c6dbd6e1e260d5157feaa5863719e782b"
+    },
+    {
+      "modelId": "yardhand",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Yardhand / stock rules 1\",\"mass\":1980,\"inertia\":[4439,4664,1017],\"chassis\":{\"width\":1.94,\"length\":4.95,\"height\":1.55},\"wheel\":{\"radius\":0.41,\"wheelbase\":2.871,\"track\":1.94},\"suspension\":{\"restLength\":0.32,\"travel\":0.26,\"spring\":50000,\"damper\":4700},\"tyres\":{\"grip\":0.94,\"corneringStiffness\":2900,\"rollingResistance\":0.023},\"steering\":{\"maxAngle\":0.45,\"rate\":1.3,\"speedReduction\":0.05},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,190],[2200,310],[4200,350],[5800,290],[6800,200]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":4.3,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"rear\",\"drag\":0.78}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.632881,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            -2.870879740444849e-16,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.09711899999999996,
+            0.09711899999999996,
+            0.09711899999999996,
+            0.09711899999999996
+          ],
+          "loadsN": [
+            4855.95,
+            4855.95,
+            4855.95,
+            4855.95
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 19423.8,
+        "weightN": 19423.8
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 503,
+        "crossing": {
+          "previousSpeedMps": 27.74296108644153,
+          "nextSpeedMps": 27.781995289406844,
+          "fraction": 0.8919534329210552,
+          "elapsedSeconds": 8.381532557215351
+        },
+        "shifts": [
+          {
+            "acceptedTick": 317,
+            "from": 1,
+            "to": 2,
+            "speedMps": 19.934088953131802,
+            "rpm": 6040.495882785056,
+            "shiftRemaining": 0.16749999999999995
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.632881,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 2012,
+          "position": [
+            0,
+            0.632881,
+            -121.69409582787644
+          ],
+          "orientation": [
+            0.004044827617575564,
+            0,
+            0,
+            0.999991819651313
+          ],
+          "velocity": [
+            0,
+            -4.459701730248952e-16,
+            -27.781995289406844
+          ],
+          "angularVelocity": [
+            -0.0005405832704486248,
+            0,
+            0
+          ],
+          "speedMps": 27.781995289406844,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5701.729035781675,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08550639490587642,
+            0.08550639490587642,
+            0.1087316050941235,
+            0.1087316050941235
+          ],
+          "loadsN": [
+            4278.80673668033,
+            4278.80673668033,
+            5433.09326331967,
+            5433.09326331967
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 179,
+        "elapsedSeconds": 2.9833333333333334,
+        "distanceM": 41.116169743522946,
+        "start": {
+          "solverSubsteps": 2012,
+          "position": [
+            0,
+            0.632881,
+            -121.69409582787644
+          ],
+          "orientation": [
+            0.004044827617575564,
+            0,
+            0,
+            0.999991819651313
+          ],
+          "velocity": [
+            0,
+            -4.459701730248952e-16,
+            -27.781995289406844
+          ],
+          "angularVelocity": [
+            -0.0005405832704486248,
+            0,
+            0
+          ],
+          "speedMps": 27.781995289406844,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5701.729035781675,
+          "shiftRemaining": 0,
+          "compression": [
+            0.08550639490587642,
+            0.08550639490587642,
+            0.1087316050941235,
+            0.1087316050941235
+          ],
+          "loadsN": [
+            4278.80673668033,
+            4278.80673668033,
+            5433.09326331967,
+            5433.09326331967
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 2728,
+          "position": [
+            0,
+            0.632881,
+            -162.81026557139938
+          ],
+          "orientation": [
+            -0.014007684322127002,
+            0,
+            0,
+            0.9999018875769422
+          ],
+          "velocity": [
+            0,
+            -4.22693174624702e-16,
+            0.0005440653163231585
+          ],
+          "angularVelocity": [
+            0.007879474637071102,
+            0,
+            0
+          ],
+          "speedMps": 0.0005440653163231585,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.1373311159935684,
+            0.1373311159935684,
+            0.05690688400643151,
+            0.05690688400643151
+          ],
+          "loadsN": [
+            6863.1135862775745,
+            6863.1135862775745,
+            2848.7864137224256,
+            2848.7864137224256
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.632881,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.632881,
+            -9.538341912117131
+          ],
+          "orientation": [
+            -0.0013464594705593354,
+            0,
+            0,
+            0.9999990935230363
+          ],
+          "velocity": [
+            0,
+            -4.50227793790761e-16,
+            -9.081660937703782
+          ],
+          "angularVelocity": [
+            -0.00023506802893493207,
+            0,
+            0
+          ],
+          "speedMps": 9.081660937703782,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 2820.7438908078993,
+          "shiftRemaining": 0,
+          "compression": [
+            0.1009846816358213,
+            0.1009846816358213,
+            0.0932533183641786,
+            0.0932533183641786
+          ],
+          "loadsN": [
+            5050.8343209687455,
+            5050.8343209687455,
+            4661.065679031255,
+            4661.065679031255
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            7.943317914773276,
+            0.632881,
+            -29.98402523952041
+          ],
+          "orientation": [
+            -0.003423567831959981,
+            -0.3907349702426242,
+            0.004251322098148865,
+            0.9204870387317866
+          ],
+          "velocity": [
+            4.415286016718502,
+            -4.1385102637194505e-16,
+            -4.121311605172195
+          ],
+          "angularVelocity": [
+            0.0021422327743725934,
+            -0.24986178791493624,
+            -0.001971227255472945
+          ],
+          "speedMps": 6.039864233271883,
+          "steering": 0.1209538191864684,
+          "headingRadians": 0.8028881011680298,
+          "gear": 1,
+          "rpm": 1876.1609091223584,
+          "shiftRemaining": 0,
+          "compression": [
+            0.1115843212211205,
+            0.0912104623137141,
+            0.10302753768628581,
+            0.08265367877887941
+          ],
+          "loadsN": [
+            5566.078216214714,
+            4572.75852357161,
+            5139.14147642839,
+            4145.821783785285
+          ],
+          "lateralSpeedsMps": [
+            -0.30256900355397365,
+            -0.24404412354100335,
+            -0.2585518531406801,
+            -0.2585366542724943
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 0.8028881011680298,
+        "lateralDisplacementM": 7.943317914773276
+      },
+      "diagnostics": {
+        "acceptedTicks": 1042,
+        "minimumUpY": 0.999385916503634,
+        "maxAngularSpeed": 0.3068235030855053,
+        "maxSpeedMps": 27.781995289406844,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "2732e142b63ca15afc801b9e2c1d09cb9769764d2e7f351c416648d5bd8dd885",
+      "recipeDigest": "cdf14fce905582d5fc6275be2281a1fbcf22ba0289ac5148665f4c687b339992",
+      "recipeSha256": "58d87b16711eba43636aaa1d1dfd8aca4b2369b3e40dc6160eb8d048ff30df8d",
+      "receiptSha256": "d19e68cafd1d00b4fd0b7c1f9c3576e0df6f2eb6b1ad47b042560b3ce06dd9e8"
+    },
+    {
+      "modelId": "glass-comet",
+      "rulesId": "co-014a-stock-physical-v1",
+      "rulesVersion": 1,
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "canonicalBuild": "{\"format\":\"circuit-overdrive.vehicle-build\",\"version\":1,\"rulesVersion\":1,\"parts\":{\"engine\":\"stock\",\"intake\":\"stock\",\"exhaust\":\"stock\",\"gearbox\":\"stock\",\"finalDrive\":\"stock\",\"tyres\":\"stock\",\"suspension\":\"stock\",\"steering\":\"stock\",\"paint\":\"factory\"}}",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Glass Comet / stock rules 1\",\"mass\":1260,\"inertia\":[2124,2418,513],\"chassis\":{\"width\":1.96,\"length\":4.38,\"height\":1.02},\"wheel\":{\"radius\":0.35,\"wheelbase\":2.5404,\"track\":1.96},\"suspension\":{\"restLength\":0.22,\"travel\":0.17,\"spring\":48000,\"damper\":4000},\"tyres\":{\"grip\":1.22,\"corneringStiffness\":4100,\"rollingResistance\":0.014},\"steering\":{\"maxAngle\":0.48,\"rate\":2.1,\"speedReduction\":0.032},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,180],[2200,300],[4200,370],[5800,340],[6800,240]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":3.8,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"all\",\"drag\":0.32}",
+      "support": {
+        "acceptedTicks": 120,
+        "state": {
+          "solverSubsteps": 480,
+          "position": [
+            0,
+            0.5056218749999999,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            7.39866721680358e-16,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06437812500000006,
+            0.06437812500000006,
+            0.06437812500000006,
+            0.06437812500000006
+          ],
+          "loadsN": [
+            3090.1500000000005,
+            3090.1500000000005,
+            3090.1500000000005,
+            3090.1500000000005
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "totalLoadN": 12360.600000000002,
+        "weightN": 12360.6
+      },
+      "acceleration": {
+        "completed": true,
+        "acceptedTicks": 286,
+        "crossing": {
+          "previousSpeedMps": 27.757843702926948,
+          "nextSpeedMps": 27.839570350778672,
+          "fraction": 0.24391156831731028,
+          "elapsedSeconds": 4.754065192805288
+        },
+        "shifts": [
+          {
+            "acceptedTick": 179,
+            "from": 1,
+            "to": 2,
+            "speedMps": 19.275952758363065,
+            "rpm": 6145.179976674136,
+            "shiftRemaining": 0.1758333333333333
+          }
+        ],
+        "start": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5056218749999999,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 0,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1144,
+          "position": [
+            0,
+            0.5056218749999999,
+            -66.45151506597246
+          ],
+          "orientation": [
+            0.005377302014103771,
+            0,
+            0,
+            0.9999855422070109
+          ],
+          "velocity": [
+            0,
+            7.514723603109479e-16,
+            -27.839570350778672
+          ],
+          "angularVelocity": [
+            -0.0021053464565890054,
+            0,
+            0
+          ],
+          "speedMps": 27.839570350778672,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5912.348421938401,
+          "shiftRemaining": 0,
+          "compression": [
+            0.05071782446402362,
+            0.05071782446402362,
+            0.07803842553597656,
+            0.07803842553597656
+          ],
+          "loadsN": [
+            2444.231154112454,
+            2444.231154112454,
+            3736.068845887543,
+            3736.068845887543
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "braking": {
+        "completed": true,
+        "acceptedTicks": 139,
+        "elapsedSeconds": 2.3166666666666664,
+        "distanceM": 32.05724039782109,
+        "start": {
+          "solverSubsteps": 1144,
+          "position": [
+            0,
+            0.5056218749999999,
+            -66.45151506597246
+          ],
+          "orientation": [
+            0.005377302014103771,
+            0,
+            0,
+            0.9999855422070109
+          ],
+          "velocity": [
+            0,
+            7.514723603109479e-16,
+            -27.839570350778672
+          ],
+          "angularVelocity": [
+            -0.0021053464565890054,
+            0,
+            0
+          ],
+          "speedMps": 27.839570350778672,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 2,
+          "rpm": 5912.348421938401,
+          "shiftRemaining": 0,
+          "compression": [
+            0.05071782446402362,
+            0.05071782446402362,
+            0.07803842553597656,
+            0.07803842553597656
+          ],
+          "loadsN": [
+            2444.231154112454,
+            2444.231154112454,
+            3736.068845887543,
+            3736.068845887543
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 1700,
+          "position": [
+            0,
+            0.5056218749999999,
+            -98.50875546379355
+          ],
+          "orientation": [
+            -0.012284534344827356,
+            0,
+            0,
+            0.9999245422610303
+          ],
+          "velocity": [
+            0,
+            8.213737646062603e-16,
+            0.0009594100644574229
+          ],
+          "angularVelocity": [
+            0.011092978113184365,
+            0,
+            0
+          ],
+          "speedMps": 0.0009594100644574229,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0.09558340119232189,
+            0.09558340119232189,
+            0.033172848807678235,
+            0.033172848807678235
+          ],
+          "loadsN": [
+            4581.18264616709,
+            4581.18264616709,
+            1599.1173538329103,
+            1599.1173538329103
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      "steering": {
+        "acceptedTicks": 240,
+        "spawn": {
+          "solverSubsteps": 0,
+          "position": [
+            0,
+            0.5056218749999999,
+            0
+          ],
+          "orientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "velocity": [
+            0,
+            0,
+            -10
+          ],
+          "angularVelocity": [
+            0,
+            0,
+            0
+          ],
+          "speedMps": 10,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 850,
+          "shiftRemaining": 0,
+          "compression": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "loadsN": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            false,
+            false,
+            false,
+            false
+          ]
+        },
+        "start": {
+          "solverSubsteps": 240,
+          "position": [
+            0,
+            0.5056218749999999,
+            -9.382835203715644
+          ],
+          "orientation": [
+            -0.0012422033313752078,
+            0,
+            0,
+            0.9999992284651443
+          ],
+          "velocity": [
+            0,
+            7.202051870738984e-16,
+            -8.771764196275884
+          ],
+          "angularVelocity": [
+            0.00005705049573436136,
+            0,
+            0
+          ],
+          "speedMps": 8.771764196275884,
+          "steering": 0,
+          "headingRadians": 0,
+          "gear": 1,
+          "rpm": 2820.895198994278,
+          "shiftRemaining": 0,
+          "compression": [
+            0.06753381590829821,
+            0.06753381590829821,
+            0.061222434091701916,
+            0.061222434091701916
+          ],
+          "loadsN": [
+            3241.347588356754,
+            3241.347588356754,
+            2938.9524116432467,
+            2938.9524116432467
+          ],
+          "lateralSpeedsMps": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "terminal": {
+          "solverSubsteps": 960,
+          "position": [
+            9.61667494518283,
+            0.5056218749999999,
+            -26.114495640701506
+          ],
+          "orientation": [
+            -0.0023187676418920844,
+            -0.49213095895794334,
+            0.0013645945298584642,
+            0.8705170190372657
+          ],
+          "velocity": [
+            4.279287693529969,
+            7.434239777674295e-16,
+            -2.284905065146535
+          ],
+          "angularVelocity": [
+            0.0019982870415225264,
+            -0.27346733533196177,
+            -0.001094202014435049
+          ],
+          "speedMps": 4.851092075062,
+          "steering": 0.14542984332416192,
+          "headingRadians": 1.0290823178612793,
+          "gear": 1,
+          "rpm": 1558.7615604210353,
+          "shiftRemaining": 0,
+          "compression": [
+            0.0723648797953006,
+            0.06323504258161539,
+            0.06552120741838474,
+            0.05639137020469953
+          ],
+          "loadsN": [
+            3464.5813580465333,
+            3043.319284641454,
+            3136.980715358546,
+            2715.7186419534637
+          ],
+          "lateralSpeedsMps": [
+            -0.15269463449454124,
+            -0.07494274001635981,
+            -0.10005383853885785,
+            -0.10004709165961234
+          ],
+          "grounded": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "headingChangeRadians": 1.0290823178612793,
+        "lateralDisplacementM": 9.61667494518283
+      },
+      "diagnostics": {
+        "acceptedTicks": 785,
+        "minimumUpY": 0.9995502692603636,
+        "maxAngularSpeed": 0.41559386499769324,
+        "maxSpeedMps": 27.839570350778672,
+        "minimumGrounded": 4
+      },
+      "sourceRevision": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+      "buildDigest": "3d4727ce2403570ecbdfec66b965af282b565b910e80d7609228e8c956c0ce0f",
+      "recipeDigest": "0ac0566ca04d34bbe60c81b3eb5d0b705f3bcfccde7439fec505279a19831b02",
+      "recipeSha256": "b450c78fe11977f0b7699600d2763d46a79e458de2c1c84a44e6fd39f9c08ba0",
+      "receiptSha256": "ca06c4d1c0d687cb85168e152b7a80c4ab52e9d8e07dab2344f30a3d81d82fab"
+    }
+  ]
+}

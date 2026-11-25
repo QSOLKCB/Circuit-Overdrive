@@ -1,0 +1,341 @@
+{
+  "version": 1,
+  "source": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+  "browser": "158.0.8127.36",
+  "runtime": {
+    "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "webLocks": true,
+    "secureContext": true,
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "url": "http://127.0.0.1:8765/Circuit-Overdrive/",
+  "scenarios": [
+    "first visit, cancelled creation, saved setup with focus on enabled Buy, first Cinder Two purchase and reload",
+    "actual catalogue, confirmed purchases, four bays, selection, sale, reload, export, backup, valid import and rejected files",
+    "delayed native File.text cannot revive an import after explicit cancellation or leaving the garage",
+    "eight full catalogue cycles, four cameras, no idle uploads/draws, WebGL loss/restoration and repeated resource disposal",
+    "simultaneous pages reject stale purchase, reconcile explicitly and observe a real sale",
+    "fresh-key confirmation, held Enter suppression, Space release after blur and safe focus/cancel",
+    "failed quota write preserves inventory and explicit reload recovers",
+    "whole-save replacement with a reused serial reconciles displayed model and valuation from accepted ownership",
+    "premium and mixed-model purchases, inactive and last-car sales, duplicate confirmation and monotonic identities",
+    "stale whole-state imports and identical-data replacements invalidate old confirmations",
+    "actual exclusive Web Lock contention fails closed without deferred or duplicate purchases",
+    "busy first creation disables both creation actions and duplicate confirmation until verified commitment",
+    "initial quota, denied write and failed save verification never enable purchases from an unconfirmed setup",
+    "SecurityError reads/writes and uncertain readback preserve displayed state and require explicit reconciliation",
+    "corrupt and unsupported stored saves recover through confirmed actual exported backup without free cash",
+    "real previously created championship save remains unchanged and resumable after garage transactions",
+    "synthetic standard gamepad with real menu polling: held confirmation, neutral rearming and disconnect protection",
+    "1920x1080, 1440x900, 720px and mobile first-run visibility, stale scroll, keyboard cancellation/setup/purchase and stable reopen focus",
+    "responsive touch purchase and reduced-motion camera controls",
+    "missing Web Locks fails closed with explicit storage status",
+    "showroom WebGL unavailability leaves explicit, working ownership controls",
+    "global WebGL failure still offers a reachable HTML garage with real persisted purchases"
+  ],
+  "resources": {
+    "catalogueCycles": 8,
+    "afterSwitch": {
+      "created": 84,
+      "deleted": 42,
+      "invalidated": 0,
+      "live": 42,
+      "uploads": 84,
+      "uploadBytes": 1577184,
+      "draws": 8451
+    },
+    "idle": {
+      "created": 84,
+      "deleted": 42,
+      "invalidated": 0,
+      "live": 42,
+      "uploads": 84,
+      "uploadBytes": 1577184,
+      "draws": 8451
+    },
+    "afterLifecycle": {
+      "created": 252,
+      "deleted": 210,
+      "invalidated": 42,
+      "live": 0,
+      "uploads": 252,
+      "uploadBytes": 4731552,
+      "draws": 8715
+    }
+  },
+  "captures": [
+    {
+      "file": "first-visit-cta.png",
+      "sha256": "a2e439e03d976b62faf8a0221543c6c6ccba8fac90afbba30be3ed2122370bb6"
+    },
+    {
+      "file": "create-confirmation.png",
+      "sha256": "a430df6d87c55abd904226aee09caeeabc7d0f907b7cf3336586c1fd5b0b97cf"
+    },
+    {
+      "file": "created-buy-enabled.png",
+      "sha256": "10ae6157202adc6909c94e122af295a019af61811d3cdb97c3cb028cca705944"
+    },
+    {
+      "file": "empty-garage.png",
+      "sha256": "10ae6157202adc6909c94e122af295a019af61811d3cdb97c3cb028cca705944"
+    },
+    {
+      "file": "catalogue-starter.png",
+      "sha256": "2b9f013dbfb1b6a41818333084b44ac18ef0a77b8e3ce94a0a3dac97cc400565"
+    },
+    {
+      "file": "purchase-confirmation.png",
+      "sha256": "dd339d9db1baee21d7ea70a8976bc4fd22f6a499450bd6df22d9a2f2b88c31f0"
+    },
+    {
+      "file": "first-owned-bay.png",
+      "sha256": "7e74aa4f510c848102a8267d1c31c1f7fdcf797be82d12195b488bf15d87461b"
+    },
+    {
+      "file": "reloaded-first-car.png",
+      "sha256": "766e3bc26c86c0a9da49ef8cbade367643f24ff75494e45577aac600165faa99"
+    },
+    {
+      "file": "insufficient-credits.png",
+      "sha256": "db6d81dd448fb9d613b4718b87d58fc2e20f701a0549762a61aca6658e8c61c8"
+    },
+    {
+      "file": "four-bays-front.png",
+      "sha256": "10e7a550df76fc09895da4d1bf2de5197f2c54de30f1121f514828034da78928"
+    },
+    {
+      "file": "four-bays-full.png",
+      "sha256": "ef1f0657ef0e4cac372388ffc392701048da60d877afa58667f6599b289f8f14"
+    },
+    {
+      "file": "successful-sale.png",
+      "sha256": "f1585b60591a8908e3d092a9a44d86d0c184a94920b48fdfa5ca6d82311a3237"
+    },
+    {
+      "file": "save-export.png",
+      "sha256": "1f8d5f72ccd96f26b4cdf13afd657e06af8f33c036babc2c3e678e38b72f942b"
+    },
+    {
+      "file": "recovered-save.png",
+      "sha256": "b5d0765839e77ad1b17365fe83a306570425b060fd5d0efeb163fe6fde16e790"
+    },
+    {
+      "file": "invalid-import.png",
+      "sha256": "c3c11cb8e216823f68b648462d87a84e3da6aa05ed32ff069e47efdb058b343f"
+    },
+    {
+      "file": "showroom-cinder-two.png",
+      "sha256": "f819e8f7bc27a08e3bbacbe3a6f3aa15c32039c91c68e125640485cb08b25f52"
+    },
+    {
+      "file": "showroom-lilt.png",
+      "sha256": "154defc8aa12252b903405a04dfbaaae0f8cd5848fa89df94982eb65a89351bd"
+    },
+    {
+      "file": "showroom-evening-line.png",
+      "sha256": "3ead16ff78204f7bb5df02454218b40b79c744b92f36839c1386eefd5973cc3d"
+    },
+    {
+      "file": "showroom-rivet-eight.png",
+      "sha256": "2ceca20513cb4b1ebd5b7d7a1653084c9e9b35c28048f6485dcce0c808026387"
+    },
+    {
+      "file": "showroom-yardhand.png",
+      "sha256": "7c4f61e418f0bab40544798c56d0b5f3c4ce85f9d963fc582017703b231f71df"
+    },
+    {
+      "file": "showroom-glass-comet.png",
+      "sha256": "df4cc103af8a058f7f1c6db9882082e8fb8cfd94522d323dc2b9bb291992e749"
+    },
+    {
+      "file": "stale-tab-conflict.png",
+      "sha256": "8d3ba422eca93a126e78b12fc673413c8418626825baffb736eec026829b93f7"
+    },
+    {
+      "file": "premium-owned-car.png",
+      "sha256": "d5efce14ddac8f33635b14c23ed146c8d5623d76384ecb0dce1772b628b02143"
+    },
+    {
+      "file": "multiple-owned-models.png",
+      "sha256": "7ab12f17ffaa24701040dc813a96bae86742a2f7eb430d6f856821cb7e89c027"
+    },
+    {
+      "file": "last-car-sold.png",
+      "sha256": "004cad48519c1318ef709c2b4bd62d55d59c67673e42e42c9487fa96920dfd9a"
+    },
+    {
+      "file": "corrupt-save-recovery.png",
+      "sha256": "8eba62fc651576475ff19b1bf8da8d46d6b6f37f9c393d27fa96416621b88f60"
+    },
+    {
+      "file": "corrupt-save-recovery.png",
+      "sha256": "8eba62fc651576475ff19b1bf8da8d46d6b6f37f9c393d27fa96416621b88f60"
+    },
+    {
+      "file": "corrupt-save-recovered.png",
+      "sha256": "bc51664fbae3d640a0a80b641c0048194809dec8a6fde9da9f6c9c784d8fd175"
+    },
+    {
+      "file": "onboarding-1920.png",
+      "sha256": "9f149f7ee03e866b09578b4b605fb99dee80f6d511e03fd5ab7e931c00859ec8"
+    },
+    {
+      "file": "onboarding-1440.png",
+      "sha256": "9ac4c0e9f15858a1e313b714a65f83b15e06a72dd60ca2398f10056567f89fe5"
+    },
+    {
+      "file": "onboarding-720.png",
+      "sha256": "b6be98967433667eaa68aec59f37926cf0ca7062fe3c711a583230cd57f40b85"
+    },
+    {
+      "file": "onboarding-390.png",
+      "sha256": "958581acc4817c73fa14b60a6805b8f689e582747f0f29924aaaded5e17655d1"
+    },
+    {
+      "file": "mobile-purchase-controls.png",
+      "sha256": "c0fc754937d6457e8d9f2a2a137e326f8c7570956c0334a99d10635a3945b226"
+    },
+    {
+      "file": "mobile-owned-garage.png",
+      "sha256": "606daeaf422f83da91f2157a7209517e99eaac8ccb27acdc4e1449f680bbb720"
+    }
+  ],
+  "requests": 1701,
+  "externalRequests": [],
+  "errors": [],
+  "exports": [
+    {
+      "file": "download-01.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 315,
+      "sha256": "b6d9871f46f69fe1d07789a0e29115e70c9edbce566033d00c7dc5657689b6cd"
+    },
+    {
+      "file": "download-02.json",
+      "suggestedName": "circuit-overdrive-garage-before-replacement.json",
+      "bytes": 315,
+      "sha256": "b6d9871f46f69fe1d07789a0e29115e70c9edbce566033d00c7dc5657689b6cd"
+    },
+    {
+      "file": "download-03.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 315,
+      "sha256": "b6d9871f46f69fe1d07789a0e29115e70c9edbce566033d00c7dc5657689b6cd"
+    },
+    {
+      "file": "download-04.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 214,
+      "sha256": "3078fa3d5aa7f38355148b4f05196ca247fdb45c9edfcfeb61834fb49d295b3b"
+    },
+    {
+      "file": "download-05.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 263,
+      "sha256": "1d118e837a6f39e46e30dec4c4fe451e3f5d160dbaa433b7b0027ed07ee74366"
+    },
+    {
+      "file": "download-06.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 216,
+      "sha256": "31522821f2845e8588c2aac9f4713050da18e2d262236521521da9b47aeb43ad"
+    },
+    {
+      "file": "download-07.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 216,
+      "sha256": "31522821f2845e8588c2aac9f4713050da18e2d262236521521da9b47aeb43ad"
+    },
+    {
+      "file": "download-08.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 216,
+      "sha256": "31522821f2845e8588c2aac9f4713050da18e2d262236521521da9b47aeb43ad"
+    },
+    {
+      "file": "download-09.json",
+      "suggestedName": "circuit-overdrive-garage.json",
+      "bytes": 216,
+      "sha256": "31522821f2845e8588c2aac9f4713050da18e2d262236521521da9b47aeb43ad"
+    }
+  ],
+  "onboardingLayouts": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "firstActionVisible": true,
+      "cancellation": true,
+      "keyboardPurchase": true,
+      "savedBalance": 1800
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "firstActionVisible": true,
+      "cancellation": true,
+      "keyboardPurchase": true,
+      "savedBalance": 1800
+    },
+    {
+      "width": 720,
+      "height": 900,
+      "firstActionVisible": true,
+      "cancellation": true,
+      "keyboardPurchase": true,
+      "savedBalance": 1800
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "firstActionVisible": true,
+      "cancellation": true,
+      "keyboardPurchase": true,
+      "savedBalance": 1800
+    }
+  ],
+  "invalidImportCases": [
+    "malformed",
+    "oversized",
+    "schema",
+    "catalogue",
+    "edition",
+    "extra-field",
+    "missing-field",
+    "negative-credit",
+    "fractional-credit",
+    "unsafe-credit",
+    "unsafe-allocator",
+    "active-ID",
+    "duplicate-ID",
+    "extra-bay",
+    "unknown-model",
+    "nested-field",
+    "prototype-key"
+  ],
+  "finalGarage": {
+    "version": 1,
+    "edition": "after-hours-v1",
+    "catalogRevision": 1,
+    "credits": 600,
+    "nextVehicleId": 3,
+    "activeVehicleId": "car-000001",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000001",
+        "modelId": "yardhand"
+      },
+      {
+        "ownedVehicleId": "car-000002",
+        "modelId": "cinder-two"
+      },
+      null,
+      null
+    ],
+    "revision": 2
+  },
+  "limitations": [
+    "Synthetic standard gamepad reports and storage service faults are explicitly identified.",
+    "Software WebGL unless GARAGE_NATIVE=1; this smoke is not a native 60 FPS certification."
+  ]
+}

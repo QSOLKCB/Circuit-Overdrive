@@ -1,12 +1,12 @@
 # Circuit Overdrive — Roadmap
 
 **Owner:** QSOL-IMC · **Project:** [Circuit Overdrive](https://github.com/QSOLKCB/Circuit-Overdrive) · **Engine:** [VANILLAJS](https://github.com/QSOLKCB/VANILLAJS)  
-**Updated:** 2026-11-25 · **Licence:** Apache-2.0
+**Updated:** 2026-11-26 · **Licence:** Apache-2.0
 
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-The release table records the published game through v1.2.0. Street Rod: The Garage targets v1.3.0 through five owner review gates. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
+The release table records the published game through v1.3.0. Built Not Bought targets v1.4.0 through six owner review gates; its later features are not yet implemented. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
 
 ## 1. Non-negotiable project contracts
 
@@ -36,10 +36,13 @@ The release table records the published game through v1.2.0. Street Rod: The Gar
 | **v1.1.0** | CO-011 — Crash Lab: The Impact Experiment | Three instrumented impact trials, physical contact receipts, component impairment and source-bound v5 replay |
 | **v1.1.1** | CO-CRACK-001 — Computational Impact Panels | Deterministic per-car dents and exposed steel, exact reset, replay reconstruction and bounded WebGL updates |
 | **v1.2.0** | CO-012 — Total Destruction: Last Car Standing! | Two enclosed arenas, six physical competitors, damage-aware rivals, legitimate knockouts, spectator continuation and source-bound v6 replay |
+| **v1.3.0** | CO-013 — Street Rod: The Garage | Six original cosmetic vehicles, four owned bays, integer-credit transactions, verified local saves and After Hours Motor Works |
 
-**Published Total Destruction baseline.** v1.1.1 is at `541ba6ca27dabe644ab23fe9a061c91dda8794a6`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Crash Lab driving guide](docs/crash-lab.md) · [Computational panel evidence](docs/evidence/co-crack-001/README.md)
+**Published impact-panel baseline.** v1.1.1 is at `541ba6ca27dabe644ab23fe9a061c91dda8794a6`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Crash Lab driving guide](docs/crash-lab.md) · [Computational panel evidence](docs/evidence/co-crack-001/README.md)
 
-**Published Garage baseline.** v1.2.0 is at `e12665b04609f40d452084a37264756a23d730da`, published by the owner on 2026-11-25. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.2.0) · [Total Destruction guide](docs/total-destruction.md)
+**Published Total Destruction baseline.** v1.2.0 is at `e12665b04609f40d452084a37264756a23d730da`, published by the owner on 2026-11-25. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.2.0) · [Total Destruction guide](docs/total-destruction.md)
+
+**Published Machine Shop baseline.** v1.3.0 is at `1c745a90258d0f6cb968935f773354cff702b276`, published by the owner on 2026-11-25. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.3.0) · [Garage guide](docs/garage-player-guide.md)
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -116,13 +119,15 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |
 | **v1.2.0 published** | **CO-012 — TOTAL DESTRUCTION** | Two original demolition arenas, six physical competitors, damage-aware AI, legitimate knockouts and complete source-bound replays | Real browser matches on both arenas, deterministic settlements and measured six-car rendering |
-| **v1.3.0 candidate development** | **CO-013 — STREET ROD: THE GARAGE** | Original buy/sell catalogue, four owned-vehicle bays, local integer credits and inventory UI | Explicit validated transactions, unique car identities, bounded save/import/export, no negative funds or unintended duplication |
+| **v1.3.0 published** | **CO-013 — STREET ROD: THE GARAGE** | Original buy/sell catalogue, four owned-vehicle bays, local integer credits and inventory UI | Explicit validated transactions, unique car identities, bounded save/import/export, no negative funds or unintended duplication |
 | **v1.4.0** | **CO-014 — BUILT NOT BOUGHT** | Real vehicle-build variations: engine, intake, exhaust, gearing, tyres, suspension, paint, repairs, tuning and benchmark comparisons | Every fitted upgrade has a documented physical effect; no visual-only stats marketed as physical; race/replay revision tracks vehicle build |
 | **v1.5.0** | **CO-015 — STREET ROD: THE UNDERGROUND** | Earnable cash/reputation, rival challenges, garages and upgrades connected to championship, racing and derby modes | Results settle once against originating career revision; abandoned practice is non-paying; no real-money economy, microtransactions or monetization |
 
 CO-012A–F are integrated into published v1.2.0. [Six-car impact contract](docs/derby-impact.md) · [Arena contract and preview](docs/derby-arenas.md) · [Match rules](docs/derby-rules.md) · [Reusable panels](docs/computational-impact-panels.md) · [Source-bound acceptance](docs/co-012-acceptance.md)
 
-CO-013 uses five focused owner-reviewed PRs. **A — Vehicle Registry** establishes six original cosmetic models, four explicit bays, stable owned identities and strict canonical schema admission. **B — Transaction Engine** adds validated purchases, sales, selection and retry/revision rules. **C — Save Vault** adds a separate storage slot, exclusive coordination, stale-tab detection and confirmed whole-state import. **D — After Hours Motor Works** adds the original workshop, vehicle previews and confirmed interactive transactions. **E — Garage Certification** provides browser, concurrency, native resource, legacy and offline evidence. A merged as PR #55 at `0554ec0e8bf6d7b508dfd818d35fd8b2f59a6baf`; B merged as PR #56 at `fe8f439c42f0430469510855d400dba4e6b013fa`. C merged as PR #57 at `fff96e99f1021e3147d80d726407ed75c605fa0d`. D merged as PR #58 at `d65525f11a1353f09ac859af9a09c0605888e197`. E adds final adversarial, browser, native performance, legacy and offline certification on this candidate branch. Its owner review, final main verification and release sign-off remain outstanding. [Registry contract](docs/garage-registry.md) · [Transaction contract](docs/garage-transactions.md) · [Save Vault](docs/garage-save-vault.md)
+CO-013 uses five focused owner-reviewed PRs. **A — Vehicle Registry** establishes six original cosmetic models, four explicit bays, stable owned identities and strict canonical schema admission. **B — Transaction Engine** adds validated purchases, sales, selection and retry/revision rules. **C — Save Vault** adds a separate storage slot, exclusive coordination, stale-tab detection and confirmed whole-state import. **D — After Hours Motor Works** adds the original workshop, vehicle previews and confirmed interactive transactions. **E — Garage Certification** provides browser, concurrency, native resource, legacy and offline evidence. A merged as PR #55 at `0554ec0e8bf6d7b508dfd818d35fd8b2f59a6baf`; B merged as PR #56 at `fe8f439c42f0430469510855d400dba4e6b013fa`. C merged as PR #57 at `fff96e99f1021e3147d80d726407ed75c605fa0d`. D merged as PR #58 at `d65525f11a1353f09ac859af9a09c0605888e197`. E merged as PR #59 and supplied adversarial, browser, native performance, legacy and offline certification. The first-purchase onboarding correction merged as PR #60; the owner published v1.3.0 at the exact baseline above. [Registry contract](docs/garage-registry.md) · [Transaction contract](docs/garage-transactions.md) · [Save Vault](docs/garage-save-vault.md)
+
+CO-014 requires six focused owner-reviewed PRs: **A — Build Forge** (six stock recipes, strict compiler and physical receipts); **B — Build Registry** (independent owned builds and deliberate v1.3.0 migration); **C — Parts Counter** (mechanical parts and verified integer-credit installation); **D — Proving Grounds** (playable owned-car physics and four reproducible benchmarks); **E — Machine Shop** (workshop controls, visuals and build-bound replay); **F — Certification** (independent physical, migration, economy, browser, native GPU, legacy and offline evidence). A is proposed for owner review; B–F remain future work. Stop at each owner-review gate, then retarget dependent branches after approved merges. [Build Forge contract](docs/vehicle-builds.md)
 
 Ownership is separate from physical vehicle recipes. CO-013 does not advertise performance improvements, persist race damage, award race currency or implement repairs. CO-014 and CO-015 retain those separately validated responsibilities. The future Foundries remain research, with inert versioned definitions and explicit simulation authority boundaries.
 

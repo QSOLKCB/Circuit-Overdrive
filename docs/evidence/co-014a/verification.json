@@ -1,0 +1,111 @@
+{
+  "base": "1c745a90258d0f6cb968935f773354cff702b276",
+  "implementation": "f625eaf7aa6e420b5aa30216d587484f677ebe36",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtime": {
+    "node": {
+      "node": "v22.18.0",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    "chrome": "158.0.8127.36",
+    "browserGraphics": "SwiftShader",
+    "gpuDiscoveryOnly": "RTX 5060 Ti / 595.99.02; Ryzen 9 5950X"
+  },
+  "executed": [
+    {
+      "command": "node --test tests/*.test.mjs",
+      "exit": 0,
+      "tests": 384,
+      "pass": 384,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 277755.546602,
+      "historicalV100MatchingTicks": 45225
+    },
+    {
+      "command": "node --experimental-test-isolation=none --test tests/vehicle-build*.test.mjs",
+      "exit": 0,
+      "tests": 24,
+      "pass": 24,
+      "fail": 0
+    },
+    {
+      "command": "node tests/compare-v100.mjs /tmp/co014a-published-v130",
+      "exit": 0,
+      "matchingTicks": 45225,
+      "baseline": "1c745a90258d0f6cb968935f773354cff702b276",
+      "candidate": "f625eaf7aa6e420b5aa30216d587484f677ebe36"
+    },
+    {
+      "command": "node scripts/measure-vehicle-builds.mjs",
+      "exit": 0,
+      "models": 6,
+      "workingTreeMatchesHead": true
+    },
+    {
+      "command": "PLAYWRIGHT_MODULE=/tmp/co-012-browser-tools/node_modules/playwright/index.mjs CHROME_BIN=/usr/bin/google-chrome RECEIPT=/tmp/co014a-verification/stock-browser.json node tests/browser-vehicle-builds.mjs http://127.0.0.1:8764/",
+      "exit": 0,
+      "models": 6,
+      "sameRuntimeRepeats": "exact receipts",
+      "nodeBrowserMetricTolerance": 1e-06
+    },
+    {
+      "command": "node --experimental-vm-modules scripts/package-site.mjs /tmp/co014a-verification/site",
+      "exit": 0,
+      "runtimeFiles": 103
+    },
+    {
+      "command": "python3 scripts/offline-release.py build /tmp/co014a-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 scripts/offline-release.py verify /tmp/co014a-verification/offline",
+      "exit": 0
+    },
+    {
+      "command": "python3 tests/test_offline_release.py",
+      "exit": 0,
+      "tests": 1
+    },
+    {
+      "command": "bash tests/browser-pages-shards.sh",
+      "exit": 0,
+      "scope": "seven-worker inventory, orchestration and failure propagation; not full browser matrix"
+    },
+    {
+      "command": "PLAYWRIGHT_MODULE=/tmp/co-012-browser-tools/node_modules/playwright/index.mjs CHROME_BIN=/usr/bin/google-chrome EVIDENCE_DIR=/tmp/co014a-verification/smoke node tests/browser-smoke.mjs http://127.0.0.1:8765/Circuit-Overdrive/",
+      "exit": 0
+    },
+    {
+      "command": "PLAYWRIGHT_MODULE=/tmp/co-012-browser-tools/node_modules/playwright/index.mjs CHROME_BIN=/usr/bin/google-chrome EVIDENCE_DIR=/tmp/co014a-verification/garage node tests/browser-garage.mjs http://127.0.0.1:8765/Circuit-Overdrive/",
+      "exit": 0,
+      "scenarios": 22,
+      "invalidImports": 17
+    }
+  ],
+  "artifact": {
+    "name": "Circuit-Overdrive-f625eaf7aa6e420b5aa30216d587484f677ebe36.zip",
+    "sha256": "da20aa4f9950e7ba0f6b76081a1d2849f92ae4ff98e0032002d8414457059d6f",
+    "runtimeFiles": 103,
+    "independentlyRebuilt": true,
+    "localDirectory": "/tmp/co014a-verification/offline"
+  },
+  "notExecuted": [
+    "Full seven-lane browser matrix (F)",
+    "Native GPU/frame/resource profiling of a physical facility (D/F)",
+    "B-F functionality and certification",
+    "Owner play-through/approval",
+    "Post-merge CI/Pages"
+  ],
+  "exploratoryFailure": "Earlier dirty-source full run had 370 passes and one clean-tree parity rejection. No production failure or weakened guard; committed final rerun passed all 384 tests including newly completed geometry tests.",
+  "sha256": {
+    "garage-browser.json": "52115e762e5a13a2770bffce4ba494f556a19e8b919df471ba18bc09d31da0f1",
+    "node-tests.log": "ba4e7c6e1a0a8e5b1507b5b8b40d566a0a5988e0e3ab5e9927bac2323f1f8b0e",
+    "packaged-smoke.log": "1a2bb397bbedf1daf3fc0ff828ced4a59e72cc7b842cf5d0d69d081dc424be64",
+    "shards.log": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed",
+    "stock-browser.json": "76a7fa46f1b973f668cd3a19d99a7640822129d6ea8bedb69e60370caaa30bfe",
+    "stock-physical.json": "289b8242aa6b41626835fd5a30ac160f4edd89d3fda9ebfdd3915c9587c573eb",
+    "v130-parity.json": "3a28d2049494120923f6b80e98b2a5c0dde3662318ca293a61943188b98b4fbd"
+  }
+}
