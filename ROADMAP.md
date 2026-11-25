@@ -6,7 +6,7 @@
 > **Six cars. Several disciplines. One authoritative racing engine.**  
 > Modern convenience, minimal dependencies, old-school correctness. **Correctness outranks speed.**
 
-The release table records the published game through v1.1.1. Total Destruction targets v1.2.0 through six owner review gates. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
+The release table records the published game through v1.2.0. Street Rod: The Garage targets v1.3.0 through five owner review gates. [Engineering policy](AGENTS.md) · [Implemented gameplay](README.md) · [Source-bound packaging](docs/offline-release.md)
 
 ## 1. Non-negotiable project contracts
 
@@ -35,8 +35,11 @@ The release table records the published game through v1.1.1. Total Destruction t
 | **v1.0.0** | CO-010 — Rocket Overdrive | Orbital Spine, automatic surface grip, six physical rocket cars and v4 replay |
 | **v1.1.0** | CO-011 — Crash Lab: The Impact Experiment | Three instrumented impact trials, physical contact receipts, component impairment and source-bound v5 replay |
 | **v1.1.1** | CO-CRACK-001 — Computational Impact Panels | Deterministic per-car dents and exposed steel, exact reset, replay reconstruction and bounded WebGL updates |
+| **v1.2.0** | CO-012 — Total Destruction: Last Car Standing! | Two enclosed arenas, six physical competitors, damage-aware rivals, legitimate knockouts, spectator continuation and source-bound v6 replay |
 
 **Published Total Destruction baseline.** v1.1.1 is at `541ba6ca27dabe644ab23fe9a061c91dda8794a6`. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.1.1) · [Crash Lab driving guide](docs/crash-lab.md) · [Computational panel evidence](docs/evidence/co-crack-001/README.md)
+
+**Published Garage baseline.** v1.2.0 is at `e12665b04609f40d452084a37264756a23d730da`, published by the owner on 2026-11-25. [Published release](https://github.com/QSOLKCB/Circuit-Overdrive/releases/tag/v1.2.0) · [Total Destruction guide](docs/total-destruction.md)
 
 ## 3. Completed soundtrack milestone — v0.6.1
 
@@ -57,7 +60,7 @@ The release table records the published game through v1.1.1. Total Destruction t
 | **RASTER VELOCITY** | Tracker/demoscene chiptune · 180 BPM | Rocket Overdrive · Orbital Spine review candidate |
 | **MIDNIGHT PROTOCOL** | Cyberpunk/dark chiptune · 144 BPM | After Dark (CO-008) — standalone Nightshift events in v0.8.0 |
 | **DIGITAL DOMINION** | Arcade championship anthem · 120 BPM | W.O.C. (CO-007) — active since v0.7.0 |
-| **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — v1.2.0 candidate |
+| **STEEL RIOT** | Industrial/demolition chiptune · 150 BPM | Total Destruction (CO-012) — published in v1.2.0 |
 
 Create distinct original melodies, bass figures, drums, harmonies and timbres. Industrial guitar-like tones may use bounded Karplus–Strong pluck, distortion and filtered power-chord synthesis. No sampled commercial recordings, existing copyrighted songs, music-generation service or runtime downloads.
 
@@ -112,12 +115,16 @@ Create distinct original melodies, bass figures, drums, harmonies and timbres. I
 
 | Version | Milestone | Minimum product | Acceptance boundary |
 | --- | --- | --- | --- |
-| **v1.2.0 candidate development** | **CO-012 — TOTAL DESTRUCTION** | Two original demolition arenas, six physical competitors, damage-aware AI, legitimate knockouts and complete source-bound replays | Real browser matches on both arenas, deterministic settlements and measured six-car rendering |
-| **v1.3.0** | **CO-013 — STREET ROD: THE GARAGE** | Original buy/sell catalogue, multiple owned vehicles, garage bays, local integer credits, cash and inventory UI | Explicit validated transactions, unique car identities, bounded save/import/export, no negative funds or unintended duplication |
+| **v1.2.0 published** | **CO-012 — TOTAL DESTRUCTION** | Two original demolition arenas, six physical competitors, damage-aware AI, legitimate knockouts and complete source-bound replays | Real browser matches on both arenas, deterministic settlements and measured six-car rendering |
+| **v1.3.0 candidate development** | **CO-013 — STREET ROD: THE GARAGE** | Original buy/sell catalogue, four owned-vehicle bays, local integer credits and inventory UI | Explicit validated transactions, unique car identities, bounded save/import/export, no negative funds or unintended duplication |
 | **v1.4.0** | **CO-014 — BUILT NOT BOUGHT** | Real vehicle-build variations: engine, intake, exhaust, gearing, tyres, suspension, paint, repairs, tuning and benchmark comparisons | Every fitted upgrade has a documented physical effect; no visual-only stats marketed as physical; race/replay revision tracks vehicle build |
 | **v1.5.0** | **CO-015 — STREET ROD: THE UNDERGROUND** | Earnable cash/reputation, rival challenges, garages and upgrades connected to championship, racing and derby modes | Results settle once against originating career revision; abandoned practice is non-paying; no real-money economy, microtransactions or monetization |
 
-CO-012A and B merged the six-car authority and both arenas. The candidate stack adds the match rules and rival drivers (C), the playable mode (D), source-bound v6 replay (E), and browser, native and offline acceptance evidence (F). v1.2.0 awaits owner review and the final main integration checks. [Six-car impact contract](docs/derby-impact.md) · [Arena contract and preview](docs/derby-arenas.md) · [Match rules](docs/derby-rules.md) · [Reusable panels](docs/computational-impact-panels.md) · [Candidate acceptance](docs/co-012-acceptance.md)
+CO-012A–F are integrated into published v1.2.0. [Six-car impact contract](docs/derby-impact.md) · [Arena contract and preview](docs/derby-arenas.md) · [Match rules](docs/derby-rules.md) · [Reusable panels](docs/computational-impact-panels.md) · [Source-bound acceptance](docs/co-012-acceptance.md)
+
+CO-013 uses five focused owner-reviewed PRs. **A — Vehicle Registry** establishes six original cosmetic models, four explicit bays, stable owned identities and strict canonical schema admission. **B — Transaction Engine** adds validated purchases, sales, selection and retry/revision rules. **C — Save Vault** adds a separate storage slot, exclusive coordination, stale-tab detection and confirmed whole-state import. **D — After Hours Motor Works** adds the original workshop, vehicle previews and confirmed interactive transactions. **E — Garage Certification** provides browser, concurrency, native resource, legacy and offline evidence. Only A is implemented on this candidate branch; B–E remain pending owner review gates. [Registry contract](docs/garage-registry.md)
+
+Ownership is separate from physical vehicle recipes. CO-013 does not advertise performance improvements, persist race damage, award race currency or implement repairs. CO-014 and CO-015 retain those separately validated responsibilities. The future Foundries remain research, with inert versioned definitions and explicit simulation authority boundaries.
 
 **Relevant internal donor:** [STREET-RACER](https://github.com/QSOLKCB/STREET-RACER) already implements original garage purchases, upgrades, a four-bay career, recovery jobs, validated save transactions, and a separate *Impact Arena* demonstration. Reuse **reviewed contracts**, not its distinct driving authority: preserve Circuit Overdrive's VANILLAJS simulation and exact import provenance. Cash means local fictional credits only. Car damage and repairs must be causally linked to actual vehicle state. A player must have a fair recoverable path after losing a car or funds.
 

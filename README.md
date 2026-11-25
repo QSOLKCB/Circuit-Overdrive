@@ -14,9 +14,13 @@ Choose **Day** or **Nightshift** on Speedway or Ridge. Nightshift Speedway runs 
 
 For the downloadable game, archive checksums and receipt verification, see the [offline release guide](docs/offline-release.md).
 
-## Total Destruction — v1.2.0 candidate
+## Total Destruction — published v1.2.0
 
 Choose **Total Destruction** from the main menu, select **The Crucible** or **Iron Pit**, arm the six-car grid and start the countdown. Drive the Ignition GT against five rivals. Accepted impacts crumple body panels and impair handling. Watch the knockout standings and follow the surviving cars if your car loses drive. The round finishes with a sole survivor, a draw if the last cars fail together, or a timed classification after three minutes of accepted play. The original **STEEL RIOT** score runs at 150 BPM. A stamped build saves a v6 replay and an inspection receipt after the official result. [Player guide](docs/total-destruction.md) · [Arena layouts](docs/derby-arenas.md) · [Browser and native acceptance](docs/co-012-acceptance.md)
+
+## Street Rod — The Garage, v1.3.0 candidate
+
+CO-013A introduces the original six-model catalogue and validated four-bay ownership schema for **After Hours Motor Works**. This first review stage provides pure data modules and tests. Buying, selling, storage and the WebGL showroom follow in separately reviewed PRs B–D; no garage entry appears in the game yet. Catalogue styling is cosmetic, and garage selection does not change racing physics or event damage. [Registry contract and catalogue](docs/garage-registry.md) · [Executed registry checks](docs/co-013a-acceptance.md)
 
 ## Crash Lab — The Impact Facility
 
