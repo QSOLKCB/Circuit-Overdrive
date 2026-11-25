@@ -125,7 +125,11 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   const select = button('select','Make active',() => transaction('select',ownedVehicleId));
   const sell = button('sell','Review sale',() => transaction('sell',ownedVehicleId));
   const showPreview = button('show-preview','View showroom',() => onCamera(camera),'garage-show-preview');
-  const detailActions = element('div',undefined,'garage-actions'); detailActions.append(buy,select,sell);
+  const testDrive = button('test-drive','Drive at the Proving Grounds',() => {
+    if (testDrive.disabled) return;
+    boundary(); window.location.assign(testDrive.getAttribute('href'));
+  });
+  const detailActions = element('div',undefined,'garage-actions'); detailActions.append(buy,select,sell,testDrive);
   detail.append(modelName,modelDescription,modelFinish,ownership,showPreview,price,availability,detailActions,
     element('p','Paint is cosmetic. Garage selection does not change any established racing vehicle or performance.','garage-physics-note'));
   const bays = element('section',undefined,'garage-bays'); bays.append(element('h3','Your four bays'));
@@ -302,6 +306,8 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     select.hidden = sell.hidden = !car;
     select.disabled = blockedWrite || needsMigration || !car || state?.activeVehicleId === car?.ownedVehicleId;
     sell.disabled = blockedWrite || needsMigration || !car;
+    testDrive.hidden = !car; testDrive.disabled = blockedWrite || needsMigration || !car;
+    testDrive.setAttribute('href','./proving-ground.html?vehicle='+encodeURIComponent(car?.ownedVehicleId??''));
     buy.textContent = 'Buy · ' + credits(model.purchasePrice);
     sell.textContent = 'Sell · ' + credits(garageResaleValue(modelId));
     for (const [id,control] of modelButtons) {

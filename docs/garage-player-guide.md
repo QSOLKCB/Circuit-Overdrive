@@ -1,6 +1,6 @@
 # Street Rod — After Hours Motor Works
 
-Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any racing mode. The Parts Counter offers bounded mechanical fitting and setup for a selected owned car. Repairs, race rewards and a playable owned-car facility remain later milestones.
+Open **The Garage** from the game menu to inspect six original models and manage four owned-car bays. The garage is an offline collection with fictional integer credits. It does not change the car, physics, damage, replay or results of any established racing mode. The Parts Counter offers bounded mechanical fitting and setup for a selected owned car. **Drive at the Proving Grounds** tests its accepted saved build in a separate physical facility. Repairs and race rewards remain later milestones.
 
 ## Keep an existing garage
 
@@ -23,6 +23,8 @@ The Cinder Two costs 600 credits. Confirming its purchase leaves 1,800 credits a
 Select an occupied bay. The **Parts Counter** identifies that owned car and its installed parts. Choose a slot and part, then any supported setup steps. Review the acquisition/fitting cost and select **Review fitting**. The confirmation names the exact car, part, setup and resulting balance. Confirm fitting to save; Cancel leaves the build and balance unchanged.
 
 Acquired parts belong to that car. Refitting an owned mechanical part costs 20 credits; new parts also cost their catalogue price. Setup changes cost 10 credits. Paint fitting costs 10 plus acquisition if needed. An unchanged part/setup cannot charge again. Parts/labor receive no sale refund. Paint changes original panel colours and adds no horsepower or grip. Saved builds and inventories survive reload and validated export/import. They do not replace established racing vehicles. [Physical effects and exact prices](vehicle-parts.md)
+
+Select the owned bay and **Drive at the Proving Grounds**. Load a practice or benchmark, explicitly arm, then use the normal driving controls. **Current saved build** admits that exact owned configuration. **Stock simulation** and **Proposed simulation** are free comparisons; a proposal never installs a part. Choose one of the four tests and **Run reference comparisons** for measured outcomes with the accepted command tapes. Acceleration uses identical full-throttle commands; the other reference drivers respond to the physical car and may use different commands. Finish a live test to export its source-bound receipt. Return to The Garage to purchase/fix a build; testing never changes credits, inventory or condition. [Rules, geometry and receipt details](proving-ground.md)
 
 ## Sales and recovery
 
