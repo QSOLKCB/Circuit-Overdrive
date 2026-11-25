@@ -69,7 +69,7 @@ export function installDerbyProbe({fast}) {
         if(player)save('player-eliminated',[player],{driverId:5});
       }
       steps.push({tick,physicsMs,solverMs,contacts:contacts.length,damaging:damaging.length,
-        accepted:!result.technicalStop,player:result.commands[5],...stats});
+        completed:!result.technicalStop,player:result.commands[5],...stats});
     },
     observeRenderer(Renderer){
       const p=Renderer.prototype,{mesh,update,dispose}=p;

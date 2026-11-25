@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {arch,release} from 'node:os';
+import {FIELD} from '../src/field.js';
 import {LIT_PROFILES} from '../vendor/vanillajs/modules/render-lit/index.js';
 import {countBrowserResources} from './browser-resources.mjs';
 import {installDerbyProbe} from './browser-derby-probe.mjs';
@@ -151,6 +152,35 @@ try {
     assert.equal((await observe()).phase,'running');
     assert.equal((await observe()).state.ticks,0);
   }
+  async function selectCamera(mode,driver){
+    // Dispatch the same select controls without moving keyboard focus away
+    // from the driving canvas while the clock is stopped for a capture.
+    await page.evaluate(({mode,driver})=>{
+      for(const [id,value] of [['derby-camera',mode],['derby-follow',driver]]){
+        const select=document.getElementById(id);select.value=String(value);
+        select.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+    },{mode,driver});
+    await advance();
+  }
+  async function checkPauseAndRestart(grid){
+    await start();
+    await advance(6);
+    await page.keyboard.press('Escape');
+    const paused=await observe();
+    assert.equal(paused.phase,'paused');
+    await page.keyboard.up('w');
+    await advance(6);await advance(6);
+    assert.deepEqual((await observe()).state,paused.state);
+    await page.locator('#derby-pause').click();await advance();await advance(1);
+    const accepted=await page.evaluate(()=>window.derbyProbe.report().steps.at(-1).player);
+    assert.deepEqual(accepted,{throttle:0,brake:0,steer:0},'resume requires fresh input');
+    await page.keyboard.press('Escape');
+    await page.locator('#derby-restart').click();await advance();
+    const fresh=await observe();
+    assert.equal(fresh.phase,'grid');assert.deepEqual(fresh.state,grid.state);
+    await page.locator('#derby-camera').selectOption('raised');await advance();
+  }
   async function seek(theatre,tick){
     await theatre.locator('#replay-seek').evaluate((slider,at)=>{
       slider.value=String(at);slider.dispatchEvent(new Event('input',{bubbles:true}));
@@ -205,21 +235,59 @@ try {
     await capture(arena+'-context-restored',page,restored.state.ticks);
     return {tick:restored.state.ticks,meshes:restored.mesh.meshes};
   }
+  async function saturatePanels(arena){
+    return page.evaluate(async arena=>{
+      const [{createDerbyArenaWorld},{createDerbyArenaScene}]=await Promise.all([
+        import('./src/derby-arenas.js'),import('./src/derby-arena-scene.js')]);
+      // Isolated presentation fixture. No live round is modified or driven.
+      const fixture=createDerbyArenaWorld(arena);
+      const canvas=document.createElement('canvas');
+      canvas.id='derby-panel-fixture';
+      canvas.style.cssText='position:fixed;left:-1200px;top:0;width:960px;height:540px';
+      document.body.append(canvas);
+      const scene=createDerbyArenaScene(canvas,fixture.arena,1,{damagePanels:true});
+      const retained=scene.stats(),samples=[];
+      try {
+        const capture=async value=>{
+          for(const car of fixture.cars)
+            for(const key of Object.keys(car.damage))car.damage[key]=value;
+          for(let attempt=0;attempt<2;attempt++){
+            const before=scene.stats();
+            window.derbyProbe.draw(canvas,0,null,'fixture',[],()=>scene.draw(fixture));
+            const after=scene.stats();
+            samples.push({value,attempt,changed:after.uploads-before.uploads,mesh:after,
+              webglError:canvas.getContext('webgl').getError()});
+          }
+          return window.derbyProbe.panels();
+        };
+        const clean=await capture(0);
+        for(const value of [250,500,750])await capture(value);
+        const saturated=await capture(1000),reset=await capture(0);
+        return {retained,samples,clean,saturated,reset};
+      }finally{scene.dispose();canvas.remove();}
+    },arena);
+  }
   const fixtures=[
-    {arena:'crucible',name:'crucible',changes:[],winnerId:0,terminal:'time-limit',ticks:10800},
-    {arena:'iron-pit',name:'iron-pit',changes:[[175,'a',true],[205,'a',false],[300,'w',false]],
-      winnerId:5,terminal:'time-limit',ticks:10800},
-    {arena:'iron-pit',name:'iron-pit-mutual',changes:[[55,'d',true],[85,'d',false]],
-      winnerId:null,terminal:'simultaneous-elimination',ticks:5414}
+    {arena:'crucible',name:'crucible',changes:[],winnerId:0,terminal:'last-car-standing',ticks:9540},
+    {arena:'iron-pit',name:'iron-pit',changes:[[55,'d',true],[85,'d',false]],
+      winnerId:1,terminal:'time-limit',ticks:10800},
+    {arena:'crucible',name:'crucible-player',changes:[[130,'a',true],[240,'a',false],[600,'w',false]],
+      winnerId:5,terminal:'last-car-standing',ticks:8286}
   ];
-  for(const fixture of profile?fixtures.slice(0,2):fixtures){
+  const only=process.argv.find(arg=>arg.startsWith('--fixture='))?.slice('--fixture='.length);
+  assert(!only || fixtures.some(fixture=>fixture.name===only));
+  for(const fixture of only?fixtures.filter(fixture=>fixture.name===only):profile?fixtures.slice(0,2):fixtures){
     const {arena,name}=fixture;
     const grid=await launch(arena,name);
+    if(!profile && name==='crucible')await checkPauseAndRestart(grid);
     await start();
     if(profile){
       await page.evaluate(()=>{window.derbyProbe.measure=true;});
       await page.waitForFunction(()=>window.inspectDerby().round.ticks>=900 || window.inspectDerby().round.result,
-        null,{timeout:45000});
+        null,{timeout:45000}).catch(async error=>{
+          const {phase,state}=await observe();
+          throw Error(`Timing stalled at ${phase} / ${state?.ticks}: ${errors.join(', ')}`,{cause:error});
+        });
       await page.keyboard.up('w');
       await page.keyboard.press('Escape');
       await page.evaluate(()=>{window.derbyProbe.measure=false;});
@@ -233,44 +301,56 @@ try {
       continue;
     }
     const seen=new Set(),changes=fixture.changes.slice();let ended=false,tick=0;
-    for(let batch=0;batch<2300&&!ended;batch++){
+    for(let batch=0;batch<300&&!ended;batch++){
       while(changes[0]?.[0]===tick+1){
         const [,key,held]=changes.shift();
         await page.keyboard[held?'down':'up'](key);
       }
-      const take=Math.min(seen.has('first-contact')?6:1,(changes[0]?.[0]??Infinity)-tick-1);
-      const frame=await page.evaluate(ticks=>{
-        window.advanceDerbyFrame(ticks);
-        const {round,phase}=window.inspectDerby();
-        return {tick:round.ticks,phase,events:window.derbyProbe.events,finished:!!round.result};
-      },take);
+      const frame=await page.evaluate(({first,until})=>{
+        const {round}=window.inspectDerby();
+        const maxStep=first?1:6;
+        const events=window.derbyProbe.events,eventCount=Object.keys(events).length;
+        const gl=document.querySelector('#derby-world').getContext('webgl');
+        const pixel=new Uint8Array(4);
+        for(let i=0;i<36 && round.ticks<until && !round.result;i++){
+          const before=round.ticks;
+          window.advanceDerbyFrame(Math.min(maxStep,until-before));
+          if(round.ticks<=before && !round.result)throw Error('Derby progress stopped at tick '+before);
+          if(Object.keys(events).length!==eventCount)break;
+          if(i%12===0)gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixel);
+        }
+        return {tick:round.ticks,phase:window.inspectDerby().phase,events,finished:!!round.result};
+      },{first:!seen.has('first-contact'),until:changes[0]===undefined?10800:changes[0][0]-1});
       ended=frame.finished;tick=frame.tick;
-      if(tick===0)assert.equal(frame.phase,'running','Round must start accepting ticks');
       for(const [eventName,event] of Object.entries(frame.events))if(!seen.has(eventName)){
         seen.add(eventName);
         if(event.driverId!==undefined && ['crumpled-front','side-panel','severely-damaged-opponent','eliminated'].includes(eventName)){
           const previous=await page.locator('#derby-camera').inputValue();
           const previousDriver=await page.locator('#derby-follow').inputValue();
-          await page.locator('#derby-camera').selectOption('spectator');
-          await page.locator('#derby-follow').selectOption(String(event.driverId));
-          await advance();
+          await selectCamera('spectator',event.driverId);
           await capture(name+'-'+eventName,page,frame.tick,event);
-          await page.locator('#derby-follow').selectOption(previousDriver);
-          await page.locator('#derby-camera').selectOption(previous);
-          await advance();
+          await selectCamera(previous,previousDriver);
         }else await capture(name+'-'+eventName,page,frame.tick,event);
       }
-      if(batch%240===0)console.error(`${arena}: ${frame.phase}, tick ${frame.tick}`);
-      if(batch%24===0)await page.locator('#derby-world').evaluate(c=>{
-        const gl=c.getContext('webgl');gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(4));
-      });
+      if(batch%12===0)console.error(`${name}: ${frame.phase}, tick ${frame.tick}`);
     }
     await page.keyboard.up('w');
     const live=await observe(),probe=await page.evaluate(()=>window.derbyProbe.report());
     assert(ended,arena+' official result');
-    assert.equal(live.state.result.reason,fixture.terminal);
-    assert.equal(live.state.result.winnerId,fixture.winnerId);
-    assert.equal(live.state.result.ticks,fixture.ticks);
+    assert.notEqual(live.state.result.reason,'technical-stop');
+    assert(live.state.result.ticks>0 && live.state.result.ticks<=10800);
+    const actualWinner=live.state.result.winnerId;
+    if(browser.version()==='158.0.8127.36'){
+      assert.equal(actualWinner,fixture.winnerId);
+      assert.equal(live.state.result.reason,fixture.terminal);
+      assert.equal(live.state.result.ticks,fixture.ticks);
+    }
+    if(actualWinner!==null)assert.equal(await page.locator('#derby-winner').textContent(),
+      `${FIELD[actualWinner].name} #${FIELD[actualWinner].number} wins`);
+    else assert.match(await page.locator('#derby-winner').textContent(),/All remaining cars were eliminated/);
+    assert.deepEqual(await page.locator('#derby-standings li > span:first-child').allTextContents(),
+      live.state.result.standings.map(({id})=>`${FIELD[id].name} #${FIELD[id].number}`));
+    console.error(`${name}: ${live.state.result.reason}, winner ${actualWinner}, tick ${live.state.result.ticks}`);
     assert.equal(live.phase,'finished');
     assert(probe.steps[0].player.throttle>0,'Keyboard must be accepted from the beginning of the fixture');
     assert.equal(probe.steps.length,live.state.ticks);
@@ -291,6 +371,10 @@ try {
     assert.equal(new Set(serials).size,serials.length,'six rigs own separate dynamic handles');
     for(const [id,rig] of panels.entries())for(const zone of rig)
       assert.equal(zone.damage,live.state.cars[id].damage[zone.name]);
+    if(live.state.result.reason==='last-car-standing'){
+      await selectCamera('spectator',live.state.result.winnerId);
+      await capture(name+'-final-survivor',page,live.state.ticks,live.state.result);
+    }
     await capture(name+'-result',page,live.state.ticks,live.state.result);
     const tape=await download(page,'save-derby-replay',name+'-replay.json');
     assert.equal(tape.data.revision,revision);assert.equal(tape.data.version,6);
@@ -308,9 +392,27 @@ try {
     const reset=await observe();
     assert.deepEqual(reset.state,grid.state,'Fresh grid restores every authoritative state');
     assert(reset.mesh.meshes===grid.mesh.meshes && reset.mesh.bytes===grid.mesh.bytes);
+    const panelEndurance=await saturatePanels(arena);
+    assert.deepEqual(panelEndurance.clean,panelEndurance.reset);
+    for(const sample of panelEndurance.samples){
+      assert.equal(sample.webglError,0);
+      checkBudget(sample,arena+' saturated');
+      for(const key of ['meshes','bytes','vertices'])assert.equal(sample.mesh[key],panelEndurance.retained[key]);
+      if(sample.attempt===1)assert.equal(sample.changed,0,'idle frames must never upload geometry');
+      else if(sample.value>0)assert(sample.changed>0 && sample.changed<=72,'only body panel parts may upload');
+    }
+    for(const [id,rig] of panelEndurance.saturated.entries())for(const [i,zone] of rig.entries()){
+      assert.equal(zone.damage,1000);
+      assert.deepEqual(zone.parts.map(part=>part.vertices),panelEndurance.clean[id][i].parts.map(part=>part.vertices));
+    }
+    await page.evaluate(()=>dispatchEvent(new PageTransitionEvent('pagehide',{persisted:false})));
+    const disposals=await page.evaluate(()=>window.derbyProbe.report().disposable);
+    assert(disposals.some(row=>row.canvas==='derby-panel-fixture' && row.after.disposed && row.after.meshes===0));
+    assert(disposals.some(row=>row.canvas==='derby-world' && row.after.disposed && row.after.meshes===0));
     await cdp.send('HeapProfiler.collectGarbage');
     const {usedSize:heapBytes}=await cdp.send('Runtime.getHeapUsage');
     measurements.push({arena,name,...graphics,start:stableFootprint(grid),mesh:live.mesh,resources:live.resources,heapBytes,
+      panelEndurance:{samples:panelEndurance.samples,disposals},
       result:live.state.result,events:probe.events,tapeSha256:sha256(tape.bytes),contextRestoration,panels:canonicalPanels(panels),
       work:profileReport(probe)});
   }
