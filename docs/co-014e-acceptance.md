@@ -5,7 +5,8 @@ Release target: v1.4.0, still unpublished. This is the fifth of six owner-review
 ## Exact source
 
 - Exact base: PR D merge `57a30486fcf8674e30486d01dea972b8981bcccd`.
-- Final tested runtime: `f580e9091da2c1bb188a89b0882f7d89460c8e70`.
+- Workshop acceptance runtime: `f580e9091da2c1bb188a89b0882f7d89460c8e70`.
+- Cancellation review fix runtime: `59bc557005013945f1be95786bfaeca82e207fbd` (focused regression and controlled Chrome evidence below).
 - Immutable VANILLAJS: `9d95d74b355ec17add32db0b55f0f71130f9c004`, unchanged and checksum-verified.
 - Published v1.3.0 comparison: `1c745a90258d0f6cb968935f773354cff702b276`.
 - Focused branch: `feature/co-014e-machine-shop`.
@@ -69,6 +70,12 @@ The showroom retains six base model packs and at most eighteen additional style 
 The final production browser measures Cinder Two's normal-frame, 900-call reference acceleration at **8.105224814834376 s stock** and **7.6026815230975355 s with the actually purchased street engine**. Both use the same accepted full-throttle tape; the engine-only v7 file preserves its original exact mechanical configuration and 900 accepted ticks. The live garage is subsequently fitted with different mechanical parts and paint, yet imported playback still reconstructs the original engine-only build and result. All categories are fitted through real confirmations; the final all-fitted save retains `car-000001`, pristine condition and 360 credits, then a disclosed paid second-tab refit leaves 350. Verification and playback themselves do not alter ownership or money.
 
 The unchanged Proving Grounds regression also measures the actually installed engine plus short gearbox at **7.5824830186320336 s**, with accepted motion and matching command tape. Other benchmark rows are displayed only after their actual tests reconstruct. Braking, slalom and handling use the declared feedback policy and may have different accepted commands across builds. Those values are not presented as controlled part-only comparisons or independently optimized performance ceilings.
+
+## Comparison cancellation review fix
+
+The final proposed recording could reject after a new selection invalidated its generation. The optional-evidence catch then published the obsolete comparison. Runtime `59bc557005013945f1be95786bfaeca82e207fbd` returns on cancellation in that catch, checks generation/disposal before publication, and prevents obsolete catch/finally UI updates. Genuine evidence-storage failures still display valid measured results.
+
+[Follow-up evidence](evidence/co-014e/cancellation-fix.json): four new tests execute the actual comparison controller with the real solver and replay admission. Selection changes, disposal and a newer completed comparison remain protected; the ordinary quota-failure control still publishes valid results. All four pass; the three cancellation cases fail against the original controller. Together with the existing replay suite, **20/20 focused tests pass**. Controlled Chrome scheduling reproduces stale publication in the old source and verifies no result/table publication and preserved selection status in the fixed source. The browser condition uses a synthetic CDP pause and calls the real select control’s registered handler; it does not inject vehicle state or measured outcomes. The original broad 539-test/acceptance receipts above remain bound to their declared earlier runtime.
 
 ## Owner play-test
 

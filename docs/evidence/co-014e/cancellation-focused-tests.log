@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: changing selection during final proposed recording admission cannot publish an obsolete comparison
+ok 1 - changing selection during final proposed recording admission cannot publish an obsolete comparison
+  ---
+  duration_ms: 886.628075
+  type: 'test'
+  ...
+# Subtest: page disposal during final recording admission cannot publish results, status or controls
+ok 2 - page disposal during final recording admission cannot publish results, status or controls
+  ---
+  duration_ms: 779.237041
+  type: 'test'
+  ...
+# Subtest: an obsolete recording rejection cannot overwrite a newer completed physical comparison
+ok 3 - an obsolete recording rejection cannot overwrite a newer completed physical comparison
+  ---
+  duration_ms: 1771.500762
+  type: 'test'
+  ...
+# Subtest: ordinary evidence retention failure still publishes valid measured outcomes
+ok 4 - ordinary evidence retention failure still publishes valid measured outcomes
+  ---
+  duration_ms: 980.181409
+  type: 'test'
+  ...
+# Subtest: v7 records and reconstructs the original accepted mechanical build with actual physical result
+ok 5 - v7 records and reconstructs the original accepted mechanical build with actual physical result
+  ---
+  duration_ms: 1277.200442
+  type: 'test'
+  ...
+# Subtest: all four benchmark terminal outcomes reproduce from recorded input and build
+ok 6 - all four benchmark terminal outcomes reproduce from recorded input and build
+  ---
+  duration_ms: 4244.526352
+  type: 'test'
+  ...
+# Subtest: manual stopped practice and honest benchmark non-completion retain distinct accepted terminals
+ok 7 - manual stopped practice and honest benchmark non-completion retain distinct accepted terminals
+  ---
+  duration_ms: 875.029734
+  type: 'test'
+  ...
+# Subtest: physically invalid manual slalom is replayed as invalid without invented gate credit
+ok 8 - physically invalid manual slalom is replayed as invalid without invented gate credit
+  ---
+  duration_ms: 239.016704
+  type: 'test'
+  ...
+# Subtest: viewer reconstruction never substitutes a newer live garage build or positions
+ok 9 - viewer reconstruction never substitutes a newer live garage build or positions
+  ---
+  duration_ms: 574.551662
+  type: 'test'
+  ...
+# Subtest: seek reconstructs from the recorded source/build and every work batch stays bounded
+ok 10 - seek reconstructs from the recorded source/build and every work batch stays bounded
+  ---
+  duration_ms: 725.522173
+  type: 'test'
+  ...
+# Subtest: render-rate batching cannot alter accepted replay motion or result
+ok 11 - render-rate batching cannot alter accepted replay motion or result
+  ---
+  duration_ms: 821.505196
+  type: 'test'
+  ...
+# Subtest: forged or merely deserialized tapes cannot bypass complete physical admission
+ok 12 - forged or merely deserialized tapes cannot bypass complete physical admission
+  ---
+  duration_ms: 341.634739
+  type: 'test'
+  ...
+# Subtest: exact revision, engine, version, rules, track, test and starting-condition admission reject mismatches
+ok 13 - exact revision, engine, version, rules, track, test and starting-condition admission reject mismatches
+  ---
+  duration_ms: 2.61229
+  type: 'test'
+  ...
+# Subtest: changed builds, digests, recipes and result assertions cannot impersonate the recorded machine
+ok 14 - changed builds, digests, recipes and result assertions cannot impersonate the recorded machine
+  ---
+  duration_ms: 1042.426448
+  type: 'test'
+  ...
+# Subtest: recorded command policy, lengths, count and complete terminal timing are enforced
+ok 15 - recorded command policy, lengths, count and complete terminal timing are enforced
+  ---
+  duration_ms: 308.764404
+  type: 'test'
+  ...
+# Subtest: admission yields bounded solver batches and cancellation publishes no admitted recording
+ok 16 - admission yields bounded solver batches and cancellation publishes no admitted recording
+  ---
+  duration_ms: 660.280094
+  type: 'test'
+  ...
+# Subtest: inert schema admission rejects getters, symbols, hidden entries and toJSON without invoking them
+ok 17 - inert schema admission rejects getters, symbols, hidden entries and toJSON without invoking them
+  ---
+  duration_ms: 1.66697
+  type: 'test'
+  ...
+# Subtest: UTF-8 byte size, malformed JSON and unsupported legacy contracts reject safely
+ok 18 - UTF-8 byte size, malformed JSON and unsupported legacy contracts reject safely
+  ---
+  duration_ms: 4.739971
+  type: 'test'
+  ...
+# Subtest: unfinished, unstamped, zero-call or mutated terminal runs do not create exportable recordings
+ok 19 - unfinished, unstamped, zero-call or mutated terminal runs do not create exportable recordings
+  ---
+  duration_ms: 289.860211
+  type: 'test'
+  ...
+# Subtest: build source identity matches the compiler independently of recorded inventory retention
+ok 20 - build source identity matches the compiler independently of recorded inventory retention
+  ---
+  duration_ms: 565.48889
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12050.682511

@@ -1,0 +1,39 @@
+{
+  "kind": "co-014e-comparison-cancellation-fix-v1",
+  "previousReviewHead": "fff46dcca154c2b80774698d4499abba5a4fa72b",
+  "fixedRuntime": "59bc557005013945f1be95786bfaeca82e207fbd",
+  "change": "Cancelled recording admission returns without optional-evidence fallback; check generation/disposal before publication and guard terminal UI updates.",
+  "focusedTests": {
+    "pass": 20,
+    "fail": 0,
+    "newCancellationCases": 4,
+    "existingReplayCases": 16
+  },
+  "oldControllerRegression": {
+    "source": "fff46dcca154c2b80774698d4499abba5a4fa72b",
+    "failedCancellationCases": 3,
+    "passedOrdinaryQuotaControl": 1
+  },
+  "browser": {
+    "oldSource": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+    "fixedSource": "59bc557005013945f1be95786bfaeca82e207fbd",
+    "browser": "Chrome 158.0.8127.36 / SwiftShader",
+    "oldOutcome": "Obsolete acceleration result and table published after changing test to braking.",
+    "fixedOutcome": "Selection-changed status retained, comparison null, zero table children, no garage creation.",
+    "limitation": "Synthetic CDP pause at proposed recording admission yield; invokes the real select control's registered onchange handler. No simulation/build/result injection; not a claim of uninstrumented native input timing."
+  },
+  "artifacts": {
+    "cancellation-focused-tests.log": {
+      "bytes": 5030,
+      "sha256": "de198a1f4280e85a31d3340ea22ea52d51be518abb51aef1c1e2c9b02c352c4c"
+    },
+    "cancellation-old-browser.json": {
+      "bytes": 18915,
+      "sha256": "1b1f40714aadb935c88f4dc40ffb3d366a891d663e7c48b19e7f63dd35166688"
+    },
+    "cancellation-fixed-browser.json": {
+      "bytes": 813,
+      "sha256": "c3600f7f6ae381e120e343ebafe9ee74682ac9ecffbee193db6f552015d33e60"
+    }
+  }
+}
