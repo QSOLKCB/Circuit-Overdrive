@@ -1,0 +1,747 @@
+{
+  "version": 1,
+  "source": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+  "browser": "158.0.8127.36",
+  "scenarios": [
+    "A second real purchase fits the short gearbox to the same owned car; its accepted 900-call physical result differs from the engine-only installed build",
+    "A real second-tab paint transaction invalidates the admitted owned snapshot; explicit Load is required before driving the newly accepted save",
+    "A browser-dispatched touch contact drives the actual car; native touch cancellation pauses and clears its pedal before neutral resume",
+    "Synthetic controller service proves neutral arming, live throttle and disconnect pause through the shared production input path",
+    "An explicit unowned URL is rejected without silently substituting the active saved car"
+  ],
+  "gearbox": {
+    "saved": {
+      "version": 2,
+      "generation": "b709575647bc427cec91fa906d1ddab3",
+      "sequence": 3,
+      "garage": {
+        "version": 2,
+        "edition": "machine-shop-v1",
+        "catalogRevision": 1,
+        "credits": 1350,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two",
+            "build": {
+              "format": "circuit-overdrive.vehicle-build",
+              "version": 1,
+              "rulesVersion": 2,
+              "parts": {
+                "engine": "street",
+                "intake": "stock",
+                "exhaust": "stock",
+                "gearbox": "short",
+                "finalDrive": "stock",
+                "tyres": "stock",
+                "suspension": "stock",
+                "steering": "stock",
+                "paint": "factory"
+              },
+              "tuning": {
+                "finalDrive": 0,
+                "spring": 0,
+                "damper": 0,
+                "travel": 0,
+                "steering": 0
+              },
+              "inventory": {
+                "engine": [
+                  "stock",
+                  "street"
+                ],
+                "intake": [
+                  "stock"
+                ],
+                "exhaust": [
+                  "stock"
+                ],
+                "gearbox": [
+                  "short",
+                  "stock"
+                ],
+                "finalDrive": [
+                  "stock"
+                ],
+                "tyres": [
+                  "stock"
+                ],
+                "suspension": [
+                  "stock"
+                ],
+                "steering": [
+                  "stock"
+                ],
+                "paint": [
+                  "factory"
+                ]
+              }
+            },
+            "condition": {
+              "version": 1,
+              "status": "pristine"
+            }
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 3
+      },
+      "legacyBackup": null
+    },
+    "current": {
+      "format": "circuit-overdrive.proving-receipt",
+      "version": 1,
+      "sourceRevision": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+      "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+      "trackId": "machine-test-facility-v1",
+      "rulesVersion": 1,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildRulesVersion": 2,
+      "build": {
+        "format": "circuit-overdrive.vehicle-build",
+        "version": 1,
+        "rulesVersion": 2,
+        "parts": {
+          "engine": "street",
+          "intake": "stock",
+          "exhaust": "stock",
+          "gearbox": "short",
+          "finalDrive": "stock",
+          "tyres": "stock",
+          "suspension": "stock",
+          "steering": "stock",
+          "paint": "factory"
+        },
+        "tuning": {
+          "finalDrive": 0,
+          "spring": 0,
+          "damper": 0,
+          "travel": 0,
+          "steering": 0
+        },
+        "inventory": {
+          "engine": [
+            "stock",
+            "street"
+          ],
+          "intake": [
+            "stock"
+          ],
+          "exhaust": [
+            "stock"
+          ],
+          "gearbox": [
+            "short",
+            "stock"
+          ],
+          "finalDrive": [
+            "stock"
+          ],
+          "tyres": [
+            "stock"
+          ],
+          "suspension": [
+            "stock"
+          ],
+          "steering": [
+            "stock"
+          ],
+          "paint": [
+            "factory"
+          ]
+        }
+      },
+      "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+      "recipeDigest": "9d022d4452e73933d06565c9e3d9f0bfd8b59ce5e3fbc41a2858073d9dc08a2f",
+      "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Cinder Two / workshop rules 2\",\"mass\":1080,\"inertia\":[1755,1901,405],\"chassis\":{\"width\":1.75,\"length\":4.25,\"height\":1.2},\"wheel\":{\"radius\":0.34,\"wheelbase\":2.465,\"track\":1.75},\"suspension\":{\"restLength\":0.24,\"travel\":0.19,\"spring\":34000,\"damper\":3100},\"tyres\":{\"grip\":1.02,\"corneringStiffness\":2600,\"rollingResistance\":0.016},\"steering\":{\"maxAngle\":0.48,\"rate\":1.8,\"speedReduction\":0.035},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,123],[2200,203],[4200,242],[5800,213],[6800,148]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.45,2.3,1.65,1.25,1],\"reverseRatio\":2.8,\"finalDrive\":3.9,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"front\",\"drag\":0.44}",
+      "testId": "acceleration",
+      "testRules": {
+        "name": "01 / Acceleration",
+        "limitTicks": 900,
+        "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+      },
+      "seed": 0,
+      "step": 0.016666666666666666,
+      "driver": "reference",
+      "comparison": "Identical fixed 900-call full-throttle tape.",
+      "startingPose": {
+        "position": [
+          0,
+          0.5020970588235295,
+          0
+        ],
+        "yaw": 0,
+        "pitch": 0,
+        "roll": 0,
+        "velocity": [
+          0,
+          0,
+          0
+        ]
+      },
+      "acceptedTicks": 900,
+      "commandsRLE": [
+        {
+          "ticks": 900,
+          "throttle": 1,
+          "brake": 0,
+          "steer": 0
+        }
+      ],
+      "accelerationCrossing": {
+        "acceptedTick": 455,
+        "previousSpeedMps": 27.728537291604795,
+        "nextSpeedMps": 27.780425032301686,
+        "fraction": 0.9489811179220228
+      },
+      "braking": null,
+      "gates": [],
+      "result": {
+        "status": "completed",
+        "reason": "fixed-command-tape-complete",
+        "testId": "acceleration",
+        "acceptedTicks": 900,
+        "elapsedSeconds": 15,
+        "gatesPassed": 0,
+        "metrics": {
+          "accelerationSeconds": 7.5824830186320336,
+          "brakingDistanceM": null,
+          "brakingStartSpeedMps": null,
+          "slalomSeconds": null,
+          "handlingSeconds": null,
+          "headingChangeRadians": 0,
+          "lateralSlipIntegralM": 0,
+          "maxLateralAccelerationMps2": 0,
+          "pathM": 380.94596309800664
+        },
+        "diagnostics": {
+          "minUpY": 0.9999291499323103,
+          "minGrounded": 4,
+          "maxSpeedMps": 43.306823533224495,
+          "maxAngularSpeed": 0.06610150908606265,
+          "maxWheelLoadN": 3211.677210851693,
+          "maxCompressionM": 0.09257409828892832,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        }
+      },
+      "terminalState": {
+        "tick": 3600,
+        "position": [
+          0,
+          0.5020970588235295,
+          -380.94596309800664
+        ],
+        "orientation": [
+          0.003021200105574295,
+          0,
+          0,
+          0.9999954361645467
+        ],
+        "velocity": [
+          0,
+          -3.8650497267030024e-16,
+          -43.306823533224495
+        ],
+        "angularVelocity": [
+          -0.0004256917332433128,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 4,
+        "rpm": 5928.595003055661,
+        "shiftRemaining": 0,
+        "wheelSpin": -1.4561282452189044,
+        "brake": 0,
+        "wheels": [
+          {
+            "grounded": true,
+            "position": [
+              -0.875,
+              0.34,
+              -382.1784405983492
+            ],
+            "contactPoint": [
+              -0.875,
+              0,
+              -382.1784405983492
+            ],
+            "normal": [
+              0,
+              1,
+              0
+            ],
+            "compression": 0.0704557169042912,
+            "load": 2397.049067310776,
+            "longitudinalSpeed": 43.30025802905838,
+            "lateralSpeed": 0,
+            "slip": 0,
+            "surfaceId": "machine-facility-dry-asphalt-v1"
+          },
+          {
+            "grounded": true,
+            "position": [
+              0.875,
+              0.34,
+              -382.1784405983492
+            ],
+            "contactPoint": [
+              0.875,
+              0,
+              -382.1784405983492
+            ],
+            "normal": [
+              0,
+              1,
+              0
+            ],
+            "compression": 0.0704557169042912,
+            "load": 2397.049067310776,
+            "longitudinalSpeed": 43.30025802905838,
+            "lateralSpeed": 0,
+            "slip": 0,
+            "surfaceId": "machine-facility-dry-asphalt-v1"
+          },
+          {
+            "grounded": true,
+            "position": [
+              -0.875,
+              0.34,
+              -379.7134855976641
+            ],
+            "contactPoint": [
+              -0.875,
+              0,
+              -379.7134855976641
+            ],
+            "normal": [
+              0,
+              1,
+              0
+            ],
+            "compression": 0.08535016544864993,
+            "load": 2900.3509326892226,
+            "longitudinalSpeed": 43.30025802905838,
+            "lateralSpeed": 0,
+            "slip": 0,
+            "surfaceId": "machine-facility-dry-asphalt-v1"
+          },
+          {
+            "grounded": true,
+            "position": [
+              0.875,
+              0.34,
+              -379.7134855976641
+            ],
+            "contactPoint": [
+              0.875,
+              0,
+              -379.7134855976641
+            ],
+            "normal": [
+              0,
+              1,
+              0
+            ],
+            "compression": 0.08535016544864993,
+            "load": 2900.3509326892226,
+            "longitudinalSpeed": 43.30025802905838,
+            "lateralSpeed": 0,
+            "slip": 0,
+            "surfaceId": "machine-facility-dry-asphalt-v1"
+          }
+        ],
+        "contacts": [],
+        "truncated": false,
+        "needsRecovery": false
+      },
+      "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+      "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+      "mode": "current",
+      "scope": "owned-saved-build",
+      "garageRevision": 3
+    },
+    "engineOnlyAccelerationSeconds": 7.6026815230975355
+  },
+  "staleTab": {
+    "saved": {
+      "version": 2,
+      "generation": "b709575647bc427cec91fa906d1ddab3",
+      "sequence": 4,
+      "garage": {
+        "version": 2,
+        "edition": "machine-shop-v1",
+        "catalogRevision": 1,
+        "credits": 1280,
+        "nextVehicleId": 2,
+        "activeVehicleId": "car-000001",
+        "bays": [
+          {
+            "ownedVehicleId": "car-000001",
+            "modelId": "cinder-two",
+            "build": {
+              "format": "circuit-overdrive.vehicle-build",
+              "version": 1,
+              "rulesVersion": 2,
+              "parts": {
+                "engine": "street",
+                "intake": "stock",
+                "exhaust": "stock",
+                "gearbox": "short",
+                "finalDrive": "stock",
+                "tyres": "stock",
+                "suspension": "stock",
+                "steering": "stock",
+                "paint": "seafoam"
+              },
+              "tuning": {
+                "finalDrive": 0,
+                "spring": 0,
+                "damper": 0,
+                "travel": 0,
+                "steering": 0
+              },
+              "inventory": {
+                "engine": [
+                  "stock",
+                  "street"
+                ],
+                "intake": [
+                  "stock"
+                ],
+                "exhaust": [
+                  "stock"
+                ],
+                "gearbox": [
+                  "short",
+                  "stock"
+                ],
+                "finalDrive": [
+                  "stock"
+                ],
+                "tyres": [
+                  "stock"
+                ],
+                "suspension": [
+                  "stock"
+                ],
+                "steering": [
+                  "stock"
+                ],
+                "paint": [
+                  "factory",
+                  "seafoam"
+                ]
+              }
+            },
+            "condition": {
+              "version": 1,
+              "status": "pristine"
+            }
+          },
+          null,
+          null,
+          null
+        ],
+        "revision": 4
+      },
+      "legacyBackup": null
+    },
+    "requiredExplicitLoad": true
+  },
+  "touch": {
+    "driven": {
+      "phase": "running",
+      "paused": false,
+      "ticks": 54,
+      "position": [
+        0,
+        0.5020970588235295,
+        -0.9155051779292412
+      ],
+      "velocity": [
+        0,
+        -3.297049852411125e-16,
+        -2.675606570742206
+      ],
+      "angularVelocity": [
+        0.0031986975337196166,
+        0,
+        0
+      ],
+      "steering": 0,
+      "gear": 1,
+      "rpm": 1004.6228808854326,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildMode": "current",
+      "driver": "manual",
+      "diagnostics": {
+        "minUpY": 0.9999302092662299,
+        "minGrounded": 4,
+        "maxSpeedMps": 2.675606570742206,
+        "maxAngularSpeed": 0.06086583135600105,
+        "maxWheelLoadN": 3204.155165427579,
+        "maxCompressionM": 0.09246400919063574,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      },
+      "wallTimeDroppedSeconds": 0
+    },
+    "cancelled": {
+      "phase": "running",
+      "paused": true,
+      "ticks": 60,
+      "position": [
+        0,
+        0.5020970588235295,
+        -1.204266778939124
+      ],
+      "velocity": [
+        0,
+        -3.4720864102414343e-16,
+        -3.0821087302560826
+      ],
+      "angularVelocity": [
+        0.0034942270426096076,
+        0,
+        0
+      ],
+      "steering": 0,
+      "gear": 1,
+      "rpm": 1158.2838567468475,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildMode": "current",
+      "driver": "manual",
+      "diagnostics": {
+        "minUpY": 0.9999302092662299,
+        "minGrounded": 4,
+        "maxSpeedMps": 3.0821087302560826,
+        "maxAngularSpeed": 0.06086583135600105,
+        "maxWheelLoadN": 3204.155165427579,
+        "maxCompressionM": 0.09246400919063574,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      },
+      "wallTimeDroppedSeconds": 0
+    },
+    "resumed": {
+      "phase": "running",
+      "paused": false,
+      "ticks": 97,
+      "position": [
+        0,
+        0.5020970588235295,
+        -2.79369346086109
+      ],
+      "velocity": [
+        0,
+        -4.1714918219583376e-16,
+        -2.0797780337201917
+      ],
+      "angularVelocity": [
+        0.0027713368181411183,
+        0,
+        0
+      ],
+      "steering": 0,
+      "gear": 1,
+      "rpm": 850,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildMode": "current",
+      "driver": "manual",
+      "diagnostics": {
+        "minUpY": 0.9999302092662299,
+        "minGrounded": 4,
+        "maxSpeedMps": 3.0821087302560826,
+        "maxAngularSpeed": 0.08787821948544357,
+        "maxWheelLoadN": 3204.155165427579,
+        "maxCompressionM": 0.09246400919063574,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      },
+      "wallTimeDroppedSeconds": 0
+    }
+  },
+  "controller": {
+    "service": "Synthetic standard Gamepad API device; production mapping and driving path.",
+    "driven": {
+      "phase": "running",
+      "paused": false,
+      "ticks": 67,
+      "position": [
+        0,
+        0.5020970588235295,
+        -1.4758708204243234
+      ],
+      "velocity": [
+        0,
+        -3.647111203027372e-16,
+        -3.419486085137774
+      ],
+      "angularVelocity": [
+        0.0014544447607585996,
+        0,
+        0
+      ],
+      "steering": 0,
+      "gear": 1,
+      "rpm": 1285.7734992104326,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildMode": "current",
+      "driver": "manual",
+      "diagnostics": {
+        "minUpY": 0.9999302092662299,
+        "minGrounded": 4,
+        "maxSpeedMps": 3.419486085137774,
+        "maxAngularSpeed": 0.06086583135600105,
+        "maxWheelLoadN": 3204.155165427579,
+        "maxCompressionM": 0.09246400919063574,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      },
+      "wallTimeDroppedSeconds": 0
+    },
+    "disconnected": {
+      "phase": "running",
+      "paused": true,
+      "ticks": 67,
+      "position": [
+        0,
+        0.5020970588235295,
+        -1.4758708204243234
+      ],
+      "velocity": [
+        0,
+        -3.647111203027372e-16,
+        -3.419486085137774
+      ],
+      "angularVelocity": [
+        0.0014544447607585996,
+        0,
+        0
+      ],
+      "steering": 0,
+      "gear": 1,
+      "rpm": 1285.7734992104326,
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "buildMode": "current",
+      "driver": "manual",
+      "diagnostics": {
+        "minUpY": 0.9999302092662299,
+        "minGrounded": 4,
+        "maxSpeedMps": 3.419486085137774,
+        "maxAngularSpeed": 0.06086583135600105,
+        "maxWheelLoadN": 3204.155165427579,
+        "maxCompressionM": 0.09246400919063574,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      },
+      "wallTimeDroppedSeconds": 0
+    }
+  },
+  "finalGarage": {
+    "version": 2,
+    "generation": "b709575647bc427cec91fa906d1ddab3",
+    "sequence": 4,
+    "garage": {
+      "version": 2,
+      "edition": "machine-shop-v1",
+      "catalogRevision": 1,
+      "credits": 1280,
+      "nextVehicleId": 2,
+      "activeVehicleId": "car-000001",
+      "bays": [
+        {
+          "ownedVehicleId": "car-000001",
+          "modelId": "cinder-two",
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "short",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "seafoam"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory",
+                "seafoam"
+              ]
+            }
+          },
+          "condition": {
+            "version": 1,
+            "status": "pristine"
+          }
+        },
+        null,
+        null,
+        null
+      ],
+      "revision": 4
+    },
+    "legacyBackup": null
+  },
+  "errors": [],
+  "limitations": [
+    "Synthetic Gamepad API and browser touch dispatch test device-service lifecycle behavior; no vehicle state or outcome is injected.",
+    "SwiftShader functional acceptance only; native hardware performance remains a separate release gate."
+  ]
+}

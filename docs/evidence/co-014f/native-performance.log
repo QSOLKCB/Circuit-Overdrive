@@ -1,0 +1,290 @@
+{
+  "source": "5454e365fc39bd4400df4c8f7a0e6818ca5cc2c9",
+  "native": true,
+  "browser": "158.0.8127.36",
+  "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+  "cycles": 8,
+  "ownedDriving": [
+    {
+      "cycle": 1,
+      "frames": 903,
+      "intervals": {
+        "samples": 902,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 16.899999999999636,
+        "meanMs": 16.648337028824834
+      },
+      "callbackCpu": {
+        "samples": 903,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 6.399999991059303,
+        "meanMs": 1.0510520494789513
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 871,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 6.399999991059303,
+        "meanMs": 1.0509758905927842
+      },
+      "gpuElapsed": {
+        "samples": 903,
+        "medianMs": 0.69648,
+        "p95Ms": 1.03984,
+        "worstMs": 2.192448,
+        "meanMs": 0.7367855769656706
+      }
+    },
+    {
+      "cycle": 2,
+      "frames": 902,
+      "intervals": {
+        "samples": 901,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 17.90000000000009,
+        "meanMs": 16.666703662597282
+      },
+      "callbackCpu": {
+        "samples": 902,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.300000011920929,
+        "worstMs": 6.100000008940697,
+        "meanMs": 1.0532150770766773
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 765,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.300000011920929,
+        "worstMs": 3.5,
+        "meanMs": 1.100784313211254
+      },
+      "gpuElapsed": {
+        "samples": 902,
+        "medianMs": 0.75008,
+        "p95Ms": 1.160416,
+        "worstMs": 2.127168,
+        "meanMs": 0.7881180310421292
+      }
+    },
+    {
+      "cycle": 3,
+      "frames": 902,
+      "intervals": {
+        "samples": 901,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 17.399999999999977,
+        "meanMs": 16.666703662597264
+      },
+      "callbackCpu": {
+        "samples": 902,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.3999999910593033,
+        "worstMs": 9.400000005960464,
+        "meanMs": 1.0774944573806025
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 813,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.3999999910593033,
+        "worstMs": 9.400000005960464,
+        "meanMs": 1.1077490778133585
+      },
+      "gpuElapsed": {
+        "samples": 902,
+        "medianMs": 0.784256,
+        "p95Ms": 1.171968,
+        "worstMs": 2.493408,
+        "meanMs": 0.7992921330376945
+      }
+    },
+    {
+      "cycle": 4,
+      "frames": 913,
+      "intervals": {
+        "samples": 912,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 17.100000000000364,
+        "meanMs": 16.66677631578965
+      },
+      "callbackCpu": {
+        "samples": 913,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.4000000059604645,
+        "worstMs": 6.799999997019768,
+        "meanMs": 1.0663745886720677
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 748,
+        "medianMs": 0.7999999970197678,
+        "p95Ms": 2.4000000059604645,
+        "worstMs": 4.200000002980232,
+        "meanMs": 1.140909090419026
+      },
+      "gpuElapsed": {
+        "samples": 904,
+        "medianMs": 0.73696,
+        "p95Ms": 1.161696,
+        "worstMs": 2.264352,
+        "meanMs": 0.777021486725664
+      }
+    },
+    {
+      "cycle": 5,
+      "frames": 902,
+      "intervals": {
+        "samples": 901,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.700000000000728,
+        "worstMs": 16.80000000000109,
+        "meanMs": 16.66670366259727
+      },
+      "callbackCpu": {
+        "samples": 902,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.4000000059604645,
+        "worstMs": 6.200000002980232,
+        "meanMs": 1.0590909091536855
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 686,
+        "medianMs": 0.8999999910593033,
+        "p95Ms": 2.4000000059604645,
+        "worstMs": 4.5,
+        "meanMs": 1.1731778430174113
+      },
+      "gpuElapsed": {
+        "samples": 902,
+        "medianMs": 0.70832,
+        "p95Ms": 1.162848,
+        "worstMs": 2.189056,
+        "meanMs": 0.7517293835920184
+      }
+    },
+    {
+      "cycle": 6,
+      "frames": 902,
+      "intervals": {
+        "samples": 901,
+        "medianMs": 16.69999999999891,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 16.80000000000109,
+        "meanMs": 16.666703662597268
+      },
+      "callbackCpu": {
+        "samples": 902,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.4000000059604645,
+        "worstMs": 6,
+        "meanMs": 1.0763858083941191
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 725,
+        "medianMs": 0.7999999970197678,
+        "p95Ms": 2.5,
+        "worstMs": 3.8999999910593033,
+        "meanMs": 1.1700689646704443
+      },
+      "gpuElapsed": {
+        "samples": 902,
+        "medianMs": 0.713472,
+        "p95Ms": 1.157184,
+        "worstMs": 1.56528,
+        "meanMs": 0.7567623592017746
+      }
+    },
+    {
+      "cycle": 7,
+      "frames": 902,
+      "intervals": {
+        "samples": 901,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.700000000000728,
+        "worstMs": 17.299999999999727,
+        "meanMs": 16.666703662597254
+      },
+      "callbackCpu": {
+        "samples": 902,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 8.299999997019768,
+        "meanMs": 1.0748337032789665
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 859,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 8.299999997019768,
+        "meanMs": 1.090570431319743
+      },
+      "gpuElapsed": {
+        "samples": 902,
+        "medianMs": 0.756288,
+        "p95Ms": 1.15536,
+        "worstMs": 2.236032,
+        "meanMs": 0.7899829002217289
+      }
+    },
+    {
+      "cycle": 8,
+      "frames": 901,
+      "intervals": {
+        "samples": 900,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999272,
+        "worstMs": 34.5,
+        "meanMs": 16.68522222222236
+      },
+      "callbackCpu": {
+        "samples": 901,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 8.299999997019768,
+        "meanMs": 1.0792452819008673
+      },
+      "acceptedStepCallbackCpu": {
+        "samples": 898,
+        "medianMs": 0.7000000029802322,
+        "p95Ms": 2.2999999970197678,
+        "worstMs": 8.299999997019768,
+        "meanMs": 1.081514475489645
+      },
+      "gpuElapsed": {
+        "samples": 901,
+        "medianMs": 0.779072,
+        "p95Ms": 1.202944,
+        "worstMs": 10.316,
+        "meanMs": 0.8524976159822418
+      }
+    }
+  ],
+  "isolated": {
+    "compilation": {
+      "samples": 64,
+      "medianMs": 0.09999999403953552,
+      "p95Ms": 0.19999998807907104,
+      "worstMs": 0.29999999701976776,
+      "meanMs": 0.07187499990686774
+    },
+    "geometry": {
+      "samples": 16,
+      "medianMs": 2.7000000029802322,
+      "p95Ms": 6.800000011920929,
+      "worstMs": 6.800000011920929,
+      "meanMs": 3.1562500009313226
+    },
+    "physicsStep": {
+      "samples": 600,
+      "medianMs": 0.20000000298023224,
+      "p95Ms": 0.29999999701976776,
+      "worstMs": 0.4000000059604645,
+      "meanMs": 0.19716666668653487
+    }
+  },
+  "closedHeapGrowthBytes": -545308,
+  "errors": []
+}

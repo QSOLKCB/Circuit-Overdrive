@@ -1,0 +1,9 @@
+{
+  "base": "b03516f6c967f7fbd0ae3f07fe81433ca279621b",
+  "functionalRuntime": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+  "nativeRuntime": "5454e365fc39bd4400df4c8f7a0e6818ca5cc2c9",
+  "files": 118,
+  "allRuntimeBlobsIdentical": true,
+  "runtimeTreeSha256": "5ad951a5a03062d05d72dde8fc6db6c38d29d70c85a9deae8bf5790dd72bef94",
+  "scope": "All raw shipped files, before source stamping. Each archive HTML stamp deliberately binds its own commit. Certification changes only tests, measurement tools and documentation."
+}

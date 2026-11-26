@@ -1,0 +1,86 @@
+{
+  "source": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+  "sevenWorkersUnchanged": true,
+  "allWorkersPassed": true,
+  "suiteCount": 23,
+  "workers": [
+    {
+      "name": "championship",
+      "suites": [
+        "championship"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/championship"
+    },
+    {
+      "name": "speedway",
+      "suites": [
+        "speedway",
+        "night-speedway"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/speedway"
+    },
+    {
+      "name": "ridge",
+      "suites": [
+        "ridge",
+        "night-ridge"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/ridge"
+    },
+    {
+      "name": "controllers",
+      "suites": [
+        "gamepad",
+        "profiles",
+        "lab",
+        "crash"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/controllers"
+    },
+    {
+      "name": "theatre",
+      "suites": [
+        "theatre",
+        "rocket"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/theatre"
+    },
+    {
+      "name": "effects",
+      "suites": [
+        "night-contact",
+        "headlights",
+        "nitro"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/effects"
+    },
+    {
+      "name": "lifecycle",
+      "suites": [
+        "smoke",
+        "ridge-smoke",
+        "night-smoke",
+        "touch",
+        "derby",
+        "garage",
+        "proving-ground",
+        "machine-shop",
+        "machine-certification"
+      ],
+      "exitCode": 0,
+      "rawEvidenceDirectory": "/tmp/co014f-browsers/lifecycle"
+    }
+  ],
+  "extraBrowserChecks": {
+    "publishedMigration": 6,
+    "partsCounter": 8,
+    "controlledRecordingCancellation": 1
+  },
+  "scope": "Complete existing seven-worker local orchestration at the functional source, plus extra migration/parts/cancellation journeys. Software WebGL is functional evidence; native measurements are separate."
+}

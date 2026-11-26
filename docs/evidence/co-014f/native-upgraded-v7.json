@@ -1,0 +1,140 @@
+{
+  "format": "circuit-overdrive.proving-replay",
+  "version": 7,
+  "discipline": "proving-ground",
+  "revision": "5454e365fc39bd4400df4c8f7a0e6818ca5cc2c9",
+  "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "modelId": "cinder-two",
+  "ownedVehicleId": "car-000001",
+  "buildRulesVersion": 2,
+  "build": {
+    "format": "circuit-overdrive.vehicle-build",
+    "version": 1,
+    "rulesVersion": 2,
+    "parts": {
+      "engine": "street",
+      "intake": "duct",
+      "exhaust": "flow",
+      "gearbox": "short",
+      "finalDrive": "adjustable",
+      "tyres": "performance",
+      "suspension": "adjustable",
+      "steering": "quick",
+      "paint": "midnight"
+    },
+    "tuning": {
+      "finalDrive": 1,
+      "spring": 1,
+      "damper": 1,
+      "travel": 1,
+      "steering": 1
+    },
+    "inventory": {
+      "engine": [
+        "stock",
+        "street"
+      ],
+      "intake": [
+        "duct",
+        "stock"
+      ],
+      "exhaust": [
+        "flow",
+        "stock"
+      ],
+      "gearbox": [
+        "short",
+        "stock"
+      ],
+      "finalDrive": [
+        "adjustable",
+        "stock"
+      ],
+      "tyres": [
+        "performance",
+        "stock"
+      ],
+      "suspension": [
+        "adjustable",
+        "stock"
+      ],
+      "steering": [
+        "quick",
+        "stock"
+      ],
+      "paint": [
+        "factory",
+        "midnight"
+      ]
+    }
+  },
+  "buildDigest": "682c6192fceb56f9d21c76e078822dda017f0a70825ca55bef9705bbe3e6dab5",
+  "recipeDigest": "a3c92e8c580c6fcdba7a6054ecf99d5d7664505afbfdece4d6da5086ebd0e161",
+  "trackId": "machine-test-facility-v1",
+  "rules": 1,
+  "testId": "acceleration",
+  "testRules": {
+    "name": "01 / Acceleration",
+    "limitTicks": 900,
+    "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+  },
+  "seed": 0,
+  "step": 0.016666666666666666,
+  "driver": "reference",
+  "startingPose": {
+    "position": [
+      0,
+      0.5020970588235295,
+      0
+    ],
+    "yaw": 0,
+    "pitch": 0,
+    "roll": 0,
+    "velocity": [
+      0,
+      0,
+      0
+    ]
+  },
+  "ticks": 900,
+  "runs": [
+    {
+      "ticks": 900,
+      "throttle": 1,
+      "brake": 0,
+      "steer": 0
+    }
+  ],
+  "terminalStop": false,
+  "result": {
+    "status": "completed",
+    "reason": "fixed-command-tape-complete",
+    "testId": "acceleration",
+    "acceptedTicks": 900,
+    "elapsedSeconds": 15,
+    "gatesPassed": 0,
+    "metrics": {
+      "accelerationSeconds": 6.782274774487981,
+      "brakingDistanceM": null,
+      "brakingStartSpeedMps": null,
+      "slalomSeconds": null,
+      "handlingSeconds": null,
+      "headingChangeRadians": 0,
+      "lateralSlipIntegralM": 0,
+      "maxLateralAccelerationMps2": 0,
+      "pathM": 409.8675677853319
+    },
+    "diagnostics": {
+      "minUpY": 0.9999325026319185,
+      "minGrounded": 4,
+      "maxSpeedMps": 45.46908945885623,
+      "maxAngularSpeed": 0.07111427766927762,
+      "maxWheelLoadN": 3868.7262909344036,
+      "maxCompressionM": 0.09734202500216937,
+      "barrierContactTicks": 0,
+      "solverTruncated": false,
+      "needsRecovery": false
+    }
+  },
+  "terminalStateDigest": "f164893596047cd17ec1a1dde9926e4646cbe45f0b5ff94590ea23da82059584"
+}

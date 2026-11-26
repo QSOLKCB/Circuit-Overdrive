@@ -1,0 +1,420 @@
+{
+  "kind": "co-014f-machine-economy-v1",
+  "sequences": {
+    "sequences": 1024,
+    "operations": 24576,
+    "accepted": 12796,
+    "rejected": 11780,
+    "installs": 7797,
+    "refits": 68,
+    "setupChanges": 75,
+    "sameIntentRetries": 7797,
+    "unchangedDuplicateFits": 7797,
+    "duplicateModelSequences": 510,
+    "publishedOpeningSequences": 514,
+    "syntheticOpeningSequences": 510,
+    "rejectionReasons": {
+      "insufficient-credits": 3563,
+      "already-fitted": 585,
+      "invalid-request": 1192,
+      "vehicle-not-owned": 4562,
+      "stale-revision": 1878
+    },
+    "modelInstalls": {
+      "cinder-two": {
+        "engine": 191,
+        "intake": 191,
+        "exhaust": 186,
+        "gearbox": 191,
+        "finalDrive": 197,
+        "tyres": 195,
+        "suspension": 191,
+        "steering": 108,
+        "paint": 116
+      },
+      "lilt": {
+        "engine": 207,
+        "intake": 196,
+        "exhaust": 200,
+        "gearbox": 119,
+        "finalDrive": 125,
+        "tyres": 126,
+        "suspension": 136,
+        "steering": 125,
+        "paint": 227
+      },
+      "evening-line": {
+        "engine": 189,
+        "intake": 182,
+        "exhaust": 183,
+        "gearbox": 190,
+        "finalDrive": 186,
+        "tyres": 190,
+        "suspension": 98,
+        "steering": 96,
+        "paint": 102
+      },
+      "rivet-eight": {
+        "engine": 211,
+        "intake": 199,
+        "exhaust": 188,
+        "gearbox": 111,
+        "finalDrive": 113,
+        "tyres": 118,
+        "suspension": 113,
+        "steering": 117,
+        "paint": 197
+      },
+      "yardhand": {
+        "engine": 115,
+        "intake": 97,
+        "exhaust": 100,
+        "gearbox": 107,
+        "finalDrive": 111,
+        "tyres": 103,
+        "suspension": 117,
+        "steering": 113,
+        "paint": 110
+      },
+      "glass-comet": {
+        "engine": 122,
+        "intake": 104,
+        "exhaust": 111,
+        "gearbox": 109,
+        "finalDrive": 107,
+        "tyres": 128,
+        "suspension": 115,
+        "steering": 102,
+        "paint": 116
+      }
+    },
+    "slotInstalls": {
+      "engine": 1035,
+      "intake": 969,
+      "exhaust": 968,
+      "gearbox": 827,
+      "finalDrive": 839,
+      "tyres": 860,
+      "suspension": 770,
+      "steering": 661,
+      "paint": 868
+    },
+    "journalSha256": "cd925aab27dc663c9493f02ee60d537468d5c6414bfde62a8972832871c1bf19",
+    "policy": "Each operation checks an independent authored cost/ownership/inventory ledger, unchanged input, exact receipt settlement, full serialization, repeated compiled recipe and pristine condition. Opening synthetic 100000-credit validator fixtures are explicit test data, never career rewards or live ownership."
+  },
+  "publishedOwnership": {
+    "published": "1c745a90258d0f6cb968935f773354cff702b276",
+    "sourceClosureSha256": {
+      "garage.js": "f43baf8f34337226daa0a86a4cf8833ea8814f6bb37fe968f923ed5cc5939bae",
+      "garage-data.js": "f4b8b34ec48d14bd0134b872310e6fbaac452baa1a22081c0f974154a670d679",
+      "garage-catalog.js": "12b8a864680f765962559d9a22a3b0597d8c9bc0c69159ddae1f0b10d63f9500",
+      "garage-transactions.js": "f7d6b31664c38ee82579a4841433d39a33af1d504a1f37dc1cd700d90d00257b",
+      "garage-vault-format.js": "900c44fb7a55332eadd8aa16d3ac113b4b1281d28c506991b3dc99073f37c4bb",
+      "garage-vault.js": "586204951ee00fd2c515c0be9b045284039b2808c572ce42b0b9922acc9daeaa"
+    },
+    "statesSha256": "1e89fef9d2c1a6aa7dd3948512f9b8ece8b18314e7663c2ebc67cf6d676d4b6f",
+    "fixtures": [
+      {
+        "name": "empty",
+        "synthetic": false,
+        "ownedIds": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "credits": 2400,
+        "activeVehicleId": null,
+        "nextVehicleId": 1,
+        "revision": 0,
+        "currentSha256": "7b2b1624868975b27fce0bffb381fa44a02824b09778c62c3672b81d7177e20c"
+      },
+      {
+        "name": "one-cinder-two",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 1800,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "2e7f05db632b5faa2d852aeb019f5176edea1bd0a21fd2ee3a150c9642741d4f"
+      },
+      {
+        "name": "one-lilt",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 1500,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "2b6d22d428aa28413ea22d74e973612d1f6ca0b02aa149125e8ac34e45718017"
+      },
+      {
+        "name": "one-evening-line",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 1000,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "69879ee594d57ba12bf98f75a71ba437c9c8a1a2965f1b3399399a2ccbee0c02"
+      },
+      {
+        "name": "one-rivet-eight",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 600,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "f768700146821cdb162d8f032a47b032143616158a3b194546ec46e0edb030ca"
+      },
+      {
+        "name": "one-yardhand",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 1200,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "5b3e462ca4b651209b6179a4f4fd25c6fb230021779897758c91642750ffe04e"
+      },
+      {
+        "name": "one-glass-comet",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          null,
+          null,
+          null
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 2,
+        "revision": 1,
+        "currentSha256": "1b3d7def9df8b69dc49c9789e92269fda840faf8987c53f999d116ba2e3d4770"
+      },
+      {
+        "name": "four-full-bays",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 5,
+        "revision": 4,
+        "currentSha256": "2bb9cb5abc8dcc78058f233bfc8f582143b68eb4a57b2026b682528bb8a9e0c4"
+      },
+      {
+        "name": "two-duplicate-models",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          null,
+          null
+        ],
+        "credits": 1200,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 3,
+        "revision": 2,
+        "currentSha256": "9b35b5351ba3444201d788bdd744d15250f9f062273a02a8e0a07bad6d9e077b"
+      },
+      {
+        "name": "sold-id-gap",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000004",
+          "car-000002",
+          "car-000003",
+          null
+        ],
+        "credits": 60,
+        "activeVehicleId": "car-000002",
+        "nextVehicleId": 5,
+        "revision": 5,
+        "currentSha256": "e49d8a8fef069b2403f5037da76a44665d724cbba63be39d0dc83aa06377e40b"
+      },
+      {
+        "name": "active-bay-1",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 5,
+        "revision": 5,
+        "currentSha256": "5b988c8fabbfd2b6cc406e4d07822e0150316885ad2fbc6018abe7f5d1737700"
+      },
+      {
+        "name": "active-bay-2",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000002",
+        "nextVehicleId": 5,
+        "revision": 5,
+        "currentSha256": "2ff4155f8046cd9b64755518f54ee8109f30589807acb3c89a69aa4e1f440f74"
+      },
+      {
+        "name": "active-bay-3",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000003",
+        "nextVehicleId": 5,
+        "revision": 5,
+        "currentSha256": "9a90d00c5e453e8542d28457462399c7b2430cedac7de3611d2cd11e5f1e1ab7"
+      },
+      {
+        "name": "active-bay-4",
+        "synthetic": false,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000004",
+        "nextVehicleId": 5,
+        "revision": 5,
+        "currentSha256": "8bd3fe4bf732bb36d0881230ad62253a0b0179b73a6df7efd73d533410bed938"
+      },
+      {
+        "name": "revision-exhausted",
+        "synthetic": true,
+        "ownedIds": [
+          "car-000001",
+          "car-000002",
+          "car-000003",
+          "car-000004"
+        ],
+        "credits": 0,
+        "activeVehicleId": "car-000001",
+        "nextVehicleId": 5,
+        "revision": 99999999,
+        "currentSha256": "818eff3e31f3bc3cb2bd0c3f20ed1150627518248a678c45f21332c69b3e2418"
+      },
+      {
+        "name": "serial-exhausted",
+        "synthetic": true,
+        "ownedIds": [
+          "car-999999",
+          null,
+          null,
+          null
+        ],
+        "credits": 1800,
+        "activeVehicleId": "car-999999",
+        "nextVehicleId": 1000000,
+        "revision": 1,
+        "currentSha256": "c5fc576998cd5da1cc2461f293ad19503d120af747945ecd4362ae5148d7f867"
+      },
+      {
+        "name": "revision-and-serial-exhausted",
+        "synthetic": true,
+        "ownedIds": [
+          "car-999999",
+          null,
+          null,
+          null
+        ],
+        "credits": 1800,
+        "activeVehicleId": "car-999999",
+        "nextVehicleId": 1000000,
+        "revision": 99999999,
+        "currentSha256": "25ebe904c74513e9a5f853b422314a3e56759556175d26a3a4255d63a3cebc7b"
+      },
+      {
+        "name": "worst-case-valid-fields",
+        "synthetic": true,
+        "ownedIds": [
+          "car-999996",
+          "car-999997",
+          "car-999998",
+          "car-999999"
+        ],
+        "credits": 99999999,
+        "activeVehicleId": "car-999999",
+        "nextVehicleId": 1000000,
+        "revision": 99999999,
+        "currentSha256": "0990a47cf72bbe9951107ee96957a54f8be5ff13d81ebe9883dddd39d67b6558"
+      }
+    ]
+  },
+  "utf8Bounds": {
+    "buildBytes": 708,
+    "garageBytes": 3444,
+    "vaultBytes": 3942,
+    "limits": {
+      "buildBytes": 2048,
+      "garageBytes": 65536,
+      "vaultBytes": 65536
+    },
+    "policy": "Complete finite inventories, longest compatible fitted IDs, signed maximum-width tuning, four longest-model identities, maximum counters/credits and recoverable legacy backup. Synthetic admission boundaries, not earned funds."
+  },
+  "source": {
+    "head": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+    "workingTreeMatchesHead": true,
+    "modified": "",
+    "sha256": {
+      "src/garage.js": "d0bd6d930501abcaf92b8f5b9566ed1aa5b09884cae1ca5dfffc728325b1eae2",
+      "src/garage-transactions.js": "b60dab30af30ab35e3b0505e264425474d32a2b9ef8d0fec5dd7510afdf71875",
+      "src/garage-vault.js": "1c470e273d243241af0268234ddae8b52186190deae9c90009ce8dd28efa5f59",
+      "src/garage-vault-format.js": "e588016df0315dfefeb26dd03ac23d61222a35c3e8fd395916a542718d18ea34",
+      "src/vehicle-builds.js": "56e9290f7be153d4bbddba0c50dbcb8d6e3c99a200f7a52e717a003f8c788905",
+      "src/vehicle-parts.js": "4fa3ff85af450da016afc8b45abd129076c4cb545037c2e9f5308c11f4f37d52",
+      "scripts/certify-machine-economy.mjs": "c62e76d5c31e629cf23a7580a3a34736c20c2467e93139019c279908d207f2ba",
+      "tests/machine-economy-certification.test.mjs": "43d1c500ff06c2ca727c18654fbc404b810328b3a7cb53e410495c7d2ed27642"
+    }
+  },
+  "runtime": {
+    "node": "v22.18.0",
+    "platform": "linux",
+    "arch": "x64"
+  }
+}

@@ -73,6 +73,8 @@ CO-014D adds `tests/browser-proving-ground.mjs` to that same lifecycle worker. I
 
 CO-014E adds `tests/browser-machine-shop.mjs` to the same worker. It exercises all nine fitted slots, quantized setup, verified comparison evidence, reload and native save export/import, original-build v7 playback after later fittings, bounded seeking, context recovery, rejected files and real concurrent-tab verification invalidation. It retains its recordings and screenshots with the tested source. No historical browser suite is removed; the seven-worker matrix stays unchanged.
 
+CO-014F adds `tests/browser-machine-certification.mjs` to lifecycle. Production controls drive and capture all six stock silhouettes, run all four measured tests per model, and compare ten mechanical proposals without creating a garage or spending credits. Source/build/recipe identities, accepted command hashes and physical outcomes are retained. Native GPU profiling remains a separate quiet-machine run; CI software WebGL is functional evidence.
+
 CO-013E extends that same suite with premium and mixed-model purchases, inactive
 and final-car sales, duplicate confirmations, stale imports, actual Web Lock
 contention, storage-denied/uncertain-write recovery and preservation of an
