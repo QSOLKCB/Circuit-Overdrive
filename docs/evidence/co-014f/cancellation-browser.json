@@ -1,0 +1,20 @@
+{
+  "source": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+  "browser": "158.0.8127.36",
+  "url": "http://127.0.0.1:8773/Circuit-Overdrive/",
+  "expectStale": false,
+  "scheduling": "Synthetic CDP pause at the proposed recording admission yield; the actual test select value is changed and its registered production onchange handler is invoked while paused (Chrome suppresses DOM event delivery under debugger pause). No simulation state or outcome injection.",
+  "beforeResume": {
+    "status": "Selection changed. Load the selected build before driving.",
+    "comparison": "null",
+    "measurements": 0
+  },
+  "observed": {
+    "test": "braking",
+    "status": "Selection changed. Load the selected build before driving.",
+    "comparison": null,
+    "measurements": 0,
+    "garage": null
+  },
+  "errors": []
+}

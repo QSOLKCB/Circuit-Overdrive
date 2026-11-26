@@ -1,0 +1,219 @@
+{
+  "kind": "co-014f-verification-v1",
+  "base": "b03516f6c967f7fbd0ae3f07fe81433ca279621b",
+  "functionalRuntime": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+  "nativeRuntime": "5454e365fc39bd4400df4c8f7a0e6818ca5cc2c9",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtimeBlobsUnchanged": 118,
+  "checks": {
+    "node": {
+      "pass": 560,
+      "fail": 0,
+      "skipped": 0
+    },
+    "browserWorkers": 7,
+    "browserSuites": 23,
+    "stockBrowserBenchmarkPairs": 24,
+    "proposalBrowserPairs": 10,
+    "nativeStockAdmissions": 6,
+    "nativeCompleteCycles": 8,
+    "independentFacilityRuns": 92,
+    "unsupportedTorqueCombinationRejected": 1,
+    "verifiedCanonicalIdentities": 107,
+    "v7IndependentReconstructions": 10,
+    "generatedSequences": 1024,
+    "generatedOperations": 24576,
+    "acceptedInstallations": 7797,
+    "immutableOwnershipFixtures": 18,
+    "publishedFixtureGitFiles": 6,
+    "realMigrationBrowserScenarios": 6,
+    "realPartsBrowserScenarios": 8,
+    "historicalTicksMatched": 45225,
+    "baselinePostMergeChecksPassed": 18,
+    "offline": "both source-stamped archives built and independently verified",
+    "httpAssetsPerSource": 118,
+    "sevenWorkerArchitecture": "unchanged; all historical suites retained"
+  },
+  "native": {
+    "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2, OpenGL ES 3.2)",
+    "viewport": {
+      "width": 1920,
+      "height": 1080,
+      "devicePixelRatio": 1.0000000149011612
+    },
+    "driver": "595.99.02",
+    "os": "Ubuntu 26.04.1 LTS",
+    "drivingRafMs": {
+      "median": 16.7,
+      "p95": 16.8,
+      "worst": 34.5
+    },
+    "drivingGpuMs": {
+      "median": 0.741,
+      "p95": 1.159,
+      "worst": 10.316
+    },
+    "closedHeapGrowthBytes": -545308,
+    "liveVoicesAfterPause": 0,
+    "ordinaryDrivingMeshUploads": 0,
+    "errors": 0,
+    "externalRequests": 0,
+    "observerSha256": "9c5254c981eb73d834acd10dc9349347a696ebf9321b1c6dd716242b53ae7082"
+  },
+  "archives": [
+    {
+      "source": "6eb0d1da9a5209b875bd064da97e74d08d6ecef2",
+      "sha256": "8d1e2355f988910ce7243664a7b5ce917bd5bc6f4e8eda37e8aac9d080ea31d9"
+    },
+    {
+      "source": "5454e365fc39bd4400df4c8f7a0e6818ca5cc2c9",
+      "sha256": "6ccaea2a3a6e5bd093b80d9cdc22a40e55739a00efe60804e2865dd613cf02c3"
+    }
+  ],
+  "releaseGatesPending": [
+    "Owner F review and merge.",
+    "Final exact main SHA and protected post-merge/public Pages checks.",
+    "Fresh independently verified final-source archive/stamp.",
+    "Owner manual play-through and manual tagging/publication."
+  ],
+  "limits": [
+    "Persistent damage/repair adapter deferred; pristine cars have no bill.",
+    "Native result is bounded single-machine evidence, not locked60FPS or unlimited leak freedom.",
+    "V7 requires matching source and does not authenticate a human driver.",
+    "Synthetic high-budget generator fixtures are not game income."
+  ],
+  "artifacts": {
+    "baseline-post-merge-checks.json": {
+      "bytes": 4093,
+      "sha256": "4922390b2f37bb7b09ee5170a4ec50d3416d7897b15d4dfd44cc9fa2a5c9f5f3"
+    },
+    "baseline-public-http.log": {
+      "bytes": 99,
+      "sha256": "97e7247fb423251e5ae6b90c305bdd5a226981a48534e8fa108a47052224a4ac"
+    },
+    "benchmark-matrix-browser.json": {
+      "bytes": 199990,
+      "sha256": "70c66a982942baf6558810aa62138069f3400e26dbbab61458e69ff116e872e1"
+    },
+    "browser-artifacts.json": {
+      "bytes": 43887,
+      "sha256": "1ef16affb8c57c4f4425201ef9c2c766cbd2d002258ff209d8cdb75a33e86569"
+    },
+    "browser-workers.json": {
+      "bytes": 2019,
+      "sha256": "6fb5578a69572cc0e948cfbd78cc2eb2e4a1adcecc0215a0557645f8922eb85b"
+    },
+    "cancellation-browser.json": {
+      "bytes": 813,
+      "sha256": "474d84a5208ae54ec98d64c0b41cc7910960a8eb12380332ad5041b894d9b239"
+    },
+    "economy.json": {
+      "bytes": 12307,
+      "sha256": "d394c829317c6a1eda0cc17aa7c19321cbea2d7b1937570f1ffa30fb036467bb"
+    },
+    "functional-offline.log": {
+      "bytes": 831,
+      "sha256": "bdc716c8a39297c5e0dc96b1616cff04fc9ec61ea6431c677ba11d2e1983a5de"
+    },
+    "garage-browser.json": {
+      "bytes": 13127,
+      "sha256": "0c825999c78019c7e97aba9e28968ffafa7bd5a5e4b0fac2fb61ddd4a8f6da1c"
+    },
+    "machine-native-owned-test-1080p.png": {
+      "bytes": 783529,
+      "sha256": "a27339cd65e930cb7e3b9360b7827bd75a300cfd3400ae42c448c32b018ade48"
+    },
+    "machine-native-replay-1080p.png": {
+      "bytes": 826213,
+      "sha256": "6f48f15a431f163a63d9a3beb08836fb6e0c81774a6bbcbffeb4ebf4386da341"
+    },
+    "machine-native-stock-cinder-two-1080p.png": {
+      "bytes": 760580,
+      "sha256": "655c12cd9db09dbb40f7de6856e7da2523fb9361a79a6f3237ae0094eb643a9d"
+    },
+    "machine-native-stock-evening-line-1080p.png": {
+      "bytes": 759283,
+      "sha256": "09580aaf34ac9d317144506c55d15629b30f07ca3971d9d8e2d038debd31dda4"
+    },
+    "machine-native-stock-glass-comet-1080p.png": {
+      "bytes": 795596,
+      "sha256": "2513b292efc57c38e29a93ee4d525631d474ad60e0babeab02e9e27e8de5ce2c"
+    },
+    "machine-native-stock-lilt-1080p.png": {
+      "bytes": 761181,
+      "sha256": "b941d87d3ae8924ef26b96e908650ca5ccc9f5d033182664f5b280a670881839"
+    },
+    "machine-native-stock-rivet-eight-1080p.png": {
+      "bytes": 771837,
+      "sha256": "fa3e9cb74c67bfa02949f97515648e91e7d393ca80e115a7a5f0baf2941a15b6"
+    },
+    "machine-native-stock-yardhand-1080p.png": {
+      "bytes": 747602,
+      "sha256": "605b768bf8e5f8230ba09e35f8de264f55095b42ecdb9fb4dbbf12a8667e8fe6"
+    },
+    "machine-native-workshop-1080p.png": {
+      "bytes": 873023,
+      "sha256": "2ec655eb19283ea4c8203f0f8e24a90235cd61827d77b4975c5390195feed534"
+    },
+    "machine-shop-browser.json": {
+      "bytes": 95736,
+      "sha256": "4cf8ee165eb67446a2ec3d477b2a3744084ec5a2090a3d092a5479344f3480e0"
+    },
+    "migration-browser.json": {
+      "bytes": 10935,
+      "sha256": "581741c61a5478327fec3ac348f7b60328bff8e6c2e9d9757452baf174f12836"
+    },
+    "native-http.log": {
+      "bytes": 95,
+      "sha256": "e2440fb51b435c28a42ec8a5a7a826fe516333631bd380692934f65016e45b71"
+    },
+    "native-offline.log": {
+      "bytes": 831,
+      "sha256": "14d334cc917974d02537e233afd6f65ef03bb4fb7ce567d4c70648eba584360f"
+    },
+    "native-performance.json": {
+      "bytes": 605028,
+      "sha256": "91fe6d61d59c0919290fc272b56ddc259985e3321f75de55e7427b9915db03a8"
+    },
+    "native-performance.log": {
+      "bytes": 7714,
+      "sha256": "b3a8d35232c7ac58edcf525bc3559aadcf4aa91696e09259262c81803ed53273"
+    },
+    "native-upgraded-v7.json": {
+      "bytes": 3296,
+      "sha256": "3aa95ce816d068b788f4a91295bfe70d4e6391cd027115e6ac00b16051e5e54d"
+    },
+    "node-tests.log": {
+      "bytes": 138531,
+      "sha256": "4c7d448c5cedf523dbd23953f0571b5a6b4329b68e3cf91ba67881a09217e662"
+    },
+    "offline-tests.log": {
+      "bytes": 98,
+      "sha256": "4ad9a0ccf4725737fa8e20183e93e68af5cfde6bc6de5c3064ed9c18786a45c9"
+    },
+    "parts-browser.json": {
+      "bytes": 32072,
+      "sha256": "13de98132ecf68f244be1ae7a8ef3f03aabed0bd0a7eadd8b6a4cf4998eb3756"
+    },
+    "physics.json": {
+      "bytes": 555692,
+      "sha256": "03900e7ea8e0f365fcef85ce4a22593183e90cc91c5d5eb0dff0b058043b5c65"
+    },
+    "proving-lifecycle-browser.json": {
+      "bytes": 20947,
+      "sha256": "4333f8d982e9e37747c5efb0d37ae2d553a66807c0fae37c643eae47807ce756"
+    },
+    "runtime-parity.json": {
+      "bytes": 521,
+      "sha256": "aa34960f4d0672ff9e78e07d4f642e47ab6f264518a856761c0a46c5d091ce54"
+    },
+    "shards.log": {
+      "bytes": 80,
+      "sha256": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed"
+    },
+    "v130-parity.json": {
+      "bytes": 4951,
+      "sha256": "16d3771ab59e3a46bf727209135574c38fcf96e9db48b501c8f7825c03865363"
+    }
+  }
+}
