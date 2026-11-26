@@ -18,7 +18,7 @@ if(!software)assert.equal(cycleCount,8,'Native certification requires eight comp
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||undefined,
   headless:software||process.env.MACHINE_HEADFUL==='0',
   args:software?['--use-angle=swiftshader','--enable-unsafe-swiftshader']:['--enable-gpu','--use-angle=gl']});
-const slot='circuit-overdrive.garage.v1',errors=[],requests=[],captures=[],periods=[],memory=[],cycles=[];
+const slot='circuit-overdrive.garage.v1',errors=[],warnings=[],requests=[],captures=[],periods=[],memory=[],cycles=[],nativeStockAdmissions=[];
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const summary=values=>{
   const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b),n=sorted.length;
@@ -27,7 +27,8 @@ const summary=values=>{
 };
 let source,runtime,acceptedRaw,isolated;
 try{
-  const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,acceptDownloads:true});
+  const viewport=software?{width:1280,height:720}:{width:1920,height:1080};
+  const context=await browser.newContext({viewport,deviceScaleFactor:1,acceptDownloads:true});
   await context.route('**/*',route=>{
     const url=route.request().url();requests.push(url);
     if(url.startsWith(base.href)||url.startsWith('blob:')||url.startsWith('data:'))return route.continue();
@@ -36,11 +37,11 @@ try{
   await context.addInitScript(()=>{
     const ids=new Set(['garage-canvas','pg-world','pr-world']);
     const nativeRAF=requestAnimationFrame.bind(window),contexts=new WeakSet(),bindings=new WeakMap();
-    const buffers=new Map(),programs=new Set(),rows=[],events=[],audioContexts=new Set();
+    const buffers=new Map(),programs=new Set(),rows=[],events=[],audioContexts=new Set(),voices=new Set(),gains=new Set(),gainParams=new WeakMap();
     const resources={createdBuffers:0,deletedBuffers:0,invalidatedBuffers:0,liveBuffers:0,retainedBytes:0,
       uploads:0,uploadedBytes:0,createdPrograms:0,deletedPrograms:0,invalidatedPrograms:0,livePrograms:0,
       drawCalls:0,contextLosses:0,contextRestorations:0};
-    const audio={created:0,closeCalls:0,closed:0,live:0,resumeCalls:0,stateChanges:[]};
+    const audio={created:0,closeCalls:0,closed:0,live:0,resumeCalls:0,createdSources:0,endedSources:0,liveSources:0,stateChanges:[],gainRamps:0,lastGainRamp:null};
     const gpu={available:null,created:0,completed:0,discarded:0,peakPending:0};
     let mode=null,current=null,glForQuery=null,ext=null,lastTicks=0,lastEvent=null;
     const pending=[];
@@ -96,11 +97,21 @@ try{
     if(NativeAudio)globalThis.AudioContext=class extends NativeAudio{
       constructor(...args){super(...args);audio.created++;audioContexts.add(this);audio.live=audioContexts.size;
         this.addEventListener('statechange',()=>{if(audio.stateChanges.length<100)audio.stateChanges.push(this.state);});}
+      createGain(...args){const node=super.createGain(...args);gains.add(node);gainParams.set(node.gain,this);return node;}
+      createBufferSource(...args){const node=super.createBufferSource(...args);audio.createdSources++;voices.add(node);audio.liveSources=voices.size;
+        node.addEventListener('ended',()=>{audio.endedSources++;voices.delete(node);audio.liveSources=voices.size;});return node;}
       resume(...args){audio.resumeCalls++;return super.resume(...args);}
       close(...args){audio.closeCalls++;const result=super.close(...args);return result.then(value=>{
         audio.closed++;audioContexts.delete(this);audio.live=audioContexts.size;return value;
       });}
     };
+    if(globalThis.AudioParam){
+      const ramp=AudioParam.prototype.linearRampToValueAtTime;
+      AudioParam.prototype.linearRampToValueAtTime=function(value,when){
+        const context=gainParams.get(this);if(context){audio.gainRamps++;audio.lastGainRamp={value,when,contextTime:context.currentTime};}
+        return ramp.call(this,value,when);
+      };
+    }
     for(const type of ['click','change']){
       document.addEventListener(type,event=>{
         const id=event.target.closest?.('button,select')?.id;
@@ -128,9 +139,10 @@ try{
     window.machinePerf={resources,audio,gpu,rows,events,pollGPU,
       mode(value){mode=value;lastEvent=null;},
       reset(){rows.length=0;events.length=0;lastEvent=null;},
-      snapshot(){return {resources:counts(),audio:{...audio,stateChanges:audio.stateChanges.slice()},gpu:{...gpu},pendingQueries:pending.length};}};
+      snapshot(){return {resources:counts(),audio:{...audio,stateChanges:audio.stateChanges.slice(),gainValues:[...gains].map(node=>node.gain.value)},gpu:{...gpu},pendingQueries:pending.length};}};
   });
   const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
+  page.on('console',message=>{if(['warning','error'].includes(message.type()))warnings.push({type:message.type(),text:message.text()});});
   page.on('response',response=>{if(response.status()>=400)errors.push(response.status()+' '+response.url());});
   const cdp=await context.newCDPSession(page),el=id=>page.locator('#'+id);
   const json=async id=>JSON.parse(await el(id).textContent());
@@ -147,6 +159,8 @@ try{
     await commit('garage-parts-review');
   }
   const counts=()=>page.evaluate(()=>window.machinePerf.snapshot());
+  const canvasDetails=id=>page.evaluate(id=>{const canvas=document.getElementById(id),gl=canvas.getContext('webgl');
+    return {css:{width:canvas.clientWidth,height:canvas.clientHeight},drawingBuffer:{width:gl.drawingBufferWidth,height:gl.drawingBufferHeight}};},id);
   async function mode(value){await page.evaluate(value=>window.machinePerf.mode(value),value);}
   async function flush(){await page.waitForTimeout(100);await page.evaluate(()=>window.machinePerf.pollGPU());}
   async function period(label){
@@ -157,6 +171,7 @@ try{
     const result={label,frames:frames.length,renderedFrames:rendered.length,
       intervals:summary(intervals),callbackCpu:summary(frames.map(row=>row.callbackMs)),
       drawFrameCallbackCpu:summary(rendered.map(row=>row.callbackMs)),glDrawSubmission:summary(rendered.map(row=>row.glSubmissionMs)),gpuElapsed:summary(gpu),
+      acceptedStepCallbackCpu:summary(frames.filter(row=>row.acceptedSteps>0).map(row=>row.callbackMs)),
       eventDispatch:summary(data.events.map(row=>row.eventDispatchMs)),actionToCallback:summary(frames.map(row=>row.actionToCallbackMs)),
       acceptedSteps:frames.reduce((sum,row)=>sum+(row.acceptedSteps||0),0),snapshot:data.snapshot,
       raw:{intervalsMs:intervals,callbackMs:frames.map(row=>row.callbackMs),gpuMs:gpu,acceptedSteps:frames.map(row=>row.acceptedSteps??0)},events:data.events};
@@ -167,16 +182,17 @@ try{
     await cdp.send('HeapProfiler.collectGarbage');const value=await cdp.send('Runtime.getHeapUsage');
     const sample={label,...value,snapshot:await counts()};memory.push(sample);return sample;
   }
-  async function capture(name){if(!evidence)return;const file=name+'.png',path=join(evidence,file);await page.screenshot({path});captures.push({file,sha256:sha(await readFile(path))});}
+  async function capture(name){if(!evidence)return;if(software)name=name.replace('machine-native','machine-software').replace('1080p','720p');const file=name+'.png',path=join(evidence,file);await page.screenshot({path});captures.push({file,sha256:sha(await readFile(path))});}
   async function restore(canvasId,label){
     const before=await counts(),start=performance.now();
     await page.evaluate(id=>{const gl=document.getElementById(id).getContext('webgl'),ext=gl.getExtension('WEBGL_lose_context');
       if(!ext)throw Error('Context-loss service unavailable');window.restoreMachineContext=()=>ext.restoreContext();ext.loseContext();},canvasId);
     await page.waitForFunction(old=>window.machinePerf.resources.contextLosses>old,before.resources.contextLosses);
-    const lost=await counts();assert.equal(lost.resources.liveBuffers,0);assert.equal(lost.audio.live,0);
+    await page.waitForFunction(()=>window.machinePerf.audio.liveSources===0,null,{timeout:10000});
+    const lost=await counts(),audioSilencedWallMs=performance.now()-start;assert.equal(lost.resources.liveBuffers,0);assert.equal(lost.audio.liveSources,0);
     await page.waitForTimeout(100);await page.evaluate(()=>window.restoreMachineContext());
     await page.waitForFunction(old=>window.machinePerf.resources.contextRestorations>old&&window.machinePerf.resources.liveBuffers>0,before.resources.contextRestorations);
-    return {label,wallMs:performance.now()-start,deliberateLostIntervalMs:100,before,lost,restored:await counts()};
+    return {label,wallMs:performance.now()-start,audioSilencedWallMs,deliberateLostIntervalMs:100,before,lost,restored:await counts()};
   }
   await page.goto(base.href);await page.bringToFront();await stamped();await el('enter-garage:enabled').click();
   await commit('garage-create');await el('garage-model-cinder-two').click();await commit('garage-buy');await el('garage-bay-0').click();
@@ -191,7 +207,7 @@ try{
       vendor:gl.getParameter(ext?.UNMASKED_VENDOR_WEBGL??gl.VENDOR),viewport:{width:innerWidth,height:innerHeight,devicePixelRatio},
       garageBuffer:{width:gl.drawingBufferWidth,height:gl.drawingBufferHeight},cssGarage:{width:canvas.clientWidth,height:canvas.clientHeight}};
   });
-  assert.equal(runtime.viewport.width,1920);assert.equal(runtime.viewport.height,1080);assert(Math.abs(runtime.viewport.devicePixelRatio-1)<1e-5);
+  assert.equal(runtime.viewport.width,viewport.width);assert.equal(runtime.viewport.height,viewport.height);assert(Math.abs(runtime.viewport.devicePixelRatio-1)<1e-5);
   if(!software)assert(/nvidia/i.test(runtime.renderer)&&!/swiftshader|llvmpipe|software/i.test(runtime.renderer),'Native NVIDIA required: '+runtime.renderer);
   let recordedBytes=null,referenceResult=null;
   for(let cycle=1;cycle<=cycleCount;cycle++){
@@ -210,7 +226,23 @@ try{
     const admissionStart=performance.now();await el('garage-test-drive').click();await page.waitForURL('**/proving-ground.html?vehicle=car-000001');await stamped();
     await page.waitForFunction(()=>{try{const t=JSON.parse(document.querySelector('#pg-telemetry').textContent);return t.ticks===0&&t.ownedVehicleId==='car-000001';}catch{return false;}});
     const admissionWallMs=performance.now()-admissionStart;
+    if(!software&&cycle===1){
+      for(const model of ['cinder-two','lilt','evening-line','rivet-eight','yardhand','glass-comet']){
+        await el('pg-build-mode').selectOption('stock');await el('pg-stock-model').selectOption(model);
+        await el('pg-test').selectOption('practice');await el('pg-driver').selectOption('manual');await el('pg-load').click();
+        const initial=await json('pg-telemetry');assert.equal(initial.modelId,model);assert.equal(initial.ownedVehicleId,null);
+        await el('pg-arm').click();await page.keyboard.down('w');
+        await page.waitForFunction(()=>JSON.parse(document.querySelector('#pg-telemetry').textContent).ticks>=60);
+        await page.keyboard.up('w');await el('pg-arm').click();const driven=await json('pg-telemetry');
+        assert(driven.paused);assert(driven.position.every(Number.isFinite));assert(Math.hypot(...driven.velocity)>.5);
+        const snapshot=await counts();assert.equal(snapshot.resources.liveBuffers,19);assert.equal(await raw(),acceptedRaw);
+        nativeStockAdmissions.push({modelId:model,initial,driven,canvas:await canvasDetails('pg-world'),snapshot});
+        await capture('machine-native-stock-'+model+'-1080p');
+      }
+      await el('pg-owned').selectOption('car-000001');await el('pg-build-mode').selectOption('current');
+    }
     await el('pg-test').selectOption('acceleration');await el('pg-driver').selectOption('reference');await el('pg-load').click();
+    const provingCanvas=await canvasDetails('pg-world');
     const loaded=await counts();assert.equal(loaded.resources.liveBuffers,19);assert.equal(loaded.resources.livePrograms,2);assert.equal(loaded.audio.created,0);
     await el('pg-sound').click();await mode('owned-driving-'+cycle);await el('pg-arm').click();
     let restoration=null;
@@ -223,8 +255,12 @@ try{
     const result=await json('pg-result'),driving=await period('owned-driving-'+cycle),finished=await counts();
     assert.equal(result.status,'completed');assert.equal(result.acceptedTicks,900);assert.equal(result.diagnostics.solverTruncated,false);assert.equal(result.diagnostics.needsRecovery,false);
     referenceResult??=result;assert.deepEqual(result,referenceResult,'Each accepted 900-call run reproduces despite navigation, graphics recovery and audio lifecycle');
-    assert(finished.audio.created>=1);assert.equal(finished.audio.live,0);assert.equal(finished.audio.closed,finished.audio.created);
+    assert.equal(finished.audio.created,1,'Pause/resume must reuse one gesture-created AudioContext');
+    assert(finished.audio.createdSources>0,'The real audio device must have scheduled actual buffer voices');
+    assert.equal(finished.audio.liveSources,0);assert.equal(finished.audio.lastGainRamp?.value,0,'Pause must schedule a fade to silence');
+    assert.equal(await el('pg-sound').getAttribute('aria-pressed'),'true','Audio device should remain available through the accepted drive');
     assert.equal(finished.resources.liveBuffers,19);assert.equal(finished.resources.livePrograms,2);
+    if(!restoration){assert.equal(finished.resources.uploads,loaded.resources.uploads,'Actual driving must reuse retained meshes');assert.equal(finished.resources.retainedBytes,loaded.resources.retainedBytes);}
     assert.equal(await raw(),acceptedRaw,'Inspection, driving and restoration cannot mutate the accepted save');
     if(cycle===1){
       await capture('machine-native-owned-test-1080p');
@@ -253,6 +289,7 @@ try{
     await page.waitForFunction(()=>JSON.parse(document.querySelector('#pr-telemetry').textContent).phase==='ready',null,{timeout:90000});
     const admissionViewerWallMs=performance.now()-viewerStart;assert.equal((await json('pr-telemetry')).recipeDigest,recording.recipeDigest);
     const viewerLoaded=await counts();assert.equal(viewerLoaded.resources.liveBuffers,19);assert.equal(viewerLoaded.audio.created,0);
+    const viewerCanvas=await canvasDetails('pr-world');
     await mode('replay-driving-'+cycle);await el('pr-play').click();await page.waitForFunction(()=>JSON.parse(document.querySelector('#pr-telemetry').textContent).tick>=120);
     await el('pr-play').click();const replayDriving=await period('replay-driving-'+cycle);
     const seekStart=performance.now();await el('pr-seek').evaluate(control=>{control.value='900';control.dispatchEvent(new Event('input',{bubbles:true}));});
@@ -261,10 +298,10 @@ try{
     let replayRestoration=null;if(cycle===8)replayRestoration=await restore('pr-world','replay-viewer');
     assert.equal(await raw(),acceptedRaw);const viewerFinished=await heap('replay-finished-'+cycle);
     if(cycle===1)await capture('machine-native-replay-1080p');
-    cycles.push({cycle,admissionWallMs,admissionViewerWallMs,seekWallMs,loaded,finished,restoration,replayRestoration,
+    cycles.push({cycle,admissionWallMs,admissionViewerWallMs,seekWallMs,provingCanvas,viewerCanvas,loaded,finished,restoration,replayRestoration,
       result,recording:{bytes:tapeBytes.length,sha256:sha(tapeBytes),buildDigest:recording.buildDigest,recipeDigest:recording.recipeDigest},
       garageIdle:{frames:garageIdle.frames,intervals:garageIdle.intervals},selection:{eventDispatch:selection.eventDispatch,actionToCallback:selection.actionToCallback},
-      driving:{frames:driving.frames,intervals:driving.intervals,callbackCpu:driving.callbackCpu,gpuElapsed:driving.gpuElapsed},
+      driving:{frames:driving.frames,intervals:driving.intervals,callbackCpu:driving.callbackCpu,acceptedStepCallbackCpu:driving.acceptedStepCallbackCpu,gpuElapsed:driving.gpuElapsed},
       replay:{frames:replayDriving.frames,intervals:replayDriving.intervals},viewerResources:viewerFinished.snapshot});
     await page.locator('a[href="./index.html#garage"]').click();await garageReady();await stamped();assert.equal(await raw(),acceptedRaw);
   }
@@ -272,11 +309,11 @@ try{
   assert.equal(finalClosed.snapshot.resources.liveBuffers,0);assert.equal(finalClosed.snapshot.resources.livePrograms,0);assert.equal(await raw(),acceptedRaw);
   assert.deepEqual(errors,[]);
   const closed=memory.filter(row=>row.label.startsWith('closed-workshop'));
-  const report={version:1,kind:'co-014f-machine-native-performance-v1',source,browser:browser.version(),runtime,
+  const report={version:1,kind:'co-014f-machine-native-performance-v1',source,observerSourceSha256:sha(await readFile(new URL(import.meta.url))),browser:browser.version(),runtime,
     host:{platform:platform(),release:release(),cpu:cpus()[0]?.model},native:!software,cycles:cycleCount,
-    acceptedGarage:JSON.parse(acceptedRaw),periods,cycleReceipts:cycles,isolated,
+    acceptedGarage:JSON.parse(acceptedRaw),nativeStockAdmissions,periods,cycleReceipts:cycles,isolated,
     memory:{samples:memory,closedHeapGrowthBytes:closed.at(-1).usedSize-closed[0].usedSize},
-    nativeRecordingSha256:sha(recordedBytes),captures,requests:requests.length,externalRequests:[],errors,
+    nativeRecordingSha256:sha(recordedBytes),captures,requests:requests.length,externalRequests:[],warnings,errors,
     methods:['Unchanged source-stamped runtime and real UI transactions; all injected functions are observational browser-service wrappers.',
       'RAF intervals are actual production callback timestamp gaps; idle Garage callbacks may submit no draw. Full callback CPU includes observer overhead, UI and render as well as accepted physics.',
       'Individual solver/compile/geometry costs are isolated read-only module calls, not a claimed decomposition of live production callback time.',
@@ -284,7 +321,7 @@ try{
       'UI event dispatch timing spans capture-to-bubble around real production handlers; action-to-callback and navigation/seek wall times include browser scheduling/automation IPC, not compositor presentation latency.',
       'WebGL counters track only Garage/Proving/viewer canvases, not the independent racing menu canvas. Lost-context objects are invalidated separately from explicit deletes.',
       'Closed-workshop resource and post-GC heap samples are taken after the real close control disposes its scene, before reopening for a real test-drive entry. Whole-document navigations then release their old realms; per-document counts are not summed into invented live global GPU totals.',
-      'Audio tracks actual gesture-created AudioContexts and close completion. No audible-listening or speaker-quality claim.',
+      'Audio tracks actual gesture-created AudioContexts, queued BufferSources, ended events, intrinsic gain values and forwarded native fade automation. TouringAudio.stop intentionally retains its one pooled context while stopping voices and scheduling gain to zero; resume must reuse it. Zero live buffer voices establishes stopped output; an intrinsic AudioParam.value is not used as an output-level meter. No audible-listening or speaker-quality claim.',
       'Post-GC V8 heaps are CDP Runtime.getHeapUsage, not total browser, driver, compositor or GPU memory. Eight bounded cycles do not prove unbounded leak freedom.',
       'No native 60FPS guarantee is inferred from median alone; p95/worst frame intervals and raw samples are retained.']};
   if(evidence)await writeFile(join(evidence,'machine-performance.json'),JSON.stringify(report,null,2)+'\n');
