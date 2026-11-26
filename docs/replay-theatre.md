@@ -2,6 +2,8 @@
 
 Replay Theatre shipped in v0.6.2.
 
+Machine Shop proving recordings use the separate [v7 proving viewer](proving-replay.md) at `proving-replay.html`. They reconstruct a recorded owned build and are not admitted by the historical v2–v6 race/experiment viewer described here.
+
 Replay Theatre is a **source-bound, offline-first WebGL spectator**. It re-simulates all six cars from a saved recording’s accepted 60 Hz commands, seeded field and recovery requests. It does not take pre-recorded arbitrary car positions, invent checkpoints or change physics.
 
 ## How to watch and share

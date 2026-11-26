@@ -36,7 +36,7 @@ export function createWorkshopEvidence(){
   const results=document.createElement('div');results.id='garage-machine-results';results.style.width='100%';
   const note=document.createElement('p');note.textContent='Return from the Proving Grounds to verify your recorded tests. Evidence is temporary and separate from garage saves. Every displayed result is re-simulated for this source and build.';
   host.append(heading,status,verify,results,note);
-  let car=null,view=null,key=null,epoch=0;
+  let car=null,view=null,key=null,epoch=0,blocked=false;
   verify.onclick=async()=>{
     const token=++epoch,selected=car,revision=source();verify.disabled=true;results.replaceChildren();
     try{
@@ -45,6 +45,7 @@ export function createWorkshopEvidence(){
         .filter(e=>e.recording?.ownedVehicleId===selected.ownedVehicleId&&e.recording?.modelId===selected.modelId);
       if(!entries.length)throw Error('No retained tests for this owned car. Drive or compare it at the Proving Grounds.');
       const current=await identifyVehicleBuild(selected.modelId,selected.build,revision),stock=await identifyVehicleBuild(selected.modelId,stockVehicleBuild(selected.modelId),revision),accepted=[];
+      if(token!==epoch)return;
       for(const entry of entries){
         status.textContent='Reconstructing '+entry.mode+' · '+entry.recording.testId+' from accepted commands…';
         const tape=await parseProvingReplay(JSON.stringify(entry.recording),revision,
@@ -70,14 +71,18 @@ export function createWorkshopEvidence(){
         }
       }
       results.append(table);
+      const provenance=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Measurement provenance';provenance.append(summary);
+      for(const {mode,tape} of accepted){const item=document.createElement('p');item.textContent=mode+' / '+tape.testId+' · source '+tape.revision+' · track '+tape.trackId+' · rules '+tape.rules+' · build '+tape.buildDigest+' · recipe '+tape.recipeDigest+' · '+tape.ticks+' ticks · '+tape.driver+' · '+tape.testRules.policy;provenance.append(item);}
+      results.append(provenance);
       const policy=document.createElement('p');policy.textContent='Acceleration reference runs use identical full-throttle commands. Braking, slalom and handling use deterministic feedback; commands can differ. Original-build results are historical measurements, not the newly fitted build.';results.append(policy);
       status.textContent='Verified '+accepted.length+' source-bound test recordings for '+selected.ownedVehicleId+'.';
     }catch(error){if(token===epoch)status.textContent='Evidence unavailable: '+error.message;}
-    finally{if(token===epoch)verify.disabled=!car||view.busy;}
+    finally{if(token===epoch)verify.disabled=!car||blocked;}
   };
   return {host,render(nextView,nextCar){
     view=nextView;car=nextCar;host.hidden=!car||view.migrationRequired;
-    if(key!==car){key=car;epoch++;results.replaceChildren();status.textContent=car?'Select Verify to reconstruct retained results for '+car.ownedVehicleId+'.':'';}
-    verify.disabled=!car||view.busy||['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status);
+    const nextBlocked=view.busy||['CONFLICT','STORAGE UNAVAILABLE'].includes(view.status);
+    if(key!==car||blocked!==nextBlocked){key=car;epoch++;results.replaceChildren();status.textContent=car?nextBlocked?'Garage unavailable or changing. Reload before verifying results.':'Select Verify to reconstruct retained results for '+car.ownedVehicleId+'.':'';}
+    blocked=nextBlocked;verify.disabled=!car||blocked;
   }};
 }

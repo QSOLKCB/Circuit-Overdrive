@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {createGarage,serializeGarage} from '../src/garage.js';
 import {transactGarage} from '../src/garage-transactions.js';
-import {stockVehicleBuild} from '../src/vehicle-builds.js';
+import {stockVehicleBuild,stockUpgradeBuild} from '../src/vehicle-builds.js';
 import {createProvingRun,startProvingRun,stepProvingRun,stopProvingRun} from '../src/proving-ground.js';
 import {createProvingRecording} from '../src/proving-replay.js';
 import {WORKSHOP_EVIDENCE_SLOT,WORKSHOP_EVIDENCE_BYTES,retainWorkshopRecording} from '../src/workshop-evidence.js';
@@ -99,4 +99,18 @@ test('unadmitted recording copies and unknown modes cannot be retained as truste
   assert.throws(()=>retainWorkshopRecording({...tape,result:{status:'completed'}},'current',storage),/physical admission/);
   assert.throws(()=>retainWorkshopRecording(tape,'unknown',storage),/Unknown test configuration/);
   assert.deepEqual(storage.reads,[]);assert.deepEqual(storage.writes,[]);
+});
+
+test('a genuinely reconstructed upgraded recording cannot masquerade as the stock baseline',async()=>{
+  const build=structuredClone(stockUpgradeBuild('cinder-two',stockVehicleBuild('cinder-two')));
+  build.parts.engine='street';build.inventory.engine.push('street');
+  const run=createProvingRun({modelId:'cinder-two',build,ownedVehicleId:'car-000001',
+    sourceRevision:SOURCE,testId:'practice',driver:'manual'});
+  startProvingRun(run);stepProvingRun(run,{throttle:.2,brake:0,steer:0});stopProvingRun(run);
+  const tape=await createProvingRecording(run),storage=store();
+  assert.equal(tape.build.parts.engine,'street');
+  assert.throws(()=>retainWorkshopRecording(tape,'stock',storage),/original stock build/);
+  assert.deepEqual(storage.reads,[]);assert.deepEqual(storage.writes,[]);
+  assert.equal(retainWorkshopRecording(tape,'current',storage),true);
+  assert.equal(entries(storage)[0].mode,'current');assert.equal(entries(storage)[0].recording.build.parts.engine,'street');
 });

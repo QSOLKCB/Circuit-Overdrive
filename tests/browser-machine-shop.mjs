@@ -268,6 +268,33 @@ try{
   assert(await theatre.locator('#replay-play').isDisabled());assert.equal(await raw(theatre),liveRaw);
   scenarios.push('Historical Replay Theatre rejects the separate v7 contract rather than reinterpreting it as a published v2–v6 recording');
 
+  // Both operations use ordinary controls. Preparing the partner confirmation
+  // first lets its real whole-state commit overlap the read-only reconstruction.
+  const partner=await shared.newPage();await partner.goto(new URL('index.html#garage',base).href);await stamp(partner);
+  await garageReady(partner);await garage(partner,'bay-0').click();
+  await parts(partner,'slot').selectOption('paint');await parts(partner,'part').selectOption('factory');
+  await review(partner,parts(partner,'review'));
+  await page.bringToFront();await page.locator('#garage-machine-verify').click();
+  await page.waitForFunction(()=>document.querySelector('#garage-machine-status').textContent.startsWith('Reconstructing '));
+  const pendingEvidence=await page.locator('#garage-machine-status').textContent();
+  await partner.bringToFront();await confirm(partner);
+  await page.waitForFunction(()=>document.querySelector('#garage-status').textContent==='CONFLICT');
+  await page.bringToFront();await page.waitForTimeout(500);
+  assert(await page.locator('#garage-machine-verify').isDisabled(),'A stale continuation cannot re-enable evidence verification after a real second-tab commit');
+  assert.equal(await page.locator('#garage-machine-results').textContent(),'','A stale reconstruction cannot publish an old comparison table');
+  const conflictingStatus=await page.locator('#garage-machine-status').textContent();
+  const concurrentGarage=await saved(partner);assert.equal(concurrentGarage.credits,350);
+  assert.equal(concurrentGarage.bays[0].ownedVehicleId,'car-000001');assert.equal(concurrentGarage.bays[0].build.parts.paint,'factory');
+  await garage(page,'reload').click();await garageReady(page);await garage(page,'bay-0').click();
+  assert.deepEqual(await saved(page),concurrentGarage);assert.equal(await page.locator('#garage-machine-results').textContent(),'');
+  await page.locator('#garage-machine-verify').click();
+  await page.waitForFunction(()=>document.querySelector('#garage-machine-status').textContent.startsWith('Verified '),null,{timeout:120000});
+  assert.equal(await page.locator('#garage-machine-comparisons table tbody tr').count(),4);
+  const concurrentVerification={pendingEvidence,conflictingStatus,garage:concurrentGarage};
+  await partner.close();
+  scenarios.push('A real second-tab paid paint refit cancels an in-flight evidence reconstruction; CONFLICT keeps Verify disabled and results empty until explicit Reload and a fresh verification');
+
+
   runtime=await viewer.evaluate(()=>{
     const gl=document.querySelector('#pr-world').getContext('webgl'),info=gl.getExtension('WEBGL_debug_renderer_info');
     return {browser:navigator.userAgent,renderer:info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),viewport:{width:innerWidth,height:innerHeight}};
@@ -276,7 +303,7 @@ try{
   const report={version:1,source,browser:browser.version(),runtime,url:base.href,scenarios,purchasedGarage:bought,
     engineGarage,stockResult,engineResult,recording:recording.data,
     comparisons:Object.fromEntries(Object.entries(comparisons).map(([key,value])=>[key,{...value,results:value.results.map(compactReceipt)}])),
-    fittedGarage:fitted,replay:{midpoint,terminal,contextLost:lost},rejections,captures,downloads,
+    fittedGarage:fitted,concurrentVerification,replay:{midpoint,terminal,contextLost:lost},rejections,captures,downloads,
     requests:requests.length,externalRequests:requests.filter(url=>!url.startsWith(base.href)&&!url.startsWith('blob:')&&!url.startsWith('data:')),errors,
     limitations:['Chrome SwiftShader functionality only; no native GPU frame-time certification.',
       'WebGL context loss is an explicit browser-service condition. Accepted builds, ownership, prices, motion, comparisons and replays are created through production controls.',
@@ -284,7 +311,7 @@ try{
   if(evidence)await writeFile(join(evidence,'machine-shop-browser.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({source,browser:browser.version(),scenarios:scenarios.length,recordingVersion:recording.data.version,
     ownedVehicleId:recording.data.ownedVehicleId,stockAccelerationSeconds:stockResult.metrics.accelerationSeconds,
-    engineAccelerationSeconds:engineResult.metrics.accelerationSeconds,fittedCredits:fitted.credits,replayTicks:terminal.tick,errors},null,2));
+    engineAccelerationSeconds:engineResult.metrics.accelerationSeconds,fittedCredits:fitted.credits,finalCredits:concurrentGarage.credits,replayTicks:terminal.tick,errors},null,2));
 }catch(error){
   if(evidence&&diagnosticPage&&!diagnosticPage.isClosed()){
     await diagnosticPage.screenshot({path:join(evidence,'machine-shop-failure.png'),fullPage:true}).catch(()=>{});
