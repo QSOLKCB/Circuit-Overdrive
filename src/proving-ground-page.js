@@ -149,8 +149,9 @@ async function compare(){
       const receipt=await provingReceipt(test);if(token!==generation||disposed)return;
       results.push({...receipt,mode,scope:admission.scope,garageRevision:admission.garageRevision});
       try{const recording=await createProvingRecording(test,{yieldTask:()=>new Promise(resolve=>setTimeout(resolve,0)),cancelled:()=>token!==generation||disposed});if(token!==generation||disposed)return;retainWorkshopRecording(recording,mode);}
-      catch(error){evidenceError=error.message;}
+      catch(error){if(token!==generation||disposed)return;evidenceError=error.message;}
     }
+    if(token!==generation||disposed)return;
     $('comparison').textContent=JSON.stringify({testId,comparisonPolicy:results[0].comparison,results},null,2);
     const [key,label,unit]={acceleration:['accelerationSeconds','0–100 km/h','s'],braking:['brakingDistanceM','Reached 100 to stop','m'],
       slalom:['slalomSeconds','Six-gate slalom','s'],handling:['handlingSeconds','Constant-radius handling','s']}[testId];
@@ -165,8 +166,8 @@ async function compare(){
     $('measurements').append(table);
     status(evidenceError?'Comparison complete. Temporary evidence unavailable: '+evidenceError:
       'Comparison complete. Return to The Garage and verify measured tests to inspect these exact builds.');
-  }catch(error){if(token===generation)status('Comparison rejected: '+error.message);}
-  finally{if(token===generation){comparing=false;instruments();}}
+  }catch(error){if(token===generation&&!disposed)status('Comparison rejected: '+error.message);}
+  finally{if(token===generation&&!disposed){comparing=false;instruments();}}
 }
 $('load').onclick=$('reset').onclick=load;$('arm').onclick=arm;$('compare').onclick=compare;
 $('finish').onclick=()=>{if(run?.phase==='running'&&run.ticks>0){pause();stopProvingRun(run);status('Run stopped. The accepted outcome and commands can be recorded.');instruments();}};
