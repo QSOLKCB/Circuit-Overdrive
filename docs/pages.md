@@ -75,6 +75,8 @@ CO-014E adds `tests/browser-machine-shop.mjs` to the same worker. It exercises a
 
 CO-014F adds `tests/browser-machine-certification.mjs` to lifecycle. Production controls drive and capture all six stock silhouettes, run all four measured tests per model, and compare ten mechanical proposals without creating a garage or spending credits. Source/build/recipe identities, accepted command hashes and physical outcomes are retained. Native GPU profiling remains a separate quiet-machine run; CI software WebGL is functional evidence.
 
+The certification suite enters through the main menu before its benchmark matrix. `node tests/proving-menu-entry.mjs BASE_URL` runs that focused regression separately: an unforced desktop mouse click, keyboard Tab/Enter and the production controller-menu focus/confirm policy must each open the admitted free simulation without creating a garage. The policy check calls the real menu adapter directly; it is not a physical-controller certification. This covers the menu anchor's pointer hit testing as well as navigation, which direct facility URLs and the Garage's separate test-drive button do not exercise.
+
 CO-013E extends that same suite with premium and mixed-model purchases, inactive
 and final-car sales, duplicate confirmations, stale imports, actual Web Lock
 contention, storage-denied/uncertain-write recovery and preservation of an

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
+import {runProvingMenuEntryChecks} from './proving-menu-entry.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const base=new URL(process.argv[2]||'http://127.0.0.1:8773/Circuit-Overdrive/'),evidence=process.env.EVIDENCE_DIR;
 const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||undefined,
@@ -22,7 +23,7 @@ try{
   });
   const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
   page.on('response',response=>{if(response.status()>=400)errors.push(response.status()+' '+response.url());});
-  await page.goto(new URL('proving-ground.html',base).href);
+  const menuEntry=await runProvingMenuEntryChecks(page,base);
   const source=await page.locator('meta[name="game-revision"]').getAttribute('content');
   assert.match(source,/^[a-f0-9]{40}$/);if(process.env.SOURCE_SHA)assert.equal(source,process.env.SOURCE_SHA);
   const pg=id=>page.locator('#pg-'+id),json=async node=>JSON.parse(await node.textContent());
@@ -71,7 +72,7 @@ try{
   const report={kind:'co-014f-production-benchmark-matrix-v1',source,browser:browser.version(),url:base.href,
     scope:'Real production controls and accepted physical results; free simulations never create ownership. Software WebGL functional evidence, not native performance.',
     stockModels:matrix.length,stockBenchmarkPairs:matrix.reduce((sum,r)=>sum+r.benchmarks.length,0),proposalPairs:proposals.length,
-    matrix,proposals,captures,requests:requests.length,errors};
+    menuEntry,matrix,proposals,captures,requests:requests.length,errors};
   if(evidence)await writeFile(join(evidence,'machine-certification-browser.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({source,stockModels:matrix.length,stockBenchmarkPairs:24,proposalPairs:proposals.length,errors},null,2));
 }finally{await browser.close();}

@@ -130,7 +130,7 @@ export function menuAction(action) {
     return true;
   }
   if (action === 'confirm') {
-    if (active?.matches('button:enabled,summary,input[type=checkbox]:enabled,a#enter-derby')) active.click();
+    if (active?.matches('button:enabled,summary,input[type=checkbox]:enabled,a#enter-derby,a#enter-proving-ground')) active.click();
     else if (!dialog) document.querySelector('#start')?.click();
     return true;
   }
@@ -143,7 +143,7 @@ export function menuAction(action) {
     active.dispatchEvent(new Event('change',{bubbles:true}));
     return true;
   }
-  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled,summary,a#enter-derby')]
+  const available = [...(dialog || document).querySelectorAll('button:enabled,select:enabled,input:enabled,summary,a#enter-derby,a#enter-proving-ground')]
     .filter(el => el.getClientRects().length && !el.closest('details:not([open]) > :not(summary)'));
   const index = available.indexOf(active);
   available[(index < 0 ? 0 : (index+(forward?1:-1)+available.length)%available.length)]?.focus();

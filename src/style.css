@@ -136,7 +136,7 @@ main {
   background: linear-gradient(90deg,#071620f5 0%,#0d202ce6 26%,#10242e9e 41%,#11242a18 62%,transparent 75%),linear-gradient(0deg,#0c172671,transparent 30%);
 }
 
-.menu button {
+.menu button,.menu a[href] {
   pointer-events: auto;
 }
 
