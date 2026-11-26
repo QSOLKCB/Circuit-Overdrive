@@ -124,6 +124,16 @@ test('accepted owned paint is cached, bounded across the finite palette and rele
   scene.dispose();assert.equal(gl.buffers.size+gl.programs.size+gl.listeners.size,0);
 });
 
+test('mechanical appearance variants evict invisible meshes within the published retained resource bound',()=>{
+  const gl=recordingCanvas(),scene=createGarageScene(gl.canvas);
+  for(let cycle=0;cycle<8;cycle++)for(const model of GARAGE_CATALOG)for(const tyres of ['stock','touring','performance','economy'])for(const exhaust of ['stock','flow']){
+    const car={ownedVehicleId:'car-000001',modelId:model.modelId,build:{parts:{paint:cycle%2?'oxide':'factory',tyres,exhaust}}};
+    scene.draw({garage:{bays:[car,null,null,null]},modelId:model.modelId,ownedVehicleId:car.ownedVehicleId});
+    assert(scene.stats().meshes<=149);assert(gl.buffers.size<=150);
+  }
+  scene.dispose();assert.equal(gl.buffers.size+gl.programs.size+gl.listeners.size,0);
+});
+
 test('all catalogue switches and camera views retain bounded resources and never mutate ownership',()=>{
   const gl=recordingCanvas(),scene=createGarageScene(gl.canvas),garage=fullGarage(),before=JSON.stringify(garage);
   const initial=scene.stats();

@@ -71,6 +71,8 @@ The lifecycle worker also opens **The Garage** through the packaged menu and com
 
 CO-014D adds `tests/browser-proving-ground.mjs` to that same lifecycle worker. It purchases and fits real parts through the Garage, drives the accepted owned build, measures all four reference tests, exports a receipt, admits six free stock models and verifies that tests do not mutate the save. The seven-worker matrix and every historical suite remain intact. `bash tests/browser-pages-shards.sh` checks the added invocation, retained evidence and failure propagation.
 
+CO-014E adds `tests/browser-machine-shop.mjs` to the same worker. It exercises all nine fitted slots, quantized setup, verified comparison evidence, reload and native save export/import, original-build v7 playback after later fittings, bounded seeking, context recovery, rejected files and real concurrent-tab verification invalidation. It retains its recordings and screenshots with the tested source. No historical browser suite is removed; the seven-worker matrix stays unchanged.
+
 CO-013E extends that same suite with premium and mixed-model purchases, inactive
 and final-car sales, duplicate confirmations, stale imports, actual Web Lock
 contention, storage-denied/uncertain-write recovery and preservation of an

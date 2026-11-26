@@ -59,6 +59,19 @@ body[data-phase=garage] #foot-keys { display:none; }
 #garage-confirmation .buttons { margin-top:18px; }
 #garage-confirmation button { min-height:44px; }
 #garage-confirmation::backdrop { background:#070e16bd; }
+.machine-shop > details,.machine-shop > div,.machine-shop > table { width:100%; }
+.machine-shop details { padding:10px 0; border-bottom:1px solid #435451; font:12px/1.6 var(--mono); }
+.machine-shop summary { cursor:pointer; color:#f4c67d; min-height:32px; }
+.machine-shop h4 { width:100%; margin:14px 0 5px; font:700 17px var(--type); color:#fff0d3; }
+.machine-shop-sections { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+#garage .machine-shop-sections button { font-size:10px; padding:8px 4px; }
+.machine-shop table { border-collapse:collapse; table-layout:fixed; font:11px/1.6 var(--mono); }
+.machine-shop th,.machine-shop td { padding:8px 5px; text-align:left; vertical-align:top; border-bottom:1px solid #435451; overflow-wrap:anywhere; }
+.machine-shop th { color:#f4c67d; }
+#garage-parts-identity { color:#fff0d3; font-weight:700; }
+#garage-parts-repairs { border-left:3px solid #b7e2d5; padding:8px 10px; background:#25343b; }
+#garage-parts-preview { padding:10px; background:#25343b; border-left:3px solid #edc993; }
+#garage-parts-owned-parts { padding-left:20px; margin:5px 0; color:#b8c9c4; overflow-wrap:anywhere; }
 @media (min-width:1500px) { #garage { width:520px; padding:28px; } #garage-view { right:520px; } }
 @media (max-width:960px) {
   #garage { width:410px; padding:16px; } #garage-view { right:410px; }

@@ -1,0 +1,237 @@
+{
+  "format": "circuit-overdrive.proving-receipt",
+  "version": 1,
+  "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+  "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "trackId": "machine-test-facility-v1",
+  "rulesVersion": 1,
+  "modelId": "cinder-two",
+  "ownedVehicleId": "car-000001",
+  "buildRulesVersion": 1,
+  "build": {
+    "format": "circuit-overdrive.vehicle-build",
+    "version": 1,
+    "rulesVersion": 1,
+    "parts": {
+      "engine": "stock",
+      "intake": "stock",
+      "exhaust": "stock",
+      "gearbox": "stock",
+      "finalDrive": "stock",
+      "tyres": "stock",
+      "suspension": "stock",
+      "steering": "stock",
+      "paint": "factory"
+    }
+  },
+  "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+  "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+  "canonicalRecipe": "{\"format\":\"qsol.vanillajs.vehicle3d.v1\",\"version\":1,\"name\":\"Cinder Two / stock rules 1\",\"mass\":1080,\"inertia\":[1755,1901,405],\"chassis\":{\"width\":1.75,\"length\":4.25,\"height\":1.2},\"wheel\":{\"radius\":0.34,\"wheelbase\":2.465,\"track\":1.75},\"suspension\":{\"restLength\":0.24,\"travel\":0.19,\"spring\":34000,\"damper\":3100},\"tyres\":{\"grip\":1.02,\"corneringStiffness\":2600,\"rollingResistance\":0.016},\"steering\":{\"maxAngle\":0.48,\"rate\":1.8,\"speedReduction\":0.035},\"engine\":{\"idleRPM\":850,\"redlineRPM\":6800,\"torqueCurve\":[[850,105],[2200,175],[4200,210],[5800,185],[6800,130]],\"engineBrake\":40},\"gearbox\":{\"ratios\":[3.1,2.05,1.48,1.12,0.89],\"reverseRatio\":2.8,\"finalDrive\":3.9,\"efficiency\":0.9,\"shiftTime\":0.18,\"automatic\":true},\"drive\":\"front\",\"drag\":0.44}",
+  "testId": "acceleration",
+  "testRules": {
+    "name": "01 / Acceleration",
+    "limitTicks": 900,
+    "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+  },
+  "seed": 0,
+  "step": 0.016666666666666666,
+  "driver": "reference",
+  "comparison": "Identical fixed 900-call full-throttle tape.",
+  "startingPose": {
+    "position": [
+      0,
+      0.5020970588235295,
+      0
+    ],
+    "yaw": 0,
+    "pitch": 0,
+    "roll": 0,
+    "velocity": [
+      0,
+      0,
+      0
+    ]
+  },
+  "acceptedTicks": 900,
+  "commandsRLE": [
+    {
+      "ticks": 900,
+      "throttle": 1,
+      "brake": 0,
+      "steer": 0
+    }
+  ],
+  "accelerationCrossing": {
+    "acceptedTick": 487,
+    "previousSpeedMps": 27.76506887925197,
+    "nextSpeedMps": 27.805609067209744,
+    "fraction": 0.3134888900625179
+  },
+  "braking": null,
+  "gates": [],
+  "result": {
+    "status": "completed",
+    "reason": "fixed-command-tape-complete",
+    "testId": "acceleration",
+    "acceptedTicks": 900,
+    "elapsedSeconds": 15,
+    "gatesPassed": 0,
+    "metrics": {
+      "accelerationSeconds": 8.105224814834376,
+      "brakingDistanceM": null,
+      "brakingStartSpeedMps": null,
+      "slalomSeconds": null,
+      "handlingSeconds": null,
+      "headingChangeRadians": 0,
+      "lateralSlipIntegralM": 0,
+      "maxLateralAccelerationMps2": 0,
+      "pathM": 358.14260587119895
+    },
+    "diagnostics": {
+      "minUpY": 0.999930312967846,
+      "minGrounded": 4,
+      "maxSpeedMps": 40.31525522010692,
+      "maxAngularSpeed": 0.0660853028180797,
+      "maxWheelLoadN": 3202.701706306215,
+      "maxCompressionM": 0.09245318744617392,
+      "barrierContactTicks": 0,
+      "solverTruncated": false,
+      "needsRecovery": false
+    }
+  },
+  "terminalState": {
+    "tick": 3600,
+    "position": [
+      0,
+      0.5020970588235295,
+      -358.14260587119895
+    ],
+    "orientation": [
+      0.0025844058999329816,
+      0,
+      0,
+      0.9999966604174959
+    ],
+    "velocity": [
+      0,
+      -3.265347330561302e-16,
+      -40.31525522010692
+    ],
+    "angularVelocity": [
+      -0.00006883781584455262,
+      0,
+      0
+    ],
+    "steering": 0,
+    "gear": 4,
+    "rpm": 4945.157670776652,
+    "shiftRemaining": 0,
+    "wheelSpin": 2.737452739108658,
+    "brake": 0,
+    "wheels": [
+      {
+        "grounded": true,
+        "position": [
+          -0.875,
+          0.34,
+          -359.3750894070847
+        ],
+        "contactPoint": [
+          -0.875,
+          0,
+          -359.3750894070847
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "compression": 0.07153240190814825,
+        "load": 2432.3514037125365,
+        "longitudinalSpeed": 40.30978483373334,
+        "lateralSpeed": 0,
+        "slip": 0,
+        "surfaceId": "machine-facility-dry-asphalt-v1"
+      },
+      {
+        "grounded": true,
+        "position": [
+          0.875,
+          0.34,
+          -359.3750894070847
+        ],
+        "contactPoint": [
+          0.875,
+          0,
+          -359.3750894070847
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "compression": 0.07153240190814825,
+        "load": 2432.3514037125365,
+        "longitudinalSpeed": 40.30978483373334,
+        "lateralSpeed": 0,
+        "slip": 0,
+        "surfaceId": "machine-facility-dry-asphalt-v1"
+      },
+      {
+        "grounded": true,
+        "position": [
+          -0.875,
+          0.34,
+          -356.9101223353132
+        ],
+        "contactPoint": [
+          -0.875,
+          0,
+          -356.9101223353132
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "compression": 0.08427348044479283,
+        "load": 2865.048596287466,
+        "longitudinalSpeed": 40.30978483373334,
+        "lateralSpeed": 0,
+        "slip": 0,
+        "surfaceId": "machine-facility-dry-asphalt-v1"
+      },
+      {
+        "grounded": true,
+        "position": [
+          0.875,
+          0.34,
+          -356.9101223353132
+        ],
+        "contactPoint": [
+          0.875,
+          0,
+          -356.9101223353132
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "compression": 0.08427348044479283,
+        "load": 2865.048596287466,
+        "longitudinalSpeed": 40.30978483373334,
+        "lateralSpeed": 0,
+        "slip": 0,
+        "surfaceId": "machine-facility-dry-asphalt-v1"
+      }
+    ],
+    "contacts": [],
+    "truncated": false,
+    "needsRecovery": false
+  },
+  "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+  "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+  "mode": "current",
+  "scope": "owned-saved-build"
+}

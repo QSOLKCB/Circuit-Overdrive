@@ -48,6 +48,9 @@ START_HERE = b"""Circuit Overdrive - offline arcade racing
    a test and explicitly arm controls. Compare stock/current/proposed builds
    with measured reference runs; proposals never install parts or spend credits.
    Export finished test receipts for the exact source and mechanical build.
+   The Machine Shop verifies retained measured comparisons. Save a v7 build-bound
+   recording to watch the original configuration in proving-replay.html, even
+   after changing your garage. Recordings require their matching source runtime.
 8. Press Ctrl+C in the terminal when you are done.
 
 The server reads this folder on your computer. Both courses, the six-car field,

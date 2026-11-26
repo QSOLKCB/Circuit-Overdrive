@@ -1,0 +1,139 @@
+{
+  "kind": "co-014e-verification-v1",
+  "base": "57a30486fcf8674e30486d01dea972b8981bcccd",
+  "implementation": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+  "engine": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+  "runtime": {
+    "node": "v22.18.0",
+    "platform": "Linux",
+    "browser": "Chrome 158.0.8127.36",
+    "functionalRenderer": "ANGLE SwiftShader"
+  },
+  "checks": {
+    "node": {
+      "pass": 539,
+      "fail": 0,
+      "skipped": 0
+    },
+    "machineBrowser": {
+      "scenarios": 11,
+      "errors": 0,
+      "injectedBuilds": false
+    },
+    "garageBrowser": {
+      "scenarios": 23,
+      "errors": 0
+    },
+    "partsBrowser": {
+      "scenarios": 8,
+      "errors": 0
+    },
+    "provingBrowser": {
+      "scenarios": 13,
+      "errors": 0
+    },
+    "httpAssets": 118,
+    "offlineTests": "passed",
+    "offlineIndependentVerification": "passed",
+    "historicalParity": "45,225 ticks against published v1.3.0 plus full-suite historical comparison",
+    "browserOrchestration": "passed; seven-worker matrix unchanged, Machine Shop added to lifecycle, all historical suites retained"
+  },
+  "measuredCinderSeconds": {
+    "stock": 8.105224814834376,
+    "purchasedStreetEngine": 7.6026815230975355,
+    "purchasedEngineAndShortGearboxRegression": 7.5824830186320336
+  },
+  "offline": {
+    "source": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+    "sha256": "21588f6aea62ef9b0cf9305270a6c4d4575f931366ea749dddd4542ea7619996"
+  },
+  "limits": [
+    "Pristine cars only; no fabricated damage or repair bills.",
+    "V7 requires matching exact source; historical v2-v6 remain separate.",
+    "Temporary evidence cache is not ownership and is reconstructed before display.",
+    "Native GPU/frame-time/heap/audio endurance and final release certification remain CO-014F.",
+    "Owner review pending; no merge, tag or publication."
+  ],
+  "artifacts": {
+    "build-bound-replay-terminal.png": {
+      "bytes": 637825,
+      "sha256": "a92fb5e96b3ffd5587984682e60403fbb174f9c2b6572e655d0db93fd53fb4e7"
+    },
+    "garage-regression.json": {
+      "bytes": 13127,
+      "sha256": "747a7400faaca8085e55c327a5599c458418aac23f37ed8eafee506f209e1039"
+    },
+    "http.log": {
+      "bytes": 95,
+      "sha256": "0a1c6f2dcb30e1c52e6f54a58fbe71f10604c8c73fe58565dcdbaab8e178dc02"
+    },
+    "machine-shop-browser.json": {
+      "bytes": 95736,
+      "sha256": "ba67ab4f5c8689f4046a3536c52c7570f1b5b1683f2d41fcbd5b6d1c71f608ab"
+    },
+    "machine-shop-fitted-midnight.png": {
+      "bytes": 615531,
+      "sha256": "c1061006b1335df839be84c7047fc6318d9022ef0fde27336771677d7137a2c1"
+    },
+    "machine-shop-flow-exhaust-rear.png": {
+      "bytes": 326615,
+      "sha256": "5e13d6ee92629c0c7a586413ca306c79acbd24985be0cef1ce9f8a60e716a575"
+    },
+    "machine-shop-garage-export.json": {
+      "bytes": 895,
+      "sha256": "9c8450ba235fe489877b395e7ea0c84e17580fd8832cbcba752270ef157c8cbf"
+    },
+    "machine-shop-measured-comparisons.png": {
+      "bytes": 619516,
+      "sha256": "43214dd8f7a637f6fd8c14d8c06cfb06a2c46c8eb55f767d228a7b021f6cb192"
+    },
+    "machine-shop-mobile.png": {
+      "bytes": 52000,
+      "sha256": "fcca6e9aa421001cf9d517795bfffa9357c026f1afeeabb62e3d024b33ffe262"
+    },
+    "machine-shop-stock.png": {
+      "bytes": 547157,
+      "sha256": "a975e8a77e42a769978d837df6cfd9150cd70c75cdf0aeb7748e51a0883b4afc"
+    },
+    "node-tests.log": {
+      "bytes": 132438,
+      "sha256": "f81cd2471668819020ded92c94260a9e2581a34f2bf5808b57f0e48c6a326e4b"
+    },
+    "offline-tests.log": {
+      "bytes": 98,
+      "sha256": "af440814471413c27db0e2abdefa0dfd969b9ce0d1e1eb9543511b77ee2b39ac"
+    },
+    "offline.log": {
+      "bytes": 831,
+      "sha256": "8622e310ba8da1b9030bea67fd3fdf73e9805ed63ba202a75c1bc1b4786edf89"
+    },
+    "owned-engine-v7-replay.json": {
+      "bytes": 3130,
+      "sha256": "3a16d7ad86b7096ac2bd3e90df74bb300ccac0d6312ee11308188ea5e475c97b"
+    },
+    "parts-regression.json": {
+      "bytes": 32072,
+      "sha256": "a44471b122e2ffb83728c08f830d28e2e89e18336ffa3625c2da1fc1b3256d3a"
+    },
+    "proving-lifecycle-regression.json": {
+      "bytes": 21008,
+      "sha256": "0a17d1d632f1d0a9ecfbcf6c8d8ce50a6079566113514fd5f9408bb67e2e7044"
+    },
+    "proving-regression.json": {
+      "bytes": 35927,
+      "sha256": "a21c041d6850acc853ccd914587a6345b009177a44460299134c6fc4567a49e8"
+    },
+    "shards.log": {
+      "bytes": 80,
+      "sha256": "aaceac79b5235c99e866f30a720ea57a903e5b5bc7a5df4987d859fd14de2bed"
+    },
+    "stock-acceleration-receipt.json": {
+      "bytes": 6610,
+      "sha256": "46981c6789218ca6f4c4e9890db57b076d2ff0d7101b8e8dbafbe9ca3be432a4"
+    },
+    "v130-parity.json": {
+      "bytes": 4951,
+      "sha256": "6119fecbbe4dbedd13f76d619763ea73d8dd40baae328c6c73c7156f65bd8e4c"
+    }
+  }
+}

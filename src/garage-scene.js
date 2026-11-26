@@ -34,13 +34,24 @@ export function createGarageScene(canvas,pixelRatio=1) {
   try {
     const geometry=garageGeometry();
     const upload=parts=>Object.entries(parts).map(([name,vertices])=>({name,mesh:renderer.mesh(vertices)}));
-    const workshop=upload(geometry.workshop),vehicles=new Map(geometry.vehicles.map(({modelId,parts})=>[modelId+':factory',upload(parts)]));
-    // At most six original models × four finite finishes. Cache each accepted
-    // variant once; selection never allocates an unbounded stream of meshes.
-    function vehicleMeshes(modelId,paintId) {
-      const key=modelId+':'+paintId;
-      if(!vehicles.has(key))vehicles.set(key,upload(garageVehicleGeometry(modelId,paintId)));
-      return vehicles.get(key);
+    const baseKey=modelId=>modelId+':factory:stock:stock';
+    const workshop=upload(geometry.workshop),vehicles=new Map(geometry.vehicles.map(({modelId,parts})=>[baseKey(modelId),upload(parts)]));
+    const baseKeys=new Set(vehicles.keys());
+    const appearance=car=>({tyres:car?.build?.parts.tyres??'stock',exhaust:car?.build?.parts.exhaust??'stock'});
+    const variantKey=(modelId,paint,style)=>[modelId,paint,style.tyres,style.exhaust].join(':');
+    // Retain the original six stock meshes and at most eighteen variants.
+    // Evict only invisible variants; four bays plus the inspection car fit safely.
+    function vehicleMeshes(modelId,paintId,style,wanted) {
+      const key=variantKey(modelId,paintId,style);
+      if(!vehicles.has(key)){
+        if(vehicles.size>=24){
+          const victim=[...vehicles.keys()].find(key=>!baseKeys.has(key)&&!wanted.has(key));
+          if(!victim)throw RangeError('Visible garage variants exceed retained capacity');
+          for(const part of vehicles.get(victim))renderer.deleteMesh(part.mesh);vehicles.delete(victim);
+        }
+        vehicles.set(key,upload(garageVehicleGeometry(modelId,paintId,style)));
+      }
+      const parts=vehicles.get(key);vehicles.delete(key);vehicles.set(key,parts);return parts;
     }
     const shadow=renderer.mesh(shadowVertices);
     return {
@@ -59,10 +70,12 @@ export function createGarageScene(canvas,pixelRatio=1) {
         const ids=[modelId,...GARAGE_BAY_POSITIONS.map((_,i)=>garage?.bays[i]?.modelId??null)];
         const inspected=garage?.bays.find(car=>car?.ownedVehicleId===ownedVehicleId&&car.modelId===modelId);
         const paints=[inspected?.build?.parts.paint??'factory',...GARAGE_BAY_POSITIONS.map((_,i)=>garage?.bays[i]?.build?.parts.paint??'factory')];
+        const styles=[appearance(inspected),...GARAGE_BAY_POSITIONS.map((_,i)=>appearance(garage?.bays[i]))];
+        const wanted=new Set(ids.map((id,i)=>id?variantKey(id,paints[i],styles[i]):null));
         for(let i=0;i<ids.length;i++)if(ids[i])renderer.draw(shadow,{matrix:matrices[i],material:shadowMaterial});
         for(let i=0;i<ids.length;i++) {
           if(!ids[i])continue;
-          const parts=vehicleMeshes(ids[i],paints[i]);
+          const parts=vehicleMeshes(ids[i],paints[i],styles[i],wanted);
           if(!parts)throw RangeError('Unknown owned garage model');
           for(const {name,mesh} of parts)renderer.draw(mesh,{matrix:matrices[i],material:material[name]});
         }

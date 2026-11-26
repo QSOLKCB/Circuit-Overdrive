@@ -4,6 +4,7 @@ import {GARAGE_SAVE_BYTES} from './garage.js';
 import {garageResaleValue} from './garage-transactions.js';
 import {createGarageVault} from './garage-vault.js';
 import {createGaragePartsUI} from './garage-parts-ui.js';
+import {createWorkshopEvidence} from './workshop-evidence.js';
 import {vehiclePart, vehiclePaint} from './vehicle-parts.js';
 
 const credits = value => value.toLocaleString('en-US') + ' credits';
@@ -146,6 +147,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
   const partsCounter = createGaragePartsUI(action => {
     cancelPending();proposal(vault.prepareInstallation(action));
   });
+  const machineEvidence = createWorkshopEvidence();
   tools.append(element('h3','Save vault'));
   const reload = button('reload','Reload saved garage',reloadGarage);
   const exportButton = button('export','Export garage JSON',() => {
@@ -205,7 +207,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     // A queued close event from an earlier confirmation cannot cancel a new one.
     if (!dialog.open && prepared && !vault.view.busy) cancelPending();
   });
-  host.replaceChildren(header,status,introduction,cameraControls,layout,partsCounter.host,tools,dialog);
+  host.replaceChildren(header,status,introduction,cameraControls,layout,partsCounter.host,machineEvidence.host,tools,dialog);
   const vault = createGarageVault({onChange:render});
 
   function reveal(control) {
@@ -267,6 +269,7 @@ export function createGarageUI(host, {onClose = () => {}, onPreview = () => {},
     if (car) modelId = car.modelId;
     const model = garageModel(modelId);
     partsCounter.render(view,car);
+    machineEvidence.render(view,car);
     host.dataset.status = view.status; host.dataset.busy = String(view.busy);
     host.dataset.ownedCount = String(state?.bays.filter(Boolean).length ?? 0);
     host.dataset.revision = state ? String(state.revision) : '';
