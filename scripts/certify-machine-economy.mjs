@@ -3,8 +3,10 @@
 // fixtures, never game rewards or mutations of a browser's ownership save.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
-import {readFileSync} from 'node:fs';
+import {execFileSync,spawnSync} from 'node:child_process';
+import {mkdtempSync,readFileSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {createGarage,validateGarage,serializeGarage,parseGarage,migrateLegacyGarage,parseGarageImport} from '../src/garage.js';
 import {transactGarage,transactGarageInstallation} from '../src/garage-transactions.js';
@@ -162,11 +164,31 @@ export function certifyGeneratedEconomy(sequenceCount=1024){
     policy:'Each operation checks an independent authored cost/ownership/inventory ledger, unchanged input, exact receipt settlement, full serialization, repeated compiled recipe and pristine condition. Opening synthetic 100000-credit validator fixtures are explicit test data, never career rewards or live ownership.'};
 }
 
+function readPublishedSources(names){
+  let temporary=null,reference=root;
+  try{
+    if(spawnSync('git',['-C',root,'cat-file','-e',published+'^{commit}'],{stdio:'ignore'}).status!==0){
+      // Default CI checkouts contain only the candidate. Fetch the immutable
+      // published source in isolation, preserving the caller's refs/history.
+      temporary=mkdtempSync(join(tmpdir(),'circuit-v130-audit-'));reference=temporary;
+      execFileSync('git',['init','--quiet','--bare','--template=',reference],{stdio:['ignore','pipe','pipe']});
+      execFileSync('git',['-C',reference,'fetch','--quiet','--no-tags','--depth=1','--',
+        'https://github.com/QSOLKCB/Circuit-Overdrive.git',published],{stdio:['ignore','pipe','pipe']});
+      const fetched=execFileSync('git',['-C',reference,'rev-parse','FETCH_HEAD'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();
+      assert.equal(fetched,published,'Audit requires the exact published commit');
+    }
+    return Object.fromEntries(names.map(name=>[name,execFileSync('git',['-C',reference,'show',published+':src/'+name],{stdio:['ignore','pipe','pipe']})]));
+  }finally{
+    if(temporary)rmSync(temporary,{recursive:true,force:true});
+  }
+}
+
 export function auditPublishedOwnership(){
   const dir=new URL('../tests/fixtures/garage-v1/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('provenance.json',dir))),files={};
   assert.equal(manifest.commit,published);assert.deepEqual(manifest.localChanges,[]);
+  const sources=readPublishedSources(Object.keys(manifest.sha256));
   for(const [name,expected] of Object.entries(manifest.sha256)){
-    const local=readFileSync(new URL(name,dir)),upstream=execFileSync('git',['-C',root,'show',published+':src/'+name],{stdio:['ignore','pipe','pipe']});
+    const local=readFileSync(new URL(name,dir)),upstream=sources[name];
     assert.deepEqual(local,upstream,'Fixture must equal exact published source: '+name);assert.equal(sha(local),expected);files[name]=expected;
   }
   const bytes=readFileSync(new URL('states.json',dir));assert.equal(sha(bytes),manifest.fixturesSha256['states.json']);
