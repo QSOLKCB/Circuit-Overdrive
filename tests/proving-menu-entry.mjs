@@ -14,6 +14,7 @@ export async function runProvingMenuEntryChecks(page,base){
   let source;
   async function stamp(){
     const value=(await page.locator('meta[name="game-revision"]').getAttribute('content'))||null;
+    assert.match(value??'',/^[a-f0-9]{40}$/,'Menu entry checks require a source-stamped package');
     if(process.env.SOURCE_SHA)assert.equal(value,process.env.SOURCE_SHA);
     if(source===undefined)source=value;else assert.equal(value,source);
   }
