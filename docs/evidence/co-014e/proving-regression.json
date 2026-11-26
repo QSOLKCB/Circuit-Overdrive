@@ -1,0 +1,1082 @@
+{
+  "version": 1,
+  "source": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+  "browser": "158.0.8127.36",
+  "runtime": {
+    "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "webLocks": true,
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "viewport": {
+      "width": 1440,
+      "height": 1080
+    }
+  },
+  "url": "http://127.0.0.1:8771/Circuit-Overdrive/",
+  "scenarios": [
+    "Real create, Cinder purchase and confirmed street-engine installation; selected owned ID enters the facility with the exact accepted saved build",
+    "Fresh keyboard throttle and steering move the actual owned chassis through normal animation frames; pause freezes accepted ticks",
+    "Held key \u2192 blur \u2192 off-window release pauses and clears driving; resume stays neutral until a fresh key press",
+    "Actual WebGL context loss/restoration preserves accepted owned state, pauses physics and requires fresh controls",
+    "Production stock/current/proposed reference comparisons run all four physical benchmarks; real fitted engine and sandbox short gearbox have distinct source-bound accepted recipes",
+    "A normal-frame reference acceleration completes and native export records its original saved build, source, commands and accepted terminal result",
+    "All six freely admitted catalogue stock models spawn their actual finite physical chassis and respond to live throttle without creating owned cars",
+    "Return and reload preserve the exact serialized Vault envelope, credits, owned identity and fitted engine after every facility operation"
+  ],
+  "renderedResult": {
+    "status": "completed",
+    "reason": "fixed-command-tape-complete",
+    "testId": "acceleration",
+    "acceptedTicks": 900,
+    "elapsedSeconds": 15,
+    "gatesPassed": 0,
+    "metrics": {
+      "accelerationSeconds": 7.6026815230975355,
+      "brakingDistanceM": null,
+      "brakingStartSpeedMps": null,
+      "slalomSeconds": null,
+      "handlingSeconds": null,
+      "headingChangeRadians": 0,
+      "lateralSlipIntegralM": 0,
+      "maxLateralAccelerationMps2": 0,
+      "pathM": 378.87663920859956
+    },
+    "diagnostics": {
+      "minUpY": 0.9999290770968339,
+      "minGrounded": 4,
+      "maxSpeedMps": 42.885337755058266,
+      "maxAngularSpeed": 0.06610150908566774,
+      "maxWheelLoadN": 3211.952564970972,
+      "maxCompressionM": 0.09258163722564161,
+      "barrierContactTicks": 0,
+      "solverTruncated": false,
+      "needsRecovery": false
+    }
+  },
+  "stockAdmissions": [
+    {
+      "model": "cinder-two",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.5020970588235295,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "cinder-two",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 36,
+        "position": [
+          0,
+          0.5020970588235295,
+          -0.535845660162343
+        ],
+        "velocity": [
+          0,
+          -3.0870224942295866e-16,
+          -1.7730626159958205
+        ],
+        "angularVelocity": [
+          -0.001995922034063616,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "cinder-two",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.9999596452884636,
+          "minGrounded": 4,
+          "maxSpeedMps": 1.7730626159958205,
+          "maxAngularSpeed": 0.04611521990344592,
+          "maxWheelLoadN": 3070.548416309564,
+          "maxCompressionM": 0.08897541514416452,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      }
+    },
+    {
+      "model": "lilt",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.4781163793103449,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "lilt",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 37,
+        "position": [
+          0,
+          0.4781163793103449,
+          -0.656424679282792
+        ],
+        "velocity": [
+          0,
+          -2.7633874431737903e-16,
+          -2.1138438970952107
+        ],
+        "angularVelocity": [
+          -0.0016534872766669957,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "lilt",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.9999187074172786,
+          "minGrounded": 4,
+          "maxSpeedMps": 2.1138438970952107,
+          "maxAngularSpeed": 0.0661043906626179,
+          "maxWheelLoadN": 2516.969783346163,
+          "maxCompressionM": 0.08512132441212705,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      }
+    },
+    {
+      "model": "evening-line",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.5218267857142858,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "evening-line",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 37,
+        "position": [
+          0,
+          0.5218267857142858,
+          -0.5045766730435243
+        ],
+        "velocity": [
+          0,
+          -6.047522474799284e-16,
+          -1.6248499618554413
+        ],
+        "angularVelocity": [
+          -0.001930821330395074,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "evening-line",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.9999741268626576,
+          "minGrounded": 4,
+          "maxSpeedMps": 1.6248499618554413,
+          "maxAngularSpeed": 0.03508382548210696,
+          "maxWheelLoadN": 4180.457198811231,
+          "maxCompressionM": 0.09829079021022336,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      }
+    },
+    {
+      "model": "rivet-eight",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.5641625,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "rivet-eight",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 40,
+        "position": [
+          0,
+          0.5641625,
+          -0.8543380469614792
+        ],
+        "velocity": [
+          0,
+          1.0353628596703879e-16,
+          -2.5461611083632794
+        ],
+        "angularVelocity": [
+          -0.0006364115600228187,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "rivet-eight",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.9999277744027453,
+          "minGrounded": 4,
+          "maxSpeedMps": 2.5461611083632794,
+          "maxAngularSpeed": 0.0595885870662361,
+          "maxWheelLoadN": 4785.454248221466,
+          "maxCompressionM": 0.10214910055745796,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0.11669999999999708
+      }
+    },
+    {
+      "model": "yardhand",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.632881,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "yardhand",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 36,
+        "position": [
+          0,
+          0.632881,
+          -0.46856689419264114
+        ],
+        "velocity": [
+          0,
+          -4.401241463139877e-16,
+          -1.5500974856153689
+        ],
+        "angularVelocity": [
+          -0.005162707005251197,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "yardhand",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.99995609828679,
+          "minGrounded": 4,
+          "maxSpeedMps": 1.5500974856153689,
+          "maxAngularSpeed": 0.04310894185532921,
+          "maxWheelLoadN": 5601.003413424045,
+          "maxCompressionM": 0.11056998728727829,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0.04999999999999999
+      }
+    },
+    {
+      "model": "glass-comet",
+      "initial": {
+        "phase": "ready",
+        "paused": true,
+        "ticks": 0,
+        "position": [
+          0,
+          0.5056218749999999,
+          0
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "angularVelocity": [
+          0,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 850,
+        "modelId": "glass-comet",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 1,
+          "minGrounded": 4,
+          "maxSpeedMps": 0,
+          "maxAngularSpeed": 0,
+          "maxWheelLoadN": 0,
+          "maxCompressionM": 0,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0
+      },
+      "driven": {
+        "phase": "running",
+        "paused": false,
+        "ticks": 39,
+        "position": [
+          0,
+          0.5056218749999999,
+          -0.8911216986425413
+        ],
+        "velocity": [
+          0,
+          6.795642749222318e-16,
+          -2.724077289365304
+        ],
+        "angularVelocity": [
+          0.0011633020223091991,
+          0,
+          0
+        ],
+        "steering": 0,
+        "gear": 1,
+        "rpm": 869.8275513947278,
+        "modelId": "glass-comet",
+        "ownedVehicleId": null,
+        "buildMode": "stock",
+        "driver": "manual",
+        "diagnostics": {
+          "minUpY": 0.9999507492273874,
+          "minGrounded": 4,
+          "maxSpeedMps": 2.724077289365304,
+          "maxAngularSpeed": 0.056801486755007256,
+          "maxWheelLoadN": 3770.5555214017863,
+          "maxCompressionM": 0.07698444371222163,
+          "barrierContactTicks": 0,
+          "solverTruncated": false,
+          "needsRecovery": false
+        },
+        "wallTimeDroppedSeconds": 0.016700000000004364
+      }
+    }
+  ],
+  "downloads": [
+    {
+      "file": "proving-ground-receipt-01.json",
+      "suggestedFilename": "circuit-overdrive-cinder-two-acceleration-receipt.json",
+      "bytes": 7185,
+      "sha256": "82a3c02fd3d8746a3c815a4b663337cc1c7fe8ead87c09f52c9face754f50452"
+    }
+  ],
+  "requests": 216,
+  "externalRequests": [],
+  "errors": [],
+  "limitations": [
+    "SwiftShader browser functionality only; this is not native GPU or frame-time certification.",
+    "WebGL context loss and blur are synthetic browser-service conditions. Ownership, credits, builds, vehicle motion and benchmark outcomes always use production controls and simulation.",
+    "The exported proving-ground receipt is diagnostic evidence; build-bound replay admission and playback are reserved for CO-014E."
+  ],
+  "comparisons": {
+    "acceleration": {
+      "testId": "acceleration",
+      "comparisonPolicy": "Identical fixed 900-call full-throttle tape.",
+      "results": [
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "acceleration",
+          "acceptedTicks": 900,
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 8.105224814834376,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 358.14260587119895
+            },
+            "diagnostics": {
+              "minUpY": 0.999930312967846,
+              "minGrounded": 4,
+              "maxSpeedMps": 40.31525522010692,
+              "maxAngularSpeed": 0.0660853028180797,
+              "maxWheelLoadN": 3202.701706306215,
+              "maxCompressionM": 0.09245318744617392,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "stock",
+          "scope": "stock-simulation"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "acceleration",
+          "acceptedTicks": 900,
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.6026815230975355,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 378.87663920859956
+            },
+            "diagnostics": {
+              "minUpY": 0.9999290770968339,
+              "minGrounded": 4,
+              "maxSpeedMps": 42.885337755058266,
+              "maxAngularSpeed": 0.06610150908566774,
+              "maxWheelLoadN": 3211.952564970972,
+              "maxCompressionM": 0.09258163722564161,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "current",
+          "scope": "owned-saved-build"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "acceleration",
+          "acceptedTicks": 900,
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.5824830186320336,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 380.94596309800664
+            },
+            "diagnostics": {
+              "minUpY": 0.9999291499323103,
+              "minGrounded": 4,
+              "maxSpeedMps": 43.306823533224495,
+              "maxAngularSpeed": 0.06610150908606265,
+              "maxWheelLoadN": 3211.677210851693,
+              "maxCompressionM": 0.09257409828892832,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "proposed",
+          "scope": "proposed-simulation"
+        }
+      ]
+    },
+    "braking": {
+      "testId": "braking",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "braking",
+          "acceptedTicks": 652,
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 652,
+            "elapsedSeconds": 10.866666666666667,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 8.105224814834376,
+              "brakingDistanceM": 37.97894437042572,
+              "brakingStartSpeedMps": 27.805609067209744,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 156.01654253484557
+            },
+            "diagnostics": {
+              "minUpY": 0.9995227077108982,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.805609067209744,
+              "maxAngularSpeed": 0.17412219611255136,
+              "maxWheelLoadN": 4115.489101461505,
+              "maxCompressionM": 0.11597815117739896,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "stock",
+          "scope": "stock-simulation"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "braking",
+          "acceptedTicks": 622,
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 622,
+            "elapsedSeconds": 10.366666666666667,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.6026815230975355,
+              "brakingDistanceM": 38.01221420813975,
+              "brakingStartSpeedMps": 27.817969435079796,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 148.36294941822837
+            },
+            "diagnostics": {
+              "minUpY": 0.9995239512057695,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.817969435079796,
+              "maxAngularSpeed": 0.17244915733232302,
+              "maxWheelLoadN": 4112.153173632633,
+              "maxCompressionM": 0.11592853177156298,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "current",
+          "scope": "owned-saved-build"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "braking",
+          "acceptedTicks": 620,
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 620,
+            "elapsedSeconds": 10.333333333333334,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.5824830186320336,
+              "brakingDistanceM": 37.911167816206174,
+              "brakingStartSpeedMps": 27.780425032301686,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 148.7657560381773
+            },
+            "diagnostics": {
+              "minUpY": 0.9994919261092405,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.780425032301686,
+              "maxAngularSpeed": 0.21011495388167936,
+              "maxWheelLoadN": 4190.724603509829,
+              "maxCompressionM": 0.11718644293814529,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "proposed",
+          "scope": "proposed-simulation"
+        }
+      ]
+    },
+    "slalom": {
+      "testId": "slalom",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "slalom",
+          "acceptedTicks": 1648,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1648,
+            "elapsedSeconds": 27.466666666666665,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 27.454495653488866,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08156069172367506,
+              "lateralSlipIntegralM": 1.9135528375786601,
+              "maxLateralAccelerationMps2": 1.5191775434679233,
+              "pathM": 182.66876042442584
+            },
+            "diagnostics": {
+              "minUpY": 0.9999687134699644,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.194008444537394,
+              "maxAngularSpeed": 0.21339183979420617,
+              "maxWheelLoadN": 2987.013599315288,
+              "maxCompressionM": 0.08766301711398139,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "stock",
+          "scope": "stock-simulation"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "slalom",
+          "acceptedTicks": 1607,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1607,
+            "elapsedSeconds": 26.78333333333333,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 26.778409695627914,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08201145959513373,
+              "lateralSlipIntegralM": 1.944299835150991,
+              "maxLateralAccelerationMps2": 1.5613388985310637,
+              "pathM": 182.62363080666137
+            },
+            "diagnostics": {
+              "minUpY": 0.999963763584697,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.286587036173957,
+              "maxAngularSpeed": 0.21658123047390204,
+              "maxWheelLoadN": 3054.7360420110363,
+              "maxCompressionM": 0.08957505026073609,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "current",
+          "scope": "owned-saved-build"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "slalom",
+          "acceptedTicks": 1589,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1589,
+            "elapsedSeconds": 26.483333333333334,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 26.47652646510423,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08191635174271103,
+              "lateralSlipIntegralM": 1.9549687871994317,
+              "maxLateralAccelerationMps2": 1.572698853414854,
+              "pathM": 182.63943823192872
+            },
+            "diagnostics": {
+              "minUpY": 0.9999477517409621,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.310602633270553,
+              "maxAngularSpeed": 0.21743097657960272,
+              "maxWheelLoadN": 3137.1404746784997,
+              "maxCompressionM": 0.09186911193295233,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "proposed",
+          "scope": "proposed-simulation"
+        }
+      ]
+    },
+    "handling": {
+      "testId": "handling",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "handling",
+          "acceptedTicks": 1797,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1797,
+            "elapsedSeconds": 29.95,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 29.937289082812867,
+              "headingChangeRadians": 6.269498421959764,
+              "lateralSlipIntegralM": 4.5055051344142,
+              "maxLateralAccelerationMps2": 1.6366854172043452,
+              "pathM": 200.13033793922605
+            },
+            "diagnostics": {
+              "minUpY": 0.9999636609570406,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.173303188369545,
+              "maxAngularSpeed": 0.2283397277406109,
+              "maxWheelLoadN": 3091.6030571842357,
+              "maxCompressionM": 0.0906278758983074,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "stock",
+          "scope": "stock-simulation"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "handling",
+          "acceptedTicks": 1754,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1754,
+            "elapsedSeconds": 29.233333333333334,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 29.22753070331573,
+              "headingChangeRadians": 6.268260417881106,
+              "lateralSlipIntegralM": 4.58068204950114,
+              "maxLateralAccelerationMps2": 1.6796140962462893,
+              "pathM": 200.1087366890465
+            },
+            "diagnostics": {
+              "minUpY": 0.9999542408817091,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.267525050043405,
+              "maxAngularSpeed": 0.23123064463971374,
+              "maxWheelLoadN": 3151.9802883882166,
+              "maxCompressionM": 0.09230893746010671,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "current",
+          "scope": "owned-saved-build"
+        },
+        {
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "handling",
+          "acceptedTicks": 1735,
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1735,
+            "elapsedSeconds": 28.916666666666668,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 28.913453080970886,
+              "headingChangeRadians": 6.267755498475331,
+              "lateralSlipIntegralM": 4.609707586447844,
+              "maxLateralAccelerationMps2": 1.6909992161370144,
+              "pathM": 200.10055441487108
+            },
+            "diagnostics": {
+              "minUpY": 0.9999387651967938,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.293579503766041,
+              "maxAngularSpeed": 0.231933580983886,
+              "maxWheelLoadN": 3227.4053794853485,
+              "maxCompressionM": 0.09440699625277871,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "mode": "proposed",
+          "scope": "proposed-simulation"
+        }
+      ]
+    }
+  },
+  "rawReport": {
+    "bytes": 1871940,
+    "sha256": "5fb9510625630579ec2faa0f24e6ce7e512f2325390758d9517ee5330e73c78e",
+    "policy": "Large feedback tapes omitted from this retained regression summary. Run tests/browser-proving-ground.mjs at the recorded source to reproduce."
+  }
+}

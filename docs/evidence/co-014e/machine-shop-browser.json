@@ -1,0 +1,3047 @@
+{
+  "version": 1,
+  "source": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+  "browser": "158.0.8127.36",
+  "runtime": {
+    "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "viewport": {
+      "width": 1440,
+      "height": 1080
+    }
+  },
+  "url": "http://127.0.0.1:8771/Circuit-Overdrive/",
+  "scenarios": [
+    "The real first purchase opens the selected owned Cinder Machine Shop, identifies its stable owned ID and reports pristine repair status",
+    "A normal-frame stock test supplies an actual measured baseline; the confirmed engine fitting deducts exactly 270 credits on the same owned car",
+    "The purchased engine changes normal-frame accepted acceleration; a native v7 download records that exact source, build, command tape and measured terminal result",
+    "All four actual stock/current/proposed benchmark receipts return to the Garage and are explicitly re-simulated before measured comparison display; verification preserves the save",
+    "Every named mechanical/paint section fits real existing catalogue parts and quantized settings through explicit transactions; exact owned identity and pristine condition survive all nine categories",
+    "Native JSON export/import, browser reload and responsive named-section navigation preserve every installed part, setting, credit and owned identity",
+    "The standalone v7 viewer reconstructs the original engine-only build after the live car has different parts/paint; play, pause, midpoint/end seek, camera, reduced motion and restart reproduce its accepted result without touching the save",
+    "The actual browser WebGL context can be lost/restored while the viewer preserves its reconstructed build and paused accepted tick",
+    "Native file admission rejects a different source, tampered recipe identity, fictional result and diagnostic receipt; no rejected file can start playback or mutate ownership",
+    "Historical Replay Theatre rejects the separate v7 contract rather than reinterpreting it as a published v2–v6 recording",
+    "A real second-tab paid paint refit cancels an in-flight evidence reconstruction; CONFLICT keeps Verify disabled and results empty until explicit Reload and a fresh verification"
+  ],
+  "purchasedGarage": {
+    "version": 2,
+    "edition": "machine-shop-v1",
+    "catalogRevision": 1,
+    "credits": 1800,
+    "nextVehicleId": 2,
+    "activeVehicleId": "car-000001",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000001",
+        "modelId": "cinder-two",
+        "build": {
+          "format": "circuit-overdrive.vehicle-build",
+          "version": 1,
+          "rulesVersion": 1,
+          "parts": {
+            "engine": "stock",
+            "intake": "stock",
+            "exhaust": "stock",
+            "gearbox": "stock",
+            "finalDrive": "stock",
+            "tyres": "stock",
+            "suspension": "stock",
+            "steering": "stock",
+            "paint": "factory"
+          }
+        },
+        "condition": {
+          "version": 1,
+          "status": "pristine"
+        }
+      },
+      null,
+      null,
+      null
+    ],
+    "revision": 1
+  },
+  "engineGarage": {
+    "version": 2,
+    "edition": "machine-shop-v1",
+    "catalogRevision": 1,
+    "credits": 1530,
+    "nextVehicleId": 2,
+    "activeVehicleId": "car-000001",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000001",
+        "modelId": "cinder-two",
+        "build": {
+          "format": "circuit-overdrive.vehicle-build",
+          "version": 1,
+          "rulesVersion": 2,
+          "parts": {
+            "engine": "street",
+            "intake": "stock",
+            "exhaust": "stock",
+            "gearbox": "stock",
+            "finalDrive": "stock",
+            "tyres": "stock",
+            "suspension": "stock",
+            "steering": "stock",
+            "paint": "factory"
+          },
+          "tuning": {
+            "finalDrive": 0,
+            "spring": 0,
+            "damper": 0,
+            "travel": 0,
+            "steering": 0
+          },
+          "inventory": {
+            "engine": [
+              "stock",
+              "street"
+            ],
+            "intake": [
+              "stock"
+            ],
+            "exhaust": [
+              "stock"
+            ],
+            "gearbox": [
+              "stock"
+            ],
+            "finalDrive": [
+              "stock"
+            ],
+            "tyres": [
+              "stock"
+            ],
+            "suspension": [
+              "stock"
+            ],
+            "steering": [
+              "stock"
+            ],
+            "paint": [
+              "factory"
+            ]
+          }
+        },
+        "condition": {
+          "version": 1,
+          "status": "pristine"
+        }
+      },
+      null,
+      null,
+      null
+    ],
+    "revision": 2
+  },
+  "stockResult": {
+    "status": "completed",
+    "reason": "fixed-command-tape-complete",
+    "testId": "acceleration",
+    "acceptedTicks": 900,
+    "elapsedSeconds": 15,
+    "gatesPassed": 0,
+    "metrics": {
+      "accelerationSeconds": 8.105224814834376,
+      "brakingDistanceM": null,
+      "brakingStartSpeedMps": null,
+      "slalomSeconds": null,
+      "handlingSeconds": null,
+      "headingChangeRadians": 0,
+      "lateralSlipIntegralM": 0,
+      "maxLateralAccelerationMps2": 0,
+      "pathM": 358.14260587119895
+    },
+    "diagnostics": {
+      "minUpY": 0.999930312967846,
+      "minGrounded": 4,
+      "maxSpeedMps": 40.31525522010692,
+      "maxAngularSpeed": 0.0660853028180797,
+      "maxWheelLoadN": 3202.701706306215,
+      "maxCompressionM": 0.09245318744617392,
+      "barrierContactTicks": 0,
+      "solverTruncated": false,
+      "needsRecovery": false
+    }
+  },
+  "engineResult": {
+    "status": "completed",
+    "reason": "fixed-command-tape-complete",
+    "testId": "acceleration",
+    "acceptedTicks": 900,
+    "elapsedSeconds": 15,
+    "gatesPassed": 0,
+    "metrics": {
+      "accelerationSeconds": 7.6026815230975355,
+      "brakingDistanceM": null,
+      "brakingStartSpeedMps": null,
+      "slalomSeconds": null,
+      "handlingSeconds": null,
+      "headingChangeRadians": 0,
+      "lateralSlipIntegralM": 0,
+      "maxLateralAccelerationMps2": 0,
+      "pathM": 378.87663920859956
+    },
+    "diagnostics": {
+      "minUpY": 0.9999290770968339,
+      "minGrounded": 4,
+      "maxSpeedMps": 42.885337755058266,
+      "maxAngularSpeed": 0.06610150908566774,
+      "maxWheelLoadN": 3211.952564970972,
+      "maxCompressionM": 0.09258163722564161,
+      "barrierContactTicks": 0,
+      "solverTruncated": false,
+      "needsRecovery": false
+    }
+  },
+  "recording": {
+    "format": "circuit-overdrive.proving-replay",
+    "version": 7,
+    "discipline": "proving-ground",
+    "revision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+    "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+    "modelId": "cinder-two",
+    "ownedVehicleId": "car-000001",
+    "buildRulesVersion": 2,
+    "build": {
+      "format": "circuit-overdrive.vehicle-build",
+      "version": 1,
+      "rulesVersion": 2,
+      "parts": {
+        "engine": "street",
+        "intake": "stock",
+        "exhaust": "stock",
+        "gearbox": "stock",
+        "finalDrive": "stock",
+        "tyres": "stock",
+        "suspension": "stock",
+        "steering": "stock",
+        "paint": "factory"
+      },
+      "tuning": {
+        "finalDrive": 0,
+        "spring": 0,
+        "damper": 0,
+        "travel": 0,
+        "steering": 0
+      },
+      "inventory": {
+        "engine": [
+          "stock",
+          "street"
+        ],
+        "intake": [
+          "stock"
+        ],
+        "exhaust": [
+          "stock"
+        ],
+        "gearbox": [
+          "stock"
+        ],
+        "finalDrive": [
+          "stock"
+        ],
+        "tyres": [
+          "stock"
+        ],
+        "suspension": [
+          "stock"
+        ],
+        "steering": [
+          "stock"
+        ],
+        "paint": [
+          "factory"
+        ]
+      }
+    },
+    "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+    "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+    "trackId": "machine-test-facility-v1",
+    "rules": 1,
+    "testId": "acceleration",
+    "testRules": {
+      "name": "01 / Acceleration",
+      "limitTicks": 900,
+      "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+    },
+    "seed": 0,
+    "step": 0.016666666666666666,
+    "driver": "reference",
+    "startingPose": {
+      "position": [
+        0,
+        0.5020970588235295,
+        0
+      ],
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "velocity": [
+        0,
+        0,
+        0
+      ]
+    },
+    "ticks": 900,
+    "runs": [
+      {
+        "ticks": 900,
+        "throttle": 1,
+        "brake": 0,
+        "steer": 0
+      }
+    ],
+    "terminalStop": false,
+    "result": {
+      "status": "completed",
+      "reason": "fixed-command-tape-complete",
+      "testId": "acceleration",
+      "acceptedTicks": 900,
+      "elapsedSeconds": 15,
+      "gatesPassed": 0,
+      "metrics": {
+        "accelerationSeconds": 7.6026815230975355,
+        "brakingDistanceM": null,
+        "brakingStartSpeedMps": null,
+        "slalomSeconds": null,
+        "handlingSeconds": null,
+        "headingChangeRadians": 0,
+        "lateralSlipIntegralM": 0,
+        "maxLateralAccelerationMps2": 0,
+        "pathM": 378.87663920859956
+      },
+      "diagnostics": {
+        "minUpY": 0.9999290770968339,
+        "minGrounded": 4,
+        "maxSpeedMps": 42.885337755058266,
+        "maxAngularSpeed": 0.06610150908566774,
+        "maxWheelLoadN": 3211.952564970972,
+        "maxCompressionM": 0.09258163722564161,
+        "barrierContactTicks": 0,
+        "solverTruncated": false,
+        "needsRecovery": false
+      }
+    },
+    "terminalStateDigest": "bc8f5267b92687b6a30545ff0084ccd9fd60bdbc11b1cb199fb9c224dca6a49b"
+  },
+  "comparisons": {
+    "acceleration": {
+      "testId": "acceleration",
+      "comparisonPolicy": "Identical fixed 900-call full-throttle tape.",
+      "results": [
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 1,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 1,
+            "parts": {
+              "engine": "stock",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            }
+          },
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "acceleration",
+          "testRules": {
+            "name": "01 / Acceleration",
+            "limitTicks": 900,
+            "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Identical fixed 900-call full-throttle tape.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 900,
+          "accelerationCrossing": {
+            "acceptedTick": 487,
+            "previousSpeedMps": 27.76506887925197,
+            "nextSpeedMps": 27.805609067209744,
+            "fraction": 0.3134888900625179
+          },
+          "braking": null,
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 8.105224814834376,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 358.14260587119895
+            },
+            "diagnostics": {
+              "minUpY": 0.999930312967846,
+              "minGrounded": 4,
+              "maxSpeedMps": 40.31525522010692,
+              "maxAngularSpeed": 0.0660853028180797,
+              "maxWheelLoadN": 3202.701706306215,
+              "maxCompressionM": 0.09245318744617392,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "stock",
+          "scope": "stock-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1,
+          "acceptedCommands": [
+            {
+              "ticks": 900,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -358.14260587119895
+            ],
+            "velocity": [
+              0,
+              -3.265347330561302e-16,
+              -40.31525522010692
+            ],
+            "orientation": [
+              0.0025844058999329816,
+              0,
+              0,
+              0.9999966604174959
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "acceleration",
+          "testRules": {
+            "name": "01 / Acceleration",
+            "limitTicks": 900,
+            "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Identical fixed 900-call full-throttle tape.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 900,
+          "accelerationCrossing": {
+            "acceptedTick": 457,
+            "previousSpeedMps": 27.77007139586966,
+            "nextSpeedMps": 27.817969435079796,
+            "fraction": 0.160891385852127
+          },
+          "braking": null,
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.6026815230975355,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 378.87663920859956
+            },
+            "diagnostics": {
+              "minUpY": 0.9999290770968339,
+              "minGrounded": 4,
+              "maxSpeedMps": 42.885337755058266,
+              "maxAngularSpeed": 0.06610150908566774,
+              "maxWheelLoadN": 3211.952564970972,
+              "maxCompressionM": 0.09258163722564161,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "current",
+          "scope": "owned-saved-build",
+          "garageRevision": 2,
+          "commandBlocks": 1,
+          "acceptedCommands": [
+            {
+              "ticks": 900,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -378.87663920859956
+            ],
+            "velocity": [
+              0,
+              -3.3066880044117754e-16,
+              -42.885337755058266
+            ],
+            "orientation": [
+              0.002928319094744105,
+              0,
+              0,
+              0.9999957124644483
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "short",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "acceleration",
+          "testRules": {
+            "name": "01 / Acceleration",
+            "limitTicks": 900,
+            "policy": "Identical 900-call full-throttle tape; first 100 km/h crossing interpolates consecutive accepted horizontal-speed endpoints; null is valid non-completion."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Identical fixed 900-call full-throttle tape.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 900,
+          "accelerationCrossing": {
+            "acceptedTick": 455,
+            "previousSpeedMps": 27.728537291604795,
+            "nextSpeedMps": 27.780425032301686,
+            "fraction": 0.9489811179220228
+          },
+          "braking": null,
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "fixed-command-tape-complete",
+            "testId": "acceleration",
+            "acceptedTicks": 900,
+            "elapsedSeconds": 15,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.5824830186320336,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 380.94596309800664
+            },
+            "diagnostics": {
+              "minUpY": 0.9999291499323103,
+              "minGrounded": 4,
+              "maxSpeedMps": 43.306823533224495,
+              "maxAngularSpeed": 0.06610150908606265,
+              "maxWheelLoadN": 3211.677210851693,
+              "maxCompressionM": 0.09257409828892832,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "proposed",
+          "scope": "proposed-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1,
+          "acceptedCommands": [
+            {
+              "ticks": 900,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -380.94596309800664
+            ],
+            "velocity": [
+              0,
+              -3.8650497267030024e-16,
+              -43.306823533224495
+            ],
+            "orientation": [
+              0.003021200105574295,
+              0,
+              0,
+              0.9999954361645467
+            ]
+          }
+        }
+      ]
+    },
+    "braking": {
+      "testId": "braking",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 1,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 1,
+            "parts": {
+              "engine": "stock",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            }
+          },
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "braking",
+          "testRules": {
+            "name": "02 / Braking",
+            "limitTicks": 1800,
+            "policy": "From rest, reference driver accelerates to the first accepted speed >=100 km/h, then applies full brake to <=0.1 m/s. Exact over-threshold starting speed and accepted path are reported. Manual inputs are separately labelled."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 652,
+          "accelerationCrossing": {
+            "acceptedTick": 487,
+            "previousSpeedMps": 27.76506887925197,
+            "nextSpeedMps": 27.805609067209744,
+            "fraction": 0.3134888900625179
+          },
+          "braking": {
+            "startTick": 487,
+            "startSpeedMps": 27.805609067209744,
+            "startPosition": [
+              0,
+              0.5020970588235295,
+              -118.03759816441985
+            ],
+            "pathM": 37.97894437042572,
+            "fullBrakeCommands": true
+          },
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 652,
+            "elapsedSeconds": 10.866666666666667,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 8.105224814834376,
+              "brakingDistanceM": 37.97894437042572,
+              "brakingStartSpeedMps": 27.805609067209744,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 156.01654253484557
+            },
+            "diagnostics": {
+              "minUpY": 0.9995227077108982,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.805609067209744,
+              "maxAngularSpeed": 0.17412219611255136,
+              "maxWheelLoadN": 4115.489101461505,
+              "maxCompressionM": 0.11597815117739896,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "stock",
+          "scope": "stock-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 2,
+          "acceptedCommands": [
+            {
+              "ticks": 487,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            },
+            {
+              "ticks": 165,
+              "throttle": 0,
+              "brake": 1,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -156.01654253484557
+            ],
+            "velocity": [
+              0,
+              -4.0707550994525776e-16,
+              -0.009433084064343754
+            ],
+            "orientation": [
+              -0.01313279503372744,
+              0,
+              0,
+              0.9999137611287297
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "braking",
+          "testRules": {
+            "name": "02 / Braking",
+            "limitTicks": 1800,
+            "policy": "From rest, reference driver accelerates to the first accepted speed >=100 km/h, then applies full brake to <=0.1 m/s. Exact over-threshold starting speed and accepted path are reported. Manual inputs are separately labelled."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 622,
+          "accelerationCrossing": {
+            "acceptedTick": 457,
+            "previousSpeedMps": 27.77007139586966,
+            "nextSpeedMps": 27.817969435079796,
+            "fraction": 0.160891385852127
+          },
+          "braking": {
+            "startTick": 457,
+            "startSpeedMps": 27.817969435079796,
+            "startPosition": [
+              0,
+              0.5020970588235295,
+              -110.35073521008862
+            ],
+            "pathM": 38.01221420813975,
+            "fullBrakeCommands": true
+          },
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 622,
+            "elapsedSeconds": 10.366666666666667,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.6026815230975355,
+              "brakingDistanceM": 38.01221420813975,
+              "brakingStartSpeedMps": 27.817969435079796,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 148.36294941822837
+            },
+            "diagnostics": {
+              "minUpY": 0.9995239512057695,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.817969435079796,
+              "maxAngularSpeed": 0.17244915733232302,
+              "maxWheelLoadN": 4112.153173632633,
+              "maxCompressionM": 0.11592853177156298,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "current",
+          "scope": "owned-saved-build",
+          "garageRevision": 2,
+          "commandBlocks": 2,
+          "acceptedCommands": [
+            {
+              "ticks": 457,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            },
+            {
+              "ticks": 165,
+              "throttle": 0,
+              "brake": 1,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -148.36294941822837
+            ],
+            "velocity": [
+              0,
+              -3.2243003614005087e-16,
+              -0.015424292336962103
+            ],
+            "orientation": [
+              -0.01313664940063375,
+              0,
+              0,
+              0.9999137104983233
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "short",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "braking",
+          "testRules": {
+            "name": "02 / Braking",
+            "limitTicks": 1800,
+            "policy": "From rest, reference driver accelerates to the first accepted speed >=100 km/h, then applies full brake to <=0.1 m/s. Exact over-threshold starting speed and accepted path are reported. Manual inputs are separately labelled."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              0,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 620,
+          "accelerationCrossing": {
+            "acceptedTick": 455,
+            "previousSpeedMps": 27.728537291604795,
+            "nextSpeedMps": 27.780425032301686,
+            "fraction": 0.9489811179220228
+          },
+          "braking": {
+            "startTick": 455,
+            "startSpeedMps": 27.780425032301686,
+            "startPosition": [
+              0,
+              0.5020970588235295,
+              -110.85458822197113
+            ],
+            "pathM": 37.911167816206174,
+            "fullBrakeCommands": true
+          },
+          "gates": [],
+          "result": {
+            "status": "completed",
+            "reason": "braked-to-stop",
+            "testId": "braking",
+            "acceptedTicks": 620,
+            "elapsedSeconds": 10.333333333333334,
+            "gatesPassed": 0,
+            "metrics": {
+              "accelerationSeconds": 7.5824830186320336,
+              "brakingDistanceM": 37.911167816206174,
+              "brakingStartSpeedMps": 27.780425032301686,
+              "slalomSeconds": null,
+              "handlingSeconds": null,
+              "headingChangeRadians": 0,
+              "lateralSlipIntegralM": 0,
+              "maxLateralAccelerationMps2": 0,
+              "pathM": 148.7657560381773
+            },
+            "diagnostics": {
+              "minUpY": 0.9994919261092405,
+              "minGrounded": 4,
+              "maxSpeedMps": 27.780425032301686,
+              "maxAngularSpeed": 0.21011495388167936,
+              "maxWheelLoadN": 4190.724603509829,
+              "maxCompressionM": 0.11718644293814529,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "proposed",
+          "scope": "proposed-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 2,
+          "acceptedCommands": [
+            {
+              "ticks": 455,
+              "throttle": 1,
+              "brake": 0,
+              "steer": 0
+            },
+            {
+              "ticks": 165,
+              "throttle": 0,
+              "brake": 1,
+              "steer": 0
+            }
+          ],
+          "terminalMotion": {
+            "position": [
+              0,
+              0.5020970588235295,
+              -148.7657560381773
+            ],
+            "velocity": [
+              0,
+              -3.433670239641568e-16,
+              -4.039219799953364e-8
+            ],
+            "orientation": [
+              -0.013123156209438002,
+              0,
+              0,
+              0.9999138876778854
+            ]
+          }
+        }
+      ]
+    },
+    "slalom": {
+      "testId": "slalom",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 1,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 1,
+            "parts": {
+              "engine": "stock",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            }
+          },
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "slalom",
+          "testRules": {
+            "name": "03 / Slalom",
+            "limitTicks": 3600,
+            "policy": "Pass six ordered finite forward timing gates inside the declared corridor. Reference driver follows the authored line at 8 m/s using recipe-aware pure pursuit and speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              -50,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1648,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "slalom-1",
+              "acceptedTick": 376,
+              "fraction": 0.19181615133137747,
+              "elapsedSeconds": 6.253196935855523,
+              "position": [
+                -47.01415736695652,
+                -30
+              ]
+            },
+            {
+              "id": "slalom-2",
+              "acceptedTick": 631,
+              "fraction": 0.5529759927333865,
+              "elapsedSeconds": 10.509216266545558,
+              "position": [
+                -52.5911315854707,
+                -60
+              ]
+            },
+            {
+              "id": "slalom-3",
+              "acceptedTick": 886,
+              "fraction": 0.5279860784873497,
+              "elapsedSeconds": 14.75879976797479,
+              "position": [
+                -47.44645478400341,
+                -90
+              ]
+            },
+            {
+              "id": "slalom-4",
+              "acceptedTick": 1141,
+              "fraction": 0.4622494116760984,
+              "elapsedSeconds": 19.00770415686127,
+              "position": [
+                -52.551182071538825,
+                -120
+              ]
+            },
+            {
+              "id": "slalom-5",
+              "acceptedTick": 1396,
+              "fraction": 0.6964409763934106,
+              "elapsedSeconds": 23.261607349606557,
+              "position": [
+                -47.12484623117519,
+                -150
+              ]
+            },
+            {
+              "id": "slalom-6",
+              "acceptedTick": 1648,
+              "fraction": 0.26973920933216805,
+              "elapsedSeconds": 27.454495653488866,
+              "position": [
+                -49.57407360626386,
+                -180
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1648,
+            "elapsedSeconds": 27.466666666666665,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 27.454495653488866,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08156069172367506,
+              "lateralSlipIntegralM": 1.9135528375786601,
+              "maxLateralAccelerationMps2": 1.5191775434679233,
+              "pathM": 182.66876042442584
+            },
+            "diagnostics": {
+              "minUpY": 0.9999687134699644,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.194008444537394,
+              "maxAngularSpeed": 0.21339183979420617,
+              "maxWheelLoadN": 2987.013599315288,
+              "maxCompressionM": 0.08766301711398139,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "stock",
+          "scope": "stock-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1648,
+          "terminalMotion": {
+            "position": [
+              -49.58089410262435,
+              0.5020970588235295,
+              -180.08728379928226
+            ],
+            "velocity": [
+              -0.5579213021040615,
+              -3.4185965679946446e-16,
+              -7.171641073509495
+            ],
+            "orientation": [
+              0.00006765584505468546,
+              0.04076899525654123,
+              0.0010387628790507993,
+              0.9991680566451971
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "slalom",
+          "testRules": {
+            "name": "03 / Slalom",
+            "limitTicks": 3600,
+            "policy": "Pass six ordered finite forward timing gates inside the declared corridor. Reference driver follows the authored line at 8 m/s using recipe-aware pure pursuit and speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              -50,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1607,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "slalom-1",
+              "acceptedTick": 351,
+              "fraction": 0.841739571659591,
+              "elapsedSeconds": 5.847362326194327,
+              "position": [
+                -47.00988302929464,
+                -30
+              ]
+            },
+            {
+              "id": "slalom-2",
+              "acceptedTick": 603,
+              "fraction": 0.943420855541336,
+              "elapsedSeconds": 10.049057014259024,
+              "position": [
+                -52.59462746145115,
+                -60
+              ]
+            },
+            {
+              "id": "slalom-3",
+              "acceptedTick": 855,
+              "fraction": 0.667177352099143,
+              "elapsedSeconds": 14.244452955868319,
+              "position": [
+                -47.443005292484706,
+                -90
+              ]
+            },
+            {
+              "id": "slalom-4",
+              "acceptedTick": 1107,
+              "fraction": 0.3504503867943094,
+              "elapsedSeconds": 18.43917417311324,
+              "position": [
+                -52.5545854163547,
+                -120
+              ]
+            },
+            {
+              "id": "slalom-5",
+              "acceptedTick": 1359,
+              "fraction": 0.33237354833963884,
+              "elapsedSeconds": 22.638872892472325,
+              "position": [
+                -47.12222016077565,
+                -150
+              ]
+            },
+            {
+              "id": "slalom-6",
+              "acceptedTick": 1607,
+              "fraction": 0.7045817376748825,
+              "elapsedSeconds": 26.778409695627914,
+              "position": [
+                -49.5751108797913,
+                -180
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1607,
+            "elapsedSeconds": 26.78333333333333,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 26.778409695627914,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08201145959513373,
+              "lateralSlipIntegralM": 1.944299835150991,
+              "maxLateralAccelerationMps2": 1.5613388985310637,
+              "pathM": 182.62363080666137
+            },
+            "diagnostics": {
+              "minUpY": 0.999963763584697,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.286587036173957,
+              "maxAngularSpeed": 0.21658123047390204,
+              "maxWheelLoadN": 3054.7360420110363,
+              "maxCompressionM": 0.08957505026073609,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "current",
+          "scope": "owned-saved-build",
+          "garageRevision": 2,
+          "commandBlocks": 1607,
+          "terminalMotion": {
+            "position": [
+              -49.57792386255031,
+              0.5020970588235295,
+              -180.03576240505478
+            ],
+            "velocity": [
+              -0.5687807087301744,
+              -3.576846857621546e-16,
+              -7.2636105255526635
+            ],
+            "orientation": [
+              0.00006985809852763427,
+              0.0409941877788333,
+              0.001069579666061881,
+              0.9991588100434974
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "short",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "slalom",
+          "testRules": {
+            "name": "03 / Slalom",
+            "limitTicks": 3600,
+            "policy": "Pass six ordered finite forward timing gates inside the declared corridor. Reference driver follows the authored line at 8 m/s using recipe-aware pure pursuit and speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              -50,
+              0.5020970588235295,
+              0
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1589,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "slalom-1",
+              "acceptedTick": 337,
+              "fraction": 0.9496990020180978,
+              "elapsedSeconds": 5.615828316700302,
+              "position": [
+                -47.008113045769704,
+                -30
+              ]
+            },
+            {
+              "id": "slalom-2",
+              "acceptedTick": 589,
+              "fraction": 0.20553153400914675,
+              "elapsedSeconds": 9.80342552556682,
+              "position": [
+                -52.595540156639316,
+                -60
+              ]
+            },
+            {
+              "id": "slalom-3",
+              "acceptedTick": 840,
+              "fraction": 0.0786538915410724,
+              "elapsedSeconds": 13.984644231525685,
+              "position": [
+                -47.44210826401883,
+                -90
+              ]
+            },
+            {
+              "id": "slalom-4",
+              "acceptedTick": 1090,
+              "fraction": 0.911113604910895,
+              "elapsedSeconds": 18.165185226748516,
+              "position": [
+                -52.555500649090234,
+                -120
+              ]
+            },
+            {
+              "id": "slalom-5",
+              "acceptedTick": 1342,
+              "fraction": 0.04462883305790074,
+              "elapsedSeconds": 22.3507438138843,
+              "position": [
+                -47.121510173327366,
+                -150
+              ]
+            },
+            {
+              "id": "slalom-6",
+              "acceptedTick": 1589,
+              "fraction": 0.5915879062537435,
+              "elapsedSeconds": 26.47652646510423,
+              "position": [
+                -49.57537268800479,
+                -180
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "slalom",
+            "acceptedTicks": 1589,
+            "elapsedSeconds": 26.483333333333334,
+            "gatesPassed": 6,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": 26.47652646510423,
+              "handlingSeconds": null,
+              "headingChangeRadians": -0.08191635174271103,
+              "lateralSlipIntegralM": 1.9549687871994317,
+              "maxLateralAccelerationMps2": 1.572698853414854,
+              "pathM": 182.63943823192872
+            },
+            "diagnostics": {
+              "minUpY": 0.9999477517409621,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.310602633270553,
+              "maxAngularSpeed": 0.21743097657960272,
+              "maxWheelLoadN": 3137.1404746784997,
+              "maxCompressionM": 0.09186911193295233,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "proposed",
+          "scope": "proposed-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1589,
+          "terminalMotion": {
+            "position": [
+              -49.579270660656434,
+              0.5020970588235295,
+              -180.04960431402264
+            ],
+            "velocity": [
+              -0.5700934907083449,
+              -3.6823258038266745e-16,
+              -7.287592428461511
+            ],
+            "orientation": [
+              0.00007037318788542065,
+              0.04094667299788909,
+              0.0010772953640831393,
+              0.9991607500561244
+            ]
+          }
+        }
+      ]
+    },
+    "handling": {
+      "testId": "handling",
+      "comparisonPolicy": "Deterministic feedback policy; accepted command streams can differ between builds.",
+      "results": [
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 1,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 1,
+            "parts": {
+              "engine": "stock",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            }
+          },
+          "buildDigest": "4f5a4e245c8b96cfdcb7ac3b850e10c76f1fa650e986979e8fe1725231588cb7",
+          "recipeDigest": "8d92f640b0243b8e7f38abe94a049130611914559b54db8b4ddfcecf673c6a16",
+          "testId": "handling",
+          "testRules": {
+            "name": "04 / Constant-radius handling",
+            "limitTicks": 3600,
+            "policy": "Complete eight ordered radial timing gates around the 32 m reference circle within a +/-6 m corridor. Reference driver uses recipe-aware pure pursuit and 8 m/s speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              33,
+              0.5020970588235295,
+              55
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1797,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "ring-1",
+              "acceptedTick": 332,
+              "fraction": 0.7606027616549803,
+              "elapsedSeconds": 5.529343379360916,
+              "position": [
+                42.52857822413244,
+                32.528578224132445
+              ]
+            },
+            {
+              "id": "ring-2",
+              "acceptedTick": 541,
+              "fraction": 0.9501219344615811,
+              "elapsedSeconds": 9.01583536557436,
+              "position": [
+                65,
+                23.14850805126632
+              ]
+            },
+            {
+              "id": "ring-3",
+              "acceptedTick": 751,
+              "fraction": 0.17793869338974538,
+              "elapsedSeconds": 12.502965644889828,
+              "position": [
+                87.51901670186706,
+                32.480983298132934
+              ]
+            },
+            {
+              "id": "ring-4",
+              "acceptedTick": 960,
+              "fraction": 0.3890256809753352,
+              "elapsedSeconds": 15.989817094682921,
+              "position": [
+                96.84652730151858,
+                54.99999999999999
+              ]
+            },
+            {
+              "id": "ring-5",
+              "acceptedTick": 1169,
+              "fraction": 0.6010736482032102,
+              "elapsedSeconds": 19.47668456080339,
+              "position": [
+                87.51894327629404,
+                77.51894327629402
+              ]
+            },
+            {
+              "id": "ring-6",
+              "acceptedTick": 1378,
+              "fraction": 0.8131743597571541,
+              "elapsedSeconds": 22.96355290599595,
+              "position": [
+                65.00000000000001,
+                86.84660780106044
+              ]
+            },
+            {
+              "id": "ring-7",
+              "acceptedTick": 1588,
+              "fraction": 0.0252589667796598,
+              "elapsedSeconds": 26.450420982779658,
+              "position": [
+                42.481027357804955,
+                77.5189726421951
+              ]
+            },
+            {
+              "id": "ring-8",
+              "acceptedTick": 1797,
+              "fraction": 0.23734496877214514,
+              "elapsedSeconds": 29.937289082812867,
+              "position": [
+                33.15339852176297,
+                55.000000000000014
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1797,
+            "elapsedSeconds": 29.95,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 29.937289082812867,
+              "headingChangeRadians": 6.269498421959764,
+              "lateralSlipIntegralM": 4.5055051344142,
+              "maxLateralAccelerationMps2": 1.6366854172043452,
+              "pathM": 200.13033793922605
+            },
+            "diagnostics": {
+              "minUpY": 0.9999636609570406,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.173303188369545,
+              "maxAngularSpeed": 0.2283397277406109,
+              "maxWheelLoadN": 3091.6030571842357,
+              "maxCompressionM": 0.0906278758983074,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "stock",
+          "scope": "stock-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1797,
+          "terminalMotion": {
+            "position": [
+              33.15348842681364,
+              0.5020970588235295,
+              54.908821082335265
+            ],
+            "velocity": [
+              0.017171441780388527,
+              -3.7808357388787333e-16,
+              -7.173262920365825
+            ],
+            "orientation": [
+              -0.00002113192425137959,
+              -0.006843360855116355,
+              -0.0042073937264923865,
+              -0.9999677323812399
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "stock",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "df992ed3d7a926dafc1208667c1eda05533445aba97ccd2a8d11f6f1fe800805",
+          "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+          "testId": "handling",
+          "testRules": {
+            "name": "04 / Constant-radius handling",
+            "limitTicks": 3600,
+            "policy": "Complete eight ordered radial timing gates around the 32 m reference circle within a +/-6 m corridor. Reference driver uses recipe-aware pure pursuit and 8 m/s speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              33,
+              0.5020970588235295,
+              55
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1754,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "ring-1",
+              "acceptedTick": 309,
+              "fraction": 0.024506512494703977,
+              "elapsedSeconds": 5.133741775208246,
+              "position": [
+                42.520844193576075,
+                32.52084419357608
+              ]
+            },
+            {
+              "id": "ring-2",
+              "acceptedTick": 515,
+              "fraction": 0.4989986613013969,
+              "elapsedSeconds": 8.57498331102169,
+              "position": [
+                65,
+                23.14507091231542
+              ]
+            },
+            {
+              "id": "ring-3",
+              "acceptedTick": 722,
+              "fraction": 0.036102265266350596,
+              "elapsedSeconds": 12.017268371087772,
+              "position": [
+                87.52157786808165,
+                32.47842213191835
+              ]
+            },
+            {
+              "id": "ring-4",
+              "acceptedTick": 928,
+              "fraction": 0.5584914330745175,
+              "elapsedSeconds": 15.459308190551242,
+              "position": [
+                96.85018540951664,
+                54.99999999999999
+              ]
+            },
+            {
+              "id": "ring-5",
+              "acceptedTick": 1135,
+              "fraction": 0.08180905481545099,
+              "elapsedSeconds": 18.901363484246925,
+              "position": [
+                87.52155176416656,
+                77.52155176416655
+              ]
+            },
+            {
+              "id": "ring-6",
+              "acceptedTick": 1341,
+              "fraction": 0.6051622145839723,
+              "elapsedSeconds": 22.343419370243065,
+              "position": [
+                65.00000000000001,
+                86.85023973321368
+              ]
+            },
+            {
+              "id": "ring-7",
+              "acceptedTick": 1548,
+              "fraction": 0.12850185513665177,
+              "elapsedSeconds": 25.785475030918942,
+              "position": [
+                42.47845868587491,
+                77.52154131412514
+              ]
+            },
+            {
+              "id": "ring-8",
+              "acceptedTick": 1754,
+              "fraction": 0.6518421989437045,
+              "elapsedSeconds": 29.22753070331573,
+              "position": [
+                33.14975726183316,
+                55.000000000000014
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1754,
+            "elapsedSeconds": 29.233333333333334,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 29.22753070331573,
+              "headingChangeRadians": 6.268260417881106,
+              "lateralSlipIntegralM": 4.58068204950114,
+              "maxLateralAccelerationMps2": 1.6796140962462893,
+              "pathM": 200.1087366890465
+            },
+            "diagnostics": {
+              "minUpY": 0.9999542408817091,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.267525050043405,
+              "maxAngularSpeed": 0.23123064463971374,
+              "maxWheelLoadN": 3151.9802883882166,
+              "maxCompressionM": 0.09230893746010671,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "current",
+          "scope": "owned-saved-build",
+          "garageRevision": 2,
+          "commandBlocks": 1754,
+          "terminalMotion": {
+            "position": [
+              33.14973291047321,
+              0.5020970588235295,
+              54.95782937907626
+            ],
+            "velocity": [
+              0.006167628780547117,
+              -3.744507658693262e-16,
+              -7.267503953274638
+            ],
+            "orientation": [
+              -0.000025018407738201814,
+              -0.007462336928142924,
+              -0.004318142365481737,
+              -0.9999628325833724
+            ]
+          }
+        },
+        {
+          "format": "circuit-overdrive.proving-receipt",
+          "version": 1,
+          "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70",
+          "engineRevision": "9d95d74b355ec17add32db0b55f0f71130f9c004",
+          "trackId": "machine-test-facility-v1",
+          "rulesVersion": 1,
+          "modelId": "cinder-two",
+          "ownedVehicleId": "car-000001",
+          "buildRulesVersion": 2,
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "stock",
+              "exhaust": "stock",
+              "gearbox": "short",
+              "finalDrive": "stock",
+              "tyres": "stock",
+              "suspension": "stock",
+              "steering": "stock",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 0,
+              "spring": 0,
+              "damper": 0,
+              "travel": 0,
+              "steering": 0
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "stock"
+              ],
+              "exhaust": [
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "stock"
+              ],
+              "tyres": [
+                "stock"
+              ],
+              "suspension": [
+                "stock"
+              ],
+              "steering": [
+                "stock"
+              ],
+              "paint": [
+                "factory"
+              ]
+            }
+          },
+          "buildDigest": "3eda7df1a3ec5cc210e2e86ad10a309223a4f8b054f4a64783352191e762a614",
+          "recipeDigest": "d68807587b8a1127cf15a88e9b785bc98abf673dd60873933e1bb7d5a15974d7",
+          "testId": "handling",
+          "testRules": {
+            "name": "04 / Constant-radius handling",
+            "limitTicks": 3600,
+            "policy": "Complete eight ordered radial timing gates around the 32 m reference circle within a +/-6 m corridor. Reference driver uses recipe-aware pure pursuit and 8 m/s speed feedback."
+          },
+          "seed": 0,
+          "step": 0.016666666666666666,
+          "driver": "reference",
+          "comparison": "Deterministic feedback policy; accepted command streams can differ between builds.",
+          "startingPose": {
+            "position": [
+              33,
+              0.5020970588235295,
+              55
+            ],
+            "yaw": 0,
+            "pitch": 0,
+            "roll": 0,
+            "velocity": [
+              0,
+              0,
+              0
+            ]
+          },
+          "acceptedTicks": 1735,
+          "accelerationCrossing": null,
+          "braking": null,
+          "gates": [
+            {
+              "id": "ring-1",
+              "acceptedTick": 295,
+              "fraction": 0.30674265508165766,
+              "elapsedSeconds": 4.905112377584695,
+              "position": [
+                42.51624723443018,
+                32.51624723443019
+              ]
+            },
+            {
+              "id": "ring-2",
+              "acceptedTick": 501,
+              "fraction": 0.04336084912748872,
+              "elapsedSeconds": 8.334056014152125,
+              "position": [
+                65,
+                23.144239870528796
+              ]
+            },
+            {
+              "id": "ring-3",
+              "acceptedTick": 706,
+              "fraction": 0.84782244132162,
+              "elapsedSeconds": 11.764130374022026,
+              "position": [
+                87.52225586858629,
+                32.47774413141371
+              ]
+            },
+            {
+              "id": "ring-4",
+              "acceptedTick": 912,
+              "fraction": 0.6389821750829328,
+              "elapsedSeconds": 15.193983036251382,
+              "position": [
+                96.85120443399228,
+                54.99999999999999
+              ]
+            },
+            {
+              "id": "ring-5",
+              "acceptedTick": 1118,
+              "fraction": 0.43101809990292106,
+              "elapsedSeconds": 18.62385030166505,
+              "position": [
+                87.52223749037398,
+                77.52223749037397
+              ]
+            },
+            {
+              "id": "ring-6",
+              "acceptedTick": 1324,
+              "fraction": 0.22308189593477754,
+              "elapsedSeconds": 22.053718031598912,
+              "position": [
+                65.00000000000001,
+                86.85126433817393
+              ]
+            },
+            {
+              "id": "ring-7",
+              "acceptedTick": 1530,
+              "fraction": 0.015132769078136302,
+              "elapsedSeconds": 25.4835855461513,
+              "position": [
+                42.47772886273142,
+                77.52227113726865
+              ]
+            },
+            {
+              "id": "ring-8",
+              "acceptedTick": 1735,
+              "fraction": 0.8071848582530571,
+              "elapsedSeconds": 28.913453080970886,
+              "position": [
+                33.14873131131124,
+                55.000000000000014
+              ]
+            }
+          ],
+          "result": {
+            "status": "completed",
+            "reason": "all-timing-gates",
+            "testId": "handling",
+            "acceptedTicks": 1735,
+            "elapsedSeconds": 28.916666666666668,
+            "gatesPassed": 8,
+            "metrics": {
+              "accelerationSeconds": null,
+              "brakingDistanceM": null,
+              "brakingStartSpeedMps": null,
+              "slalomSeconds": null,
+              "handlingSeconds": 28.913453080970886,
+              "headingChangeRadians": 6.267755498475331,
+              "lateralSlipIntegralM": 4.609707586447844,
+              "maxLateralAccelerationMps2": 1.6909992161370144,
+              "pathM": 200.10055441487108
+            },
+            "diagnostics": {
+              "minUpY": 0.9999387651967938,
+              "minGrounded": 4,
+              "maxSpeedMps": 7.293579503766041,
+              "maxAngularSpeed": 0.231933580983886,
+              "maxWheelLoadN": 3227.4053794853485,
+              "maxCompressionM": 0.09440699625277871,
+              "barrierContactTicks": 0,
+              "solverTruncated": false,
+              "needsRecovery": false
+            }
+          },
+          "damage": "No persistent owned damage is assigned: vehicle3d barrier contacts supply no reviewed impact-energy-to-damage adapter.",
+          "recording": "Diagnostic receipt only; not a historical replay format or v7 playback admission.",
+          "mode": "proposed",
+          "scope": "proposed-simulation",
+          "garageRevision": 2,
+          "commandBlocks": 1735,
+          "terminalMotion": {
+            "position": [
+              33.148703832973716,
+              0.5020970588235295,
+              54.97656153938105
+            ],
+            "velocity": [
+              0.0018876754283931223,
+              -3.374844063760625e-16,
+              -7.2935628595693505
+            ],
+            "orientation": [
+              -0.00002647830419145232,
+              -0.007714785625452889,
+              -0.004349017972993846,
+              -0.9999607829431728
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "fittedGarage": {
+    "version": 2,
+    "edition": "machine-shop-v1",
+    "catalogRevision": 1,
+    "credits": 360,
+    "nextVehicleId": 2,
+    "activeVehicleId": "car-000001",
+    "bays": [
+      {
+        "ownedVehicleId": "car-000001",
+        "modelId": "cinder-two",
+        "build": {
+          "format": "circuit-overdrive.vehicle-build",
+          "version": 1,
+          "rulesVersion": 2,
+          "parts": {
+            "engine": "street",
+            "intake": "duct",
+            "exhaust": "flow",
+            "gearbox": "short",
+            "finalDrive": "adjustable",
+            "tyres": "performance",
+            "suspension": "adjustable",
+            "steering": "quick",
+            "paint": "midnight"
+          },
+          "tuning": {
+            "finalDrive": 2,
+            "spring": 1,
+            "damper": 1,
+            "travel": 1,
+            "steering": 1
+          },
+          "inventory": {
+            "engine": [
+              "stock",
+              "street"
+            ],
+            "intake": [
+              "duct",
+              "stock"
+            ],
+            "exhaust": [
+              "flow",
+              "stock"
+            ],
+            "gearbox": [
+              "short",
+              "stock"
+            ],
+            "finalDrive": [
+              "adjustable",
+              "stock"
+            ],
+            "tyres": [
+              "performance",
+              "stock"
+            ],
+            "suspension": [
+              "adjustable",
+              "stock"
+            ],
+            "steering": [
+              "quick",
+              "stock"
+            ],
+            "paint": [
+              "factory",
+              "midnight"
+            ]
+          }
+        },
+        "condition": {
+          "version": 1,
+          "status": "pristine"
+        }
+      },
+      null,
+      null,
+      null
+    ],
+    "revision": 10
+  },
+  "concurrentVerification": {
+    "pendingEvidence": "Reconstructing stock · acceleration from accepted commands…",
+    "conflictingStatus": "Garage unavailable or changing. Reload before verifying results.",
+    "garage": {
+      "version": 2,
+      "edition": "machine-shop-v1",
+      "catalogRevision": 1,
+      "credits": 350,
+      "nextVehicleId": 2,
+      "activeVehicleId": "car-000001",
+      "bays": [
+        {
+          "ownedVehicleId": "car-000001",
+          "modelId": "cinder-two",
+          "build": {
+            "format": "circuit-overdrive.vehicle-build",
+            "version": 1,
+            "rulesVersion": 2,
+            "parts": {
+              "engine": "street",
+              "intake": "duct",
+              "exhaust": "flow",
+              "gearbox": "short",
+              "finalDrive": "adjustable",
+              "tyres": "performance",
+              "suspension": "adjustable",
+              "steering": "quick",
+              "paint": "factory"
+            },
+            "tuning": {
+              "finalDrive": 2,
+              "spring": 1,
+              "damper": 1,
+              "travel": 1,
+              "steering": 1
+            },
+            "inventory": {
+              "engine": [
+                "stock",
+                "street"
+              ],
+              "intake": [
+                "duct",
+                "stock"
+              ],
+              "exhaust": [
+                "flow",
+                "stock"
+              ],
+              "gearbox": [
+                "short",
+                "stock"
+              ],
+              "finalDrive": [
+                "adjustable",
+                "stock"
+              ],
+              "tyres": [
+                "performance",
+                "stock"
+              ],
+              "suspension": [
+                "adjustable",
+                "stock"
+              ],
+              "steering": [
+                "quick",
+                "stock"
+              ],
+              "paint": [
+                "factory",
+                "midnight"
+              ]
+            }
+          },
+          "condition": {
+            "version": 1,
+            "status": "pristine"
+          }
+        },
+        null,
+        null,
+        null
+      ],
+      "revision": 11
+    }
+  },
+  "replay": {
+    "midpoint": {
+      "phase": "paused",
+      "tick": 450,
+      "totalTicks": 900,
+      "position": [
+        0,
+        0.5020970588235295,
+        -107.12420147943226
+      ],
+      "velocity": [
+        0,
+        -3.6688572776883306e-16,
+        -27.481605715317237
+      ],
+      "orientation": [
+        0.0004399935649258946,
+        0,
+        0,
+        0.9999999032028267
+      ],
+      "angularVelocity": [
+        -0.04410503576236368,
+        0,
+        0
+      ],
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "build": {
+        "format": "circuit-overdrive.vehicle-build",
+        "version": 1,
+        "rulesVersion": 2,
+        "parts": {
+          "engine": "street",
+          "intake": "stock",
+          "exhaust": "stock",
+          "gearbox": "stock",
+          "finalDrive": "stock",
+          "tyres": "stock",
+          "suspension": "stock",
+          "steering": "stock",
+          "paint": "factory"
+        },
+        "tuning": {
+          "finalDrive": 0,
+          "spring": 0,
+          "damper": 0,
+          "travel": 0,
+          "steering": 0
+        },
+        "inventory": {
+          "engine": [
+            "stock",
+            "street"
+          ],
+          "intake": [
+            "stock"
+          ],
+          "exhaust": [
+            "stock"
+          ],
+          "gearbox": [
+            "stock"
+          ],
+          "finalDrive": [
+            "stock"
+          ],
+          "tyres": [
+            "stock"
+          ],
+          "suspension": [
+            "stock"
+          ],
+          "steering": [
+            "stock"
+          ],
+          "paint": [
+            "factory"
+          ]
+        }
+      },
+      "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+      "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70"
+    },
+    "terminal": {
+      "phase": "finished",
+      "tick": 900,
+      "totalTicks": 900,
+      "position": [
+        0,
+        0.5020970588235295,
+        -378.87663920859956
+      ],
+      "velocity": [
+        0,
+        -3.3066880044117754e-16,
+        -42.885337755058266
+      ],
+      "orientation": [
+        0.002928319094744105,
+        0,
+        0,
+        0.9999957124644483
+      ],
+      "angularVelocity": [
+        -0.00009292351549665951,
+        0,
+        0
+      ],
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "build": {
+        "format": "circuit-overdrive.vehicle-build",
+        "version": 1,
+        "rulesVersion": 2,
+        "parts": {
+          "engine": "street",
+          "intake": "stock",
+          "exhaust": "stock",
+          "gearbox": "stock",
+          "finalDrive": "stock",
+          "tyres": "stock",
+          "suspension": "stock",
+          "steering": "stock",
+          "paint": "factory"
+        },
+        "tuning": {
+          "finalDrive": 0,
+          "spring": 0,
+          "damper": 0,
+          "travel": 0,
+          "steering": 0
+        },
+        "inventory": {
+          "engine": [
+            "stock",
+            "street"
+          ],
+          "intake": [
+            "stock"
+          ],
+          "exhaust": [
+            "stock"
+          ],
+          "gearbox": [
+            "stock"
+          ],
+          "finalDrive": [
+            "stock"
+          ],
+          "tyres": [
+            "stock"
+          ],
+          "suspension": [
+            "stock"
+          ],
+          "steering": [
+            "stock"
+          ],
+          "paint": [
+            "factory"
+          ]
+        }
+      },
+      "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+      "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70"
+    },
+    "contextLost": {
+      "phase": "paused",
+      "tick": 0,
+      "totalTicks": 900,
+      "position": [
+        0,
+        0.5020970588235295,
+        0
+      ],
+      "velocity": [
+        0,
+        0,
+        0
+      ],
+      "orientation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "angularVelocity": [
+        0,
+        0,
+        0
+      ],
+      "modelId": "cinder-two",
+      "ownedVehicleId": "car-000001",
+      "build": {
+        "format": "circuit-overdrive.vehicle-build",
+        "version": 1,
+        "rulesVersion": 2,
+        "parts": {
+          "engine": "street",
+          "intake": "stock",
+          "exhaust": "stock",
+          "gearbox": "stock",
+          "finalDrive": "stock",
+          "tyres": "stock",
+          "suspension": "stock",
+          "steering": "stock",
+          "paint": "factory"
+        },
+        "tuning": {
+          "finalDrive": 0,
+          "spring": 0,
+          "damper": 0,
+          "travel": 0,
+          "steering": 0
+        },
+        "inventory": {
+          "engine": [
+            "stock",
+            "street"
+          ],
+          "intake": [
+            "stock"
+          ],
+          "exhaust": [
+            "stock"
+          ],
+          "gearbox": [
+            "stock"
+          ],
+          "finalDrive": [
+            "stock"
+          ],
+          "tyres": [
+            "stock"
+          ],
+          "suspension": [
+            "stock"
+          ],
+          "steering": [
+            "stock"
+          ],
+          "paint": [
+            "factory"
+          ]
+        }
+      },
+      "recipeDigest": "d8abd974c90dd770426fd12f9a6cc5e907a9ad5493321deb5d32e06bc64ffa74",
+      "sourceRevision": "f580e9091da2c1bb188a89b0882f7d89460c8e70"
+    }
+  },
+  "rejections": [
+    {
+      "name": "different-source",
+      "status": "Recording rejected: Proving replay needs its exact source revision"
+    },
+    {
+      "name": "different-recipe",
+      "status": "Recording rejected: Proving build or recipe digest mismatch"
+    },
+    {
+      "name": "different-result",
+      "status": "Recording rejected: Proving terminal result does not reproduce"
+    },
+    {
+      "name": "diagnostic-receipt",
+      "status": "Recording rejected: Proving replay has missing or unexpected fields"
+    }
+  ],
+  "captures": [
+    {
+      "file": "machine-shop-stock.png",
+      "sha256": "a975e8a77e42a769978d837df6cfd9150cd70c75cdf0aeb7748e51a0883b4afc"
+    },
+    {
+      "file": "machine-shop-measured-comparisons.png",
+      "sha256": "43214dd8f7a637f6fd8c14d8c06cfb06a2c46c8eb55f767d228a7b021f6cb192"
+    },
+    {
+      "file": "machine-shop-fitted-midnight.png",
+      "sha256": "c1061006b1335df839be84c7047fc6318d9022ef0fde27336771677d7137a2c1"
+    },
+    {
+      "file": "machine-shop-flow-exhaust-rear.png",
+      "sha256": "5e13d6ee92629c0c7a586413ca306c79acbd24985be0cef1ce9f8a60e716a575"
+    },
+    {
+      "file": "machine-shop-mobile.png",
+      "sha256": "fcca6e9aa421001cf9d517795bfffa9357c026f1afeeabb62e3d024b33ffe262"
+    },
+    {
+      "file": "build-bound-replay-terminal.png",
+      "sha256": "a92fb5e96b3ffd5587984682e60403fbb174f9c2b6572e655d0db93fd53fb4e7"
+    }
+  ],
+  "downloads": [
+    {
+      "file": "stock-acceleration-receipt.json",
+      "suggestedFilename": "circuit-overdrive-cinder-two-acceleration-receipt.json",
+      "bytes": 6610,
+      "sha256": "46981c6789218ca6f4c4e9890db57b076d2ff0d7101b8e8dbafbe9ca3be432a4"
+    },
+    {
+      "file": "owned-engine-v7-replay.json",
+      "suggestedFilename": "circuit-overdrive-cinder-two-proving-v7.json",
+      "bytes": 3130,
+      "sha256": "3a16d7ad86b7096ac2bd3e90df74bb300ccac0d6312ee11308188ea5e475c97b"
+    },
+    {
+      "file": "machine-shop-garage-export.json",
+      "suggestedFilename": "circuit-overdrive-garage.json",
+      "bytes": 895,
+      "sha256": "9c8450ba235fe489877b395e7ea0c84e17580fd8832cbcba752270ef157c8cbf"
+    }
+  ],
+  "requests": 596,
+  "externalRequests": [],
+  "errors": [],
+  "limitations": [
+    "Chrome SwiftShader functionality only; no native GPU frame-time certification.",
+    "WebGL context loss is an explicit browser-service condition. Accepted builds, ownership, prices, motion, comparisons and replays are created through production controls.",
+    "Negative imported files derive from native production exports solely to exercise strict rejection."
+  ]
+}

@@ -202,6 +202,9 @@ try{
   await page.locator('#garage-machine-verify').click();
   await page.waitForFunction(()=>document.querySelector('#garage-machine-comparisons').textContent.includes('Original build'),null,{timeout:120000});
   await capture(page,'machine-shop-fitted-midnight');
+  const cameraRaw=await raw(page);await garage(page,'camera-rear').click();
+  await capture(page,'machine-shop-flow-exhaust-rear','#garage-canvas');
+  await garage(page,'camera-front').click();assert.equal(await raw(page),cameraRaw);
   scenarios.push('Every named mechanical/paint section fits real existing catalogue parts and quantized settings through explicit transactions; exact owned identity and pristine condition survive all nine categories');
 
   const exported=await download(page,garage(page,'export'),'machine-shop-garage-export.json');

@@ -72,6 +72,7 @@ crash|tests/browser-crash.mjs $url
 derby|tests/browser-derby.mjs $url
 garage|tests/browser-garage.mjs $url
 proving-ground|tests/browser-proving-ground.mjs $url
+machine-shop|tests/browser-machine-shop.mjs $url
 EOF
 diff -u "$test_dir/expected" "$test_dir/serial.calls"
 # Every shard starts by validating its own HTTP endpoint. Assert suite membership
@@ -92,7 +93,7 @@ check_lane speedway speedway night-speedway
 check_lane ridge ridge night-ridge
 check_lane controllers gamepad profiles lab crash
 check_lane theatre theatre rocket
-check_lane lifecycle smoke ridge-smoke night-smoke touch derby garage proving-ground
+check_lane lifecycle smoke ridge-smoke night-smoke touch derby garage proving-ground machine-shop
 check_lane effects night-contact headlights nitro
 diff -u <(tail -n +2 "$test_dir/serial.calls" | sort) \
   <(for shard in "${shards[@]}"; do tail -n +2 "$test_dir/$shard.calls"; done | sort)
@@ -112,6 +113,8 @@ if FAIL_SCRIPT=tests/browser-profiles.mjs run failure --shard=controllers; then 
 [[ $(wc -l < "$test_dir/failure.calls") == 3 && ! -e "$test_dir/failure/lab.log" ]]
 if FAIL_SCRIPT=tests/browser-proving-ground.mjs run proving-failure --shard=lifecycle; then exit 1; else [[ $? == 73 ]]; fi
 [[ -e "$test_dir/proving-failure/proving-ground.log" && -e "$test_dir/proving-failure/proving-ground/captured" ]]
+if FAIL_SCRIPT=tests/browser-machine-shop.mjs run machine-failure --shard=lifecycle; then exit 1; else [[ $? == 73 ]]; fi
+[[ -e "$test_dir/machine-failure/machine-shop.log" && -e "$test_dir/machine-failure/machine-shop/captured" ]]
 if FAIL_SCRIPT=scripts/verify-pages.mjs run http-failure --shard=ridge; then exit 1; fi
 [[ $(wc -l < "$test_dir/http-failure.calls") == 1 ]]
 for option in --shard=typo --shard= --unexpected; do

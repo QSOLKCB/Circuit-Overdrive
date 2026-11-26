@@ -1,0 +1,3252 @@
+TAP version 13
+# Subtest: seeded drivers plan slower corner entries and rate-limit their steering commands
+ok 1 - seeded drivers plan slower corner entries and rate-limit their steering commands
+  ---
+  duration_ms: 4.238621
+  type: 'test'
+  ...
+# Subtest: passing choices persist, blocked lanes force braking, and an alongside car keeps its space
+ok 2 - passing choices persist, blocked lanes force braking, and an alongside car keeps its space
+  ---
+  duration_ms: 1.54042
+  type: 'test'
+  ...
+# Subtest: immobilised AI requests ordinary recovery and keeps its own state
+ok 3 - immobilised AI requests ordinary recovery and keeps its own state
+  ---
+  duration_ms: 1.784331
+  type: 'test'
+  ...
+# Subtest: a faster AI catches, changes lane and clears a slower rival under full-field physics
+ok 4 - a faster AI catches, changes lane and clears a slower rival under full-field physics
+  ---
+  duration_ms: 1891.000269
+  type: 'test'
+  ...
+# Subtest: Ignition V8 follows measured RPM, pedal load and the shift interruption with mix headroom
+ok 5 - Ignition V8 follows measured RPM, pedal load and the shift interruption with mix headroom
+  ---
+  duration_ms: 187.112209
+  type: 'test'
+  ...
+# Subtest: effects respond to grounded tyre slip, shoulders, brake, contact, speed and tunnel acoustics
+ok 6 - effects respond to grounded tyre slip, shoulders, brake, contact, speed and tunnel acoustics
+  ---
+  duration_ms: 403.096782
+  type: 'test'
+  ...
+# Subtest: gesture-owned device schedules one pooled stream, smooths master, fades on stop and resumes cleanly
+ok 7 - gesture-owned device schedules one pooled stream, smooths master, fades on stop and resumes cleanly
+  ---
+  duration_ms: 125.618419
+  type: 'test'
+  ...
+# Subtest: stop revokes pending starts; refused or interrupted devices remain optional and retryable
+ok 8 - stop revokes pending starts; refused or interrupted devices remain optional and retryable
+  ---
+  duration_ms: 11.753252
+  type: 'test'
+  ...
+# Subtest: Nitro effects synthesize only accepted transitions and stay on the effects bus
+ok 9 - Nitro effects synthesize only accepted transitions and stay on the effects bus
+  ---
+  duration_ms: 216.249573
+  type: 'test'
+  ...
+# Subtest: the landing thump waits for settled wheels and Nitro tones clear on a course switch
+ok 10 - the landing thump waits for settled wheels and Nitro tones clear on a course switch
+  ---
+  duration_ms: 49.725678
+  type: 'test'
+  ...
+# Subtest: Rocket sound consumes accepted body events, isolated from the engine bus and silent control requests
+ok 11 - Rocket sound consumes accepted body events, isolated from the engine bus and silent control requests
+  ---
+  duration_ms: 108.972466
+  type: 'test'
+  ...
+# Subtest: bounded phrase compiler renders repeatable, non-silent 48 kHz stereo PCM
+ok 12 - bounded phrase compiler renders repeatable, non-silent 48 kHz stereo PCM
+  ---
+  duration_ms: 109.671377
+  type: 'test'
+  ...
+# Subtest: arbitrary chunking and loop wrap reproduce the same exact samples
+ok 13 - arbitrary chunking and loop wrap reproduce the same exact samples
+  ---
+  duration_ms: 42.925506
+  type: 'test'
+  ...
+# Subtest: seed and genre affect timbre while all four available phrases remain bounded
+ok 14 - seed and genre affect timbre while all four available phrases remain bounded
+  ---
+  duration_ms: 119.411489
+  type: 'test'
+  ...
+# Subtest: rejects hostile score shapes, non-aligned BPM, sparse patterns and invalid frame spans
+ok 15 - rejects hostile score shapes, non-aligned BPM, sparse patterns and invalid frame spans
+  ---
+  duration_ms: 29.805684
+  type: 'test'
+  ...
+# Subtest: rejects accessor-backed phrase and lane arrays before invoking a getter
+ok 16 - rejects accessor-backed phrase and lane arrays before invoking a getter
+  ---
+  duration_ms: 0.716771
+  type: 'test'
+  ...
+# Subtest: 200 BPM arp releases to zero inside a phrase even when decay is longer than the gate
+ok 17 - 200 BPM arp releases to zero inside a phrase even when decay is longer than the gate
+  ---
+  duration_ms: 1.48274
+  type: 'test'
+  ...
+# Subtest: reuse requires exact download bytes and both independently checked race classifications
+ok 18 - reuse requires exact download bytes and both independently checked race classifications
+  ---
+  duration_ms: 5.594741
+  type: 'test'
+  ...
+# Subtest: read only bounded intact four-round results from the exact workflow and runner
+ok 19 - read only bounded intact four-round results from the exact workflow and runner
+  ---
+  duration_ms: 20.916493
+  type: 'test'
+  ...
+# Subtest: four flags score exactly once from the bound simulation and survive inter-event reloads
+ok 20 - four flags score exactly once from the bound simulation and survive inter-event reloads
+  ---
+  duration_ms: 115925.52943
+  type: 'test'
+  ...
+# Subtest: restarted and abandoned attempts, paused races, foreign races and claimed flags cannot pay
+ok 21 - restarted and abandoned attempts, paused races, foreign races and claimed flags cannot pay
+  ---
+  duration_ms: 1.02282
+  type: 'test'
+  ...
+# Subtest: seeds vary the existing rival decisions on reused courses and reproduce the same field
+ok 22 - seeds vary the existing rival decisions on reused courses and reproduce the same field
+  ---
+  duration_ms: 0.99985
+  type: 'test'
+  ...
+# Subtest: ties resolve by wins, seconds, thirds, latest result and stable entrant ID
+ok 23 - ties resolve by wins, seconds, thirds, latest result and stable entrant ID
+  ---
+  duration_ms: 0.54084
+  type: 'test'
+  ...
+# Subtest: save admission rejects inconsistent history, invalid times, scores, identity and source
+ok 24 - save admission rejects inconsistent history, invalid times, scores, identity and source
+  ---
+  duration_ms: 1.7496
+  type: 'test'
+  ...
+# Subtest: one atomic slot detects stale writers, denied reads, quota and unavailable locking
+ok 25 - one atomic slot detects stale writers, denied reads, quota and unavailable locking
+  ---
+  duration_ms: 0.49426
+  type: 'test'
+  ...
+# Subtest: rear impact exchanges momentum; side brush retains forward motion
+ok 26 - rear impact exchanges momentum; side brush retains forward motion
+  ---
+  duration_ms: 2.39258
+  type: 'test'
+  ...
+# Subtest: head-on collision brakes both cars and swept corner contact catches disjoint end poses
+ok 27 - head-on collision brakes both cars and swept corner contact catches disjoint end poses
+  ---
+  duration_ms: 0.51733
+  type: 'test'
+  ...
+# Subtest: nearly tangential rotating front corner finds contact within the tick
+ok 28 - nearly tangential rotating front corner finds contact within the tick
+  ---
+  duration_ms: 0.64971
+  type: 'test'
+  ...
+# Subtest: separating axes reject adjacent yawed cars and vertical clearance
+ok 29 - separating axes reject adjacent yawed cars and vertical clearance
+  ---
+  duration_ms: 0.90857
+  type: 'test'
+  ...
+# Subtest: coincident chassis separate deterministically in stable ID order without launch impulses
+ok 30 - coincident chassis separate deterministically in stable ID order without launch impulses
+  ---
+  duration_ms: 1.235511
+  type: 'test'
+  ...
+# Subtest: side contact on the 17 degree bank preserves clearance and road-relative vertical speed
+ok 31 - side contact on the 17 degree bank preserves clearance and road-relative vertical speed
+  ---
+  duration_ms: 0.41562
+  type: 'test'
+  ...
+# Subtest: six-car simulation resolves a door-to-door squeeze against the banked outside rail
+ok 32 - six-car simulation resolves a door-to-door squeeze against the banked outside rail
+  ---
+  duration_ms: 400.383791
+  type: 'test'
+  ...
+# Subtest: cap-speed shallow side strike, rail end and pure rotating tip have witnessed geometry
+ok 33 - cap-speed shallow side strike, rail end and pure rotating tip have witnessed geometry
+  ---
+  duration_ms: 4.08749
+  type: 'test'
+  ...
+# Subtest: simultaneous rails and interacting car/fixture pairs retain order, work limits and per-body ledgers
+ok 34 - simultaneous rails and interacting car/fixture pairs retain order, work limits and per-body ledgers
+  ---
+  duration_ms: 4.053301
+  type: 'test'
+  ...
+# Subtest: repeated cap-speed fixtures keep every number finite and damage bounded
+ok 35 - repeated cap-speed fixtures keep every number finite and damage bounded
+  ---
+  duration_ms: 26.088484
+  type: 'test'
+  ...
+# Subtest: PCM depends on simulation observations without modifying a trial
+ok 36 - PCM depends on simulation observations without modifying a trial
+  ---
+  duration_ms: 16.546683
+  type: 'test'
+  ...
+# Subtest: an impossible initial fixture layout stops at budget with a measured residual and zero damage
+ok 37 - an impossible initial fixture layout stops at budget with a measured residual and zero damage
+  ---
+  duration_ms: 0.99917
+  type: 'test'
+  ...
+# Subtest: damage ledger equals accepted per-site changes and gentle contact costs zero
+ok 38 - damage ledger equals accepted per-site changes and gentle contact costs zero
+  ---
+  duration_ms: 4.6348
+  type: 'test'
+  ...
+# Subtest: continuing physical constraint cannot charge again before separation
+ok 39 - continuing physical constraint cannot charge again before separation
+  ---
+  duration_ms: 0.63672
+  type: 'test'
+  ...
+# Subtest: engine, steering, tyre grip and damping each change a measured driving state
+ok 40 - engine, steering, tyre grip and damping each change a measured driving state
+  ---
+  duration_ms: 0.96208
+  type: 'test'
+  ...
+# Subtest: bounded state rejects invalid values and fresh runs are pristine
+ok 41 - bounded state rejects invalid values and fresh runs are pristine
+  ---
+  duration_ms: 0.88471
+  type: 'test'
+  ...
+# Subtest: central wall impulse has the analytic SI response and a source-bound witness
+ok 42 - central wall impulse has the analytic SI response and a source-bound witness
+  ---
+  duration_ms: 2.84276
+  type: 'test'
+  ...
+# Subtest: a complete sideways crossing of a 10 mm plate in one free tick is intercepted
+ok 43 - a complete sideways crossing of a 10 mm plate in one free tick is intercepted
+  ---
+  duration_ms: 0.74487
+  type: 'test'
+  ...
+# Subtest: moving chassis share equal and opposite impulses in stable ID order
+ok 44 - moving chassis share equal and opposite impulses in stable ID order
+  ---
+  duration_ms: 1.560391
+  type: 'test'
+  ...
+# Subtest: rest, separation, co-motion and ambiguous initial overlap do not create impacts
+ok 45 - rest, separation, co-motion and ambiguous initial overlap do not create impacts
+  ---
+  duration_ms: 0.72527
+  type: 'test'
+  ...
+# Subtest: oblique and rotating contact account for friction and yaw inertia
+ok 46 - oblique and rotating contact account for friction and yaw inertia
+  ---
+  duration_ms: 0.4141
+  type: 'test'
+  ...
+# Subtest: fixture identities, finite launches and field size are bounded
+ok 47 - fixture identities, finite launches and field size are bounded
+  ---
+  duration_ms: 0.44171
+  type: 'test'
+  ...
+# Subtest: both velocity components are finite numbers before car or world admission
+ok 48 - both velocity components are finite numbers before car or world admission
+  ---
+  duration_ms: 0.80618
+  type: 'test'
+  ...
+# Subtest: the published v1.0.0 field, input tape and classification agree at every accepted tick
+ok 49 - the published v1.0.0 field, input tape and classification agree at every accepted tick
+  ---
+  duration_ms: 320940.951274
+  type: 'test'
+  ...
+# f580e9091da2c1bb188a89b0882f7d89460c8e70 · 45225 matching legacy ticks across six course/environment combinations
+# Subtest: v5 source-bound drives reproduce every impulse, damage increment, latch and result after rewinding
+ok 50 - v5 source-bound drives reproduce every impulse, damage increment, latch and result after rewinding
+  ---
+  duration_ms: 137.245581
+  type: 'test'
+  ...
+# Subtest: only admitted dense own input data can reach an experiment
+ok 51 - only admitted dense own input data can reach an experiment
+  ---
+  duration_ms: 21.848913
+  type: 'test'
+  ...
+# Subtest: terminal predicate rejects early and trailing inputs independently of race finishes
+ok 52 - terminal predicate rejects early and trailing inputs independently of race finishes
+  ---
+  duration_ms: 24.066174
+  type: 'test'
+  ...
+# Subtest: wall reaches a real target and resets exactly
+ok 53 - wall reaches a real target and resets exactly
+  ---
+  duration_ms: 14.967553
+  type: 'test'
+  ...
+# Subtest: glancing reaches a real target and resets exactly
+ok 54 - glancing reaches a real target and resets exactly
+  ---
+  duration_ms: 19.220423
+  type: 'test'
+  ...
+# Subtest: opposing reaches a real target and resets exactly
+ok 55 - opposing reaches a real target and resets exactly
+  ---
+  duration_ms: 57.298009
+  type: 'test'
+  ...
+# Subtest: a stationary no-contact trial ends at its time limit undamaged
+ok 56 - a stationary no-contact trial ends at its time limit undamaged
+  ---
+  duration_ms: 82.335912
+  type: 'test'
+  ...
+# Subtest: the two immutable arenas have distinct footprints, surfaces and viewpoints
+ok 57 - the two immutable arenas have distinct footprints, surfaces and viewpoints
+  ---
+  duration_ms: 2.52848
+  type: 'test'
+  ...
+# Subtest: crucible closes every physical boundary edge and spawns the complete field with real clearance
+ok 58 - crucible closes every physical boundary edge and spawns the complete field with real clearance
+  ---
+  duration_ms: 9.257472
+  type: 'test'
+  ...
+# Subtest: crucible has routes clear for a turning chassis
+ok 59 - crucible has routes clear for a turning chassis
+  ---
+  duration_ms: 23.277793
+  type: 'test'
+  ...
+# Subtest: crucible catches a near-cap strike against every fixed capsule
+ok 60 - crucible catches a near-cap strike against every fixed capsule
+  ---
+  duration_ms: 17.654473
+  type: 'test'
+  ...
+# Subtest: crucible diagonal corner approaches hit adjacent capsules instead of tunnelling
+ok 61 - crucible diagonal corner approaches hit adjacent capsules instead of tunnelling
+  ---
+  duration_ms: 29.270934
+  type: 'test'
+  ...
+# Subtest: crucible completes repeated six-driver stress ticks with identical ordered and permuted receipts
+ok 62 - crucible completes repeated six-driver stress ticks with identical ordered and permuted receipts
+  ---
+  duration_ms: 1697.776771
+  type: 'test'
+  ...
+# 1920 ticks in each ordering; 2830 vehicle and 1255 fixture impulses; peak 6 passes / 197 sweep samples
+# Subtest: crucible holds an out-of-enclosure world without consuming the next tick
+ok 63 - crucible holds an out-of-enclosure world without consuming the next tick
+  ---
+  duration_ms: 2.05635
+  type: 'test'
+  ...
+# Subtest: crucible holds invalid motion before velocity can contaminate the six-car field
+ok 64 - crucible holds invalid motion before velocity can contaminate the six-car field
+  ---
+  duration_ms: 5.973501
+  type: 'test'
+  ...
+# Subtest: crucible retained collision mesh follows the authority capsule footprint and top height
+ok 65 - crucible retained collision mesh follows the authority capsule footprint and top height
+  ---
+  duration_ms: 135.610221
+  type: 'test'
+  ...
+# Subtest: iron-pit closes every physical boundary edge and spawns the complete field with real clearance
+ok 66 - iron-pit closes every physical boundary edge and spawns the complete field with real clearance
+  ---
+  duration_ms: 3.467371
+  type: 'test'
+  ...
+# Subtest: iron-pit has routes clear for a turning chassis
+ok 67 - iron-pit has routes clear for a turning chassis
+  ---
+  duration_ms: 29.076164
+  type: 'test'
+  ...
+# Subtest: iron-pit catches a near-cap strike against every fixed capsule
+ok 68 - iron-pit catches a near-cap strike against every fixed capsule
+  ---
+  duration_ms: 2.24842
+  type: 'test'
+  ...
+# Subtest: iron-pit diagonal corner approaches hit adjacent capsules instead of tunnelling
+ok 69 - iron-pit diagonal corner approaches hit adjacent capsules instead of tunnelling
+  ---
+  duration_ms: 39.870366
+  type: 'test'
+  ...
+# Subtest: iron-pit completes repeated six-driver stress ticks with identical ordered and permuted receipts
+ok 70 - iron-pit completes repeated six-driver stress ticks with identical ordered and permuted receipts
+  ---
+  duration_ms: 1867.109077
+  type: 'test'
+  ...
+# 1920 ticks in each ordering; 3358 vehicle and 2423 fixture impulses; peak 11 passes / 455 sweep samples
+# Subtest: iron-pit holds an out-of-enclosure world without consuming the next tick
+ok 71 - iron-pit holds an out-of-enclosure world without consuming the next tick
+  ---
+  duration_ms: 1.25299
+  type: 'test'
+  ...
+# Subtest: iron-pit holds invalid motion before velocity can contaminate the six-car field
+ok 72 - iron-pit holds invalid motion before velocity can contaminate the six-car field
+  ---
+  duration_ms: 3.372491
+  type: 'test'
+  ...
+# Subtest: iron-pit retained collision mesh follows the authority capsule footprint and top height
+ok 73 - iron-pit retained collision mesh follows the authority capsule footprint and top height
+  ---
+  duration_ms: 112.974937
+  type: 'test'
+  ...
+# Subtest: rules and raw contact receipts repeat through twelve seeded full rounds
+ok 74 - rules and raw contact receipts repeat through twelve seeded full rounds
+  ---
+  duration_ms: 29901.554817
+  type: 'test'
+  ...
+# {"rounds":12,"ticks":125852,"contacts":78518,"contactTicks":49965,"knockouts":34,"results":{"simultaneous-elimination":1,"time-limit":10,"last-car-standing":1}}
+# Subtest: a zero-damage final tick settles tied scores by stable driver ID
+ok 75 - a zero-damage final tick settles tied scores by stable driver ID
+  ---
+  duration_ms: 1.27917
+  type: 'test'
+  ...
+# Subtest: derby admission holds 15 distinct vehicle pairs and 96 fixture pairs while the laboratory keeps its own limits
+ok 76 - derby admission holds 15 distinct vehicle pairs and 96 fixture pairs while the laboratory keeps its own limits
+  ---
+  duration_ms: 8.627141
+  type: 'test'
+  ...
+# Subtest: one complete validated command snapshot drives the sorted field, and an invalid snapshot is atomic
+ok 77 - one complete validated command snapshot drives the sorted field, and an invalid snapshot is atomic
+  ---
+  duration_ms: 3.822381
+  type: 'test'
+  ...
+# Subtest: six accepted command streams move a fresh field from rest into physical impacts
+ok 78 - six accepted command streams move a fresh field from rest into physical impacts
+  ---
+  duration_ms: 18.116643
+  type: 'test'
+  ...
+# Subtest: each of the 15 pairs can produce the analytic equal-and-opposite response at the velocity cap
+ok 79 - each of the 15 pairs can produce the analytic equal-and-opposite response at the velocity cap
+  ---
+  duration_ms: 30.604865
+  type: 'test'
+  ...
+# Subtest: three exact simultaneous pairs settle in stable ID order, independent of all input array orders
+ok 80 - three exact simultaneous pairs settle in stable ID order, independent of all input array orders
+  ---
+  duration_ms: 17.863852
+  type: 'test'
+  ...
+# Subtest: six inward trajectories resolve a dense pileup with finite impulses and independent lasting damage
+ok 81 - six inward trajectories resolve a dense pileup with finite impulses and independent lasting damage
+  ---
+  duration_ms: 84.272193
+  type: 'test'
+  ...
+# 61 receipts in 24 ticks, peak 37 passes, 1998 feature sweeps and 2189 sweep samples
+# Subtest: the swept envelope catches thin barriers, rotating tips and rounded corner fixtures
+ok 82 - the swept envelope catches thin barriers, rotating tips and rounded corner fixtures
+  ---
+  duration_ms: 3.162001
+  type: 'test'
+  ...
+# Subtest: rear and side witnesses identify the local panel, and equal-speed translating cars remain contact-free
+ok 83 - rear and side witnesses identify the local panel, and equal-speed translating cars remain contact-free
+  ---
+  duration_ms: 2.18755
+  type: 'test'
+  ...
+# Subtest: fixture constraints preserve episode IDs and only award damage again after actual separation
+ok 84 - fixture constraints preserve episode IDs and only award damage again after actual separation
+  ---
+  duration_ms: 1.6466
+  type: 'test'
+  ...
+# Subtest: six close spawns separate without damage, and moving initial penetration is recovery rather than a new impact
+ok 85 - six close spawns separate without damage, and moving initial penetration is recovery rather than a new impact
+  ---
+  duration_ms: 5.123971
+  type: 'test'
+  ...
+# Subtest: a previously disabled car has no thrust but stays a physical participant with its own cumulative ledger
+ok 86 - a previously disabled car has no thrust but stays a physical participant with its own cumulative ledger
+  ---
+  duration_ms: 1.33541
+  type: 'test'
+  ...
+# Subtest: impossible fixture overlap stops with a finite residual and no invented contact or damage
+ok 87 - impossible fixture overlap stops with a finite residual and no invented contact or damage
+  ---
+  duration_ms: 14.889643
+  type: 'test'
+  ...
+# Subtest: near-tangent rotation can exhaust one feature sweep and preserve its last certified pose
+ok 88 - near-tangent rotation can exhaust one feature sweep and preserve its last certified pose
+  ---
+  duration_ms: 5.821811
+  type: 'test'
+  ...
+# Subtest: the aggregate sample cap holds the whole unresolved interval of a densely obstructed field
+ok 89 - the aggregate sample cap holds the whole unresolved interval of a densely obstructed field
+  ---
+  duration_ms: 93.767314
+  type: 'test'
+  ...
+# Subtest: 1,000 reproducible six-car fixture cases match their permuted full state and receipts
+ok 90 - 1,000 reproducible six-car fixture cases match their permuted full state and receipts
+  ---
+  duration_ms: 2354.843701
+  type: 'test'
+  ...
+# 3000 witnessed impulses over 2,000 ordered ticks, repeated with permuted inputs
+# Subtest: published v1.1.1 wall retains its accepted ticks and v5 replay
+ok 91 - published v1.1.1 wall retains its accepted ticks and v5 replay
+  ---
+  duration_ms: 56.627618
+  type: 'test'
+  ...
+# Subtest: published v1.1.1 glancing retains its accepted ticks and v5 replay
+ok 92 - published v1.1.1 glancing retains its accepted ticks and v5 replay
+  ---
+  duration_ms: 65.55615
+  type: 'test'
+  ...
+# Subtest: published v1.1.1 opposing retains its accepted ticks and v5 replay
+ok 93 - published v1.1.1 opposing retains its accepted ticks and v5 replay
+  ---
+  duration_ms: 139.843471
+  type: 'test'
+  ...
+# Subtest: legacy packed contacts and impossible fixture diagnostics retain the published order and budget
+ok 94 - legacy packed contacts and impossible fixture diagnostics retain the published order and budget
+  ---
+  duration_ms: 2.219581
+  type: 'test'
+  ...
+# Subtest: Crash Lab continues to admit four cars and eight fixtures at most
+ok 95 - Crash Lab continues to admit four cars and eight fixtures at most
+  ---
+  duration_ms: 0.6726
+  type: 'test'
+  ...
+# Subtest: derby v6 admits only its exact source and owns validated input data
+ok 96 - derby v6 admits only its exact source and owns validated input data
+  ---
+  duration_ms: 4.767781
+  type: 'test'
+  ...
+# Subtest: an attempted stop and a partial match cannot impersonate a terminal derby
+ok 97 - an attempted stop and a partial match cannot impersonate a terminal derby
+  ---
+  duration_ms: 10.795052
+  type: 'test'
+  ...
+# Subtest: crucible reconstructs a physical six-car derby through player elimination and settlement
+ok 98 - crucible reconstructs a physical six-car derby through player elimination and settlement
+  ---
+  duration_ms: 5320.606346
+  type: 'test'
+  ...
+# Subtest: iron-pit reconstructs a physical six-car derby through player elimination and settlement
+ok 99 - iron-pit reconstructs a physical six-car derby through player elimination and settlement
+  ---
+  duration_ms: 1624.377789
+  type: 'test'
+  ...
+# Subtest: reconstructs last-car-standing from accepted controls
+ok 100 - reconstructs last-car-standing from accepted controls
+  ---
+  duration_ms: 2365.706263
+  type: 'test'
+  ...
+# Subtest: reconstructs technical-stop from accepted controls
+ok 101 - reconstructs technical-stop from accepted controls
+  ---
+  duration_ms: 2606.46811
+  type: 'test'
+  ...
+# Subtest: derby owns six ordered identities and rejects malformed player input before moving any car
+ok 102 - derby owns six ordered identities and rejects malformed player input before moving any car
+  ---
+  duration_ms: 9.945151
+  type: 'test'
+  ...
+# Subtest: three simultaneous opposing entries can disable all six with mutual credit and no surviving winner
+ok 103 - three simultaneous opposing entries can disable all six with mutual credit and no surviving winner
+  ---
+  duration_ms: 9.886132
+  type: 'test'
+  ...
+# Subtest: last active driver 4 wins exactly once
+ok 104 - last active driver 4 wins exactly once
+  ---
+  duration_ms: 3.31044
+  type: 'test'
+  ...
+# Subtest: last active driver 5 wins exactly once
+ok 105 - last active driver 5 wins exactly once
+  ---
+  duration_ms: 3.381661
+  type: 'test'
+  ...
+# Subtest: solid wrecks receive and transfer impulses after elimination without new credit
+ok 106 - solid wrecks receive and transfer impulses after elimination without new credit
+  ---
+  duration_ms: 14.391562
+  type: 'test'
+  ...
+# Subtest: competitive reverse supplies road forces and real contact behind the player
+ok 107 - competitive reverse supplies road forces and real contact behind the player
+  ---
+  duration_ms: 18.557953
+  type: 'test'
+  ...
+# Subtest: technical stop freezes the official classification and never awards a knockout
+ok 108 - technical stop freezes the official classification and never awards a knockout
+  ---
+  duration_ms: 1.46217
+  type: 'test'
+  ...
+# Subtest: The Crucible accepts a complete round after the player hits a wall and spectates
+ok 109 - The Crucible accepts a complete round after the player hits a wall and spectates
+  ---
+  duration_ms: 1940.519278
+  type: 'test'
+  ...
+# Subtest: Iron Pit reproduces every command and accepted receipt through a complete spectator period
+ok 110 - Iron Pit reproduces every command and accepted receipt through a complete spectator period
+  ---
+  duration_ms: 1616.708988
+  type: 'test'
+  ...
+# Subtest: grounded wheel slip, heavy braking and apron contact select the corresponding effects
+ok 111 - grounded wheel slip, heavy braking and apron contact select the corresponding effects
+  ---
+  duration_ms: 17.238402
+  type: 'test'
+  ...
+# Subtest: guardrail sparks require accepted impact and speed loss, and remain brief at rest
+ok 112 - guardrail sparks require accepted impact and speed loss, and remain brief at rest
+  ---
+  duration_ms: 0.67406
+  type: 'test'
+  ...
+# Subtest: effects freeze while paused, expire on racing ticks, and reset across recovery/quality/grid changes
+ok 113 - effects freeze while paused, expire on racing ticks, and reset across recovery/quality/grid changes
+  ---
+  duration_ms: 12.344532
+  type: 'test'
+  ...
+# Subtest: invalid wheel and camera samples cannot submit non-finite presentation geometry
+ok 114 - invalid wheel and camera samples cannot submit non-finite presentation geometry
+  ---
+  duration_ms: 0.5456
+  type: 'test'
+  ...
+# Subtest: actual pack slip, shoulder and rail telemetry produce bounded effects without changing the replay
+ok 115 - actual pack slip, shoulder and rail telemetry produce bounded effects without changing the replay
+  ---
+  duration_ms: 7549.367278
+  type: 'test'
+  ...
+# Subtest: only the selected standard slot drives, independent of brand and sparse slot ordering
+ok 116 - only the selected standard slot drives, independent of brand and sparse slot ordering
+  ---
+  duration_ms: 4.905271
+  type: 'test'
+  ...
+# Subtest: neutral arming and action edges survive held start, clear, and profile changes
+ok 117 - neutral arming and action edges survive held start, clear, and profile changes
+  ---
+  duration_ms: 1.41766
+  type: 'test'
+  ...
+# Subtest: polling disconnect, wrong identity and changed layout clear all input and require reselection
+ok 118 - polling disconnect, wrong identity and changed layout clear all input and require reselection
+  ---
+  duration_ms: 1.15465
+  type: 'test'
+  ...
+# Subtest: disconnect events revoke even identical slot replacements between polls
+ok 119 - disconnect events revoke even identical slot replacements between polls
+  ---
+  duration_ms: 0.52959
+  type: 'test'
+  ...
+# Subtest: standard mapping validates its controls, rejects name-based guesses and clamps finite input
+ok 120 - standard mapping validates its controls, rejects name-based guesses and clamps finite input
+  ---
+  duration_ms: 0.63842
+  type: 'test'
+  ...
+# Subtest: custom layout uses the same neutral and action boundary, including cancelled digital inputs
+ok 121 - custom layout uses the same neutral and action boundary, including cancelled digital inputs
+  ---
+  duration_ms: 0.35542
+  type: 'test'
+  ...
+# Subtest: permission denial, missing API, and empty device lists keep controls neutral
+ok 122 - permission denial, missing API, and empty device lists keep controls neutral
+  ---
+  duration_ms: 0.39925
+  type: 'test'
+  ...
+# Subtest: Nitro bumpers are held tick commands with neutral arming and disconnect clearance
+ok 123 - Nitro bumpers are held tick commands with neutral arming and disconnect clearance
+  ---
+  duration_ms: 0.45159
+  type: 'test'
+  ...
+# Subtest: Rocket boost and lateral D-pad require a neutral grid, preserve signed dodge and clear on loss
+ok 124 - Rocket boost and lateral D-pad require a neutral grid, preserve signed dodge and clear on loss
+  ---
+  duration_ms: 2.593551
+  type: 'test'
+  ...
+# Subtest: legacy admission preserves the exact published v1.3.0 registry source body
+ok 125 - legacy admission preserves the exact published v1.3.0 registry source body
+  ---
+  duration_ms: 9.654342
+  type: 'test'
+  ...
+# Subtest: new current garages retain the initial economy with explicit schema 2 and no owned damage
+ok 126 - new current garages retain the initial economy with explicit schema 2 and no owned damage
+  ---
+  duration_ms: 0.69879
+  type: 'test'
+  ...
+# Subtest: legacy empty, one-car, sparse, full duplicate-model and every-active-bay states preserve ownership exactly
+ok 127 - legacy empty, one-car, sparse, full duplicate-model and every-active-bay states preserve ownership exactly
+  ---
+  duration_ms: 32.924805
+  type: 'test'
+  ...
+# Subtest: same-model cars own independent copied build and condition records
+ok 128 - same-model cars own independent copied build and condition records
+  ---
+  duration_ms: 2.31502
+  type: 'test'
+  ...
+# Subtest: current owned-car admission rejects unsupported parts, build rules, tuning, damage and ownership fields
+ok 129 - current owned-car admission rejects unsupported parts, build rules, tuning, damage and ownership fields
+  ---
+  duration_ms: 20.223003
+  type: 'test'
+  ...
+# Subtest: owned build and condition accessors are rejected without execution
+ok 130 - owned build and condition accessors are rejected without execution
+  ---
+  duration_ms: 5.621661
+  type: 'test'
+  ...
+# Subtest: legacy/current import is explicit and bounded; current admission never silently migrates
+ok 131 - legacy/current import is explicit and bounded; current admission never silently migrates
+  ---
+  duration_ms: 3.08652
+  type: 'test'
+  ...
+# Subtest: legacy serial/revision exhaustion and maximum credits survive without wrap, reset or reward
+ok 132 - legacy serial/revision exhaustion and maximum credits survive without wrap, reset or reward
+  ---
+  duration_ms: 1.04988
+  type: 'test'
+  ...
+# Subtest: ordinary purchases allocate one stock build and pristine condition for each stable owned identity
+ok 133 - ordinary purchases allocate one stock build and pristine condition for each stable owned identity
+  ---
+  duration_ms: 3.445851
+  type: 'test'
+  ...
+# Subtest: largest current supported stock save is measured within the unchanged 64 KiB bound
+ok 134 - largest current supported stock save is measured within the unchanged 64 KiB bound
+  ---
+  duration_ms: 13.907232
+  type: 'test'
+  ...
+# Subtest: recreated identical garage histories cannot revive tickets after cleared or corrupt storage
+ok 135 - recreated identical garage histories cannot revive tickets after cleared or corrupt storage
+  ---
+  duration_ms: 9.201872
+  type: 'test'
+  ...
+# Subtest: the final storage sequence commits once and exhaustion preserves exportable ownership
+ok 136 - the final storage sequence commits once and exhaustion preserves exportable ownership
+  ---
+  duration_ms: 9.410511
+  type: 'test'
+  ...
+# Subtest: first installation charges catalog cost plus bounded fitting labor once and preserves owned identity
+ok 137 - first installation charges catalog cost plus bounded fitting labor once and preserves owned identity
+  ---
+  duration_ms: 16.118423
+  type: 'test'
+  ...
+# Subtest: refitting paid inventory charges labor only, stock is retained, and setup-only changes have explicit costs
+ok 138 - refitting paid inventory charges labor only, stock is retained, and setup-only changes have explicit costs
+  ---
+  duration_ms: 10.442801
+  type: 'test'
+  ...
+# Subtest: insufficient money, missing ownership, stale intent and unsupported changes reject without state loss
+ok 139 - insufficient money, missing ownership, stale intent and unsupported changes reject without state loss
+  ---
+  duration_ms: 16.241433
+  type: 'test'
+  ...
+# Subtest: installation admission owns inert data and never executes accessors or serialization hooks
+ok 140 - installation admission owns inert data and never executes accessors or serialization hooks
+  ---
+  duration_ms: 4.37313
+  type: 'test'
+  ...
+# Subtest: combined physical compilation failure never spends credits or installs a partial stack
+ok 141 - combined physical compilation failure never spends credits or installs a partial stack
+  ---
+  duration_ms: 3.253721
+  type: 'test'
+  ...
+# Subtest: selling an upgraded car pays only stock resale and transfers no paid inventory to a new identity
+ok 142 - selling an upgraded car pays only stock resale and transfers no paid inventory to a new identity
+  ---
+  duration_ms: 2.1237
+  type: 'test'
+  ...
+# Subtest: prepared installation is copied and published only after one verified whole-save write
+ok 143 - prepared installation is copied and published only after one verified whole-save write
+  ---
+  duration_ms: 11.512772
+  type: 'test'
+  ...
+# Subtest: installation quota persistence fault never awards an unverified free part
+ok 144 - installation quota persistence fault never awards an unverified free part
+  ---
+  duration_ms: 11.124132
+  type: 'test'
+  ...
+# Subtest: installation drop persistence fault never awards an unverified free part
+ok 145 - installation drop persistence fault never awards an unverified free part
+  ---
+  duration_ms: 6.435481
+  type: 'test'
+  ...
+# Subtest: installation readback persistence fault never awards an unverified free part
+ok 146 - installation readback persistence fault never awards an unverified free part
+  ---
+  duration_ms: 4.796
+  type: 'test'
+  ...
+# Subtest: another tab cannot install against an obsolete build or charge the same owned car twice
+ok 147 - another tab cannot install against an obsolete build or charge the same owned car twice
+  ---
+  duration_ms: 5.334331
+  type: 'test'
+  ...
+# Subtest: 1,024 generated purchase/installation/sale sequences preserve an independent money and per-car inventory ledger
+ok 148 - 1,024 generated purchase/installation/sale sequences preserve an independent money and per-car inventory ledger
+  ---
+  duration_ms: 39036.075848
+  type: 'test'
+  ...
+# {"sequences":1024,"operations":32768,"accepted":16414,"rejected":16354,"installs":8471,"refits":3364,"setups":1056,"retries":8471,"slotInstalls":{"engine":3541,"intake":148,"exhaust":121,"gearbox":488,"finalDrive":2757,"tyres":408,"suspension":138,"steering":169,"paint":701}}
+# Subtest: immutable v1.3.0 validation/transaction/vault closure retains its exact source hashes
+ok 149 - immutable v1.3.0 validation/transaction/vault closure retains its exact source hashes
+  ---
+  duration_ms: 15.564173
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: empty
+ok 150 - explicit migration preserves exact published ownership: empty
+  ---
+  duration_ms: 3.17696
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-cinder-two
+ok 151 - explicit migration preserves exact published ownership: one-cinder-two
+  ---
+  duration_ms: 4.892891
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-lilt
+ok 152 - explicit migration preserves exact published ownership: one-lilt
+  ---
+  duration_ms: 4.241781
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-evening-line
+ok 153 - explicit migration preserves exact published ownership: one-evening-line
+  ---
+  duration_ms: 2.08428
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-rivet-eight
+ok 154 - explicit migration preserves exact published ownership: one-rivet-eight
+  ---
+  duration_ms: 4.957831
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-yardhand
+ok 155 - explicit migration preserves exact published ownership: one-yardhand
+  ---
+  duration_ms: 3.06522
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: one-glass-comet
+ok 156 - explicit migration preserves exact published ownership: one-glass-comet
+  ---
+  duration_ms: 1.932681
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: four-full-bays
+ok 157 - explicit migration preserves exact published ownership: four-full-bays
+  ---
+  duration_ms: 8.034711
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: two-duplicate-models
+ok 158 - explicit migration preserves exact published ownership: two-duplicate-models
+  ---
+  duration_ms: 6.022971
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: sold-id-gap
+ok 159 - explicit migration preserves exact published ownership: sold-id-gap
+  ---
+  duration_ms: 4.40096
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-1
+ok 160 - explicit migration preserves exact published ownership: active-bay-1
+  ---
+  duration_ms: 5.753341
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-2
+ok 161 - explicit migration preserves exact published ownership: active-bay-2
+  ---
+  duration_ms: 5.400081
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-3
+ok 162 - explicit migration preserves exact published ownership: active-bay-3
+  ---
+  duration_ms: 10.393782
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: active-bay-4
+ok 163 - explicit migration preserves exact published ownership: active-bay-4
+  ---
+  duration_ms: 9.147221
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: revision-exhausted
+ok 164 - explicit migration preserves exact published ownership: revision-exhausted
+  ---
+  duration_ms: 4.790411
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: serial-exhausted
+ok 165 - explicit migration preserves exact published ownership: serial-exhausted
+  ---
+  duration_ms: 1.72044
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: revision-and-serial-exhausted
+ok 166 - explicit migration preserves exact published ownership: revision-and-serial-exhausted
+  ---
+  duration_ms: 2.04991
+  type: 'test'
+  ...
+# Subtest: explicit migration preserves exact published ownership: worst-case-valid-fields
+ok 167 - explicit migration preserves exact published ownership: worst-case-valid-fields
+  ---
+  duration_ms: 4.292771
+  type: 'test'
+  ...
+# Subtest: legacy migration blocks ordinary mutations and cancellation performs no write
+ok 168 - legacy migration blocks ordinary mutations and cancellation performs no write
+  ---
+  duration_ms: 0.79484
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 buy confirmation cannot overwrite a newer schema
+ok 169 - actual published v1.3.0 buy confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 2.595571
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 reset confirmation cannot overwrite a newer schema
+ok 170 - actual published v1.3.0 reset confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 0.91884
+  type: 'test'
+  ...
+# Subtest: actual published v1.3.0 import confirmation cannot overwrite a newer schema
+ok 171 - actual published v1.3.0 import confirmation cannot overwrite a newer schema
+  ---
+  duration_ms: 0.90944
+  type: 'test'
+  ...
+# Subtest: two migration attempts and a delayed old storage event cannot silently replace accepted ownership
+ok 172 - two migration attempts and a delayed old storage event cannot silently replace accepted ownership
+  ---
+  duration_ms: 1.28345
+  type: 'test'
+  ...
+# Subtest: a published old-tab purchase made after migration review is preserved through conflict and fresh review
+ok 173 - a published old-tab purchase made after migration review is preserved through conflict and fresh review
+  ---
+  duration_ms: 2.125961
+  type: 'test'
+  ...
+# Subtest: migration quota persistence failure needs explicit rollback-free reconciliation
+ok 174 - migration quota persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 1.51844
+  type: 'test'
+  ...
+# Subtest: migration drop persistence failure needs explicit rollback-free reconciliation
+ok 175 - migration drop persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 1.29458
+  type: 'test'
+  ...
+# Subtest: migration readback persistence failure needs explicit rollback-free reconciliation
+ok 176 - migration readback persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 1.01956
+  type: 'test'
+  ...
+# Subtest: migration throw-after-write persistence failure needs explicit rollback-free reconciliation
+ok 177 - migration throw-after-write persistence failure needs explicit rollback-free reconciliation
+  ---
+  duration_ms: 0.8977
+  type: 'test'
+  ...
+# Subtest: migration keeps exhausted garage counters but cannot wrap the storage sequence
+ok 178 - migration keeps exhausted garage counters but cannot wrap the storage sequence
+  ---
+  duration_ms: 1.477851
+  type: 'test'
+  ...
+# Subtest: bounded current state plus a canonical legacy backup fits the unchanged 64KiB envelope limit
+ok 179 - bounded current state plus a canonical legacy backup fits the unchanged 64KiB envelope limit
+  ---
+  duration_ms: 3.24813
+  type: 'test'
+  ...
+# Subtest: current envelope rejects malformed legacy backups and unsupported versions without mutating accepted ownership
+ok 180 - current envelope rejects malformed legacy backups and unsupported versions without mutating accepted ownership
+  ---
+  duration_ms: 4.441801
+  type: 'test'
+  ...
+# Subtest: unsupported or corrupt legacy saves are never automatically migrated or erased
+ok 181 - unsupported or corrupt legacy saves are never automatically migrated or erased
+  ---
+  duration_ms: 0.44236
+  type: 'test'
+  ...
+# Subtest: legacy and current imports are explicit whole-state proposals and preserve recoverable legacy provenance
+ok 182 - legacy and current imports are explicit whole-state proposals and preserve recoverable legacy provenance
+  ---
+  duration_ms: 11.353982
+  type: 'test'
+  ...
+# Subtest: duplicate-model owned cars receive independent deeply immutable build/condition records
+ok 183 - duplicate-model owned cars receive independent deeply immutable build/condition records
+  ---
+  duration_ms: 0.95043
+  type: 'test'
+  ...
+# Subtest: largest canonical rules2 inventory/build and four-car envelope retain existing UTF-8 bounds
+ok 184 - largest canonical rules2 inventory/build and four-car envelope retain existing UTF-8 bounds
+  ---
+  duration_ms: 39.156936
+  type: 'test'
+  ...
+# Subtest: six distinct original catalogue entries are inert, immutable and include an affordable starter
+ok 185 - six distinct original catalogue entries are inert, immutable and include an affordable starter
+  ---
+  duration_ms: 3.146871
+  type: 'test'
+  ...
+# Subtest: catalogue admission owns every row and finish without freezing or aliasing caller data
+ok 186 - catalogue admission owns every row and finish without freezing or aliasing caller data
+  ---
+  duration_ms: 0.78777
+  type: 'test'
+  ...
+# Subtest: catalogue rejects duplicate identities, unsupported metadata, unsafe prices and excessive arrays
+ok 187 - catalogue rejects duplicate identities, unsupported metadata, unsafe prices and excessive arrays
+  ---
+  duration_ms: 8.952512
+  type: 'test'
+  ...
+# Subtest: validating authored catalogue data cannot install a user-supplied ownership model
+ok 188 - validating authored catalogue data cannot install a user-supplied ownership model
+  ---
+  duration_ms: 0.82764
+  type: 'test'
+  ...
+# Subtest: new garages have four empty bays, no active vehicle and exactly the starting fictional credits
+ok 189 - new garages have four empty bays, no active vehicle and exactly the starting fictional credits
+  ---
+  duration_ms: 0.44479
+  type: 'test'
+  ...
+# Subtest: owned identity is independent from model identity and all four bays can contain the same model
+ok 190 - owned identity is independent from model identity and all four bays can contain the same model
+  ---
+  duration_ms: 3.113771
+  type: 'test'
+  ...
+# Subtest: canonical serialization preserves bay positions and owns a deeply frozen complete state
+ok 191 - canonical serialization preserves bay positions and owns a deeply frozen complete state
+  ---
+  duration_ms: 3.63038
+  type: 'test'
+  ...
+# Subtest: registry rejects missing and extra save fields, broken ownership, capacity and active selection
+ok 192 - registry rejects missing and extra save fields, broken ownership, capacity and active selection
+  ---
+  duration_ms: 14.245222
+  type: 'test'
+  ...
+# Subtest: integer bounds include explicit serial exhaustion and reject coercion, fractions and negative zero
+ok 193 - integer bounds include explicit serial exhaustion and reject coercion, fractions and negative zero
+  ---
+  duration_ms: 15.718483
+  type: 'test'
+  ...
+# Subtest: object admission rejects accessors, hidden fields, prototype tricks and executable serialization hooks inertly
+ok 194 - object admission rejects accessors, hidden fields, prototype tricks and executable serialization hooks inertly
+  ---
+  duration_ms: 3.02409
+  type: 'test'
+  ...
+# Subtest: text admission is bounded in UTF-8 bytes and rejects malformed or unsupported complete saves
+ok 195 - text admission is bounded in UTF-8 bytes and rejects malformed or unsupported complete saves
+  ---
+  duration_ms: 2.221671
+  type: 'test'
+  ...
+# Subtest: 1,024 deterministic inventory states preserve independently specified IDs, balances and bay order
+ok 196 - 1,024 deterministic inventory states preserve independently specified IDs, balances and bay order
+  ---
+  duration_ms: 1246.836581
+  type: 'test'
+  ...
+# Subtest: six original showroom silhouettes have bounded complete lit geometry and four separated bays
+ok 197 - six original showroom silhouettes have bounded complete lit geometry and four separated bays
+  ---
+  duration_ms: 173.535107
+  type: 'test'
+  ...
+# Subtest: original paint changes authored panel colours while preserving every silhouette and non-paint batch
+ok 198 - original paint changes authored panel colours while preserving every silhouette and non-paint batch
+  ---
+  duration_ms: 312.728228
+  type: 'test'
+  ...
+# Subtest: accepted owned paint is cached, bounded across the finite palette and released on disposal
+ok 199 - accepted owned paint is cached, bounded across the finite palette and released on disposal
+  ---
+  duration_ms: 350.747504
+  type: 'test'
+  ...
+# Subtest: mechanical appearance variants evict invisible meshes within the published retained resource bound
+ok 200 - mechanical appearance variants evict invisible meshes within the published retained resource bound
+  ---
+  duration_ms: 2933.88117
+  type: 'test'
+  ...
+# Subtest: all catalogue switches and camera views retain bounded resources and never mutate ownership
+ok 201 - all catalogue switches and camera views retain bounded resources and never mutate ownership
+  ---
+  duration_ms: 394.22409
+  type: 'test'
+  ...
+# Subtest: failed uploads clean construction; lost contexts skip drawing and recreate without stale handles
+ok 202 - failed uploads clean construction; lost contexts skip drawing and recreate without stale handles
+  ---
+  duration_ms: 206.600882
+  type: 'test'
+  ...
+# Subtest: 1,024 deterministic 64-operation sequences reconcile against an independent ownership and money ledger
+ok 203 - 1,024 deterministic 64-operation sequences reconcile against an independent ownership and money ledger
+  ---
+  duration_ms: 24087.743004
+  type: 'test'
+  ...
+# {"sequences":1024,"operations":65536,"freshSequences":768,"syntheticBoundarySequences":256,"buy":5493,"sell":5080,"select":3470,"rejected":51493}
+# Subtest: repeated fresh-garage buy/sell cycles strictly spend credits and never recycle an owned ID
+ok 204 - repeated fresh-garage buy/sell cycles strictly spend credits and never recycle an owned ID
+  ---
+  duration_ms: 6.3072
+  type: 'test'
+  ...
+# Subtest: a real starter purchase changes credits, one bay, the allocator and revision atomically
+ok 205 - a real starter purchase changes credits, one bay, the allocator and revision atomically
+  ---
+  duration_ms: 7.011882
+  type: 'test'
+  ...
+# Subtest: four actual 600-credit purchases fill the garage and a fifth cannot allocate or charge
+ok 206 - four actual 600-credit purchases fill the garage and a fifth cannot allocate or charge
+  ---
+  duration_ms: 11.941021
+  type: 'test'
+  ...
+# Subtest: premium purchase uses its catalogue price and inadequate credits cannot create a partial car
+ok 207 - premium purchase uses its catalogue price and inadequate credits cannot create a partial car
+  ---
+  duration_ms: 0.94087
+  type: 'test'
+  ...
+# Subtest: resale is a fixed catalogue amount and a buy/sell cycle reduces the balance for every model
+ok 208 - resale is a fixed catalogue amount and a buy/sell cycle reduces the balance for every model
+  ---
+  duration_ms: 5.757091
+  type: 'test'
+  ...
+# Subtest: selling inactive cars preserves selection and selling the active car chooses the lowest occupied bay
+ok 209 - selling inactive cars preserves selection and selling the active car chooses the lowest occupied bay
+  ---
+  duration_ms: 9.029341
+  type: 'test'
+  ...
+# Subtest: selection only changes the active owned ID and consumes exactly one revision
+ok 210 - selection only changes the active owned ID and consumes exactly one revision
+  ---
+  duration_ms: 6.977351
+  type: 'test'
+  ...
+# Subtest: retrying a previously committed purchase or sale cannot duplicate ownership or proceeds
+ok 211 - retrying a previously committed purchase or sale cannot duplicate ownership or proceeds
+  ---
+  duration_ms: 2.18292
+  type: 'test'
+  ...
+# Subtest: stale competing intents reject before spending and never rebase themselves onto a newer revision
+ok 212 - stale competing intents reject before spending and never rebase themselves onto a newer revision
+  ---
+  duration_ms: 4.498321
+  type: 'test'
+  ...
+# Subtest: sale at the money ceiling is exact and one-credit overflow rejects the entire transaction
+ok 213 - sale at the money ceiling is exact and one-credit overflow rejects the entire transaction
+  ---
+  duration_ms: 1.09736
+  type: 'test'
+  ...
+# Subtest: serial and revision exhaustion never wrap and the last representable purchase remains valid
+ok 214 - serial and revision exhaustion never wrap and the last representable purchase remains valid
+  ---
+  duration_ms: 4.005741
+  type: 'test'
+  ...
+# Subtest: requests cannot override prices, resale, bay placement, IDs or the revision contract
+ok 215 - requests cannot override prices, resale, bay placement, IDs or the revision contract
+  ---
+  duration_ms: 5.967241
+  type: 'test'
+  ...
+# Subtest: invalid catalogue identities and malformed or unowned vehicle IDs return distinct rejection reasons
+ok 216 - invalid catalogue identities and malformed or unowned vehicle IDs return distinct rejection reasons
+  ---
+  duration_ms: 1.96391
+  type: 'test'
+  ...
+# Subtest: invalid states reject before requests and query helpers validate the complete garage
+ok 217 - invalid states reject before requests and query helpers validate the complete garage
+  ---
+  duration_ms: 1.73963
+  type: 'test'
+  ...
+# Subtest: successful transitions own all records and cannot be changed through mutable input aliases
+ok 218 - successful transitions own all records and cannot be changed through mutable input aliases
+  ---
+  duration_ms: 1.752831
+  type: 'test'
+  ...
+# Subtest: request and state accessors, hidden fields and prototype tricks reject without executing code
+ok 219 - request and state accessors, hidden fields and prototype tricks reject without executing code
+  ---
+  duration_ms: 1.81755
+  type: 'test'
+  ...
+# Subtest: vault envelopes have a strict bounded format independent of exported garage state
+ok 220 - vault envelopes have a strict bounded format independent of exported garage state
+  ---
+  duration_ms: 4.378021
+  type: 'test'
+  ...
+# Subtest: empty storage stays empty until explicit confirmation and existing unrelated saves remain untouched
+ok 221 - empty storage stays empty until explicit confirmation and existing unrelated saves remain untouched
+  ---
+  duration_ms: 1.55713
+  type: 'test'
+  ...
+# Subtest: confirmed purchases persist complete state before publication and reload restores ownership
+ok 222 - confirmed purchases persist complete state before publication and reload restores ownership
+  ---
+  duration_ms: 6.003881
+  type: 'test'
+  ...
+# Subtest: confirmation tickets are owner-bound, single-use and invalidated by a new prepare or reload
+ok 223 - confirmation tickets are owner-bound, single-use and invalidated by a new prepare or reload
+  ---
+  duration_ms: 2.06753
+  type: 'test'
+  ...
+# Subtest: stale tabs cannot overwrite purchases or resurrect a sold car
+ok 224 - stale tabs cannot overwrite purchases or resurrect a sold car
+  ---
+  duration_ms: 5.705931
+  type: 'test'
+  ...
+# Subtest: identical import and reset preserve storage history and reject ABA-stale confirmations
+ok 225 - identical import and reset preserve storage history and reject ABA-stale confirmations
+  ---
+  duration_ms: 1.49784
+  type: 'test'
+  ...
+# Subtest: whole-state import keeps identities, allocator and revision without merging balances
+ok 226 - whole-state import keeps identities, allocator and revision without merging balances
+  ---
+  duration_ms: 6.713831
+  type: 'test'
+  ...
+# Subtest: invalid imports preserve accepted ownership and invalidate any prior confirmation
+ok 227 - invalid imports preserve accepted ownership and invalidate any prior confirmation
+  ---
+  duration_ms: 12.068271
+  type: 'test'
+  ...
+# Subtest: quota failure never awards a purchase and writes remain blocked until explicit reload
+ok 228 - quota failure never awards a purchase and writes remain blocked until explicit reload
+  ---
+  duration_ms: 1.886301
+  type: 'test'
+  ...
+# Subtest: unconfirmed write verification fails closed and reload reconciles without paying twice
+ok 229 - unconfirmed write verification fails closed and reload reconciles without paying twice
+  ---
+  duration_ms: 3.29887
+  type: 'test'
+  ...
+# Subtest: unavailable storage, locks, crypto and exhausted storage sequence cannot silently downgrade writes
+ok 230 - unavailable storage, locks, crypto and exhausted storage sequence cannot silently downgrade writes
+  ---
+  duration_ms: 1.208801
+  type: 'test'
+  ...
+# Subtest: observers see only confirmed saved state and cannot undo a successful commit by throwing
+ok 231 - observers see only confirmed saved state and cannot undo a successful commit by throwing
+  ---
+  duration_ms: 1.29122
+  type: 'test'
+  ...
+# Subtest: reentrant observers cannot change the accepted state attached to a transaction receipt
+ok 232 - reentrant observers cannot change the accepted state attached to a transaction receipt
+  ---
+  duration_ms: 0.93173
+  type: 'test'
+  ...
+# Subtest: disposal after the write suppresses observers while preserving the completed commit acknowledgement
+ok 233 - disposal after the write suppresses observers while preserving the completed commit acknowledgement
+  ---
+  duration_ms: 1.06895
+  type: 'test'
+  ...
+# Subtest: corrupt stored data is preserved until a confirmed complete replacement
+ok 234 - corrupt stored data is preserved until a confirmed complete replacement
+  ---
+  duration_ms: 0.7028
+  type: 'test'
+  ...
+# Subtest: storage notifications invalidate stale views, ignore unrelated areas and tolerate delayed old events
+ok 235 - storage notifications invalidate stale views, ignore unrelated areas and tolerate delayed old events
+  ---
+  duration_ms: 4.546171
+  type: 'test'
+  ...
+# Subtest: busy locks reject without writes and pending acquisition rechecks lifecycle invalidation
+ok 236 - busy locks reject without writes and pending acquisition rechecks lifecycle invalidation
+  ---
+  duration_ms: 2.69917
+  type: 'test'
+  ...
+# Subtest: lifting and tapping right at 126 km/h leaves room to accelerate out of the Speedway bank
+ok 237 - lifting and tapping right at 126 km/h leaves room to accelerate out of the Speedway bank
+  ---
+  duration_ms: 1050.610931
+  type: 'test'
+  ...
+# Subtest: lifting at high speed with right steering held clears the Ridge opening sweep
+ok 238 - lifting at high speed with right steering held clears the Ridge opening sweep
+  ---
+  duration_ms: 1048.885701
+  type: 'test'
+  ...
+# Subtest: Overdrive Speedway stays on its wheels through the first bend with held digital corrections
+ok 239 - Overdrive Speedway stays on its wheels through the first bend with held digital corrections
+  ---
+  duration_ms: 1024.226397
+  type: 'test'
+  ...
+# Subtest: Overdrive Speedway accepts fractional steering and settles after a fast corner-entry release
+ok 240 - Overdrive Speedway accepts fractional steering and settles after a fast corner-entry release
+  ---
+  duration_ms: 1152.516567
+  type: 'test'
+  ...
+# Subtest: Redline Ridge stays on its wheels through the first bend with held digital corrections
+ok 241 - Redline Ridge stays on its wheels through the first bend with held digital corrections
+  ---
+  duration_ms: 879.193615
+  type: 'test'
+  ...
+# Subtest: Redline Ridge accepts fractional steering and settles after a fast corner-entry release
+ok 242 - Redline Ridge accepts fractional steering and settles after a fast corner-entry release
+  ---
+  duration_ms: 1092.344797
+  type: 'test'
+  ...
+# Subtest: Overdrive Speedway can hold the accelerator and turn through a fast right bend
+ok 243 - Overdrive Speedway can hold the accelerator and turn through a fast right bend
+  ---
+  duration_ms: 557.582096
+  type: 'test'
+  ...
+# Subtest: Redline Ridge can hold the accelerator and turn through a fast left bend
+ok 244 - Redline Ridge can hold the accelerator and turn through a fast left bend
+  ---
+  duration_ms: 1282.265417
+  type: 'test'
+  ...
+# Subtest: photometric centre and dipped axis use the chassis matrix on slopes and banks
+ok 245 - photometric centre and dipped axis use the chassis matrix on slopes and banks
+  ---
+  duration_ms: 1.84623
+  type: 'test'
+  ...
+# Subtest: invalid/unbounded transforms contribute no light
+ok 246 - invalid/unbounded transforms contribute no light
+  ---
+  duration_ms: 1.168721
+  type: 'test'
+  ...
+# Subtest: full quality selects the closest racing rival with stable field order; reduced keeps focus
+ok 247 - full quality selects the closest racing rival with stable field order; reduced keeps focus
+  ---
+  duration_ms: 1.08847
+  type: 'test'
+  ...
+# Subtest: headlamp calibration fits the finite view range and cone
+ok 248 - headlamp calibration fits the finite view range and cone
+  ---
+  duration_ms: 0.17307
+  type: 'test'
+  ...
+# Subtest: clean shell partitions the original v1.1.0 triangles byte for byte
+ok 249 - clean shell partitions the original v1.1.0 triangles byte for byte
+  ---
+  duration_ms: 35.030925
+  type: 'test'
+  ...
+# Subtest: glancing, opposing and wall targets have distinct physical folds and severe exposed-metal facets
+ok 250 - glancing, opposing and wall targets have distinct physical folds and severe exposed-metal facets
+  ---
+  duration_ms: 28.553854
+  type: 'test'
+  ...
+# Subtest: maximum panel damage preserves topology, shared positions, winding and finite lighting normals
+ok 251 - maximum panel damage preserves topology, shared positions, winding and finite lighting normals
+  ---
+  duration_ms: 67.352021
+  type: 'test'
+  ...
+# Subtest: panel targets depend on cumulative damage and cannot share vehicle mutations
+ok 252 - panel targets depend on cumulative damage and cannot share vehicle mutations
+  ---
+  duration_ms: 34.656995
+  type: 'test'
+  ...
+# Subtest: rejects invalid damage and malformed triangle data without reading accessors
+ok 253 - rejects invalid damage and malformed triangle data without reading accessors
+  ---
+  duration_ms: 23.881204
+  type: 'test'
+  ...
+# Subtest: wall retains its certified authority and reconstructs panel uploads through playback
+ok 254 - wall retains its certified authority and reconstructs panel uploads through playback
+  ---
+  duration_ms: 371.938997
+  type: 'test'
+  ...
+# Subtest: glancing retains its certified authority and reconstructs panel uploads through playback
+ok 255 - glancing retains its certified authority and reconstructs panel uploads through playback
+  ---
+  duration_ms: 296.945695
+  type: 'test'
+  ...
+# Subtest: opposing retains its certified authority and reconstructs panel uploads through playback
+ok 256 - opposing retains its certified authority and reconstructs panel uploads through playback
+  ---
+  duration_ms: 526.503601
+  type: 'test'
+  ...
+# Subtest: an asymmetric accepted collision changes the correct panel on each independently owned car
+ok 257 - an asymmetric accepted collision changes the correct panel on each independently owned car
+  ---
+  duration_ms: 528.326701
+  type: 'test'
+  ...
+# Subtest: alias releases, focus loss and OS repeat preserve a neutral input boundary
+ok 258 - alias releases, focus loss and OS repeat preserve a neutral input boundary
+  ---
+  duration_ms: 4.184781
+  type: 'test'
+  ...
+# Subtest: sample separates held pedals from single-tick actions and immediate pause/arming
+ok 259 - sample separates held pedals from single-tick actions and immediate pause/arming
+  ---
+  duration_ms: 0.81611
+  type: 'test'
+  ...
+# Subtest: Space and either Shift belong only to focused Nitro driving and need a fresh press after blur
+ok 260 - Space and either Shift belong only to focused Nitro driving and need a fresh press after blur
+  ---
+  duration_ms: 0.76864
+  type: 'test'
+  ...
+# Subtest: Orbital keyboard actions are focus-owned and opposing physical dodge keys cancel at sampling
+ok 261 - Orbital keyboard actions are focus-owned and opposing physical dodge keys cancel at sampling
+  ---
+  duration_ms: 0.56679
+  type: 'test'
+  ...
+# Subtest: Machine Shop overview resolves selected owned identity independently of active car and same-model neighbours
+ok 262 - Machine Shop overview resolves selected owned identity independently of active car and same-model neighbours
+  ---
+  duration_ms: 13.389832
+  type: 'test'
+  ...
+# Subtest: mechanical proposal compiles a real independent configuration without fitting, charging or granting inventory
+ok 263 - mechanical proposal compiles a real independent configuration without fitting, charging or granting inventory
+  ---
+  duration_ms: 7.942781
+  type: 'test'
+  ...
+# Subtest: unsupported combined mechanical build reports the compiler reason with no partial installation or credit mutation
+ok 264 - unsupported combined mechanical build reports the compiler reason with no partial installation or credit mutation
+  ---
+  duration_ms: 6.534161
+  type: 'test'
+  ...
+# Subtest: unaffordable proposal can describe valid mechanics but never grants a part or charges the car
+ok 265 - unaffordable proposal can describe valid mechanics but never grants a part or charges the car
+  ---
+  duration_ms: 2.171771
+  type: 'test'
+  ...
+# Subtest: paint proposal is explicitly cosmetic and preserves the exact accepted physical recipe
+ok 266 - paint proposal is explicitly cosmetic and preserves the exact accepted physical recipe
+  ---
+  duration_ms: 3.6197
+  type: 'test'
+  ...
+# Subtest: quantized setup preview uses supported physical units and rejects unrelated changes
+ok 267 - quantized setup preview uses supported physical units and rejects unrelated changes
+  ---
+  duration_ms: 7.829181
+  type: 'test'
+  ...
+# Subtest: already-fitted choices and malformed/executable setup never become a reviewable payment
+ok 268 - already-fitted choices and malformed/executable setup never become a reviewable payment
+  ---
+  duration_ms: 7.782581
+  type: 'test'
+  ...
+# Subtest: all named workshop sections describe only actual compiled specifications
+ok 269 - all named workshop sections describe only actual compiled specifications
+  ---
+  duration_ms: 2.20556
+  type: 'test'
+  ...
+# Subtest: original tyre-pack rim styles retain physical wheel geometry and cosmetic-only spokes
+ok 270 - original tyre-pack rim styles retain physical wheel geometry and cosmetic-only spokes
+  ---
+  duration_ms: 369.681826
+  type: 'test'
+  ...
+# Subtest: accepted flow-exhaust appearance adds original bounded tail pieces without changing tyres or panels
+ok 271 - accepted flow-exhaust appearance adds original bounded tail pieces without changing tyres or panels
+  ---
+  duration_ms: 34.503575
+  type: 'test'
+  ...
+# Subtest: the live Rocket and Derby scores retain distinct authored material and PCM
+ok 272 - the live Rocket and Derby scores retain distinct authored material and PCM
+  ---
+  duration_ms: 983.158401
+  type: 'test'
+  ...
+# Subtest: WAV export emits seven distinct score/WAV pairs and fourteen valid SHA-256 receipts
+ok 273 - WAV export emits seven distinct score/WAV pairs and fourteen valid SHA-256 receipts
+  ---
+  duration_ms: 2029.252291
+  type: 'test'
+  ...
+# Subtest: five original race scores compile to bounded stereo PCM and retain exact sample identity
+ok 274 - five original race scores compile to bounded stereo PCM and retain exact sample identity
+  ---
+  duration_ms: 646.076299
+  type: 'test'
+  ...
+# Subtest: Nitro Pulse loops 128 sample-aligned sixteenths and reproduces its WAV
+ok 275 - Nitro Pulse loops 128 sample-aligned sixteenths and reproduces its WAV
+  ---
+  duration_ms: 14.068772
+  type: 'test'
+  ...
+# Subtest: race soundtrack is deterministic, stereo and driven only by read-only accepted state
+ok 276 - race soundtrack is deterministic, stereo and driven only by read-only accepted state
+  ---
+  duration_ms: 24.553874
+  type: 'test'
+  ...
+# Subtest: soundtrack shares one gesture-owned device, remains optional and survives pause
+ok 277 - soundtrack shares one gesture-owned device, remains optional and survives pause
+  ---
+  duration_ms: 63.64785
+  type: 'test'
+  ...
+# Subtest: the live championship uses the complete v0.6.2 anthem and schedules only music on the podium
+ok 278 - the live championship uses the complete v0.6.2 anthem and schedules only music on the podium
+  ---
+  duration_ms: 14.130492
+  type: 'test'
+  ...
+# Subtest: Nightshift plays the exact v0.7.0 Midnight Protocol score through the live mixer
+ok 279 - Nightshift plays the exact v0.7.0 Midnight Protocol score through the live mixer
+  ---
+  duration_ms: 21.911473
+  type: 'test'
+  ...
+# Subtest: speedway preserves six-car authority through the flag under night observation
+ok 280 - speedway preserves six-car authority through the flag under night observation
+  ---
+  duration_ms: 69597.445014
+  type: 'test'
+  ...
+# Subtest: ridge preserves six-car authority through the flag under night observation
+ok 281 - ridge preserves six-car authority through the flag under night observation
+  ---
+  duration_ms: 48458.102463
+  type: 'test'
+  ...
+# Subtest: environment validation accepts only the two literal values without coercion
+ok 282 - environment validation accepts only the two literal values without coercion
+  ---
+  duration_ms: 1.60846
+  type: 'test'
+  ...
+# Subtest: Skyway resolves a touring night selection to daylight and keeps its event title
+ok 283 - Skyway resolves a touring night selection to daylight and keeps its event title
+  ---
+  duration_ms: 0.39508
+  type: 'test'
+  ...
+# Subtest: night projector lenses share the original front fascia; braking only changes rear lamps
+ok 284 - night projector lenses share the original front fascia; braking only changes rear lamps
+  ---
+  duration_ms: 646.489049
+  type: 'test'
+  ...
+# Subtest: Overdrive Speedway night fixture lighting retains every original triangle, its normal and UV
+ok 285 - Overdrive Speedway night fixture lighting retains every original triangle, its normal and UV
+  ---
+  duration_ms: 1020.391547
+  type: 'test'
+  ...
+# Subtest: Redline Ridge night fixture lighting retains every original triangle, its normal and UV
+ok 286 - Redline Ridge night fixture lighting retains every original triangle, its normal and UV
+  ---
+  duration_ms: 1707.377202
+  type: 'test'
+  ...
+# Subtest: admit all five exact controls before modifying countdown, field, or physics
+ok 287 - admit all five exact controls before modifying countdown, field, or physics
+  ---
+  duration_ms: 47.422197
+  type: 'test'
+  ...
+# Subtest: actual sideslip earns bounded energy; the thrust is measured in chassis velocity
+ok 288 - actual sideslip earns bounded energy; the thrust is measured in chassis velocity
+  ---
+  duration_ms: 2652.708126
+  type: 'test'
+  ...
+# Subtest: straight, reversing, low speed, stationary, rocking and parked pause cannot farm
+ok 289 - straight, reversing, low speed, stationary, rocking and parked pause cannot farm
+  ---
+  duration_ms: 5448.250506
+  type: 'test'
+  ...
+# Subtest: real ramp flight follows gravity, accepts body-axis control and settles on its suspension
+ok 290 - real ramp flight follows gravity, accepts body-axis control and settles on its suspension
+  ---
+  duration_ms: 3629.614257
+  type: 'test'
+  ...
+# Subtest: thrust tapers to the available energy and remaining headroom below the 120 m/s engine guard
+ok 291 - thrust tapers to the available energy and remaining headroom below the 120 m/s engine guard
+  ---
+  duration_ms: 499.135756
+  type: 'test'
+  ...
+# Subtest: barrier scrubbing and apron travel suppress charging; legitimate charging saturates exactly at capacity
+ok 292 - barrier scrubbing and apron travel suppress charging; legitimate charging saturates exactly at capacity
+  ---
+  duration_ms: 1574.313402
+  type: 'test'
+  ...
+# Subtest: jumping through a timing plane cannot claim the gate or a recovery ahead of it
+ok 293 - jumping through a timing plane cannot claim the gate or a recovery ahead of it
+  ---
+  duration_ms: 3714.56651
+  type: 'test'
+  ...
+# Subtest: Nitro v3 encodes the two independent held controls and accepted recovery
+ok 294 - Nitro v3 encodes the two independent held controls and accepted recovery
+  ---
+  duration_ms: 4.761461
+  type: 'test'
+  ...
+# Subtest: Nitro v3 rejects mixed schemas, invalid bounds, accessors and unverified sources
+ok 295 - Nitro v3 rejects mixed schemas, invalid bounds, accessors and unverified sources
+  ---
+  duration_ms: 6.318451
+  type: 'test'
+  ...
+# Subtest: v3 binds both historical asphalt-only sources to scoring rules 1 and new recordings to rules 2
+ok 296 - v3 binds both historical asphalt-only sources to scoring rules 1 and new recordings to rules 2
+  ---
+  duration_ms: 6.673341
+  type: 'test'
+  ...
+# Subtest: every drivable Orbital Spine triangle is the same finite face for the wheel and mesh
+ok 297 - every drivable Orbital Spine triangle is the same finite face for the wheel and mesh
+  ---
+  duration_ms: 62.07532
+  type: 'test'
+  ...
+# Subtest: walls, opposite XZ-overlapping decks, lateral edges and the open transfer have distinct physical support
+ok 298 - walls, opposite XZ-overlapping decks, lateral edges and the open transfer have distinct physical support
+  ---
+  duration_ms: 1.37144
+  type: 'test'
+  ...
+# Subtest: held throttle and boost carry the player through the wall and ceiling timing gates with automatic grip
+ok 299 - held throttle and boost carry the player through the wall and ceiling timing gates with automatic grip
+  ---
+  duration_ms: 5389.973066
+  type: 'test'
+  ...
+# Subtest: an ordinary throttle-and-steer drive reaches the flag with every unit of boost fuel
+ok 300 - an ordinary throttle-and-steer drive reaches the flag with every unit of boost fuel
+  ---
+  duration_ms: 10126.430843
+  type: 'test'
+  ...
+# Subtest: six real bodies complete the ordered wall, inverted gate, free transfer and catch under deterministic tick inputs
+ok 301 - six real bodies complete the ordered wall, inverted gate, free transfer and catch under deterministic tick inputs
+  ---
+  duration_ms: 16347.629328
+  type: 'test'
+  ...
+# Subtest: vertical checkpoint recovery rolls back to a supported grid slot with all previously credited gates retained
+ok 302 - vertical checkpoint recovery rolls back to a supported grid slot with all previously credited gates retained
+  ---
+  duration_ms: 6544.041784
+  type: 'test'
+  ...
+# Subtest: forward timing aperture excludes reverse, lateral, airborne and wrong-deck crossings even with realistic wheel loads
+ok 303 - forward timing aperture excludes reverse, lateral, airborne and wrong-deck crossings even with realistic wheel loads
+  ---
+  duration_ms: 10.214271
+  type: 'test'
+  ...
+# Subtest: a blocked lost-car recovery waits for a clear slot and cannot re-spend cooldown or receive a gate
+ok 304 - a blocked lost-car recovery waits for a clear slot and cannot re-spend cooldown or receive a gate
+  ---
+  duration_ms: 15.353542
+  type: 'test'
+  ...
+# Subtest: a stranded Rocket resting on its roof returns behind the last credited gate once
+ok 305 - a stranded Rocket resting on its roof returns behind the last credited gate once
+  ---
+  duration_ms: 217.371254
+  type: 'test'
+  ...
+# Subtest: an airborne rival may spend a directional dodge only into a clear landing lane
+ok 306 - an airborne rival may spend a directional dodge only into a clear landing lane
+  ---
+  duration_ms: 6.645471
+  type: 'test'
+  ...
+# Subtest: package is reproducible, with a reachable allowlist, local references and intact upstream sources
+ok 307 - package is reproducible, with a reachable allowlist, local references and intact upstream sources
+  ---
+  duration_ms: 3223.833745
+  type: 'test'
+  ...
+# Subtest: stamp only the revision whose Git blobs match the entire runtime
+ok 308 - stamp only the revision whose Git blobs match the entire runtime
+  ---
+  duration_ms: 1344.539696
+  type: 'test'
+  ...
+# Subtest: six distinct number and accent meshes share one shell, tyre and wheel face
+ok 309 - six distinct number and accent meshes share one shell, tyre and wheel face
+  ---
+  duration_ms: 7.137171
+  type: 'test'
+  ...
+# Subtest: body basis and four independently sprung wheel centres follow authoritative mount convention
+ok 310 - body basis and four independently sprung wheel centres follow authoritative mount convention
+  ---
+  duration_ms: 1.946741
+  type: 'test'
+  ...
+# Subtest: high and low chase retain bank, bridge and tunnel clearance at the lane edges
+ok 311 - high and low chase retain bank, bridge and tunnel clearance at the lane edges
+  ---
+  duration_ms: 582.010379
+  type: 'test'
+  ...
+# Subtest: a yaw discontinuity, gear-speed step, rival and view toggle blend without a camera jump
+ok 312 - a yaw discontinuity, gear-speed step, rival and view toggle blend without a camera jump
+  ---
+  duration_ms: 1.43474
+  type: 'test'
+  ...
+# Subtest: standard editable profile uses browser layout and drives both triggers independently
+ok 313 - standard editable profile uses browser layout and drives both triggers independently
+  ---
+  duration_ms: 3.86365
+  type: 'test'
+  ...
+# Subtest: asymmetric wheel and reversed separate pedals retain their measured neutral and full spans
+ok 314 - asymmetric wheel and reversed separate pedals retain their measured neutral and full spans
+  ---
+  duration_ms: 1.54466
+  type: 'test'
+  ...
+# Subtest: combined axis pedals share a rest and produce mutually exclusive positive commands
+ok 315 - combined axis pedals share a rest and produce mutually exclusive positive commands
+  ---
+  duration_ms: 0.69002
+  type: 'test'
+  ...
+# Subtest: digital steering detects two held directions even when steering cancels; menu and race pairings are explicit
+ok 316 - digital steering detects two held directions even when steering cancels; menu and race pairings are explicit
+  ---
+  duration_ms: 2.09685
+  type: 'test'
+  ...
+# Subtest: centred wheel calibration inspects all candidate channels and rejects unsafe or ambiguous limits
+ok 317 - centred wheel calibration inspects all candidate channels and rejects unsafe or ambiguous limits
+  ---
+  duration_ms: 1.08233
+  type: 'test'
+  ...
+# Subtest: inputs stay bounded under sensitivity, curve, saturation and rejected calibration values
+ok 318 - inputs stay bounded under sensitivity, curve, saturation and rejected calibration values
+  ---
+  duration_ms: 0.54993
+  type: 'test'
+  ...
+# Subtest: versioned storage requires intentional neutral save, isolates device layouts and handles denial and corruption
+ok 319 - versioned storage requires intentional neutral save, isolates device layouts and handles denial and corruption
+  ---
+  duration_ms: 1.814681
+  type: 'test'
+  ...
+# Subtest: explicit hat learns observed positions around an out-of-range neutral; unmapped diagonals cannot arm or steer
+ok 320 - explicit hat learns observed positions around an out-of-range neutral; unmapped diagonals cannot arm or steer
+  ---
+  duration_ms: 0.63549
+  type: 'test'
+  ...
+# Subtest: v1 assignments migrate without guessing and permit explicit independent Nitro controls
+ok 321 - v1 assignments migrate without guessing and permit explicit independent Nitro controls
+  ---
+  duration_ms: 1.20722
+  type: 'test'
+  ...
+# Subtest: old Nitro wheel calibration remains usable and newly captured Rocket actions need an explicit save
+ok 322 - old Nitro wheel calibration remains usable and newly captured Rocket actions need an explicit save
+  ---
+  duration_ms: 2.43054
+  type: 'test'
+  ...
+# Subtest: loading a v3 wheel drops only its retired assist mapping and leaves storage alone until save
+ok 323 - loading a v3 wheel drops only its retired assist mapping and leaves storage alone until save
+  ---
+  duration_ms: 0.893171
+  type: 'test'
+  ...
+# Subtest: a Rocket-only hat must return to rest for Rocket arming and has no authority on other grids
+ok 324 - a Rocket-only hat must return to rest for Rocket arming and has no authority on other grids
+  ---
+  duration_ms: 0.30295
+  type: 'test'
+  ...
+# Subtest: vendored sources and notices match the pinned manifest
+ok 325 - vendored sources and notices match the pinned manifest
+  ---
+  duration_ms: 33.311575
+  type: 'test'
+  ...
+# Subtest: admission selects the exact owned build independently of active selection and same-model cars
+ok 326 - admission selects the exact owned build independently of active selection and same-model cars
+  ---
+  duration_ms: 16.965963
+  type: 'test'
+  ...
+# Subtest: six free stock simulations require no garage, allocation, inventory or owned identity
+ok 327 - six free stock simulations require no garage, allocation, inventory or owned identity
+  ---
+  duration_ms: 3.68155
+  type: 'test'
+  ...
+# Subtest: owned stock comparison is explicitly stock while retaining its actual attribution
+ok 328 - owned stock comparison is explicitly stock while retaining its actual attribution
+  ---
+  duration_ms: 7.331371
+  type: 'test'
+  ...
+# Subtest: owned proposed parts compile in an independent sandbox without money, inventory or identity mutation
+ok 329 - owned proposed parts compile in an independent sandbox without money, inventory or identity mutation
+  ---
+  duration_ms: 6.290191
+  type: 'test'
+  ...
+# Subtest: a proposed return to stock resets only the associated bounded tuning
+ok 330 - a proposed return to stock resets only the associated bounded tuning
+  ---
+  duration_ms: 10.276112
+  type: 'test'
+  ...
+# Subtest: missing, malformed, stale or unsupported choices reject rather than falling back to another car
+ok 331 - missing, malformed, stale or unsupported choices reject rather than falling back to another car
+  ---
+  duration_ms: 6.774131
+  type: 'test'
+  ...
+# Subtest: a physically unsupported proposed combination fails without a partial recipe or granted part
+ok 332 - a physically unsupported proposed combination fails without a partial recipe or granted part
+  ---
+  duration_ms: 3.47802
+  type: 'test'
+  ...
+# Subtest: selection admission rejects executable or extended records without invoking their accessors
+ok 333 - selection admission rejects executable or extended records without invoking their accessors
+  ---
+  duration_ms: 2.874711
+  type: 'test'
+  ...
+# Subtest: facility retains finite original geometry, exact physical wall boxes and route markings
+ok 334 - facility retains finite original geometry, exact physical wall boxes and route markings
+  ---
+  duration_ms: 146.802133
+  type: 'test'
+  ...
+# Subtest: six original silhouettes and paint retain authored triangles with four independent exact-radius wheel meshes
+ok 335 - six original silhouettes and paint retain authored triangles with four independent exact-radius wheel meshes
+  ---
+  duration_ms: 339.643822
+  type: 'test'
+  ...
+# Subtest: all six accepted physical states own body orientation and each steered/spinning wheel hub
+ok 336 - all six accepted physical states own body orientation and each steered/spinning wheel hub
+  ---
+  duration_ms: 20.896463
+  type: 'test'
+  ...
+# Subtest: interpolation follows prior/current accepted poses, including wrapped wheel spin
+ok 337 - interpolation follows prior/current accepted poses, including wrapped wheel spin
+  ---
+  duration_ms: 5.052441
+  type: 'test'
+  ...
+# Subtest: declared tick-zero empty-wheel presentation uses the level plane without changing solver state
+ok 338 - declared tick-zero empty-wheel presentation uses the level plane without changing solver state
+  ---
+  duration_ms: 24.596034
+  type: 'test'
+  ...
+# Subtest: accepted suspension extension moves actual body stance while wheel radii and hubs stay physical
+ok 339 - accepted suspension extension moves actual body stance while wheel radii and hubs stay physical
+  ---
+  duration_ms: 1347.832836
+  type: 'test'
+  ...
+# Subtest: eight workshop/test cycles retain meshes through driving/camera changes and release every resource
+ok 340 - eight workshop/test cycles retain meshes through driving/camera changes and release every resource
+  ---
+  duration_ms: 695.885077
+  type: 'test'
+  ...
+# Subtest: failed uploads and context restoration cannot retain stale buffers
+ok 341 - failed uploads and context restoration cannot retain stale buffers
+  ---
+  duration_ms: 144.127912
+  type: 'test'
+  ...
+# Subtest: facility data has finite original geometry, disjoint slalom apertures and bounded test rules
+ok 342 - facility data has finite original geometry, disjoint slalom apertures and bounded test rules
+  ---
+  duration_ms: 10.145612
+  type: 'test'
+  ...
+# Subtest: run admission rejects malformed identity, build, options and commands before accepting motion
+ok 343 - run admission rejects malformed identity, build, options and commands before accepting motion
+  ---
+  duration_ms: 7.798461
+  type: 'test'
+  ...
+# Subtest: six stock owned builds physically spawn, accelerate, brake, weave and complete the ring with finite supported chassis
+ok 344 - six stock owned builds physically spawn, accelerate, brake, weave and complete the ring with finite supported chassis
+  ---
+  duration_ms: 22590.337295
+  type: 'test'
+  ...
+# Subtest: independent direct solver re-expands all four accepted tapes and reproduces physical state and measurements
+ok 345 - independent direct solver re-expands all four accepted tapes and reproduces physical state and measurements
+  ---
+  duration_ms: 3103.993776
+  type: 'test'
+  ...
+# Subtest: engine and short gearing change measured physical acceleration under an identical accepted command tape
+ok 346 - engine and short gearing change measured physical acceleration under an identical accepted command tape
+  ---
+  duration_ms: 2634.858524
+  type: 'test'
+  ...
+# Subtest: tyre selection changes observed lateral response, with feedback policy differences explicitly declared
+ok 347 - tyre selection changes observed lateral response, with feedback policy differences explicitly declared
+  ---
+  duration_ms: 3930.947893
+  type: 'test'
+  ...
+# Subtest: manual neutral yields honest non-completion and cannot forge the declared reference policy
+ok 348 - manual neutral yields honest non-completion and cannot forge the declared reference policy
+  ---
+  duration_ms: 443.035018
+  type: 'test'
+  ...
+# Subtest: straight driving cannot claim a slalom and driving off the ring cannot claim a lap
+ok 349 - straight driving cannot claim a slalom and driving off the ring cannot claim a lap
+  ---
+  duration_ms: 228.973975
+  type: 'test'
+  ...
+# Subtest: braking cannot complete when its actual final stopping tick leaves the straight corridor
+ok 350 - braking cannot complete when its actual final stopping tick leaves the straight corridor
+  ---
+  duration_ms: 1.27655
+  type: 'test'
+  ...
+# Subtest: a solver recovery flag is a visible physical failure, never a fabricated benchmark result
+ok 351 - a solver recovery flag is a visible physical failure, never a fabricated benchmark result
+  ---
+  duration_ms: 1.217541
+  type: 'test'
+  ...
+# Subtest: physical enclosure receives real conservative-cube contact and no damage or money is invented
+ok 352 - physical enclosure receives real conservative-cube contact and no damage or money is invented
+  ---
+  duration_ms: 1113.75687
+  type: 'test'
+  ...
+# Subtest: source-bound inert receipts retain identity, canonical build and tick tapes while rejecting unstamped export
+ok 353 - source-bound inert receipts retain identity, canonical build and tick tapes while rejecting unstamped export
+  ---
+  duration_ms: 13.776832
+  type: 'test'
+  ...
+# Subtest: worst-length 7200-call practice command recording remains bounded without persistence or executable data
+ok 354 - worst-length 7200-call practice command recording remains bounded without persistence or executable data
+  ---
+  duration_ms: 3618.978225
+  type: 'test'
+  ...
+# Subtest: v7 records and reconstructs the original accepted mechanical build with actual physical result
+ok 355 - v7 records and reconstructs the original accepted mechanical build with actual physical result
+  ---
+  duration_ms: 5095.326901
+  type: 'test'
+  ...
+# Subtest: all four benchmark terminal outcomes reproduce from recorded input and build
+ok 356 - all four benchmark terminal outcomes reproduce from recorded input and build
+  ---
+  duration_ms: 11938.586552
+  type: 'test'
+  ...
+# Subtest: manual stopped practice and honest benchmark non-completion retain distinct accepted terminals
+ok 357 - manual stopped practice and honest benchmark non-completion retain distinct accepted terminals
+  ---
+  duration_ms: 1960.22669
+  type: 'test'
+  ...
+# Subtest: physically invalid manual slalom is replayed as invalid without invented gate credit
+ok 358 - physically invalid manual slalom is replayed as invalid without invented gate credit
+  ---
+  duration_ms: 649.95039
+  type: 'test'
+  ...
+# Subtest: viewer reconstruction never substitutes a newer live garage build or positions
+ok 359 - viewer reconstruction never substitutes a newer live garage build or positions
+  ---
+  duration_ms: 1359.176279
+  type: 'test'
+  ...
+# Subtest: seek reconstructs from the recorded source/build and every work batch stays bounded
+ok 360 - seek reconstructs from the recorded source/build and every work batch stays bounded
+  ---
+  duration_ms: 1808.380547
+  type: 'test'
+  ...
+# Subtest: render-rate batching cannot alter accepted replay motion or result
+ok 361 - render-rate batching cannot alter accepted replay motion or result
+  ---
+  duration_ms: 2012.740629
+  type: 'test'
+  ...
+# Subtest: forged or merely deserialized tapes cannot bypass complete physical admission
+ok 362 - forged or merely deserialized tapes cannot bypass complete physical admission
+  ---
+  duration_ms: 623.887175
+  type: 'test'
+  ...
+# Subtest: exact revision, engine, version, rules, track, test and starting-condition admission reject mismatches
+ok 363 - exact revision, engine, version, rules, track, test and starting-condition admission reject mismatches
+  ---
+  duration_ms: 5.303871
+  type: 'test'
+  ...
+# Subtest: changed builds, digests, recipes and result assertions cannot impersonate the recorded machine
+ok 364 - changed builds, digests, recipes and result assertions cannot impersonate the recorded machine
+  ---
+  duration_ms: 1868.629027
+  type: 'test'
+  ...
+# Subtest: recorded command policy, lengths, count and complete terminal timing are enforced
+ok 365 - recorded command policy, lengths, count and complete terminal timing are enforced
+  ---
+  duration_ms: 689.813766
+  type: 'test'
+  ...
+# Subtest: admission yields bounded solver batches and cancellation publishes no admitted recording
+ok 366 - admission yields bounded solver batches and cancellation publishes no admitted recording
+  ---
+  duration_ms: 1451.817522
+  type: 'test'
+  ...
+# Subtest: inert schema admission rejects getters, symbols, hidden entries and toJSON without invoking them
+ok 367 - inert schema admission rejects getters, symbols, hidden entries and toJSON without invoking them
+  ---
+  duration_ms: 4.772861
+  type: 'test'
+  ...
+# Subtest: UTF-8 byte size, malformed JSON and unsupported legacy contracts reject safely
+ok 368 - UTF-8 byte size, malformed JSON and unsupported legacy contracts reject safely
+  ---
+  duration_ms: 12.663982
+  type: 'test'
+  ...
+# Subtest: unfinished, unstamped, zero-call or mutated terminal runs do not create exportable recordings
+ok 369 - unfinished, unstamped, zero-call or mutated terminal runs do not create exportable recordings
+  ---
+  duration_ms: 615.949025
+  type: 'test'
+  ...
+# Subtest: build source identity matches the compiler independently of recorded inventory retention
+ok 370 - build source identity matches the compiler independently of recorded inventory retention
+  ---
+  duration_ms: 1184.242571
+  type: 'test'
+  ...
+# Subtest: source-compatibility pins match the immutable published v0.6.0 through v0.9.0 touring and v0.9.0 Nitro authority
+ok 371 - source-compatibility pins match the immutable published v0.6.0 through v0.9.0 touring and v0.9.0 Nitro authority
+  ---
+  duration_ms: 84.608393
+  type: 'test'
+  ...
+# Subtest: reject legacy, mismatched, corrupt and accessor-backed JSON before simulating
+ok 372 - reject legacy, mismatched, corrupt and accessor-backed JSON before simulating
+  ---
+  duration_ms: 4607.464676
+  type: 'test'
+  ...
+# Subtest: forward/rewind/seek batches preserve authoritative six-car state on both courses
+ok 373 - forward/rewind/seek batches preserve authoritative six-car state on both courses
+  ---
+  duration_ms: 27474.021374
+  type: 'test'
+  ...
+# Subtest: spectator interpolates accepted snapshots at fractional speed without modifying race authority
+ok 374 - spectator interpolates accepted snapshots at fractional speed without modifying race authority
+  ---
+  duration_ms: 344.002163
+  type: 'test'
+  ...
+# Subtest: saved analog commands and recovery reproduce all six cars across presentation cadences without a device
+ok 375 - saved analog commands and recovery reproduce all six cars across presentation cadences without a device
+  ---
+  duration_ms: 19462.571685
+  type: 'test'
+  ...
+# Subtest: recording owns its snapshots and rejects corrupt/truncated or unbounded playback
+ok 376 - recording owns its snapshots and rejects corrupt/truncated or unbounded playback
+  ---
+  duration_ms: 10.262822
+  type: 'test'
+  ...
+# Subtest: published recordings identify their revision before playback and keep legacy inputs readable
+ok 377 - published recordings identify their revision before playback and keep legacy inputs readable
+  ---
+  duration_ms: 1.19796
+  type: 'test'
+  ...
+# Subtest: finite paved approach, racing distance and runoff have physically distinct endpoints
+ok 378 - finite paved approach, racing distance and runoff have physically distinct endpoints
+  ---
+  duration_ms: 3.20411
+  type: 'test'
+  ...
+# Subtest: projection, contact plane and arc tangent agree on both sides through hills and banking
+ok 379 - projection, contact plane and arc tangent agree on both sides through hills and banking
+  ---
+  duration_ms: 180.783368
+  type: 'test'
+  ...
+# Subtest: retained asphalt and shoulder triangles follow authoritative wheel height across the route
+ok 380 - retained asphalt and shoulder triangles follow authoritative wheel height across the route
+  ---
+  duration_ms: 209.356072
+  type: 'test'
+  ...
+# Subtest: solid rail geometry matches each physical boundary and structures clear the chase camera
+ok 381 - solid rail geometry matches each physical boundary and structures clear the chase camera
+  ---
+  duration_ms: 76.129872
+  type: 'test'
+  ...
+# Subtest: invalid route shape, elevation coverage, gates and non-finite queries reject early
+ok 382 - invalid route shape, elevation coverage, gates and non-finite queries reject early
+  ---
+  duration_ms: 2.56658
+  type: 'test'
+  ...
+# Subtest: bank transitions keep the asphalt at tyre height and the paint above it
+ok 383 - bank transitions keep the asphalt at tyre height and the paint above it
+  ---
+  duration_ms: 761.038827
+  type: 'test'
+  ...
+# Subtest: chase and high cameras stay above the tyres in the wall and ceiling frames
+ok 384 - chase and high cameras stay above the tyres in the wall and ceiling frames
+  ---
+  duration_ms: 4.747231
+  type: 'test'
+  ...
+# Subtest: all rendered Orbital deck corners match the wheel probe triangles, including both lips
+ok 385 - all rendered Orbital deck corners match the wheel probe triangles, including both lips
+  ---
+  duration_ms: 229.925185
+  type: 'test'
+  ...
+# Subtest: swept equal-mass chassis contact resolves physical velocities in stable entrant order
+ok 386 - swept equal-mass chassis contact resolves physical velocities in stable entrant order
+  ---
+  duration_ms: 6.576131
+  type: 'test'
+  ...
+# Subtest: wall rail acts along the physical lateral axis and has finite height
+ok 387 - wall rail acts along the physical lateral axis and has finite height
+  ---
+  duration_ms: 6.288741
+  type: 'test'
+  ...
+# Subtest: ceiling rail acts along the physical lateral axis and has finite height
+ok 388 - ceiling rail acts along the physical lateral axis and has finite height
+  ---
+  duration_ms: 7.898692
+  type: 'test'
+  ...
+# Subtest: the side strikes the actual grid deck at speed and remains above it
+ok 389 - the side strikes the actual grid deck at speed and remains above it
+  ---
+  duration_ms: 152.830093
+  type: 'test'
+  ...
+# Subtest: the roof strikes the actual grid deck at speed and remains above it
+ok 390 - the roof strikes the actual grid deck at speed and remains above it
+  ---
+  duration_ms: 163.927705
+  type: 'test'
+  ...
+# Subtest: shell sweeps respect the front face, outer edge, open gap and stacked heights
+ok 391 - shell sweeps respect the front face, outer edge, open gap and stacked heights
+  ---
+  duration_ms: 6.557181
+  type: 'test'
+  ...
+# Subtest: a roof-first collision uses the local wall or inverted deck normal
+ok 392 - a roof-first collision uses the local wall or inverted deck normal
+  ---
+  duration_ms: 5.388071
+  type: 'test'
+  ...
+# Subtest: a tumbling wing crossing a bank seam clears the physical triangle under its endpoint
+ok 393 - a tumbling wing crossing a bank seam clears the physical triangle under its endpoint
+  ---
+  duration_ms: 35.477206
+  type: 'test'
+  ...
+# Subtest: invalid commands, contact normals and handedness fail without advancing the previous body
+ok 394 - invalid commands, contact normals and handedness fail without advancing the previous body
+  ---
+  duration_ms: 7.228821
+  type: 'test'
+  ...
+# Subtest: a flat suspension bears weight and steering changes the actual travel direction
+ok 395 - a flat suspension bears weight and steering changes the actual travel direction
+  ---
+  duration_ms: 316.083748
+  type: 'test'
+  ...
+# Subtest: a full-lock start correction stays on its tyres and settles after release on magnetic and ordinary pavement
+ok 396 - a full-lock start correction stays on its tyres and settles after release on magnetic and ordinary pavement
+  ---
+  duration_ms: 364.882006
+  type: 'test'
+  ...
+# Subtest: automatic grip redirects gravity on the floor, wall and ceiling and releases over a gap
+ok 397 - automatic grip redirects gravity on the floor, wall and ceiling and releases over a gap
+  ---
+  duration_ms: 250.326599
+  type: 'test'
+  ...
+# Subtest: level-deck downforce preserves slow steering and builds to its finite high-speed load
+ok 398 - level-deck downforce preserves slow steering and builds to its finite high-speed load
+  ---
+  duration_ms: 27.327444
+  type: 'test'
+  ...
+# Subtest: braking to rest and restarting on a wall or ceiling needs no fuel or minimum speed
+ok 399 - braking to rest and restarting on a wall or ceiling needs no fuel or minimum speed
+  ---
+  duration_ms: 492.089735
+  type: 'test'
+  ...
+# Subtest: crossing the end of the ceiling removes support and free flight accelerates downward
+ok 400 - crossing the end of the ceiling removes support and free flight accelerates downward
+  ---
+  duration_ms: 48.308958
+  type: 'test'
+  ...
+# Subtest: distant, ineligible and back-facing deck surfaces cannot provide magnetic support
+ok 401 - distant, ineligible and back-facing deck surfaces cannot provide magnetic support
+  ---
+  duration_ms: 23.870913
+  type: 'test'
+  ...
+# Subtest: dodge applies one signed body-relative velocity impulse per released, eligible edge
+ok 402 - dodge applies one signed body-relative velocity impulse per released, eligible edge
+  ---
+  duration_ms: 126.70887
+  type: 'test'
+  ...
+# Subtest: unsupported steering changes angular momentum while gravity still governs flight
+ok 403 - unsupported steering changes angular momentum while gravity still governs flight
+  ---
+  duration_ms: 10.221831
+  type: 'test'
+  ...
+# Subtest: a hard landing settles without penetration, unbounded energy or a velocity spike
+ok 404 - a hard landing settles without penetration, unbounded energy or a velocity spike
+  ---
+  duration_ms: 173.201447
+  type: 'test'
+  ...
+# Subtest: the Crown exit keeps bounded magnetic pull through unloaded suspension at racing speed
+ok 405 - the Crown exit keeps bounded magnetic pull through unloaded suspension at racing speed
+  ---
+  duration_ms: 361.244145
+  type: 'test'
+  ...
+# Subtest: a short magnetic gap cannot sustain a prior attached state or reacquire a distant face
+ok 406 - a short magnetic gap cannot sustain a prior attached state or reacquire a distant face
+  ---
+  duration_ms: 27.142785
+  type: 'test'
+  ...
+# Subtest: vacuum gravity is invariant to upside-down orientation and a gap leaves horizontal momentum intact
+ok 407 - vacuum gravity is invariant to upside-down orientation and a gap leaves horizontal momentum intact
+  ---
+  duration_ms: 27.528264
+  type: 'test'
+  ...
+# Subtest: boost adds finite forward thrust, pays for partial delivery and stops at depletion and cut-off
+ok 408 - boost adds finite forward thrust, pays for partial delivery and stops at depletion and cut-off
+  ---
+  duration_ms: 1.92521
+  type: 'test'
+  ...
+# Subtest: automatic flight damping and pedal pitch trim change physical spin without any translational lift
+ok 409 - automatic flight damping and pedal pitch trim change physical spin without any translational lift
+  ---
+  duration_ms: 13.781702
+  type: 'test'
+  ...
+# Subtest: gravity and commanded torque reach the hard limits without overshoot or orientation drift
+ok 410 - gravity and commanded torque reach the hard limits without overshoot or orientation drift
+  ---
+  duration_ms: 16.310893
+  type: 'test'
+  ...
+# Subtest: approach assist levels a tilted vehicle only near a closing surface, through torque
+ok 411 - approach assist levels a tilted vehicle only near a closing surface, through torque
+  ---
+  duration_ms: 5.126261
+  type: 'test'
+  ...
+# Subtest: wheel contacts own their solver evidence when a surface reuses its result and point storage
+ok 412 - wheel contacts own their solver evidence when a surface reuses its result and point storage
+  ---
+  duration_ms: 2.06223
+  type: 'test'
+  ...
+# Subtest: 75 m/s level and rolled flat-plane landings respect the measured end-stop tolerance
+ok 413 - 75 m/s level and rolled flat-plane landings respect the measured end-stop tolerance
+  ---
+  duration_ms: 131.42951
+  type: 'test'
+  ...
+# Subtest: nine finite patches form one connected, consistently oriented laboratory strip
+ok 414 - nine finite patches form one connected, consistently oriented laboratory strip
+  ---
+  duration_ms: 12.449132
+  type: 'test'
+  ...
+# Subtest: oblique 3D rays intersect the same finite surface point at both edges and inside every patch
+ok 415 - oblique 3D rays intersect the same finite surface point at both edges and inside every patch
+  ---
+  duration_ms: 25.696774
+  type: 'test'
+  ...
+# Subtest: opposed rays at identical XZ choose the floor or the inverted ceiling by physical distance and direction
+ok 416 - opposed rays at identical XZ choose the floor or the inverted ceiling by physical distance and direction
+  ---
+  duration_ms: 0.50519
+  type: 'test'
+  ...
+# Subtest: finite ends, zero-length casts, grazing lines and malformed probe inputs
+ok 417 - finite ends, zero-length casts, grazing lines and malformed probe inputs
+  ---
+  duration_ms: 0.959551
+  type: 'test'
+  ...
+# Subtest: v4 rules 4 records the driver controls and reserves the old assist bit
+ok 418 - v4 rules 4 records the driver controls and reserves the old assist bit
+  ---
+  duration_ms: 3.90855
+  type: 'test'
+  ...
+# Subtest: v4 rejects incompatible headers, indefinite numbers, malformed rows and accessor properties
+ok 419 - v4 rejects incompatible headers, indefinite numbers, malformed rows and accessor properties
+  ---
+  duration_ms: 5.639531
+  type: 'test'
+  ...
+# Subtest: bounded v4 seek reproduces every entrant, integrates its quaternion, and isolates observer state
+ok 420 - bounded v4 seek reproduces every entrant, integrates its quaternion, and isolates observer state
+  ---
+  duration_ms: 7197.260234
+  type: 'test'
+  ...
+# Subtest: v0.9.0 uses the published Skyway tape semantics only for v3 and touring
+ok 421 - v0.9.0 uses the published Skyway tape semantics only for v3 and touring
+  ---
+  duration_ms: 18008.558142
+  type: 'test'
+  ...
+# Subtest: one body drives from rest through both walls and the inverted ceiling on four physical tyre contacts
+ok 422 - one body drives from rest through both walls and the inverted ceiling on four physical tyre contacts
+  ---
+  duration_ms: 2609.37995
+  type: 'test'
+  ...
+# Subtest: a held throttle crosses the same contact geometry without a speed governor
+ok 423 - a held throttle crosses the same contact geometry without a speed governor
+  ---
+  duration_ms: 432.470166
+  type: 'test'
+  ...
+# Subtest: menu and countdown await start, pause freezes both clocks, restart clears race state
+ok 424 - menu and countdown await start, pause freezes both clocks, restart clears race state
+  ---
+  duration_ms: 442.851618
+  type: 'test'
+  ...
+# Subtest: accelerates, brakes, then reverses with held brake and re-engages first gear
+ok 425 - accelerates, brakes, then reverses with held brake and re-engages first gear
+  ---
+  duration_ms: 4317.648932
+  type: 'test'
+  ...
+# Subtest: full throttle runs level from the grid and follows the first right-hand bank
+ok 426 - full throttle runs level from the grid and follows the first right-hand bank
+  ---
+  duration_ms: 341.004372
+  type: 'test'
+  ...
+# Subtest: grounded contact with the first banked outer rail keeps the car on the road
+ok 427 - grounded contact with the first banked outer rail keeps the car on the road
+  ---
+  duration_ms: 503.039577
+  type: 'test'
+  ...
+# Subtest: rail response preserves vertical speed for airborne and separating cars
+ok 428 - rail response preserves vertical speed for airborne and separating cars
+  ---
+  duration_ms: 10.304792
+  type: 'test'
+  ...
+# Subtest: same fixed-tick commands produce identical vehicle and progress at 30/60/144 Hz
+ok 429 - same fixed-tick commands produce identical vehicle and progress at 30/60/144 Hz
+  ---
+  duration_ms: 2770.556495
+  type: 'test'
+  ...
+# Subtest: rejects skipped gates, reverse crossings, backing across the line and wrong winding
+ok 430 - rejects skipped gates, reverse crossings, backing across the line and wrong winding
+  ---
+  duration_ms: 4.608151
+  type: 'test'
+  ...
+# Subtest: a missed gate can be taken next time around, with all remaining sectors still due
+ok 431 - a missed gate can be taken next time around, with all remaining sectors still due
+  ---
+  duration_ms: 3.53364
+  type: 'test'
+  ...
+# Subtest: invalid numeric controls reject before state mutation
+ok 432 - invalid numeric controls reject before state mutation
+  ---
+  duration_ms: 1.32147
+  type: 'test'
+  ...
+# Subtest: recovery resets speed, adds penalty and cooldown, preserves gate and cannot advance distance
+ok 433 - recovery resets speed, adds penalty and cooldown, preserves gate and cannot advance distance
+  ---
+  duration_ms: 867.864684
+  type: 'test'
+  ...
+# Subtest: both rails accept glancing and head-on high-speed impacts without pass-through
+ok 434 - both rails accept glancing and head-on high-speed impacts without pass-through
+  ---
+  duration_ms: 312.350448
+  type: 'test'
+  ...
+# Subtest: all six entrants complete three timed laps with ordered gate passages
+ok 435 - all six entrants complete three timed laps with ordered gate passages
+  ---
+  duration_ms: 30384.52092
+  type: 'test'
+  ...
+# Subtest: six seeded grid poses have independent vehicles, barrier clearance and a shared green
+ok 436 - six seeded grid poses have independent vehicles, barrier clearance and a shared green
+  ---
+  duration_ms: 194.62278
+  type: 'test'
+  ...
+# Subtest: ranking uses validated progress across the line, reverse travel and missed gates
+ok 437 - ranking uses validated progress across the line, reverse travel and missed gates
+  ---
+  duration_ms: 0.7187
+  type: 'test'
+  ...
+# Subtest: recovery from a missed gate or an occupied safe slot cannot gain position
+ok 438 - recovery from a missed gate or an occupied safe slot cannot gain position
+  ---
+  duration_ms: 0.71816
+  type: 'test'
+  ...
+# Subtest: finish classification includes penalties, stable ties and unfinished runners
+ok 439 - finish classification includes penalties, stable ties and unfinished runners
+  ---
+  duration_ms: 3.89971
+  type: 'test'
+  ...
+# Subtest: the keyboard-driven player can pass a live rival on the opening lap
+ok 440 - the keyboard-driven player can pass a live rival on the opening lap
+  ---
+  duration_ms: 1010.414966
+  type: 'test'
+  ...
+# Subtest: a real touchdown after crossing the timing plane cannot award it retroactively
+ok 441 - a real touchdown after crossing the timing plane cannot award it retroactively
+  ---
+  duration_ms: 80.604743
+  type: 'test'
+  ...
+# Subtest: both legal apron lanes count at every grounded forward gate, including the finish
+ok 442 - both legal apron lanes count at every grounded forward gate, including the finish
+  ---
+  duration_ms: 290.529355
+  type: 'test'
+  ...
+# Subtest: the apron keeps the prior support, driving direction and gate order requirements
+ok 443 - the apron keeps the prior support, driving direction and gate order requirements
+  ---
+  duration_ms: 40.201626
+  type: 'test'
+  ...
+# Subtest: Skyway mesh follows the tyre surface through all three lips and landing decks
+ok 444 - Skyway mesh follows the tyre surface through all three lips and landing decks
+  ---
+  duration_ms: 83.246343
+  type: 'test'
+  ...
+# Subtest: opposite distortions of asphalt vertices fail even with the original centroid
+ok 445 - opposite distortions of asphalt vertices fail even with the original centroid
+  ---
+  duration_ms: 1.92069
+  type: 'test'
+  ...
+# Subtest: every timing line spans the usable deck between both rails and has one labelled gantry
+ok 446 - every timing line spans the usable deck between both rails and has one labelled gantry
+  ---
+  duration_ms: 153.002344
+  type: 'test'
+  ...
+# Subtest: six seeded drivers run the full Skyway with physical slides, paid boosts and validated landings
+ok 447 - six seeded drivers run the full Skyway with physical slides, paid boosts and validated landings
+  ---
+  duration_ms: 30746.112725
+  type: 'test'
+  ...
+# Subtest: the car stays upright after a guardrail strike on the left bend before the Ridge tunnel
+ok 448 - the car stays upright after a guardrail strike on the left bend before the Ridge tunnel
+  ---
+  duration_ms: 3314.651349
+  type: 'test'
+  ...
+# Subtest: course selection isolates six grid cars, countdown, pause and restart
+ok 449 - course selection isolates six grid cars, countdown, pause and restart
+  ---
+  duration_ms: 1182.555081
+  type: 'test'
+  ...
+# Subtest: the finite route rejects out-of-order, reverse and vertically separated gate crossings
+ok 450 - the finite route rejects out-of-order, reverse and vertically separated gate crossings
+  ---
+  duration_ms: 30.086005
+  type: 'test'
+  ...
+# Subtest: reversing back towards a missed gate never promotes the entrant
+ok 451 - reversing back towards a missed gate never promotes the entrant
+  ---
+  duration_ms: 18.973733
+  type: 'test'
+  ...
+# Subtest: a discontinuous jump inside the next sector recovers without ranking or checkpoint credit
+ok 452 - a discontinuous jump inside the next sector recovers without ranking or checkpoint credit
+  ---
+  duration_ms: 8.466571
+  type: 'test'
+  ...
+# Subtest: guardrails at both physical road ends retain the car on supported pavement
+ok 453 - guardrails at both physical road ends retain the car on supported pavement
+  ---
+  duration_ms: 3334.820542
+  type: 'test'
+  ...
+# Subtest: a full rear runway can repair a damaged car in its own footprint
+ok 454 - a full rear runway can repair a damaged car in its own footprint
+  ---
+  duration_ms: 7.020051
+  type: 'test'
+  ...
+# Subtest: sprint recovery and reversing cannot gain a checkpoint, split or classification position
+ok 455 - sprint recovery and reversing cannot gain a checkpoint, split or classification position
+  ---
+  duration_ms: 55.290608
+  type: 'test'
+  ...
+# Subtest: AI at the sprint finish uses runout tangents and never sees the grid as traffic ahead
+ok 456 - AI at the sprint finish uses runout tangents and never sees the grid as traffic ahead
+  ---
+  duration_ms: 2.096321
+  type: 'test'
+  ...
+# Subtest: grade-aware door contact preserves the road surface and the outer guardrail
+ok 457 - grade-aware door contact preserves the road surface and the outer guardrail
+  ---
+  duration_ms: 201.313471
+  type: 'test'
+  ...
+# Subtest: the six-car ridge field repeats its accepted ticks at 30, 60 and 144 Hz
+ok 458 - the six-car ridge field repeats its accepted ticks at 30, 60 and 144 Hz
+  ---
+  duration_ms: 4142.083115
+  type: 'test'
+  ...
+# Subtest: a complete six-car sprint records ordered intermediate splits and retires each finisher
+ok 459 - a complete six-car sprint records ordered intermediate splits and retires each finisher
+  ---
+  duration_ms: 27902.741969
+  type: 'test'
+  ...
+# Subtest: suspension follows a slow crossing and launches faster entries into measurable flights
+ok 460 - suspension follows a slow crossing and launches faster entries into measurable flights
+  ---
+  duration_ms: 2540.195669
+  type: 'test'
+  ...
+# Subtest: rear-first, nose-heavy, skewed and sideways drops settle on the physical catch deck
+ok 461 - rear-first, nose-heavy, skewed and sideways drops settle on the physical catch deck
+  ---
+  duration_ms: 434.402447
+  type: 'test'
+  ...
+# Subtest: a flight past a gate earns no split, recovery goes behind it, a reverse finish earns no flag
+ok 462 - a flight past a gate earns no split, recovery goes behind it, a reverse finish earns no flag
+  ---
+  duration_ms: 169.203836
+  type: 'test'
+  ...
+# Subtest: actual barrier contact and high/low rival separation use the physical chassis
+ok 463 - actual barrier contact and high/low rival separation use the physical chassis
+  ---
+  duration_ms: 170.947046
+  type: 'test'
+  ...
+# Subtest: a skewed physical launch can land with no award and recover safely; a clean pass pays just once
+ok 464 - a skewed physical launch can land with no award and recover safely; a clean pass pays just once
+  ---
+  duration_ms: 4822.1343
+  type: 'test'
+  ...
+# Subtest: each pointer owns one control; release order, opposite steering and pedal overlap are bounded
+ok 465 - each pointer owns one control; release order, opposite steering and pedal overlap are bounded
+  ---
+  duration_ms: 19.247673
+  type: 'test'
+  ...
+# Subtest: a captured thumb steers proportionally through neutral and reverses on the next sample
+ok 466 - a captured thumb steers proportionally through neutral and reverses on the next sample
+  ---
+  duration_ms: 4.401151
+  type: 'test'
+  ...
+# Subtest: the strongest touch on each side owns the demand and independent releases restore the others
+ok 467 - the strongest touch on each side owns the demand and independent releases restore the others
+  ---
+  duration_ms: 1.00304
+  type: 'test'
+  ...
+# Subtest: leaving the entire steering pad or a pedal releases that finger only, new targets need fresh contact
+ok 468 - leaving the entire steering pad or a pedal releases that finger only, new targets need fresh contact
+  ---
+  duration_ms: 0.66221
+  type: 'test'
+  ...
+# Subtest: cancellation, capture loss, page interruption and rotation release every control before explicit resume
+ok 469 - cancellation, capture loss, page interruption and rotation release every control before explicit resume
+  ---
+  duration_ms: 11.751042
+  type: 'test'
+  ...
+# Subtest: switch, pause, restart and discrete actions clear without suppressing simultaneous fingers
+ok 470 - switch, pause, restart and discrete actions clear without suppressing simultaneous fingers
+  ---
+  duration_ms: 4.059241
+  type: 'test'
+  ...
+# Subtest: four fingers can steer, accelerate, drift and boost; cancellation clears every owner
+ok 471 - four fingers can steer, accelerate, drift and boost; cancellation clears every owner
+  ---
+  duration_ms: 0.70581
+  type: 'test'
+  ...
+# Subtest: independent Rocket touch pointers can steer, accelerate, boost and issue a signed dodge
+ok 472 - independent Rocket touch pointers can steer, accelerate, boost and issue a signed dodge
+  ---
+  duration_ms: 0.67763
+  type: 'test'
+  ...
+# Subtest: the start, finish and seam share a continuous level, northbound straight
+ok 473 - the start, finish and seam share a continuous level, northbound straight
+  ---
+  duration_ms: 4.284101
+  type: 'test'
+  ...
+# Subtest: asphalt and both barrier edges project to the same closed ribbon at every metre
+ok 474 - asphalt and both barrier edges project to the same closed ribbon at every metre
+  ---
+  duration_ms: 90.139054
+  type: 'test'
+  ...
+# Subtest: contact height, gradient and material follow the bank, shoulder and wheel ceiling
+ok 475 - contact height, gradient and material follow the bank, shoulder and wheel ceiling
+  ---
+  duration_ms: 18.266273
+  type: 'test'
+  ...
+# Subtest: invalid content and out-of-domain queries reject before entering the vehicle world
+ok 476 - invalid content and out-of-domain queries reject before entering the vehicle world
+  ---
+  duration_ms: 1.33637
+  type: 'test'
+  ...
+# Subtest: independent silhouette table covers exactly the six catalogue identities
+ok 477 - independent silhouette table covers exactly the six catalogue identities
+  ---
+  duration_ms: 5.875801
+  type: 'test'
+  ...
+# Subtest: cinder-two: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 478 - cinder-two: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 56.538619
+  type: 'test'
+  ...
+# Subtest: cinder-two: supported spawn, conservative cube containment and actual wall contact
+ok 479 - cinder-two: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 595.202982
+  type: 'test'
+  ...
+# Subtest: lilt: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 480 - lilt: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 40.404716
+  type: 'test'
+  ...
+# Subtest: lilt: supported spawn, conservative cube containment and actual wall contact
+ok 481 - lilt: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 383.510979
+  type: 'test'
+  ...
+# Subtest: evening-line: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 482 - evening-line: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 12.459892
+  type: 'test'
+  ...
+# Subtest: evening-line: supported spawn, conservative cube containment and actual wall contact
+ok 483 - evening-line: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 345.707093
+  type: 'test'
+  ...
+# Subtest: rivet-eight: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 484 - rivet-eight: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 10.371131
+  type: 'test'
+  ...
+# Subtest: rivet-eight: supported spawn, conservative cube containment and actual wall contact
+ok 485 - rivet-eight: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 282.055583
+  type: 'test'
+  ...
+# Subtest: yardhand: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 486 - yardhand: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 15.495682
+  type: 'test'
+  ...
+# Subtest: yardhand: supported spawn, conservative cube containment and actual wall contact
+ok 487 - yardhand: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 269.556061
+  type: 'test'
+  ...
+# Subtest: glass-comet: compiled footprint matches original wheel geometry and disclosed visual extensions
+ok 488 - glass-comet: compiled footprint matches original wheel geometry and disclosed visual extensions
+  ---
+  duration_ms: 10.617552
+  type: 'test'
+  ...
+# Subtest: glass-comet: supported spawn, conservative cube containment and actual wall contact
+ok 489 - glass-comet: supported spawn, conservative cube containment and actual wall contact
+  ---
+  duration_ms: 265.274901
+  type: 'test'
+  ...
+# Subtest: cinder-two independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 490 - cinder-two independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 2093.131331
+  type: 'test'
+  ...
+# Subtest: lilt independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 491 - lilt independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 1594.540394
+  type: 'test'
+  ...
+# Subtest: evening-line independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 492 - evening-line independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 1397.284095
+  type: 'test'
+  ...
+# Subtest: rivet-eight independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 493 - rivet-eight independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 1039.043919
+  type: 'test'
+  ...
+# Subtest: yardhand independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 494 - yardhand independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 1265.030454
+  type: 'test'
+  ...
+# Subtest: glass-comet independently spawns, supports its weight, accelerates, shifts, brakes and steers
+ok 495 - glass-comet independently spawns, supports its weight, accelerates, shifts, brakes and steers
+  ---
+  duration_ms: 1179.148791
+  type: 'test'
+  ...
+# Subtest: the six stock machines have independently measured acceleration and handling differences
+ok 496 - the six stock machines have independently measured acceleration and handling differences
+  ---
+  duration_ms: 0.76064
+  type: 'test'
+  ...
+# Subtest: six stock builds compile deterministically into complete owned immutable recipes
+ok 497 - six stock builds compile deterministically into complete owned immutable recipes
+  ---
+  duration_ms: 24.264514
+  type: 'test'
+  ...
+# Subtest: strict build admission rejects unsupported versions, slots, tuning and raw recipes
+ok 498 - strict build admission rejects unsupported versions, slots, tuning and raw recipes
+  ---
+  duration_ms: 11.789502
+  type: 'test'
+  ...
+# Subtest: accessors never execute and canonical ordering ignores input field order
+ok 499 - accessors never execute and canonical ordering ignores input field order
+  ---
+  duration_ms: 1.08442
+  type: 'test'
+  ...
+# Subtest: SHA-256 recipe receipts bind exact source, model, rules, engine and every recipe field
+ok 500 - SHA-256 recipe receipts bind exact source, model, rules, engine and every recipe field
+  ---
+  duration_ms: 29.358945
+  type: 'test'
+  ...
+# Subtest: engine produces independently measured acceleration and displacement under the identical full-throttle tape
+ok 501 - engine produces independently measured acceleration and displacement under the identical full-throttle tape
+  ---
+  duration_ms: 2.291841
+  type: 'test'
+  ...
+# Subtest: intake produces independently measured acceleration and displacement under the identical full-throttle tape
+ok 502 - intake produces independently measured acceleration and displacement under the identical full-throttle tape
+  ---
+  duration_ms: 0.25064
+  type: 'test'
+  ...
+# Subtest: exhaust produces independently measured acceleration and displacement under the identical full-throttle tape
+ok 503 - exhaust produces independently measured acceleration and displacement under the identical full-throttle tape
+  ---
+  duration_ms: 0.25073
+  type: 'test'
+  ...
+# Subtest: gearbox changes actual road speed, accepted RPM and shift timing under the same command tape
+ok 504 - gearbox changes actual road speed, accepted RPM and shift timing under the same command tape
+  ---
+  duration_ms: 0.23778
+  type: 'test'
+  ...
+# Subtest: finalDrive changes actual road speed, accepted RPM and shift timing under the same command tape
+ok 505 - finalDrive changes actual road speed, accepted RPM and shift timing under the same command tape
+  ---
+  duration_ms: 0.33319
+  type: 'test'
+  ...
+# Subtest: performance tyres change real cornering motion, lateral slip and exact-start braking distance
+ok 506 - performance tyres change real cornering motion, lateral slip and exact-start braking distance
+  ---
+  duration_ms: 0.27945
+  type: 'test'
+  ...
+# Subtest: suspension changes accepted bump loads, heave and damping response from a common initial pose
+ok 507 - suspension changes accepted bump loads, heave and damping response from a common initial pose
+  ---
+  duration_ms: 0.26539
+  type: 'test'
+  ...
+# Subtest: quick steering changes accepted wheel response and physical yaw/trajectory at the same initial 10 m/s
+ok 508 - quick steering changes accepted wheel response and physical yaw/trajectory at the same initial 10 m/s
+  ---
+  duration_ms: 0.18722
+  type: 'test'
+  ...
+# Subtest: paint changes neither the complete accepted recipe nor any measured physical state
+ok 509 - paint changes neither the complete accepted recipe nor any measured physical state
+  ---
+  duration_ms: 1.517451
+  type: 'test'
+  ...
+# Subtest: performance engine grade independently changes early speed, 0–100 time and physical displacement
+ok 510 - performance engine grade independently changes early speed, 0–100 time and physical displacement
+  ---
+  duration_ms: 0.50869
+  type: 'test'
+  ...
+# Subtest: competition engine grade independently changes early speed, 0–100 time and physical displacement
+ok 511 - competition engine grade independently changes early speed, 0–100 time and physical displacement
+  ---
+  duration_ms: 0.21596
+  type: 'test'
+  ...
+# Subtest: long gearbox physically lowers early RPM/acceleration and delays the first automatic shift
+ok 512 - long gearbox physically lowers early RPM/acceleration and delays the first automatic shift
+  ---
+  duration_ms: 0.18245
+  type: 'test'
+  ...
+# Subtest: touring tyre grade produces distinct physical slip and braking distance in its documented direction
+ok 513 - touring tyre grade produces distinct physical slip and braking distance in its documented direction
+  ---
+  duration_ms: 0.17974
+  type: 'test'
+  ...
+# Subtest: economy tyre grade produces distinct physical slip and braking distance in its documented direction
+ok 514 - economy tyre grade produces distinct physical slip and braking distance in its documented direction
+  ---
+  duration_ms: 0.13487
+  type: 'test'
+  ...
+# Subtest: all controlled before/after receipts reproduce exactly in the same runtime
+ok 515 - all controlled before/after receipts reproduce exactly in the same runtime
+  ---
+  duration_ms: 12802.560953
+  type: 'test'
+  ...
+# Subtest: cinder-two retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 516 - cinder-two retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 695.771577
+  type: 'test'
+  ...
+# Subtest: lilt retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 517 - lilt retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 601.178182
+  type: 'test'
+  ...
+# Subtest: evening-line retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 518 - evening-line retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 634.102998
+  type: 'test'
+  ...
+# Subtest: rivet-eight retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 519 - rivet-eight retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 633.172687
+  type: 'test'
+  ...
+# Subtest: yardhand retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 520 - yardhand retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 639.931208
+  type: 'test'
+  ...
+# Subtest: glass-comet retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+ok 521 - glass-comet retains finite supported steering and bump motion with responsive and soft/long extreme valid builds
+  ---
+  duration_ms: 481.106394
+  type: 'test'
+  ...
+# Subtest: authored parts prices, slot membership and paint finishes are finite immutable data
+ok 522 - authored parts prices, slot membership and paint finishes are finite immutable data
+  ---
+  duration_ms: 17.556753
+  type: 'test'
+  ...
+# Subtest: explicit rules conversion owns copied inventory and retains all legacy build and recipe bytes
+ok 523 - explicit rules conversion owns copied inventory and retains all legacy build and recipe bytes
+  ---
+  duration_ms: 64.91423
+  type: 'test'
+  ...
+# Subtest: all single catalogue parts compile on all six machines without changing body or wheel dimensions
+ok 524 - all single catalogue parts compile on all six machines without changing body or wheel dimensions
+  ---
+  duration_ms: 112.391847
+  type: 'test'
+  ...
+# Subtest: engine, intake and exhaust compose explicit additive Nm curves without RPM or braking inventions
+ok 525 - engine, intake and exhaust compose explicit additive Nm curves without RPM or braking inventions
+  ---
+  duration_ms: 2.043891
+  type: 'test'
+  ...
+# Subtest: gearbox and final-drive changes alter supported ratios with explicit quantized trims
+ok 526 - gearbox and final-drive changes alter supported ratios with explicit quantized trims
+  ---
+  duration_ms: 2.04202
+  type: 'test'
+  ...
+# Subtest: tyres, suspension and steering resolve documented field units and preserve support bounds
+ok 527 - tyres, suspension and steering resolve documented field units and preserve support bounds
+  ---
+  duration_ms: 11.056882
+  type: 'test'
+  ...
+# Subtest: paint changes no full recipe field, including first rules1 to rules2 installation
+ok 528 - paint changes no full recipe field, including first rules1 to rules2 installation
+  ---
+  duration_ms: 30.754255
+  type: 'test'
+  ...
+# Subtest: unknown or non-quantized tuning, invalid inventory and raw mechanical data reject without partial acceptance
+ok 529 - unknown or non-quantized tuning, invalid inventory and raw mechanical data reject without partial acceptance
+  ---
+  duration_ms: 12.997072
+  type: 'test'
+  ...
+# Subtest: nested inventory/tuning and version accessors never execute during admission
+ok 530 - nested inventory/tuning and version accessors never execute during admission
+  ---
+  duration_ms: 1.40454
+  type: 'test'
+  ...
+# Subtest: canonical owned inventory is sorted, bounded and independent of installed build/recipe digests
+ok 531 - canonical owned inventory is sorted, bounded and independent of installed build/recipe digests
+  ---
+  duration_ms: 14.123182
+  type: 'test'
+  ...
+# Subtest: free unowned practice recordings are not cached and never access storage
+ok 532 - free unowned practice recordings are not cached and never access storage
+  ---
+  duration_ms: 54.455109
+  type: 'test'
+  ...
+# Subtest: retaining a physically admitted test writes only transient evidence and preserves exact garage ownership
+ok 533 - retaining a physically admitted test writes only transient evidence and preserves exact garage ownership
+  ---
+  duration_ms: 37.588956
+  type: 'test'
+  ...
+# Subtest: cache is bounded to the latest twelve distinct owned ID, test and mode records
+ok 534 - cache is bounded to the latest twelve distinct owned ID, test and mode records
+  ---
+  duration_ms: 262.90011
+  type: 'test'
+  ...
+# Subtest: same owned ID/test/mode replaces its prior test while other modes, tests and cars remain independent
+ok 535 - same owned ID/test/mode replaces its prior test while other modes, tests and cars remain independent
+  ---
+  duration_ms: 84.054663
+  type: 'test'
+  ...
+# Subtest: malformed, unsupported and oversized transient cache is replaceable without reading or modifying ownership
+ok 536 - malformed, unsupported and oversized transient cache is replaceable without reading or modifying ownership
+  ---
+  duration_ms: 26.638074
+  type: 'test'
+  ...
+# Subtest: read failure can replace temporary evidence, while quota/write failures propagate without touching ownership
+ok 537 - read failure can replace temporary evidence, while quota/write failures propagate without touching ownership
+  ---
+  duration_ms: 15.582512
+  type: 'test'
+  ...
+# Subtest: unadmitted recording copies and unknown modes cannot be retained as trusted cache inputs
+ok 538 - unadmitted recording copies and unknown modes cannot be retained as trusted cache inputs
+  ---
+  duration_ms: 16.099343
+  type: 'test'
+  ...
+# Subtest: a genuinely reconstructed upgraded recording cannot masquerade as the stock baseline
+ok 539 - a genuinely reconstructed upgraded recording cannot masquerade as the stock baseline
+  ---
+  duration_ms: 12.770192
+  type: 'test'
+  ...
+1..539
+# tests 539
+# suites 0
+# pass 539
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 321008.022104
